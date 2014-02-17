@@ -93,14 +93,14 @@ template <class T> class nDGridMap {
 		}	
 		     
         inline void getNeighbours 
-        (const int idx, std::array<int> & neighs) {
+        (const int idx, neighbours4c& neighs) {
 			neighs.size = 0;
 			for (int i = 0; i < ndims_; ++i)
 				getNeighboursInDim(idx,neighs,i);
 		}
 		
 		inline void getNeighboursInDim
-        (const int idx, std::array<int> & neighs, const int dim) {
+        (const int idx, neighbours4c & neighs, const int dim) {
 			int c1,c2;
 			int cc = neighs.size;
 			if (dim == 0) {

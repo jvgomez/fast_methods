@@ -6,7 +6,6 @@
 #include <algorithm>
 #include <numeric>
 #include <fstream>
-#include <array>
 
 #include "../fmdata/fmcell.h"
 #include "../ndgridmap/ndgridmap.hpp"
