@@ -21,7 +21,7 @@ class Cell {
 		
         // This function gets no arguments in this case, but in the derivated classes it could. The ... 
 		// says that parameters could be given (or not).
-        virtual float getValue(...) const        		{return value_;}
+        virtual float getValue() const        		{return value_;}
         virtual int getIndex() const					{return index_;}
         
 

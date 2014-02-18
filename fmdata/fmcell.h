@@ -23,10 +23,8 @@ class FMCell : public Cell{
         void setArrivalTime (const float at)    	{value_= at;}
         void setState (const FMState state)			{state_ = state;}
         std::string type () {return std::string("FMCell - Fast Marching cell");}
-        
-        float getValue (const int whattosave = 0); // Makes easier the saveGrid and other functions.
-        
-        inline float getArrivalTime () const				{return value_;}
+           
+        float getArrivalTime () const				{return value_;}
         float getVelocity () const					{return velocity_;}
         FMState getState () const					{return state_;}
         

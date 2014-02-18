@@ -12,19 +12,6 @@ inline bool FMCell::isObstacle
         return false;
 }
 
-float FMCell::getValue
-(const int whattosave) {
-	switch (whattosave) {
-		case 0:
-			return value_;
-			break;
-		case 1:
-			return velocity_;
-			break;
-	}
-	return -1;
-}
-
 ostream& operator << 
 (ostream & os, const FMCell & c) {
 	os << console::str_info("Fast Marching cell information:");

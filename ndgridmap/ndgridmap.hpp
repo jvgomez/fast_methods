@@ -232,7 +232,7 @@ template <class T> class nDGridMap {
 				ofs << std::endl << dimsize_[i] << "\t";
 				   
 			for (int i = 0; i < ncells_; ++i)
-			ofs << std::endl << getCell(i).getValue(whattosave);  
+			ofs << std::endl << getCell(i).getValue();  
 		}
 		
 		int size

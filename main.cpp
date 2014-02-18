@@ -29,7 +29,7 @@ int main(int argc, const char ** argv)
 		dimsize.push_back(atoi(argv[i+1]));
 	
 	nDGridMap<FMCell> * grid = new nDGridMap<FMCell>(ndims, dimsize, 0.10);
-	
+	//nDGridMap<FMCell> grid (ndims, dimsize, 0.10);
 		
 	vector<int> init_points;
 	init_points.push_back(source_point);
