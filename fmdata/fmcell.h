@@ -10,11 +10,11 @@
 enum class FMState {OPEN, NARROW, FROZEN};
 
 class FMCell : public Cell{
-	friend std::ostream& operator << (std::ostream & os, FMCell & c);
+	friend std::ostream& operator << (std::ostream & os, const FMCell & c);
 	
     public: 
     // Implicit Fast Marching method initialization.
-        FMCell() : state_(FMState::OPEN), velocity_(1), Cell(std::numeric_limits<float>::infinity()) {};
+       FMCell() : Cell(std::numeric_limits<float>::infinity()), state_(FMState::OPEN), velocity_(1)  {};
         virtual ~FMCell() {};
         
         // NOTE: no checks are done (out of bounds, correct states, etc) no improve efficienty.
@@ -34,8 +34,8 @@ class FMCell : public Cell{
 
     private:
 		//value_ is in this case the time of arrival.
-        float velocity_;
-        FMState state_;
+		FMState state_;
+        float velocity_;    
 };
 
 

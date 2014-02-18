@@ -11,13 +11,6 @@
 
 #include "../console/console.h"
 
-struct neighbours4c
-{
-  int data[4];
-  size_t size = 0;
-};
-
-
 template <class T> class nDGridMap {
 	friend std::ostream& operator << 
 	(std::ostream & os, const nDGridMap<T> & g) {
@@ -44,6 +37,9 @@ template <class T> class nDGridMap {
 			ncells_= 1;
 			d_.resize(ndims_);
 			dd_.resize(ndims_);
+			n_neighs = 0;
+			n.resize(2*ndims_);
+			
 			for (int i = 0; i < ndims_; ++i) {
 				ncells_ *= dimsize_[i];
 				d_[i] = ncells_;
@@ -80,39 +76,42 @@ template <class T> class nDGridMap {
          
         std::vector<int> getDimSizes() const     { return dimsize_;}
                
-        inline float getMinValueInDim
+        float getMinValueInDim
         (const int idx, const int dim)   {
-			n.size = 0;
+			n_neighs = 0;
 			getNeighboursInDim(idx,n,dim);
-			
-			if (n.size == 1)
-				return cells_[n.data[0]].getValue();
+
+			if (n_neighs == 1)
+				return cells_[n[0]].getValue();
 			else
-				return (cells_[n.data[0]].getValue()<cells_[n.data[1]].getValue()) ? cells_[n.data[0]].getValue() : cells_[n.data[1]].getValue();
+				return (cells_[n[0]].getValue()<cells_[n[1]].getValue()) ? cells_[n[0]].getValue() : cells_[n[1]].getValue();
 			
 		}	
-		     
-        inline void getNeighbours 
-        (const int idx, neighbours4c& neighs) {
-			neighs.size = 0;
+		
+		// Returns the number of neighbours found.     
+        int getNeighbours 
+        (const int idx, std::vector<int> & neighs) {
+			n_neighs = 0;
 			for (int i = 0; i < ndims_; ++i)
 				getNeighboursInDim(idx,neighs,i);
+				
+			return n_neighs;
 		}
 		
-		inline void getNeighboursInDim
-        (const int idx, neighbours4c & neighs, const int dim) {
+		// Returns the number of neighbours found in this dimension.
+		void getNeighboursInDim
+        (const int idx, std::vector<int> & neighs, const int dim) {
 			int c1,c2;
-			int cc = neighs.size;
 			if (dim == 0) {
 				c1 = idx-1;
 				c2 = idx+1;
 				// Checking neighbour 1.
 				if ((c1 >= 0) && (c1/d_[0] == idx/d_[0]))
-					neighs.data[cc++] = c1;
+					neighs[n_neighs++] = c1;
 				// Checking neighbour 2.
 				//if ((c2 < ncells_) && (c2/d_[0] == idx/d_[0])) // full check, not necessary.
 				if (c2/d_[0] == idx/d_[0])
-					neighs.data[cc++] = c2;
+					neighs[n_neighs++] = c2;
 			}
 			else {
 				// Neighbours proposed.
@@ -120,13 +119,12 @@ template <class T> class nDGridMap {
 				c2 = idx+d_[dim-1];
 				// Checking neighbour 1.
 				if ((c1 >= 0) && (c1/d_[dim] == idx/d_[dim]))
-					neighs.data[cc++] = c1;
+					neighs[n_neighs++] = c1;
 				// Checking neighbour 2.
 				//if ((c2 < ncells_) && (c2/d_[dimi] == idx/d_[dim])) // full check, not necessary.
 				if (c2/d_[dim] == idx/d_[dim])
-					neighs.data[cc++] = c2;
+					neighs[n_neighs++] = c2;
 			}
-			neighs.size = cc;
 		}
 		
 		void getNeighbours8c2D
@@ -255,7 +253,8 @@ template <class T> class nDGridMap {
         std::vector<int> d_; // Stores parcial multiplications of dimensions sizes. d_[0] = dimsize_[0];
 																			   //   d_[1] = dimsize_[0]*dimsize_[1]; etc.
 		std::vector<int> dd_; // dd_[0] = d_[0], dd_[1] = d_[1] - dd_[0], and so on.
-		neighbours4c n; // For getMinValueInDim function.
+		std::vector<int> n; // For getMinValueInDim function.
+		int n_neighs; // Internal variable that counts the number of neighbours found in every iteration. Modified by getNeighbours functions.
 };
 
 

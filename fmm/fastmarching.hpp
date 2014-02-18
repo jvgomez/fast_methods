@@ -29,6 +29,8 @@ template <class T> class FastMarching {
 			TTvalues.resize(ndims_);
 			leafsize_ = grid_->getLeafSize();
 			narrow_band_.setMaxSize(grid_->size());
+			
+			neighbours.resize(2*ndims_);
 		}
         
 			
@@ -51,10 +53,11 @@ template <class T> class FastMarching {
 			// TODO: neighbours computed twice for every cell. We can save time here.
 			// TODO: check if the previous steps have been done (loading grid map and setting initial points.)
 			int j = 0;
+			int n_neighs = 0;
 			for (int &i: init_points_) { // For each initial point
-				grid_->getNeighbours(i, neighbours);
-				for (int s = 0; s < neighbours.size; ++s){ 
-					j = neighbours.data[s];
+				n_neighs = grid_->getNeighbours(i, neighbours);
+				for (int s = 0; s < n_neighs; ++s){ 
+					j = neighbours[s];
 					if (grid_->cells_[j].getState() == FMState::FROZEN)
 						continue;
 					else {
@@ -128,14 +131,15 @@ template <class T> class FastMarching {
 		void computeFM
 		() {
 			int j= 0;
+			int n_neighs = 0;
 			while (narrow_band_.size() > 0) {
 				int idxMin = narrow_band_.popMinIdx();
 				// TODO: check if the previous steps have been done (initialization).
-				grid_->getNeighbours(idxMin, neighbours);
+				n_neighs = grid_->getNeighbours(idxMin, neighbours);
 				grid_->cells_[idxMin].setState(FMState::FROZEN);
 
-				for (int s = 0; s < neighbours.size; ++s) {
-					j = neighbours.data[s];
+				for (int s = 0; s < n_neighs; ++s) {
+					j = neighbours[s];
 					if (grid_->cells_[j].getState() == FMState::FROZEN)
 						continue;
 					else {
@@ -191,7 +195,8 @@ template <class T> class FastMarching {
 		//Aux vectors and variables declared here to avoid reallocating everytime.
 		std::vector<float> Tvalues;  //Tvalues are the T0,T1...Tn-1 variables in the Discretized Eikonal Equation.
 		std::vector<float> TTvalues; //Tvalues are the T0^2,T1^2...Tn-1^2 variables in the Discretized Eikonal Equation.
-		neighbours4c neighbours;     //std::array cannot be used since it has to be size 2*ndims_
+		//neighbours4c neighbours;     //std::array cannot be used since it has to be size 2*ndims_
+		std::vector <int> neighbours;
 		
 		
 		int ndims_;

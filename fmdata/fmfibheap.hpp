@@ -45,7 +45,7 @@ class FMFibHeap {
 	
 	size_t size
 	() const {
-		heap_.size();
+		return heap_.size();
 	}
 	
 	void update
