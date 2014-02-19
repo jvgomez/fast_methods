@@ -22,7 +22,7 @@ template <class T> class GradientDescent {
         virtual ~GradientDescent<T>() {};  
         
         static void apply2D
-        (nDGridMap<FMCell> & grid, const int & idx, std::vector<int> & path) {
+        (nDGridMap<FMCell,ndims> & grid, const int & idx, std::vector<int> & path) {
 			
 			if (grid.getNDims() != 2)
 				console::error("Not possible to apply 2D gradient descent. Grid dimensions != 2.");
@@ -86,7 +86,7 @@ template <class T> class GradientDescent {
 		
 		
         static void apply3D
-        (nDGridMap<FMCell> & grid, const int & idx, std::vector<int> & path) {
+        (nDGridMap<FMCell,ndims> & grid, const int & idx, std::vector<int> & path) {
 			
 			if (grid.getNDims() != 3)
 				console::error("Not possible to apply 3D gradient descent. Grid dimensions != 3.");

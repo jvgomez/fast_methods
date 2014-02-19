@@ -1,6 +1,7 @@
 #include <iostream>
 #include <cmath>
 #include <chrono>
+#include <array>
 
 #include "fmdata/fmcell.h"
 #include "ndgridmap/ndgridmap.hpp"
@@ -20,21 +21,20 @@ int main(int argc, const char ** argv)
 	console::info("Testing Fast Marching Method.");
 	
 	// Asigning input parameters.
-	int ndims = argc-2;
+	constexpr int ndims = 2;
 	int source_point = atoi(argv[ndims+1]);
 	
-	vector<int> dimsize;
+	array<int, ndims> dimsize;
 	
 	for (int i = 0; i < ndims; ++i)
-		dimsize.push_back(atoi(argv[i+1]));
+		dimsize[i] = atoi(argv[i+1]);
 	
-	nDGridMap<FMCell> * grid = new nDGridMap<FMCell>(ndims, dimsize, 0.10);
-	//nDGridMap<FMCell> grid (ndims, dimsize, 0.10);
+	nDGridMap<FMCell, ndims> * grid = new nDGridMap<FMCell, ndims>(dimsize, 0.10);
 		
 	vector<int> init_points;
 	init_points.push_back(source_point);
 	
-	FastMarching<FMCell> fmm;
+	FastMarching<FMCell, ndims> fmm;
 	fmm.setEnvironment(grid);
 	fmm.setInitialPoints(init_points);
 

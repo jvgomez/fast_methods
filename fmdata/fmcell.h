@@ -7,6 +7,7 @@
 
 #include "../ndgridmap/cell.h"
 
+
 enum class FMState {OPEN, NARROW, FROZEN};
 
 class FMCell : public Cell{

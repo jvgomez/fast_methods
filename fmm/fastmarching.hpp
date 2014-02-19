@@ -6,31 +6,31 @@
 #include <algorithm>
 #include <numeric>
 #include <fstream>
+#include <array>
 
 #include "../fmdata/fmcell.h"
 #include "../ndgridmap/ndgridmap.hpp"
 #include "../console/console.h"
 #include "../fmdata/fmfibheap.hpp"
-#include "../gradientdescent/gradientdescent.hpp"
+//#include "../gradientdescent/gradientdescent.hpp"
 
 
-template <class T> class FastMarching {
+template <class T, size_t ndims> class FastMarching {
 	
     public: 
-		
-        FastMarching <T> () {};
-        virtual ~FastMarching <T>() {};
+        FastMarching <T,ndims> () {};
+        virtual ~FastMarching <T,ndims>() {};
             
         void setEnvironment 
-        (nDGridMap<T> * g) {
+        (nDGridMap<T,ndims> * g) {
 			grid_ = g;
-			ndims_ = grid_->getNDims();
-			Tvalues.resize(ndims_);
-			TTvalues.resize(ndims_);
+			//ndims_ = grid_->getNDims();
+			//Tvalues.resize(ndims);
+			//TTvalues.resize(ndims);
 			leafsize_ = grid_->getLeafSize();
 			narrow_band_.setMaxSize(grid_->size());
 			
-			neighbours.resize(2*ndims_);
+			//neighbours.resize(2*ndims);
 		}
         
 			
@@ -73,6 +73,7 @@ template <class T> class FastMarching {
 							grid_->cells_[j].setState(FMState::NARROW);
 							grid_->cells_[j].setArrivalTime(new_arrival_time);
 							narrow_band_.push(&grid_->cells_[j]);
+							//std::cout << grid_->cells_[j] << std::endl;
 						} // Neighbours open.
 					} // Neighbours not frozen.
 				} // For each neighbour.
@@ -88,23 +89,28 @@ template <class T> class FastMarching {
 		// Possible improvement: If we include the neighbours in the cells information
 		// this could be (most probably) speeded up.
 		// This implementation is focused to be used with any number of dimensions.
-		inline float solveEikonal
+		float solveEikonal
 		(const int & idx) {
-			float a = ndims_; // a parameter of the Eikonal equation.
+			float a = ndims; // a parameter of the Eikonal equation.
 			
 			float updatedT;
 			sumT = 0;
 			sumTT = 0;
+			//Tvalues.fill(0);
+			//TTvalues.fill(0);
 
-			for (int dim = 0; dim < ndims_; ++dim) {
+			for (int dim = 0; dim < ndims; ++dim) {
 				float minTInDim = grid_->getMinValueInDim(idx, dim);
+				//std::cout << "Value chosen: " << minTInDim << std::endl;
 				if (!isinf(minTInDim)) {
+					//std::cout << " Not inf "<< std::endl;
 					Tvalues[dim] = minTInDim;
 					sumT += Tvalues[dim];
 					TTvalues[dim] = Tvalues[dim]*Tvalues[dim];
 					sumTT += TTvalues[dim];
 				}
 				else {
+					//std::cout << "  Inf "<< std::endl;
 					Tvalues[dim] = 0;
 					TTvalues[dim] = 0;
 					a -=1 ;
@@ -122,9 +128,9 @@ template <class T> class FastMarching {
 			}
 			else 
 				updatedT = (-b + sqrt(quad_term))/(2*a);
-			
-			Tvalues.clear();
-			TTvalues.clear();
+				
+				//std::cout << "Values: " << a <<  " " << b << " " << c << std::endl;
+				
 			return updatedT;
 		}	
 		
@@ -187,19 +193,18 @@ template <class T> class FastMarching {
 		}*/
 		
     private:
-		nDGridMap<T> *  grid_;
+		nDGridMap<T, ndims> *  grid_;
 		std::vector<int> init_points_;	
 		FMFibHeap narrow_band_;
 		
 		
 		//Aux vectors and variables declared here to avoid reallocating everytime.
-		std::vector<float> Tvalues;  //Tvalues are the T0,T1...Tn-1 variables in the Discretized Eikonal Equation.
-		std::vector<float> TTvalues; //Tvalues are the T0^2,T1^2...Tn-1^2 variables in the Discretized Eikonal Equation.
-		//neighbours4c neighbours;     //std::array cannot be used since it has to be size 2*ndims_
-		std::vector <int> neighbours;
+		std::array<float,ndims> Tvalues;  //Tvalues are the T0,T1...Tn-1 variables in the Discretized Eikonal Equation.
+		std::array<float,ndims> TTvalues; //Tvalues are the T0^2,T1^2...Tn-1^2 variables in the Discretized Eikonal Equation.
+		std::array <int,2*ndims> neighbours;
 		
 		
-		int ndims_;
+		//int ndims_;
 		float leafsize_;
 		float sumT;
 		float sumTT;
