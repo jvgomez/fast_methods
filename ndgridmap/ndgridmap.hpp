@@ -9,7 +9,7 @@
 #include <cstddef>
 #include <array> 
 
-
+//#define MAXSIZE 1000000 // Uncomment if array ncells_ chosen
 
 #include "../console/console.h"
 
@@ -49,7 +49,8 @@ template <class T, size_t ndims> class nDGridMap {
 				dd_[i] *= d_[i] - dd_[i-1];
 			
 			//Resizing gridmap and initializing with default values.
-			cells_.resize(ncells_, T());
+			cells_.resize(ncells_, T()); // Comment if array ncells_ chosen
+
 			
 			for (int i = 0; i < cells_.size(); ++i)
 				cells_[i].setIndex(i);
@@ -203,6 +204,8 @@ template <class T, size_t ndims> class nDGridMap {
 		}
 		
 		
+		// Choose between vector-based or array-based.
+		//std::array<T, MAXSIZE> cells_; // A bit faster (1-5%) but allocates maximum memory.
 		std::vector<T> cells_;
         
     protected:

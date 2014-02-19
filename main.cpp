@@ -46,8 +46,8 @@ int main(int argc, const char ** argv)
 		double time_elapsed = duration_cast<milliseconds>(end-start).count();
 		cout << "Elapsed FM time: " << time_elapsed << " ms" << endl;
 	
-	fmm.saveGrid("test_velocity.txt", 1);
-	fmm.saveGrid("test_at.txt", 0);	
+	//fmm.saveGrid("test_velocity.txt", 1);
+	//fmm.saveGrid("test_at.txt", 0);	
 
     return 0;
 }
