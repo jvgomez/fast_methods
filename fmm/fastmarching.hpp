@@ -12,7 +12,6 @@
 #include "../ndgridmap/ndgridmap.hpp"
 #include "../console/console.h"
 #include "../fmdata/fmfibheap.hpp"
-//#include "../gradientdescent/gradientdescent.hpp"
 
 
 template <class T, size_t ndims> class FastMarching {
@@ -24,13 +23,8 @@ template <class T, size_t ndims> class FastMarching {
         void setEnvironment 
         (nDGridMap<T,ndims> * g) {
 			grid_ = g;
-			//ndims_ = grid_->getNDims();
-			//Tvalues.resize(ndims);
-			//TTvalues.resize(ndims);
 			leafsize_ = grid_->getLeafSize();
 			narrow_band_.setMaxSize(grid_->size());
-			
-			//neighbours.resize(2*ndims);
 		}
         
 			
@@ -73,7 +67,6 @@ template <class T, size_t ndims> class FastMarching {
 							grid_->cells_[j].setState(FMState::NARROW);
 							grid_->cells_[j].setArrivalTime(new_arrival_time);
 							narrow_band_.push(&grid_->cells_[j]);
-							//std::cout << grid_->cells_[j] << std::endl;
 						} // Neighbours open.
 					} // Neighbours not frozen.
 				} // For each neighbour.
@@ -96,21 +89,16 @@ template <class T, size_t ndims> class FastMarching {
 			float updatedT;
 			sumT = 0;
 			sumTT = 0;
-			//Tvalues.fill(0);
-			//TTvalues.fill(0);
 
 			for (int dim = 0; dim < ndims; ++dim) {
 				float minTInDim = grid_->getMinValueInDim(idx, dim);
-				//std::cout << "Value chosen: " << minTInDim << std::endl;
 				if (!isinf(minTInDim)) {
-					//std::cout << " Not inf "<< std::endl;
 					Tvalues[dim] = minTInDim;
 					sumT += Tvalues[dim];
 					TTvalues[dim] = Tvalues[dim]*Tvalues[dim];
 					sumTT += TTvalues[dim];
 				}
 				else {
-					//std::cout << "  Inf "<< std::endl;
 					Tvalues[dim] = 0;
 					TTvalues[dim] = 0;
 					a -=1 ;
@@ -128,8 +116,6 @@ template <class T, size_t ndims> class FastMarching {
 			}
 			else 
 				updatedT = (-b + sqrt(quad_term))/(2*a);
-				
-				//std::cout << "Values: " << a <<  " " << b << " " << c << std::endl;
 				
 			return updatedT;
 		}	
@@ -196,18 +182,14 @@ template <class T, size_t ndims> class FastMarching {
 		nDGridMap<T, ndims> *  grid_;
 		std::vector<int> init_points_;	
 		FMFibHeap narrow_band_;
-		
+		float leafsize_;
+		float sumT;
+		float sumTT;
 		
 		//Aux vectors and variables declared here to avoid reallocating everytime.
 		std::array<float,ndims> Tvalues;  //Tvalues are the T0,T1...Tn-1 variables in the Discretized Eikonal Equation.
 		std::array<float,ndims> TTvalues; //Tvalues are the T0^2,T1^2...Tn-1^2 variables in the Discretized Eikonal Equation.
 		std::array <int,2*ndims> neighbours;
-		
-		
-		//int ndims_;
-		float leafsize_;
-		float sumT;
-		float sumTT;
 };
 
 
