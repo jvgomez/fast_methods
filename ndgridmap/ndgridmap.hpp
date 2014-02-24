@@ -30,13 +30,23 @@ template <class T, size_t ndims> class nDGridMap {
 	
     public: 
     
-        nDGridMap<T,ndims>() {}; // Default constructor not used.
+        nDGridMap<T,ndims>() {leafsize_ = 0.05;} // Default constructor not used.
         nDGridMap<T,ndims>
         (const std::array<int, ndims> & dimsize, const float leafsize = 0.05) {
 			leafsize_ = leafsize;
-			dimsize_ = dimsize;
 			ncells_= 1;
 			n_neighs = 0;
+			
+			resize(dimsize);
+			
+		}
+       
+        virtual ~nDGridMap<T,ndims>() {};  
+        
+        void resize
+        (const std::array<int, ndims> & dimsize) {
+			dimsize_ = dimsize;
+			ncells_= 1;
 			
 			for (int i = 0; i < ndims; ++i) {
 				ncells_ *= dimsize_[i];
@@ -49,16 +59,16 @@ template <class T, size_t ndims> class nDGridMap {
 				dd_[i] *= d_[i] - dd_[i-1];
 			
 			//Resizing gridmap and initializing with default values.
+			cells_.clear();
 			cells_.resize(ncells_, T()); // Comment if array ncells_ chosen
 
 			
 			for (int i = 0; i < cells_.size(); ++i)
-				cells_[i].setIndex(i);
+				cells_[i].setIndex(i);	
 		}
-       
-        virtual ~nDGridMap<T,ndims>() {};  
+		
         
-        // grid[i] equivalento to grid.cells_[i];
+        // grid[i] equivalent to grid.cells_[i];
         T & operator[]
         (const int idx) {
 			return cells_[idx];
@@ -203,9 +213,18 @@ template <class T, size_t ndims> class nDGridMap {
 			return ncells_;
 		}
 		
+		float getMaxValue
+		() {
+			float max = 0;
+			for (T & c:cells_) {
+				if (!isinf(c.getValue()) && c.getValue() > max)
+					max = c.getValue();
+			}
+			return max;
+		};
 		
 		// Choose between vector-based or array-based.
-		//std::array<T, MAXSIZE> cells_; // A bit faster (1-5%) but allocates maximum memory.
+		//std::array<T, MAXSIZE> cells_; // A bit faster (1-5%) but allocates maximum memory. Does not allow resizing.
 		std::vector<T> cells_;
         
     protected:

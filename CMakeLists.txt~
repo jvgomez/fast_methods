@@ -13,6 +13,9 @@ SET(CMAKE_CXX_FLAGS_RELWITHDEBINFO "-O3 -g")
 SET(CMAKE_CXX_FLAGS_RELEASE "-Ofast -fno-finite-math-only")
 SET(CMAKE_CXX_FLAGS_DEBUG  "-Wall -Wno-unused-local-typedefs -g")
 
+# CImg dependencies
+SET(CIMG_DEPS "pthread X11")
+
 # Self-made includes
 include_directories (${FMM_SOURCE_DIR}/console) 
 include_directories (${FMM_SOURCE_DIR}/ndgridmap) 
@@ -40,5 +43,5 @@ add_executable (fmm main.cpp
 					fmdata/fmcell.cpp
 					) 
 
-# Linking CImg dependencies.
+# Link the executable to the Hello library. 
 target_link_libraries (fmm X11 pthread ) 

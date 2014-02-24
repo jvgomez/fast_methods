@@ -15,19 +15,23 @@ class FMCell : public Cell{
 	
     public: 
     // Implicit Fast Marching method initialization.
-       FMCell() : Cell(std::numeric_limits<float>::infinity()), state_(FMState::OPEN), velocity_(1)  {};
+       FMCell() : Cell(std::numeric_limits<float>::infinity(), false), state_(FMState::OPEN), velocity_(1)  {};
         virtual ~FMCell() {};
         
         // NOTE: no checks are done (out of bounds, correct states, etc) no improve efficienty.
         // TODO: overload functions to add the option of input checking.
-        void setVelocity (const float v)    		{velocity_ = v;}
-        void setArrivalTime (const float at)    	{value_= at;}
-        void setState (const FMState state)			{state_ = state;}
+        virtual void setVelocity (const float v)    		{velocity_ = v;}
+        virtual void setArrivalTime (const float at)    	{value_= at;}
+        virtual void setState (const FMState state)			{state_ = state;}
+        // Occupied means velocity 0 but not vice-versa.
+        virtual void setOccupancy(const bool o)				{occupancy_ = o;
+															 if (o == 0) setVelocity(0);}
+															 
         std::string type () {return std::string("FMCell - Fast Marching cell");}
            
-        float getArrivalTime () const				{return value_;}
-        float getVelocity () const					{return velocity_;}
-        FMState getState () const					{return state_;}
+        virtual float getArrivalTime () const				{return value_;}
+        virtual float getVelocity () const					{return velocity_;}
+        virtual FMState getState () const					{return state_;}
         
         inline bool isObstacle() const;
 
