@@ -8,9 +8,6 @@
     * It has 2 template parameters: the cells employed, should be Cell class or inherited.
     * 								number of dimensions of the grid. Helps compiler to optimize.
     * 
-    * To increase a bit the performance, setting a maximum grid size (number of cells) it is possible
-    * to modify the base container from vector to array. This requires to comment and uncomment some of
-    * the code of this class (very few operations). Look for the "//ARRAY-BASED:" comments and follow instructions.
     www.javiervgomez.com
 
 	This program is free software: you can redistribute it and/or modify
@@ -37,8 +34,6 @@
 #include <algorithm>
 #include <cstddef>
 #include <array> 
-
-//#define MAXSIZE 1000000 //ARRAY-BASED: Uncomment if array ncells_
 
 #include "../console/console.h"
 
@@ -92,8 +87,7 @@ template <class T, size_t ndims> class nDGridMap {
        */
         virtual ~nDGridMap<T,ndims>() {};  
         
-        
-        //ARRAY-BASED: Comment this function if array ncells_chosen.
+
         /**
          * Resizes the grid.
          * 
@@ -118,8 +112,8 @@ template <class T, size_t ndims> class nDGridMap {
 				dd_[i] *= d_[i] - dd_[i-1];
 			
 			//Resizing gridmap and initializing with default values.
-			cells_.clear();				 //ARRAY-BASED: Comment if array ncells_ 
-			cells_.resize(ncells_, T()); //ARRAY-BASED: Comment if array ncells_ 
+			cells_.clear();				
+			cells_.resize(ncells_, T()); 
 
 			// Setting the index_ member of the cells, which a-priori is unknown.
 			for (int i = 0; i < cells_.size(); ++i)
@@ -411,8 +405,6 @@ template <class T, size_t ndims> class nDGridMap {
 			return max;
 		};
 		
-		//ARRAY-BASED: Choose between vector-based or array-based. Comment the one you do not want.
-		//std::array<T, MAXSIZE> cells_;  /*!< The main container for the class. A bit faster (1-5%) than vector but allocates maximum memory. Does not allow resizing.*/
 		std::vector<T> cells_;  /*!< The main container for the class. */
         
     protected:

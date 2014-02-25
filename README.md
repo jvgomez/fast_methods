@@ -9,7 +9,10 @@ DISCLAIMER and IMPORTANT NOTES
 
 License GNU/GPL V3.
 
-IMPORTANT NOTE:
+IMPORTANT NOTES:
+
+When using in 2D it works really fine. However, some problems appear for higher dimensions. I am working on that already.
+
 This is a source code intended for my research. Although I want it to be useful for other people it is not intended to act as a library (there are many many points to improve). However, if you show interest or have feature request do not hesitate to contact me and I will try my best to improve the code for whoever needs it. I am also open to contributions and to create a formal library if necessary.
 
 Because of this, the code is not deeply tested. I've just tested it works for the cases I need.
@@ -71,6 +74,7 @@ Although there are a lot of folders, they are quite simple. It is organized this
 + ndgridmap: main container.
 + scripts: matlab scripts to parse outputs.
 + thirdparty: others' software included.
+
 ===========================
 
 

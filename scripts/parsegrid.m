@@ -1,6 +1,6 @@
 clear all; close all;
 
-fid = fopen('../debug/test_at.txt');
+fid = fopen('../build/test_fm3d.txt');
 celltype = fgetl(fid);
 data = fscanf(fid, '%f');
 
