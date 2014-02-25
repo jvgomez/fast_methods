@@ -1,3 +1,24 @@
+/*! \file cell.h
+    \brief Header of the Cell class
+    
+   A stand-alone, standard C++ class which represents each one of the cells
+   of a gridmap and its typical members.
+   
+   IMPORTANT NOTE: no checks are done in the set functions.
+    Copyright (C) 2014 Javier V. Gomez
+    www.javiervgomez.com
+
+	This program is free software: you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation, either version 3 of the License, or
+	(at your option) any later version.
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+	GNU General Public License for more details.
+	You should have received a copy of the GNU General Public License
+	along with this program. If not, see <http://www.gnu.org/licenses/>.
+*/
 
 #ifndef CELL_H_
 #define CELL_H_
@@ -6,15 +27,32 @@
 #include <string>
 
 class Cell {
+	  /**
+	   * ostream operator << overloaded for this class.
+       */
 	friend std::ostream& operator << (std::ostream & os, Cell & c);
 	
-    public: 
+    public:
+      /**
+		Default constructor: sets value_ to -1 and occupancy_ to true (clear cell, not occupied).
+		* */
         Cell() : value_(-1), occupancy_(true) {};
+        
+     /**
+       Constructor overload.
+       * @param v value_ initialization.
+       * @param o occupancy_ initialization, true by default.
+       */
         Cell(float v, bool o = true) : value_(v), occupancy_(o) {};
+        
+     /**
+       Destructor not used.
+       */
         virtual ~Cell() {};
         
         // NOTE: no checks are done (out of bounds, correct states, etc) no improve efficienty.
         // TODO: overload functions to add the option of input checking.
+        
         virtual void setValue(const float v)        	{value_ = v;}
         virtual void setOccupancy (const bool o)		{occupancy_ = o;}
         virtual std::string type ()						{return std::string("Cell - Basic cell");}
@@ -28,10 +66,10 @@ class Cell {
         
 
     protected:
-        float value_;
-        bool occupancy_; // 1 means clear, 0 means occupied.
-        int index_; // Required because of the use of the heap.       
+        float value_; /*!< Value of the cell. */
+        bool occupancy_; /*!< Binary occupanxy, true means clear, false occupied. */
+        int index_; /*!< By design, each cell does not require to know its index within the grid
+						however, it is very useful when used in heaps*/  
 };
-
 
 #endif /* CELL_H_*/

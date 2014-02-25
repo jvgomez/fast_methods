@@ -21,9 +21,6 @@
 #include <sstream>
 #include <cstring>
 #include <cstdlib>
-//#include <boost/algorithm/string.hpp> // Including this boost library avoids
-// to include cstring and cstdlib. But this way the block is totally independent.
-
 #include "console.h"
 
 using namespace std;
@@ -33,7 +30,7 @@ using namespace std;
 
 // This function looks for the position index of the parameter string "-x" and return it (-1 if not found).
 int console::findArguments 
-(int argc, char** argv, const char* argument_name) {
+(int argc, const char** argv, const char* argument_name) {
 	for (int i = 1; i < argc; ++i)
 		// Search for the string
 		if (strcmp (argv[i], argument_name) == 0)
@@ -50,7 +47,7 @@ int console::findArguments
 
 ////////////////////////////////////////////////////////////////////////////////
 int console::parseArguments 
-(int argc, char** argv, const char* str, std::string &val) {
+(int argc, const char** argv, const char* str, std::string &val) {
 	int index = findArguments (argc, argv, str) + 1;
 	if (index > 0 && index < argc)
 		val = argv[index];
@@ -59,7 +56,7 @@ int console::parseArguments
 
 ////////////////////////////////////////////////////////////////////////////////
 int console::parseArguments
-(int argc, char** argv, const char* str, bool &val) {
+(int argc, const char** argv, const char* str, bool &val) {
 	int index = findArguments (argc, argv, str) + 1;
 	if (index > 0 && index < argc )
 		val = atoi (argv[index]) == 1;
@@ -67,7 +64,7 @@ int console::parseArguments
 }
 ////////////////////////////////////////////////////////////////////////////////
 int console::parseArguments 
-(int argc, char** argv, const char* str, double &val) {
+(int argc, const char** argv, const char* str, double &val) {
 	int index = findArguments (argc, argv, str) + 1;
 	if (index > 0 && index < argc )
 		val = atof (argv[index]);
@@ -75,7 +72,7 @@ int console::parseArguments
 }
 ////////////////////////////////////////////////////////////////////////////////
 int console::parseArguments 
-(int argc, char** argv, const char* str, float &val) {
+(int argc, const char** argv, const char* str, float &val) {
 	int index = findArguments (argc, argv, str) + 1;
 	if (index > 0 && index < argc )
 		val = static_cast<float> (atof (argv[index]));
@@ -83,7 +80,7 @@ int console::parseArguments
 }
 ////////////////////////////////////////////////////////////////////////////////
 int console::parseArguments 
-(int argc, char** argv, const char* str, int &val) {
+(int argc, const char** argv, const char* str, int &val) {
 	int index = findArguments (argc, argv, str) + 1;
 	if (index > 0 && index < argc )
 		val = atoi (argv[index]);
@@ -91,7 +88,7 @@ int console::parseArguments
 }
 ////////////////////////////////////////////////////////////////////////////////
 int console::parseArguments 
-(int argc, char** argv, const char* str, unsigned int &val) {
+(int argc, const char** argv, const char* str, unsigned int &val) {
 	int index = findArguments (argc, argv, str) + 1;
 	if (index > 0 && index < argc )
 		val = atoi (argv[index]);
@@ -99,7 +96,7 @@ int console::parseArguments
 }
 ////////////////////////////////////////////////////////////////////////////////
 int console::parseArguments 
-(int argc, char** argv, const char* str, char &val) {
+(int argc, const char** argv, const char* str, char &val) {
 	int index = findArguments (argc, argv, str) + 1;
 	if (index > 0 && index < argc )
 		val = argv[index][0];
@@ -110,7 +107,7 @@ int console::parseArguments
 ////////////////////////////////////////////////////////////////////////////////
 
 int console::parseArguments 
-(int argc, char** argv, const char* str, vector<string> & vals) {
+(int argc, const char** argv, const char* str, vector<string> & vals) {
 int index = findArguments (argc, argv, str);
 	int i = index + 1;
 	string s;
@@ -128,7 +125,7 @@ int index = findArguments (argc, argv, str);
 } 
 
 int console::parseArguments 
-(int argc, char** argv, const char* str, vector<int> & vals) {
+(int argc, const char** argv, const char* str, vector<int> & vals) {
 	int index = findArguments (argc, argv, str);
 	int i = index + 1;
 	int val;

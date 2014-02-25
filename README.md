@@ -1,7 +1,78 @@
-fastmarching
-============
+N-Dimensional Fast Marching Method V1.0
 
-N-Dimensional Fast Marching Method
-
-Author: Javier V. Gomez jvgomez __at__ gmail.com
+Author: Javier V. Gomez engjotauve __at__ gmail.com
 	www.javiervgomez.com
+
+
+===========================
+DISCLAIMER and IMPORTANT NOTES
+
+License GNU/GPL V3.
+
+IMPORTANT NOTE:
+This is a source code intended for my research. Although I want it to be useful for other people it is not intended to act as a library (there are many many points to improve). However, if you show interest or have feature request do not hesitate to contact me and I will try my best to improve the code for whoever needs it. I am also open to contributions and to create a formal library if necessary.
+
+Because of this, the code is not deeply tested. I've just tested it works for the cases I need.
+
+The compilation time is highly increased due to CImg library. Please, omit it when possible. When doing this, you can erase the following lines of the CMakeLists.txt:
+
+# Linking CImg dependencies.
+target_link_libraries (fmm X11 pthread ) 
+
+The CImg dependency is included in the thirdparty folder. For more information:
+http://cimg.sourceforge.net/
+===========================
+
+===========================
+Dependencies:
+
+This code uses C++11 so a compiler g++ 4.7 or equivalent is required.
+
+The current version relies on Boost 1.55 (probably previous versions work as well). The current CMakeLists.txt assumes you have uncompressed boost into the home directory
+
+# External dependencies
+include_directories (~/boost_1_55_0)
+
+Change this line if necessary
+===========================
+
+===========================
+To build the documentation:
+
+$ cd doc
+$ doxygen
+
+Go into the HTML folder and open index.html.
+===========================
+
+===========================
+To build the code:
+
+$ cd build
+$ cmake .. -DCMAKE_BUILD_TYPE=Release (or Debug, RelWithDebInf by default)
+$ make
+$ ./fmm -map ../data/testimg.png
+===========================
+
+
+===========================
+Folder structure:
+
+Although there are a lot of folders, they are quite simple. It is organized this way because I'm focusing on an upload to Biicode (www.biicode.com)
+
++ build: where the code should be compiled.
++ console: the console class.
++ data: additional files and maps to test.
++ doc: doxygen documentation.
++ fmdata: clases related to the data types of the Fast Marching Method.
++ fmm: Fast Marching Algorithms.
++ gradientdescent: under development.
++ io: input/output helper classes.
++ ndgridmap: main container.
++ scripts: matlab scripts to parse outputs.
++ thirdparty: others' software included.
+===========================
+
+
+
+
