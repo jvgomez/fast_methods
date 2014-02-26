@@ -51,7 +51,7 @@ class FMCell : public Cell{
         // NOTE: no checks are done (out of bounds, correct states, etc) no improve efficienty.
         // TODO: overload functions to add the option of input checking.
         virtual void setVelocity (const float v)    		{velocity_ = v;}
-        virtual void setArrivalTime (const float at)    	{value_= at;}
+        virtual void setArrivalTime (const double at)    	{value_= at;}
         virtual void setState (const FMState state)			{state_ = state;}
         // Occupied means velocity 0 but not vice-versa.
         /** 
@@ -64,7 +64,7 @@ class FMCell : public Cell{
 															 
         std::string type () {return std::string("FMCell - Fast Marching cell");}
            
-        virtual float getArrivalTime () const				{return value_;}
+        virtual double getArrivalTime () const				{return value_;}
         virtual float getVelocity () const					{return velocity_;}
         virtual FMState getState () const					{return state_;}
         

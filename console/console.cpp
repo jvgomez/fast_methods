@@ -47,12 +47,13 @@ int console::findArguments
 
 ////////////////////////////////////////////////////////////////////////////////
 int console::parseArguments 
-(int argc, const char** argv, const char* str, std::string &val) {
+(int argc, const char** argv, const char* str, string &val) {
 	int index = findArguments (argc, argv, str) + 1;
 	if (index > 0 && index < argc)
 		val = argv[index];
 	return index;
 }
+
 
 ////////////////////////////////////////////////////////////////////////////////
 int console::parseArguments

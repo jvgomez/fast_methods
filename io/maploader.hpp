@@ -30,6 +30,8 @@
 using namespace cimg_library;
 
 // TODO: include checks which ensure that the grids are adecuate for the functions used.
+// TODO: include methods to read the txt saved by GridWriter.
+
 class MapLoader {
 	public:
 		MapLoader() {};
@@ -106,7 +108,7 @@ class MapLoader {
 		 * nDGridMap::seVelocity() which has to be float valued. This function has to be
 		 * overloaded in another occupancy type is being used.
 		 * 
-		 * The image should be gray scale!
+		 * The image should be gray scale! It will be load as a single-channel, float values for pixels.
 		 * 
 		 * In also stores all the false values to as initial points for a later computeFM function.
 		 * 
@@ -118,24 +120,20 @@ class MapLoader {
 		 * 
 		 * @param filename file to be open
 		 * @param grid 2D nDGridmap
-		 * @param init_points stores the indices of all the values which are false.
 		 * 
 		 */
 		template<class T, size_t ndims> 
 		static void loadVelocitiesFromImg
-		(const char * filename, nDGridMap<T, ndims> & grid, std::vector<int> & init_points) {
+		(const char * filename, nDGridMap<T, ndims> & grid) {
 			CImg<float> img(filename);
 			std::array<int, ndims> dimsize = {img.width(), img.height()};
 			grid.resize(dimsize);
-
 			// Filling the grid flipping Y dim. We want bottom left to be the (0,0).
 			cimg_forXY(img,x,y) {
-				bool vel = img(x,y);
+				float vel = img(x,y); // First of the three channels of the image is taken.
 				int idx = img.width()*(img.height()-y-1)+x;
 				grid[idx].setVelocity(vel/255); 
-				if ( vel/255 == 0)
-					init_points.push_back(idx);				
-				}
+			}
 		}
 		
 		

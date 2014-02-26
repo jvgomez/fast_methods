@@ -26,6 +26,7 @@
 #include "../ndgridmap/ndgridmap.hpp"
 
 // TODO: include checks which ensure that the grids are adecuate for the functions used.
+// TODO: there should be a check when writing grid: it is written alread? erase and write. Something like that.
 class GridWriter {
 	public:
 		GridWriter() {};
@@ -44,9 +45,9 @@ class GridWriter {
 		 * dimsize_[1]\n						(int)
 		 * ...
 		 * dimsize_[ndims_-1]\n					(int)
-		 * getCell(0).getValue()\n 	(			depends on whattosave)
+		 * getCell(0).getValue()\n 			
 		 * ...
-		 * getCell(ncells_-1).getValue(whattosave)\n 	(depends on whattosave)
+		 * getCell(ncells_-1).getValue()\n 
 		 * 
 		 * Use the parsegrid.m Matlab script to parse the data.
 		 * 
@@ -68,7 +69,45 @@ class GridWriter {
 				   
 			for (int i = 0; i < grid.size(); ++i)
 			ofs << std::endl << grid.getCell(i).getValue();  
+		}
+		
+		
+		
+		/**
+		 * Saves grid velocities in ASCII format into the specified file.
+		 * 
+		 * Saved grid format:
+		 * CellClass - info of the cell type\n  (string)
+		 * leafsize_\n 							(float)
+		 * s\n									(size_t)
+		 * dimsize_[0]\n						(int)
+		 * dimsize_[1]\n						(int)
+		 * ...
+		 * dimsize_[ndims_-1]\n					(int)
+		 * getCell(0).getVelocity()\n 	
+		 * ...
+		 * getCell(ncells_-1).getVelocity()\n 	
+		 * 		 * 
+		 * Use the parsegrid.m Matlab script to parse the data.
+		 * 
+		 * @param filename name of the file to save.
+		 * @param grid nDGridMap to be stored.
+		 * */
+		template<class T, size_t ndims> 
+		static void saveVelocities
+		(const char * filename, nDGridMap<T, ndims> & grid) {
+			std::ofstream ofs;
+			ofs.open (filename,  std::ofstream::out | std::ofstream::trunc);
 			
+			ofs << grid.getCell(0).type() << std::endl;
+			ofs << grid.getLeafSize() << std::endl << ndims;
+			
+			std::array<int, ndims> dimsize = grid.getDimSizes();
+			for (int i = 0; i < ndims; ++i)
+				ofs << std::endl << dimsize[i] << "\t";
+				   
+			for (int i = 0; i < grid.size(); ++i)
+			ofs << std::endl << grid.getCell(i).getVelocity();  
 		}
 		
 		

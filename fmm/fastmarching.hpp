@@ -3,6 +3,10 @@
     
     It uses as a main container the nDGridMap class. The nDGridMap type T
     has to be an FMCell or something inherited from it.
+    
+    The leafsize of the grid map is ignored since it has to be >=1 and that 
+    depends on the units employed.
+    
     Copyright (C) 2014 Javier V. Gomez
     www.javiervgomez.com
 
@@ -35,11 +39,13 @@
 #include "../fmdata/fmfibheap.hpp"
 
 // TODO: compute geodesic method.
+// TODO: when computing FM on the same grid twice it could fail. It should reset the grid in that case.
+// TODO: check initial and goal points are not the same, not on obstacles, etc.
 
 template <class T, size_t ndims> class FastMarching {
 	
     public: 
-        FastMarching <T,ndims> () {};
+        FastMarching <T,ndims> () {aux_t = 0;};
         virtual ~FastMarching <T,ndims>() {};
             
          /**
@@ -97,7 +103,7 @@ template <class T, size_t ndims> class FastMarching {
 					if (grid_->cells_[j].getState() == FMState::FROZEN)
 						continue;
 					else {
-						float new_arrival_time = solveEikonal(j);
+						double new_arrival_time = solveEikonal(j);
 						if (grid_->cells_[j].getState() == FMState::NARROW) { // Updating narrow band if necessary.
 							if (new_arrival_time < grid_->cells_[j].getArrivalTime()) {
 								//console::warning("Narrow band value updated!");
@@ -133,18 +139,18 @@ template <class T, size_t ndims> class FastMarching {
 		 * 
 		 * @return the distance (or time of arrival) value.
 		 */ 
-		float solveEikonal
+		double solveEikonal
 		(const int & idx) {
 			// TODO: Here neighbours are computed and then in the computeFM. There should be a way to avoid computing
 			// neighbours twice.
-			float a = ndims; // a parameter of the Eikonal equation.
+			int a = ndims; // a parameter of the Eikonal equation.
 			
-			float updatedT;
+			double updatedT;
 			sumT = 0;
 			sumTT = 0;
 
 			for (int dim = 0; dim < ndims; ++dim) {
-				float minTInDim = grid_->getMinValueInDim(idx, dim);
+				double minTInDim = grid_->getMinValueInDim(idx, dim);
 				if (!isinf(minTInDim)) {
 					Tvalues[dim] = minTInDim;
 					sumT += Tvalues[dim];
@@ -157,19 +163,17 @@ template <class T, size_t ndims> class FastMarching {
 					a -=1 ;
 				}
 			}
-					
 			
-			float b = -2*sumT;
-			float c = sumTT - (leafsize_*leafsize_)/(grid_->cells_[idx].getVelocity()*grid_->cells_[idx].getVelocity());
-			float quad_term = b*b - 4*a*c;
+			double b = -2*sumT;
+			double c = sumTT - 1/(grid_->cells_[idx].getVelocity()*grid_->cells_[idx].getVelocity()); // leafsize not taken into account here.
+			double quad_term = b*b - 4*a*c;
 			if (quad_term < 0) {
-				//console::warning("Quad term < 0");
-				float minT = *(std::min_element(Tvalues.begin(), Tvalues.end()));
-				updatedT = (leafsize_*leafsize_)/(grid_->cells_[idx].getVelocity()*grid_->cells_[idx].getVelocity()) + minT;
+				double minT = *(std::min_element(Tvalues.begin(), Tvalues.end()));
+				updatedT = 1/(grid_->cells_[idx].getVelocity()*grid_->cells_[idx].getVelocity()) + minT; // leafsize not taken into account here.
 			}
 			else 
 				updatedT = (-b + sqrt(quad_term))/(2*a);
-				
+			
 			return updatedT;
 		}	
 		
@@ -193,7 +197,7 @@ template <class T, size_t ndims> class FastMarching {
 					if (grid_->cells_[j].getState() == FMState::FROZEN)
 						continue;
 					else {
-						float new_arrival_time = solveEikonal(j);
+						double new_arrival_time = solveEikonal(j);
 						if (grid_->cells_[j].getState() == FMState::NARROW) { // Updating narrow band if necessary.
 							if (new_arrival_time < grid_->cells_[j].getArrivalTime()) {
 								grid_->cells_[j].setArrivalTime(new_arrival_time);
@@ -241,13 +245,16 @@ template <class T, size_t ndims> class FastMarching {
 		std::vector<int> init_points_;	/*!< Initial points for the Fast Marching Method. */
 		FMFibHeap narrow_band_; /*!< Instance of the Fibonacci Heap used. */
 		
-		float leafsize_; /*!< Although it is on grid, it is stored here so that it has not to be accessed. */
-		float sumT; /*!< Auxiliar value wich computes T1+T2+T3... Useful for generalizing the Eikonal solver. */
-		float sumTT; /*!< Auxiliar value wich computes T1^2+T2^2+T3^2... Useful for generalizing the Eikonal solver. */
+		double leafsize_; /*!< Although it is on grid, it is stored here so that it has not to be accessed. */
+		double sumT; /*!< Auxiliar value wich computes T1+T2+T3... Useful for generalizing the Eikonal solver. */
+		double sumTT; /*!< Auxiliar value wich computes T1^2+T2^2+T3^2... Useful for generalizing the Eikonal solver. */
 		
-		std::array<float,ndims> Tvalues;  /*!< Auxiliar array with values T0,T1...Tn-1 variables in the Discretized Eikonal Equation. */
-		std::array<float,ndims> TTvalues;  /*!< Auxiliar array with values T0^2,T1^2...Tn-1^2 variables in the Discretized Eikonal Equation. */
+		std::array<double,ndims> Tvalues;  /*!< Auxiliar array with values T0,T1...Tn-1 variables in the Discretized Eikonal Equation. */
+		std::array<double,ndims> TTvalues;  /*!< Auxiliar array with values T0^2,T1^2...Tn-1^2 variables in the Discretized Eikonal Equation. */
 		std::array <int,2*ndims> neighbours;  /*!< Auxiliar array which stores the neighbour of each iteration of the computeFM() function. */
+		
+		
+		double aux_t;
 };
 
 

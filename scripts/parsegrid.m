@@ -22,12 +22,15 @@ grid = reshape(cells, dimsize);
 %path2 = compute_geodesic(grid,start_point); %Using Grabriel Peyre's Toolbox.
 
 
-% To see 2D slides, take into account that Matlab has another axes
-% reference.
-imagesc(grid(:,:,1)')
-axis xy;
-axis image;
+% % % % % % To see 2D slides, take into account that Matlab has another axes
+% % % % % % reference.
+% % % % % imagesc(grid(:,:,1)')
+% % % % % axis xy;
+% % % % % axis image;
 
-hold on
+%hold on
 % plot(path(:,1),path(:,2),'w');
 % plot(path2(1,:),path2(2,:), 'k.');
+
+% To see 3D slides,
+plot_volumetric_data(grid)

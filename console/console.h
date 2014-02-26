@@ -26,6 +26,8 @@
 #include <string>
 #include <vector>
 
+// TODO: a member method like string but with const char* is missing.
+
 class console {
 
 	public:
@@ -60,7 +62,7 @@ class console {
        * @return The index position in which the argument value was found.
        */
 	static int parseArguments (int argc, const char** argv, const char* str, std::string &val);
-	
+
 	 /**
 	  * Same as the others parseArguments. Bool as output.
       @see parseArguments()

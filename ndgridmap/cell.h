@@ -53,20 +53,20 @@ class Cell {
         // NOTE: no checks are done (out of bounds, correct states, etc) no improve efficienty.
         // TODO: overload functions to add the option of input checking.
         
-        virtual void setValue(const float v)        	{value_ = v;}
+        virtual void setValue(const double v)        	{value_ = v;}
         virtual void setOccupancy (const bool o)		{occupancy_ = o;}
         virtual std::string type ()						{return std::string("Cell - Basic cell");}
         virtual void setIndex(const int i)				{index_ = i;}
 		
         // This function gets no arguments in this case, but in the derivated classes it could. The ... 
 		// says that parameters could be given (or not).
-        virtual float getValue() const        		{return value_;}
+        virtual double getValue() const        		{return value_;}
         virtual bool getOccupancy() const			{return occupancy_;}
 		virtual int getIndex() const				{return index_;}
         
 
     protected:
-        float value_; /*!< Value of the cell. */
+        double value_; /*!< Value of the cell. */
         bool occupancy_; /*!< Binary occupanxy, true means clear, false occupied. */
         int index_; /*!< By design, each cell does not require to know its index within the grid
 						however, it is very useful when used in heaps*/  

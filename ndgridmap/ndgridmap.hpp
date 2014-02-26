@@ -62,9 +62,9 @@ template <class T, size_t ndims> class nDGridMap {
     public: 
     
      /**
-       Default constructor sets leafsize_ = 0.05;
+       Default constructor sets leafsize_ = 1.0f;
        */
-        nDGridMap<T,ndims>() {leafsize_ = 0.05;}
+        nDGridMap<T,ndims>() {leafsize_ = 1.0f;}
         
 	  /**
        Overloaded constructor.
@@ -73,7 +73,7 @@ template <class T, size_t ndims> class nDGridMap {
        * @param leafsize real cell size (assumed to be cubic). 0.05m by default.
        */
         nDGridMap<T,ndims>
-        (const std::array<int, ndims> & dimsize, const float leafsize = 0.05) {
+        (const std::array<int, ndims> & dimsize, const float leafsize = 1.0f) {
 			leafsize_ = leafsize;
 			ncells_= 1;
 			n_neighs = 0;
@@ -162,7 +162,7 @@ template <class T, size_t ndims> class nDGridMap {
          * 
          * @return the corresponding minimum value.
          * */       
-        float getMinValueInDim
+        double getMinValueInDim
         (const int idx, const int dim)   {
 			n_neighs = 0; // How many neighbours obtained in that dimension.
 			getNeighboursInDim(idx,n,dim);
@@ -337,7 +337,7 @@ template <class T, size_t ndims> class nDGridMap {
          * */  
 		void showCoords
 		(const int idx) {
-			std::array<int, ndims> coords(ndims);
+			std::array<int, ndims> coords;
 			idx2coord(idx, coords);
 			for (int i = 0; i < ndims; ++i)
 				std::cout << coords[i] << "\t";
