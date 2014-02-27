@@ -111,6 +111,23 @@ class GridWriter {
 		}
 		
 		
+		template<class T, size_t ndims> 
+		static void savePath2D
+		(const char * filename, nDGridMap<T, ndims> & grid,std::vector< std::array<float,2> >  & path) {
+			std::ofstream ofs;
+			ofs.open (filename,  std::ofstream::out | std::ofstream::trunc);
+			
+			ofs << grid.getLeafSize() << std::endl << ndims;
+			
+			std::array<int, ndims> dimsize = grid.getDimSizes();
+			for (int i = 0; i < ndims; ++i)
+				ofs << std::endl << dimsize[i] << "\t";
+				   
+			for (int i = 0; i < path.size(); ++i)
+			ofs << std::endl << path[i][0] << "\t" << path[i][1];  
+		}
+		
+		
 		protected:
 	
 	   

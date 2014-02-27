@@ -56,7 +56,7 @@ $ cmake .. -DCMAKE_BUILD_TYPE=Release (or Debug, RelWithDebInf by default)
 $ make
 $ ./fmm -map1 ../data/testimg.png -map2 ../data/map.png -vel ../data/velocities.png
 
-This main shows most of the utilities implemented so far
+This main shows most of the utilities implemented so far.
 ===========================
 
 

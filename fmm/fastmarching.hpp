@@ -42,10 +42,14 @@
 // TODO: when computing FM on the same grid twice it could fail. It should reset the grid in that case.
 // TODO: check initial and goal points are not the same, not on obstacles, etc.
 
+// TODO: check why those cells not reached by the wave stay as NaN values.
+
 template <class T, size_t ndims> class FastMarching {
 	
     public: 
-        FastMarching <T,ndims> () {aux_t = 0;};
+        FastMarching <T,ndims> () {
+			
+		};
         virtual ~FastMarching <T,ndims>() {};
             
          /**
@@ -74,8 +78,8 @@ template <class T, size_t ndims> class FastMarching {
 		(const std::vector<int> & init_points) {
 			init_points_ = init_points;
 			for (const int &i: init_points) {
-				grid_->cells_[i].setArrivalTime(0);
-				grid_->cells_[i].setState(FMState::FROZEN);
+				grid_->getCell(i).setArrivalTime(0);
+				grid_->getCell(i).setState(FMState::FROZEN);
 			}
 			
 			init();
@@ -92,42 +96,37 @@ template <class T, size_t ndims> class FastMarching {
 		 */	
 		void init
 		() {
-			// TODO: neighbours computed twice for every cell. We can save time here.
+			// TODO: neighbors computed twice for every cell. We can save time here.
 			// TODO: check if the previous steps have been done (loading grid map and setting initial points.)
 			int j = 0;
 			int n_neighs = 0;
 			for (int &i: init_points_) { // For each initial point
-				n_neighs = grid_->getNeighbours(i, neighbours);
-				for (int s = 0; s < n_neighs; ++s){  // For each neighbour
-					j = neighbours[s];
-					if (grid_->cells_[j].getState() == FMState::FROZEN)
+				n_neighs = grid_->getNeighbors(i, neighbors);
+				for (int s = 0; s < n_neighs; ++s){  // For each neighbor
+					j = neighbors[s];
+					if (grid_->getCell(j).getState() == FMState::FROZEN)
 						continue;
 					else {
 						double new_arrival_time = solveEikonal(j);
-						if (grid_->cells_[j].getState() == FMState::NARROW) { // Updating narrow band if necessary.
-							if (new_arrival_time < grid_->cells_[j].getArrivalTime()) {
-								//console::warning("Narrow band value updated!");
-								grid_->cells_[j].setArrivalTime(new_arrival_time);
-								narrow_band_.increase(&grid_->cells_[j]);
+						if (grid_->getCell(j).getState() == FMState::NARROW) { // Updating narrow band if necessary.
+							if (new_arrival_time < grid_->getCell(j).getArrivalTime()) {
+								grid_->getCell(j).setArrivalTime(new_arrival_time);
+								narrow_band_.increase( &(grid_->getCell(j))  ) ;
 							}
 						}
 						else {
-							grid_->cells_[j].setState(FMState::NARROW);
-							grid_->cells_[j].setArrivalTime(new_arrival_time);
-							narrow_band_.push(&grid_->cells_[j]);
-						} // Neighbours open.
-					} // Neighbours not frozen.
-				} // For each neighbour.
+							grid_->getCell(j).setState(FMState::NARROW);
+							grid_->getCell(j).setArrivalTime(new_arrival_time);
+							narrow_band_.push( &(grid_->getCell(j)) );
+						} // neighbors open.
+					} // neighbors not frozen.
+				} // For each neighbor.
 			} // For each initial point.
 		} // init()
 			
-		/*void saveGrid
-        (const std::string & filename, const int whattosave = 0) {	
-			grid_->saveGrid(filename,whattosave);
-		}*/
 		
 		//IMPORTANT NOTE: Assuming inc(1) = inc(y) =...= leafsize_
-		// Possible improvement: If we include the neighbours in the cells information
+		// Possible improvement: If we include the neighbors in the cells information
 		// this could be (most probably) speeded up.
 		// This implementation is focused to be used with any number of dimensions.
 		
@@ -141,8 +140,10 @@ template <class T, size_t ndims> class FastMarching {
 		 */ 
 		double solveEikonal
 		(const int & idx) {
-			// TODO: Here neighbours are computed and then in the computeFM. There should be a way to avoid computing
-			// neighbours twice.
+			// TODO: Here neighbors are computed and then in the computeFM. There should be a way to avoid computing
+			// neighbors twice.
+			 
+			
 			int a = ndims; // a parameter of the Eikonal equation.
 			
 			double updatedT;
@@ -165,11 +166,11 @@ template <class T, size_t ndims> class FastMarching {
 			}
 			
 			double b = -2*sumT;
-			double c = sumTT - 1/(grid_->cells_[idx].getVelocity()*grid_->cells_[idx].getVelocity()); // leafsize not taken into account here.
+			double c = sumTT - 1/(grid_->getCell(idx).getVelocity()*grid_->getCell(idx).getVelocity()); // leafsize not taken into account here.
 			double quad_term = b*b - 4*a*c;
 			if (quad_term < 0) {
 				double minT = *(std::min_element(Tvalues.begin(), Tvalues.end()));
-				updatedT = 1/(grid_->cells_[idx].getVelocity()*grid_->cells_[idx].getVelocity()) + minT; // leafsize not taken into account here.
+				updatedT = 1/(grid_->getCell(idx).getVelocity()*grid_->getCell(idx).getVelocity()) + minT; // leafsize not taken into account here.
 			}
 			else 
 				updatedT = (-b + sqrt(quad_term))/(2*a);
@@ -189,59 +190,35 @@ template <class T, size_t ndims> class FastMarching {
 			int n_neighs = 0;
 			while (narrow_band_.size() > 0) {
 				int idxMin = narrow_band_.popMinIdx();
-				n_neighs = grid_->getNeighbours(idxMin, neighbours);
-				grid_->cells_[idxMin].setState(FMState::FROZEN);
+				n_neighs = grid_->getNeighbors(idxMin, neighbors);
+				grid_->getCell(idxMin).setState(FMState::FROZEN);
 
 				for (int s = 0; s < n_neighs; ++s) {
-					j = neighbours[s];
-					if (grid_->cells_[j].getState() == FMState::FROZEN)
+					j = neighbors[s];
+					if (grid_->getCell(j).getState() == FMState::FROZEN)
 						continue;
 					else {
 						double new_arrival_time = solveEikonal(j);
-						if (grid_->cells_[j].getState() == FMState::NARROW) { // Updating narrow band if necessary.
-							if (new_arrival_time < grid_->cells_[j].getArrivalTime()) {
-								grid_->cells_[j].setArrivalTime(new_arrival_time);
-								narrow_band_.increase(&grid_->cells_[j]);
+						if (grid_->getCell(j).getState() == FMState::NARROW) { // Updating narrow band if necessary.
+							if (new_arrival_time < grid_->getCell(j).getArrivalTime()) {
+								grid_->getCell(j).setArrivalTime(new_arrival_time);
+								narrow_band_.increase( &(grid_->getCell(j)) );
 							}
 						}
 						else {
-							grid_->cells_[j].setState(FMState::NARROW);
-							grid_->cells_[j].setArrivalTime(new_arrival_time);
-							narrow_band_.push(&grid_->cells_[j]);
-						} // Neighbours open.
-					} // Neighbours not frozen.
-				} // For each neighbour.
+							grid_->getCell(j).setState(FMState::NARROW);
+							grid_->getCell(j).setArrivalTime(new_arrival_time);
+							narrow_band_.push( &(grid_->getCell(j)) );
+						} // neighbors open.
+					} // neighbors not frozen.
+				} // For each neighbor.
 			} // while narrow band not empty
 		}
-        
-        /*void computeGeodesic
-        (const int & idx, std::vector<int> & path_indices) {
-			if (ndims_ == 2)
-				GradientDescent<nDGridMap<T>>::apply2D(grid_,idx, path_indices);
-			else if (ndims_ == 3)
-				GradientDescent<nDGridMap<T>>::apply3D(grid_,idx, path_indices);
-			else
-				console::error("Grimap dimensions > 3. Geodesic extraction only implemented for 2D and 3D.");
-		}
-		
-		void saveGeodesic
-		(const std::string filename, const std::vector<int> & path) {
-			
-			std::ofstream ofs;
-			ofs.open (filename,  std::ofstream::out | std::ofstream::trunc);
-			
-			ofs << "Fast Marching geodesic" << std::endl;
-			ofs << grid_->getLeafSize() << std::endl << grid_->getNDims() ;
-			std::vector<int> dimsize = grid_->getDimSizes();
-			for (int i = 0; i < grid_->getNDims(); ++i)
-				ofs << std::endl << dimsize[i] << "\t";
-				   
-			for (int i = 0; i < path.size(); ++i)
-				ofs << std::endl << path[i];  
-		}*/
+ 
 		
     private:
 		nDGridMap<T, ndims> *  grid_; /*!< Main container.. */
+		
 		std::vector<int> init_points_;	/*!< Initial points for the Fast Marching Method. */
 		FMFibHeap narrow_band_; /*!< Instance of the Fibonacci Heap used. */
 		
@@ -251,10 +228,7 @@ template <class T, size_t ndims> class FastMarching {
 		
 		std::array<double,ndims> Tvalues;  /*!< Auxiliar array with values T0,T1...Tn-1 variables in the Discretized Eikonal Equation. */
 		std::array<double,ndims> TTvalues;  /*!< Auxiliar array with values T0^2,T1^2...Tn-1^2 variables in the Discretized Eikonal Equation. */
-		std::array <int,2*ndims> neighbours;  /*!< Auxiliar array which stores the neighbour of each iteration of the computeFM() function. */
-		
-		
-		double aux_t;
+		std::array <int,2*ndims> neighbors;  /*!< Auxiliar array which stores the neighbor of each iteration of the computeFM() function. */
 };
 
 

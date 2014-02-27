@@ -13,6 +13,7 @@
 #include "io/maploader.hpp"
 #include "io/gridplotter.hpp"
 #include "io/gridwriter.hpp"
+#include "gradientdescent/gradientdescent.hpp"
 
 using namespace std;
 using namespace std::chrono;
@@ -33,11 +34,11 @@ int main(int argc, const char ** argv)
 	
 	console::info("Creating grid from image.");
 	nDGridMap<FMCell, ndims> grid;
-	MapLoader::loadMapFromImg(filename1.c_str(), grid);
+	/*MapLoader::loadMapFromImg(filename1.c_str(), grid);
 	
-	console::info("Showing the grid and the mirror effect.");
+	onsole::info("Showing the grid and the mirror effect.");
 	GridPlotter::plotMap(grid, 0); // It looks "inverted" because the CImg (0,0) coordinates and the Y orientation.
-	GridPlotter::plotMap(grid);
+	GridPlotter::plotMap(grid);*/
 	
 	
 	console::info("Testing Fast Marching Method.");
@@ -46,8 +47,6 @@ int main(int argc, const char ** argv)
 	array<int,ndims> coords = {210, 140};
 	int idx;
 	grid.coord2idx(coords, idx);
-	grid.showIdx(coords);
-	
 	init_points.push_back(idx); // Setting the initial point.
 	
 	FastMarching<FMCell, ndims> fmm;
@@ -60,9 +59,22 @@ int main(int argc, const char ** argv)
 		cout << "\tElapsed FM time: " << time_elapsed << " ms" << endl;
 		
 	console::info("Plotting the results ");
-	GridPlotter::plotArrivalTimes(grid);
+	//GridPlotter::plotArrivalTimes(grid);
+	//GridWriter::saveGridValues("test_fm.txt", grid);
+	
+	console::info("Computing gradient descent ");
+	int goal;
+	grid.coord2idx(std::array<int, ndims>{250,280}, goal);
 	
 	
+	/*******************************************************
+	std::vector< std::array<float,2> > path;
+	GradientDescent::apply2D(grid,goal,path);
+	GridWriter::savePath2D("test_path.txt", grid,path);
+	***********************************************************/
+	
+	
+	/*
 	console::info("Now using all black points as wave sources");
 	nDGridMap<FMCell, ndims> grid2;
 	init_points.clear();
@@ -121,6 +133,6 @@ int main(int argc, const char ** argv)
 	console::info("Saving into file test_fm3d.txt");
 	GridWriter::saveGridValues("test_fm3d.txt", grid3);
 		
-		
+		*/
     return 0;
 }

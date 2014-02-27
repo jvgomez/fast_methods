@@ -1,6 +1,6 @@
 clear all; close all;
 
-fid = fopen('../build/test_fm3d.txt');
+fid = fopen('../build/test_fm.txt');
 celltype = fgetl(fid);
 data = fscanf(fid, '%f');
 
@@ -18,19 +18,126 @@ grid = reshape(cells, dimsize);
 
 %path = parse_path('test_path.txt');
 
-%start_point = [101 ,294];
+%start_point = [251,281];
 %path2 = compute_geodesic(grid,start_point); %Using Grabriel Peyre's Toolbox.
 
 
-% % % % % % To see 2D slides, take into account that Matlab has another axes
-% % % % % % reference.
-% % % % % imagesc(grid(:,:,1)')
-% % % % % axis xy;
-% % % % % axis image;
+% To see 2D slides, take into account that Matlab has another axes
+% reference.
+imagesc(grid(:,:,1)')
+axis xy;
+axis image;
 
 %hold on
 % plot(path(:,1),path(:,2),'w');
 % plot(path2(1,:),path2(2,:), 'k.');
 
 % To see 3D slides,
-plot_volumetric_data(grid)
+% plot_volumetric_data(grid)
+a= [
+112251
+112252
+112253
+112254
+112255
+112256
+112257
+112258
+112259
+112260
+112261
+112262
+112263
+112264
+112265
+112266
+112267
+112268
+112269
+112270
+112271
+112272
+112273
+112274
+112275
+112276
+112277
+112278
+112279
+112280
+112281
+112282
+112283
+112284
+112285
+112286
+112287
+112288
+112289
+112290
+112291
+112292
+112293
+112294
+112295
+112296
+112297
+112298
+112299
+112300
+112301
+112302
+112303
+112304
+112305
+112306
+112307
+112308
+112309
+112310
+112311
+112312
+112313
+111914
+111915
+111516
+111517
+111118
+110719
+110720
+110321
+110322
+109923
+109924
+109525
+109126
+109127
+108728
+108729
+108330
+108331
+107932
+107533
+107534
+107135
+107136
+106737
+106738
+106339
+106340
+105941
+105542
+105543
+105144
+105145
+104746
+104747
+104348
+104349
+103950
+103951
+103552
+103153
+103154
+102755
+];

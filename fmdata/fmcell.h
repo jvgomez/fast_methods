@@ -45,8 +45,9 @@ class FMCell : public Cell{
      /**
 	   * Default constructor which performs and implicit Fast Marching-like initialization of the grid,
        */
-       FMCell() : Cell(std::numeric_limits<float>::infinity(), false), state_(FMState::OPEN), velocity_(1)  {};
-        virtual ~FMCell() {};
+       FMCell() : Cell(std::numeric_limits<double>::infinity(), true), state_(FMState::OPEN), velocity_(1)  {};
+
+       virtual ~FMCell() {};
         
         // NOTE: no checks are done (out of bounds, correct states, etc) no improve efficienty.
         // TODO: overload functions to add the option of input checking.

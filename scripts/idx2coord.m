@@ -21,5 +21,3 @@ end
 
 %Remove this line to get C++ mode coordinates (0 to n-1).
 coords = coords+1; 
-
-

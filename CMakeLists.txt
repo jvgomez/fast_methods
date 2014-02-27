@@ -19,6 +19,7 @@ include_directories (${FMM_SOURCE_DIR}/ndgridmap)
 include_directories (${FMM_SOURCE_DIR}/fmdata) 
 include_directories (${FMM_SOURCE_DIR}/fmm) 
 include_directories (${FMM_SOURCE_DIR}/io) 
+include_directories (${FMM_SOURCE_DIR}/gradientdescent) 
 
 
 # Third party internal includes

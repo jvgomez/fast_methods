@@ -38,10 +38,11 @@
 #include "../console/console.h"
 
 	// TODO: try to create a definitve form based on arrays.
-	// TODO: a neighbours precomputation could speed things up.
+	// TODO: a neighbors precomputation could speed things up.
+	// TODO: improve coord2idx function in order to just pass n coordinates and not an array.
 	
 template <class T, size_t ndims> class nDGridMap {
-	
+		
 	  /**
        Ostream operator << overload for this class.
        */
@@ -60,7 +61,7 @@ template <class T, size_t ndims> class nDGridMap {
 	}
 	
     public: 
-    
+     
      /**
        Default constructor sets leafsize_ = 1.0f;
        */
@@ -79,7 +80,6 @@ template <class T, size_t ndims> class nDGridMap {
 			n_neighs = 0;
 			
 			resize(dimsize);
-			
 		}
        
        /**
@@ -106,10 +106,11 @@ template <class T, size_t ndims> class nDGridMap {
 				
 			}
 			
-			// Computing the auxiliar array dd_
+			/*// Computing the auxiliar array dd_
 			dd_[0] = d_[0];
 			for (int i = 1; i < ndims; ++i) 
 				dd_[i] *= d_[i] - dd_[i-1];
+			*/
 			
 			//Resizing gridmap and initializing with default values.
 			cells_.clear();				
@@ -146,10 +147,11 @@ template <class T, size_t ndims> class nDGridMap {
          * @see operator[]
          * 
          * */
-        T getCell 
-        (const int idx) const {
+        T & getCell 
+        (const int idx) {
 			return cells_[idx];
 			}
+		
          
         std::array<int, ndims> getDimSizes() const     { return dimsize_;}
         
@@ -164,8 +166,8 @@ template <class T, size_t ndims> class nDGridMap {
          * */       
         double getMinValueInDim
         (const int idx, const int dim)   {
-			n_neighs = 0; // How many neighbours obtained in that dimension.
-			getNeighboursInDim(idx,n,dim);
+			n_neighs = 0; // How many neighbors obtained in that dimension.
+			getNeighborsInDim(idx,n,dim);
 			
 			if (n_neighs == 1)
 				return cells_[n[0]].getValue();
@@ -175,59 +177,59 @@ template <class T, size_t ndims> class nDGridMap {
 		}	
 		
 		/**
-         * Computes the indices of the 4-connectivity neighbours. As it is based
-         * on arrays (to improve performance) the number of neighbours found is
+         * Computes the indices of the 4-connectivity neighbors. As it is based
+         * on arrays (to improve performance) the number of neighbors found is
          * returned since the neighs array will have always the same size.
          * 
-         * @param idx index of the cell the neighbours are desired.
+         * @param idx index of the cell the neighbors are desired.
          * @param neighs constains the neigbour indices.
          * 
-         * @return the number of neighbours found.
+         * @return the number of neighbors found.
          * */      
-        int getNeighbours 
+        int getNeighbors 
         (const int idx, std::array<int, 2*ndims> & neighs) {
 			n_neighs = 0;
 			for (int i = 0; i < ndims; ++i)
-				getNeighboursInDim(idx,neighs,i);
+				getNeighborsInDim(idx,neighs,i);
 				
 			return n_neighs;
 		}
 		
 		/**
-         * Computes the indices of the 4-connectivity neighbours in a specified direction. 
-         * This function is designed to be used within getNeighbours() or getMinValueInDim()
+         * Computes the indices of the 4-connectivity neighbors in a specified direction. 
+         * This function is designed to be used within getNeighbors() or getMinValueInDim()
          * since it increments the private member n_neighs and it is only reset in 
          * those functions.
          * 
-         * @param idx index of the cell the neighbours are desired.
+         * @param idx index of the cell the neighbors are desired.
          * @param neighs constains the neigbour indices.
          * @param dim the direction (dimension) to be examined.
          * 
-         * @see getNeighbours()
+         * @see getNeighbors()
          * @see getMinValueInDim()
          * */     
-		void getNeighboursInDim
+		void getNeighborsInDim
         (const int idx, std::array<int, 2*ndims>& neighs, const int dim) {
 			int c1,c2;
 			if (dim == 0) {
 				c1 = idx-1;
 				c2 = idx+1;
-				// Checking neighbour 1.
+				// Checking neighbor 1.
 				if ((c1 >= 0) && (c1/d_[0] == idx/d_[0]))
 					neighs[n_neighs++] = c1;
-				// Checking neighbour 2.
+				// Checking neighbor 2.
 				//if ((c2 < ncells_) && (c2/d_[0] == idx/d_[0])) // full check, not necessary.
 				if (c2/d_[0] == idx/d_[0])
 					neighs[n_neighs++] = c2;
 			}
 			else {
-				// Neighbours proposed.
+				// neighbors proposed.
 				c1 = idx-d_[dim-1];
 				c2 = idx+d_[dim-1];
-				// Checking neighbour 1.
+				// Checking neighbor 1.
 				if ((c1 >= 0) && (c1/d_[dim] == idx/d_[dim]))
 					neighs[n_neighs++] = c1;
-				// Checking neighbour 2.
+				// Checking neighbor 2.
 				//if ((c2 < ncells_) && (c2/d_[dimi] == idx/d_[dim])) // full check, not necessary.
 				if (c2/d_[dim] == idx/d_[dim])
 					neighs[n_neighs++] = c2;
@@ -237,35 +239,35 @@ template <class T, size_t ndims> class nDGridMap {
 		/**
          * Special version of this function to be used with getMinValueInDim().
          * 
-         * @param idx index of the cell the neighbours are desired.
+         * @param idx index of the cell the neighbors are desired.
          * @param neighs constains the neigbour indices.
          * @param dim the direction (dimension) to be examined.
          * 
-         * @see getNeighboursInDim()
+         * @see getNeighborsInDim()
          * @see getMinValueInDim()
          * */     
-		void getNeighboursInDim
-        (const int idx, std::array<int, ndims>& neighs, const int dim) {
+		void getNeighborsInDim
+        (const int idx, std::array<int, 2>& neighs, const int dim) {
 			int c1,c2;
 			if (dim == 0) {
 				c1 = idx-1;
 				c2 = idx+1;
-				// Checking neighbour 1.
+				// Checking neighbor 1.
 				if ((c1 >= 0) && (c1/d_[0] == idx/d_[0]))
 					neighs[n_neighs++] = c1;
-				// Checking neighbour 2.
+				// Checking neighbor 2.
 				//if ((c2 < ncells_) && (c2/d_[0] == idx/d_[0])) // full check, not necessary.
 				if (c2/d_[0] == idx/d_[0])
 					neighs[n_neighs++] = c2;
 			}
 			else {
-				// Neighbours proposed.
+				// neighbors proposed.
 				c1 = idx-d_[dim-1];
 				c2 = idx+d_[dim-1];
-				// Checking neighbour 1.
+				// Checking neighbor 1.
 				if ((c1 >= 0) && (c1/d_[dim] == idx/d_[dim]))
 					neighs[n_neighs++] = c1;
-				// Checking neighbour 2.
+				// Checking neighbor 2.
 				//if ((c2 < ncells_) && (c2/d_[dimi] == idx/d_[dim])) // full check, not necessary.
 				if (c2/d_[dim] == idx/d_[dim])
 					neighs[n_neighs++] = c2;
@@ -360,32 +362,6 @@ template <class T, size_t ndims> class nDGridMap {
 			std::cout << idx << std::endl;
 		}
 				
-		/* Saved grid format:
-		 * CellClass - info of the cell type\n  (string)
-		 * leafsize_\n 							(float)
-		 * s\n									(size_t)
-		 * dimsize_[0]\n						(int)
-		 * dimsize_[1]\n						(int)
-		 * ...
-		 * dimsize_[ndims_-1]\n					(int)
-		 * getCell(0).getValue()\n 	(			depends on whattosave)
-		 * ...
-		 * getCell(ncells_-1).getValue(whattosave)\n 	(depends on whattosave)
-		 * */
-       /* void saveGrid
-        (const std::string filename, const int whattosave = 0) {
-			std::ofstream ofs;
-			ofs.open (filename,  std::ofstream::out | std::ofstream::trunc);
-			
-			ofs << getCell(0).type() << std::endl;
-			ofs << leafsize_ << std::endl << ndims;
-			
-			for (int i = 0; i < ndims; ++i)
-				ofs << std::endl << dimsize_[i] << "\t";
-				   
-			for (int i = 0; i < ncells_; ++i)
-			ofs << std::endl << getCell(i).getValue();  
-		}*/
 		
 		int size
 		() const {
@@ -405,19 +381,19 @@ template <class T, size_t ndims> class nDGridMap {
 			return max;
 		};
 		
-		std::vector<T> cells_;  /*!< The main container for the class. */
         
-    protected:
+    private:
+		std::vector<T> cells_;  /*!< The main container for the class. */
         std::array<int, ndims> dimsize_;  /*!< Contains the size of each dimension. */
         float leafsize_;  /*!< Real size of the cells. It is assumed that the cells in the grid are cubic. */
         int ncells_;  /*!< Number of cells in the grid (size) */
         
         // Auxiliar vectors to speed things up.
-        std::array<int, ndims> d_;  /*!< Auxiliar array to speed up neighbour and indexing generalization: stores parcial multiplications of dimensions sizes. d_[0] = dimsize_[0];
+        std::array<int, ndims> d_;  /*!< Auxiliar array to speed up neighbor and indexing generalization: stores parcial multiplications of dimensions sizes. d_[0] = dimsize_[0];
 																			                                 d_[1] = dimsize_[0]*dimsize_[1]; etc.*/
-		std::array<int, ndims> dd_; /*!< Auxiliar array to speed up neighbour and indexing generalization:   dd_[0] = d_[0], dd_[1] = d_[1] - dd_[0], and so on. */
-		std::array<int, ndims> n; /*!< Auxiliar array to speed up neighbour and indexing generalization: for getMinValueInDim() function.*/
-		int n_neighs; /*!<  Internal variable that counts the number of neighbours found in every iteration. Modified by getNeighbours(), getNeighboursInDim() and getMinValueInDim(). functions.*/
+		//std::array<int, ndims> dd_; /*!< Auxiliar array to speed up neighbor and indexing generalization:   dd_[0] = d_[0], dd_[1] = d_[1] - dd_[0], and so on. */
+		std::array<int, 2> n; /*!< Auxiliar array to speed up neighbor and indexing generalization: for getMinValueInDim() function.*/
+		int n_neighs; /*!<  Internal variable that counts the number of neighbors found in every iteration. Modified by getNeighbours(), getNeighborsInDim() and getMinValueInDim(). functions.*/
 };
 
 
