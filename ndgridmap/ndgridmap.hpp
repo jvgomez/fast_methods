@@ -36,9 +36,9 @@
 
 #include "../console/console.h"
 
-	// TODO: try to create a definitve form based on arrays.
 	// TODO: a neighbors precomputation could speed things up.
 	// TODO: improve coord2idx function in order to just pass n coordinates and not an array.
+	// TODO: overload [] and getCell methods to return const.
 	
 template <class T, size_t ndims> class nDGridMap {
 		
@@ -370,9 +370,9 @@ template <class T, size_t ndims> class nDGridMap {
 		/**
         @return the maximum value of the cells within the grid.
          * */  
-		float getMaxValue
+		double getMaxValue
 		() {
-			float max = 0;
+			double max = 0;
 			for (T & c:cells_) {
 				if (!isinf(c.getValue()) && c.getValue() > max)
 					max = c.getValue();

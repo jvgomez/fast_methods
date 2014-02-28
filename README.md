@@ -52,7 +52,7 @@ Go into the HTML folder and open index.html.
 To build the code:
 
 $ cd build
-$ cmake .. -DCMAKE_BUILD_TYPE=Release (or Debug, RelWithDebInf by default)
+$ cmake .. -DCMAKE_BUILD_TYPE=Release (Release, RelWithDebInf or Debug, Debug by default)
 $ make
 $ ./fmm -map1 ../data/testimg.png -map2 ../data/map.png -vel ../data/velocities.png
 

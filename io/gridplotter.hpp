@@ -66,7 +66,7 @@ class GridPlotter {
 			else 
 				cimg_forXY(img,x,y) { img(x,y) = grid[img.width()*y+x].getOccupancy(); }	
 				
-			img.display("Grid map");
+			img.display("Grid map", false);
 		}
 	
 	
@@ -88,8 +88,8 @@ class GridPlotter {
 		static void plotArrivalTimes
 		(nDGridMap<T, ndims> & grid, const bool flipY = true) {
 			std::array<int,2> d = grid.getDimSizes();
-			float max_val = grid.getMaxValue();
-			CImg<float> img(d[0],d[1],1,1,0);
+			double max_val = grid.getMaxValue();
+			CImg<double> img(d[0],d[1],1,1,0);
 
 			if (flipY) 
 				// Filling the image flipping Y dim. We want now top left to be the (0,0).
@@ -98,7 +98,7 @@ class GridPlotter {
 				cimg_forXY(img,x,y) { img(x,y) = grid[img.width()*y+x].getValue()/max_val*255; }	
 				
 			img.map( CImg<float>::jet_LUT256() );
-			img.display("Grid values");	
+			img.display("Grid values", false);	
 		}
 		
 		 /**
@@ -120,8 +120,8 @@ class GridPlotter {
 		static void plotMapPath
 		(nDGridMap<T, ndims> & grid, const Path2D & path, const bool flipY = true) {
 			std::array<int,2> d = grid.getDimSizes();
-			float max_val = grid.getMaxValue();
-			CImg<float> img(d[0],d[1],1,1,0);
+			double max_val = grid.getMaxValue();
+			CImg<double> img(d[0],d[1],1,1,0);
 
 			if (flipY)  {
 				// Filling the image flipping Y dim. We want now top left to be the (0,0).
@@ -137,10 +137,10 @@ class GridPlotter {
 				}
 					
 				
-			img.map( CImg<float>::jet_LUT256() );
+			img.map( CImg<double>::jet_LUT256() );
 			
 			
-			img.display("Grid values");
+			img.display("Grid values", false);
 
 			
 		}

@@ -29,14 +29,10 @@
 // TODO: include checks which ensure that the grids are adecuate for the functions used.
 // TODO: there should be a check when writing grid: it is written alread? erase and write. Something like that.
 class GridWriter {
-	typedef typename std::array<double, 2> Point2D;
-	typedef typename std::vector <Point2D> Path2D;
 		
 	public:
 		GridWriter() {};
 		virtual ~GridWriter() {};
-		
-		
 		
 		/**
 		 * Saves grid values in ASCII format into the specified file.
@@ -58,7 +54,7 @@ class GridWriter {
 		 * @param filename name of the file to save.
 		 * @param grid nDGridMap to be stored.
 		 * */
-		template<class T, size_t ndims> 
+		template <class T, size_t ndims> 
 		static void saveGridValues
 		(const char * filename, nDGridMap<T, ndims> & grid) {
 			std::ofstream ofs;
@@ -99,7 +95,7 @@ class GridWriter {
 		 * @param filename name of the file to save.
 		 * @param grid nDGridMap to be stored.
 		 * */
-		template<class T, size_t ndims> 
+		template <class T, size_t ndims> 
 		static void saveVelocities
 		(const char * filename, nDGridMap<T, ndims> & grid) {
 			std::ofstream ofs;
@@ -126,17 +122,15 @@ class GridWriter {
 		 * ndims\n								(size_t)
 		 * dimsize_[0]\n						(int)
 		 * dimsize_[1]\n						(int)
-		 * x1\n 								(double)
-		 * y1\n
-		 * x2\n 								(double)
-		 * y2\n
+		 * x1\ty1\tz1...\n 						(double)
+		 * x2\ty2\tz2...\n 						(double)
 		 * ...
 		 * 		 * 
-		 * Use the parsegrid.m Matlab script to parse the data.
+		 * Use the parsegrid.m and parsepath.m Matlab scripts to parse the data.
 		 */
-		template<class T, size_t ndims> 
-		static void savePath2D
-		(const char * filename, nDGridMap<T, ndims> & grid, Path2D  & path) {
+		template <class T, size_t ndims> 
+		static void savePath
+		(const char * filename, nDGridMap<T, ndims> & grid, std::vector< std::array<double,ndims> > & path) {
 			std::ofstream ofs;
 			ofs.open (filename,  std::ofstream::out | std::ofstream::trunc);
 			
@@ -146,8 +140,11 @@ class GridWriter {
 			for (int i = 0; i < ndims; ++i)
 				ofs << std::endl << dimsize[i] << "\t";
 				   
-			for (int i = 0; i < path.size(); ++i)
-				ofs << std::endl << path[i][0] << "\t" << path[i][1]; 
+			for (int i = 0; i < path.size(); ++i) {
+				ofs << std::endl;
+				for (int j = 0; j < ndims; ++j)	
+					ofs << path[i][j] << "\t" ; 
+			}
 				
 			ofs.close(); 
 		}

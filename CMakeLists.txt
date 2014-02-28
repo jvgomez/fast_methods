@@ -4,7 +4,7 @@ project (FMM)
 # Set a default build type for single-configuration
 # CMake generators if no build type is set.
 IF(NOT CMAKE_CONFIGURATION_TYPES AND NOT CMAKE_BUILD_TYPE)
-   SET(CMAKE_BUILD_TYPE RelWithDebInfo)
+   SET(CMAKE_BUILD_TYPE Debug)
 ENDIF(NOT CMAKE_CONFIGURATION_TYPES AND NOT CMAKE_BUILD_TYPE)
 
 # Select flags.
