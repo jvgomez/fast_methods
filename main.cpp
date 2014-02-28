@@ -60,18 +60,21 @@ int main(int argc, const char ** argv)
 		
 	console::info("Plotting the results ");
 	//GridPlotter::plotArrivalTimes(grid);
-	//GridWriter::saveGridValues("test_fm.txt", grid);
+	GridWriter::saveGridValues("test_fm.txt", grid);
 	
 	console::info("Computing gradient descent ");
 	int goal;
 	grid.coord2idx(std::array<int, ndims>{250,280}, goal);
 	
-	
-	/*******************************************************
-	std::vector< std::array<float,2> > path;
+	Path2D path;
+		start = system_clock::now();
 	GradientDescent::apply2D(grid,goal,path);
-	GridWriter::savePath2D("test_path.txt", grid,path);
-	***********************************************************/
+		end = system_clock::now();
+		time_elapsed = duration_cast<milliseconds>(end-start).count();
+		cout << "\tElapsed gradient descent time: " << time_elapsed << " ms" << endl;
+	GridWriter::savePath2D("test_path.txt", grid, path);
+	GridPlotter::plotMapPath(grid,path);
+
 	
 	
 	/*

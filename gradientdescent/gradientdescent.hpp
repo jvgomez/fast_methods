@@ -5,69 +5,77 @@
 
 #include <iostream>
 #include <vector>
-#include <limits>
-#include <cmath>
 #include <array>
+//#include <limits>
+#include <cmath>
 
-#include "../console/console.h"
+
+//#include "../console/console.h"
 #include "../ndgridmap/ndgridmap.hpp"
 #include "../fmdata/fmcell.h"
 
+#include <fstream>
+
 // TODO: check if points fall in obstacles.
 
+
+typedef typename std::array<double, 2> Point2D;
+typedef typename std::vector <Point2D> Path2D;
+
+constexpr double PI  = 3.141592653589793238462643383;
+
 class GradientDescent {
+
+	typedef typename std::array<int, 2> Coord2D;
 
     public: 
         GradientDescent() {}; // Default constructor not used.    
         virtual ~GradientDescent() {};  
-        
-        /*static void apply2D
-        (nDGridMap<FMCell,2> & grid, const int & idx, std::vector<int> & path) {
+                 
+         /** 
+          * Computes the 2D path from the given index to a minimum (the one
+          * gradient descent choses).
+          * 
+          * No checks are done (points in the borders, points in obstacles...).
+          * 
+          * The included scripts will parse the saved path.
+          * 
+          * IMPORTANT NOTE: both minimum and initial index cannot be in the
+          * border of the map. This situation is not checked. We recommend to set a 1 pixel
+          * black border around the map image.
+          * 
+          * @param grid the grid to apply gradient descent on.
+          * @param idx index of the initial path point.
+          * @param path the resulting path (output).
+          */
+        static void apply2D
+        (nDGridMap<FMCell,2> & grid, int &  idx, Path2D & path) {
 			
-			if (grid.getNDims() != 2)
-				console::error("Not possible to apply 2D gradient descent. Grid dimensions != 2.");
+			Coord2D current_coord;
+			grid.idx2coord(idx, current_coord);
+			Point2D current_point = {	static_cast<double>(current_coord[0]), 
+										static_cast<double>(current_coord[1]) };
+			path.push_back(current_point);
+			
+			Coord2D d = grid.getDimSizes();
+
+			while(grid[idx].getArrivalTime() != 0) {
 				
-			else {
-				std::array<int,2> new_coords;
-				std::array<int,2>  coords;
-				path.push_back(idx);
+				// Simplest approximated gradient
+				double grad_x = - grid[idx-1].getValue()/2 + grid[idx+1].getValue()/2;
+				double grad_y = - grid[idx-d[0]].getValue()/2 + grid[idx+d[0]].getValue()/2;
 				
-				if (grid[idx].getValue() == 0) {
-					console::warning("The final path point is equal to the initial point.");
-					return;
-				}
+				double alpha = atan2(grad_y,grad_x);
 				
-				std::array<int,8> neighs;
-				int new_idx;
-				int current_idx = idx;
-				do {
-					// Assuming that we are not in any border of the map. Not in the beginning nor the end.
-					grid.getNeighbours8c2D(current_idx, neighs, false);
-
-					double grad_x =-2*grid[neighs[0]].getValue()+2*grid[neighs[1]].getValue()
-									 -grid[neighs[4]].getValue()+  grid[neighs[5]].getValue()
-									 -grid[neighs[6]].getValue()+  grid[neighs[7]].getValue();
-					double grad_y =-2*grid[neighs[2]].getValue()+2*grid[neighs[3]].getValue()
-									 -grid[neighs[4]].getValue()+  grid[neighs[6]].getValue()
-									 -grid[neighs[5]].getValue()+  grid[neighs[7]].getValue();
-					double mod = sqrt(grad_x*grad_x+grad_y*grad_y);
-					double alpha = atan2(-grad_y,-grad_x);
-					
-					std::cout << grad_x <<  "  " << grad_y << "  " << mod << "  " << alpha << std::endl;
-
-					grid.idx2coord(current_idx,coords);
-					new_coords[0] = round(coords[0]+mod*cos(alpha));
-					new_coords[1] = round(coords[1]+mod*sin(alpha));
-					grid.coord2idx(new_coords, new_idx);
-
-
-					path.push_back(new_idx);
-					current_idx = new_idx;
-					std::cout << current_idx << std::endl;
-				} while (grid[current_idx].getValue() != 0);
+				current_point = {	current_point[0] - cos(alpha),
+									current_point[1] - sin(alpha) };		
+				path.push_back(current_point);
+				
+				current_coord = {	static_cast<int>(current_point[0]), 
+									static_cast<int>(current_point[1]) };
+				grid.coord2idx(current_coord,idx);
 			}
-		}*/
-		
+		}
 		
         
     protected:

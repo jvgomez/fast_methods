@@ -22,12 +22,16 @@
 #ifndef GRIDWRITER_H_
 #define GRIDWRITER_H_
 
+#include <fstream>
 
 #include "../ndgridmap/ndgridmap.hpp"
 
 // TODO: include checks which ensure that the grids are adecuate for the functions used.
 // TODO: there should be a check when writing grid: it is written alread? erase and write. Something like that.
 class GridWriter {
+	typedef typename std::array<double, 2> Point2D;
+	typedef typename std::vector <Point2D> Path2D;
+		
 	public:
 		GridWriter() {};
 		virtual ~GridWriter() {};
@@ -40,12 +44,12 @@ class GridWriter {
 		 * Saved grid format:
 		 * CellClass - info of the cell type\n  (string)
 		 * leafsize_\n 							(float)
-		 * s\n									(size_t)
+		 * ndims\n								(size_t)
 		 * dimsize_[0]\n						(int)
 		 * dimsize_[1]\n						(int)
 		 * ...
 		 * dimsize_[ndims_-1]\n					(int)
-		 * getCell(0).getValue()\n 			
+		 * getCell(0).getValue()\n 				(double)
 		 * ...
 		 * getCell(ncells_-1).getValue()\n 
 		 * 
@@ -68,7 +72,9 @@ class GridWriter {
 				ofs << std::endl << dimsize[i] << "\t";
 				   
 			for (int i = 0; i < grid.size(); ++i)
-			ofs << std::endl << grid.getCell(i).getValue();  
+				ofs << std::endl << grid.getCell(i).getValue();  
+				
+			ofs.close(); 
 		}
 		
 		
@@ -79,7 +85,7 @@ class GridWriter {
 		 * Saved grid format:
 		 * CellClass - info of the cell type\n  (string)
 		 * leafsize_\n 							(float)
-		 * s\n									(size_t)
+		 * ndims\n								(size_t)
 		 * dimsize_[0]\n						(int)
 		 * dimsize_[1]\n						(int)
 		 * ...
@@ -107,13 +113,30 @@ class GridWriter {
 				ofs << std::endl << dimsize[i] << "\t";
 				   
 			for (int i = 0; i < grid.size(); ++i)
-			ofs << std::endl << grid.getCell(i).getVelocity();  
+				ofs << std::endl << grid.getCell(i).getVelocity();  
+			
+			ofs.close(); 
 		}
 		
-		
+	
+		/** 
+		 * Saves the 2D path in an ASCII file with the following format:
+		 *
+		 * leafsize_\n 							(float)
+		 * ndims\n								(size_t)
+		 * dimsize_[0]\n						(int)
+		 * dimsize_[1]\n						(int)
+		 * x1\n 								(double)
+		 * y1\n
+		 * x2\n 								(double)
+		 * y2\n
+		 * ...
+		 * 		 * 
+		 * Use the parsegrid.m Matlab script to parse the data.
+		 */
 		template<class T, size_t ndims> 
 		static void savePath2D
-		(const char * filename, nDGridMap<T, ndims> & grid,std::vector< std::array<float,2> >  & path) {
+		(const char * filename, nDGridMap<T, ndims> & grid, Path2D  & path) {
 			std::ofstream ofs;
 			ofs.open (filename,  std::ofstream::out | std::ofstream::trunc);
 			
@@ -124,7 +147,9 @@ class GridWriter {
 				ofs << std::endl << dimsize[i] << "\t";
 				   
 			for (int i = 0; i < path.size(); ++i)
-			ofs << std::endl << path[i][0] << "\t" << path[i][1];  
+				ofs << std::endl << path[i][0] << "\t" << path[i][1]; 
+				
+			ofs.close(); 
 		}
 		
 		
