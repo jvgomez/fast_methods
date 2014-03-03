@@ -38,11 +38,11 @@
 #include "../console/console.h"
 #include "../fmdata/fmfibheap.hpp"
 
-// TODO: compute geodesic method.
 // TODO: when computing FM on the same grid twice it could fail. It should reset the grid in that case.
 // TODO: check initial and goal points are not the same, not on obstacles, etc.
 
-// TODO: check why those cells not reached by the wave stay as NaN values.
+// TODO: check why those cells not reached by the wave stay as NaN values. 
+//		 It is because they are not checked as obstacles, so Eikonal tries to be evaluated.
 
 template <class T, size_t ndims> class FastMarching {
 	
@@ -57,7 +57,7 @@ template <class T, size_t ndims> class FastMarching {
           * 
           * @param g input grid map.
           */   
-        void setEnvironment 
+        virtual void setEnvironment 
         (nDGridMap<T,ndims> * g) {
 			grid_ = g;
 			leafsize_ = grid_->getLeafSize();
@@ -74,7 +74,7 @@ template <class T, size_t ndims> class FastMarching {
 		 * 
 		 * @see init()
 		 */	
-		void setInitialPoints
+		virtual void setInitialPoints
 		(const std::vector<int> & init_points) {
 			init_points_ = init_points;
 			for (const int &i: init_points) {
@@ -94,7 +94,7 @@ template <class T, size_t ndims> class FastMarching {
 		 * 
 		 * @see setInitialPoints()
 		 */	
-		void init
+		virtual void init
 		() {
 			// TODO: neighbors computed twice for every cell. We can save time here.
 			// TODO: check if the previous steps have been done (loading grid map and setting initial points.)
@@ -104,7 +104,7 @@ template <class T, size_t ndims> class FastMarching {
 				n_neighs = grid_->getNeighbors(i, neighbors);
 				for (int s = 0; s < n_neighs; ++s){  // For each neighbor
 					j = neighbors[s];
-					if (grid_->getCell(j).getState() == FMState::FROZEN)
+					if (grid_->getCell(j).getState() == FMState::FROZEN) // TODO: Or obstacle!
 						continue;
 					else {
 						double new_arrival_time = solveEikonal(j);
@@ -138,7 +138,7 @@ template <class T, size_t ndims> class FastMarching {
 		 * 
 		 * @return the distance (or time of arrival) value.
 		 */ 
-		double solveEikonal
+		virtual double solveEikonal
 		(const int & idx) {
 			// TODO: Here neighbors are computed and then in the computeFM. There should be a way to avoid computing
 			// neighbors twice.
@@ -183,7 +183,7 @@ template <class T, size_t ndims> class FastMarching {
 		 * 
 		 * @see setInitialPoints()
 		 */
-		void computeFM
+		virtual void computeFM
 		() {
 			// TODO: check if the previous steps have been done (initialization).
 			int j= 0;
@@ -195,7 +195,7 @@ template <class T, size_t ndims> class FastMarching {
 
 				for (int s = 0; s < n_neighs; ++s) {
 					j = neighbors[s];
-					if (grid_->getCell(j).getState() == FMState::FROZEN)
+					if (grid_->getCell(j).getState() == FMState::FROZEN) // TODO: Or obstacle!
 						continue;
 					else {
 						double new_arrival_time = solveEikonal(j);
@@ -216,7 +216,7 @@ template <class T, size_t ndims> class FastMarching {
 		}
  
 		
-    private:
+    protected:
 		nDGridMap<T, ndims> *  grid_; /*!< Main container.. */
 		
 		std::vector<int> init_points_;	/*!< Initial points for the Fast Marching Method. */

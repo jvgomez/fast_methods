@@ -105,7 +105,7 @@ template <class T, size_t ndims> class nDGridMap {
 				
 			}
 			
-			/*// Computing the auxiliar array dd_
+			/*// Computing the auxiliar array dd_ for 8-connectivity neighbours.
 			dd_[0] = d_[0];
 			for (int i = 1; i < ndims; ++i) 
 				dd_[i] *= d_[i] - dd_[i-1];

@@ -31,6 +31,8 @@ using namespace cimg_library;
 
 // TODO: include checks which ensure that the grids are adecuate for the functions used.
 // TODO: include methods to read the txt saved by GridWriter.
+// TODO: when loading an empty grid, cells are not correctly initialized. 
+// 		 Although it works properly, values are not set to Inf (that is why we have Nan values in obstacles.)
 
 class MapLoader {
 	public:

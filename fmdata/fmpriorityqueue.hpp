@@ -1,5 +1,5 @@
-/*! \file fmfibheap.hpp
-    \brief Wrap for the Boost Fibonacci Heap class.
+/*! \file fmpriorityqueue.hpp
+    \brief Wrap for the Boost Priority Queue class.
     
     Copyright (C) 2014 Javier V. Gomez
     www.javiervgomez.com
@@ -17,11 +17,11 @@
 */
 
 
-#ifndef FMFIBHEAP_H_
-#define FMFIBHEAP_H_
+#ifndef FMPRIORITYQUEUE_H_
+#define FMPRIORITYQUEUE_H_
 
 
-#include <boost/heap/fibonacci_heap.hpp>
+#include <boost/heap/priority_queue.hpp>
 
 #include "fmcell.h"
 
@@ -31,7 +31,7 @@
  * is desired the operation checked is param1 > param2 as seen in this
  * [Stack Overflow post](http://stackoverflow.com/a/16706002/2283531)
  * */
-struct compare_cells {
+struct compare_cells_pq {
 	inline bool operator()
 	(const FMCell * c1 , const FMCell * c2) const {
 
@@ -40,14 +40,12 @@ struct compare_cells {
 };
 
 // TODO: Template this class.
-class FMFibHeap {
-	
-	typedef typename boost::heap::fibonacci_heap<const FMCell *, boost::heap::compare<compare_cells>>::handle_type handle_t;
+class FMPriorityQueue{
 	
 	public:
-		FMFibHeap () {};
-		FMFibHeap (const int & n) {	handles_.resize(n);}
-		virtual ~ FMFibHeap() {};
+		FMPriorityQueue () {};
+		FMPriorityQueue (const int & n) {	heap_.reserve(n);}
+		virtual ~ FMPriorityQueue() {};
 		
 		/**
 		 * Set the maximum number of cells the heap will contain.
@@ -56,12 +54,12 @@ class FMFibHeap {
 		 */
 		void setMaxSize
 		(const int & n) {
-			handles_.resize(n);
+			heap_.reserve(n);
 		}
 		
 		void push 
 		(const FMCell * c) {
-			handles_[c->getIndex()] = heap_.push(c);
+			heap_.push(c);
 		}
 		
 		/**
@@ -80,40 +78,12 @@ class FMFibHeap {
 		() const {
 			return heap_.size();
 		}
-		
-		/**
-		 * Updates the position of the cell in the heap. Its priority can increase or decrease.
-		 * 
-		 * @param c FMCell to be updated.
-		 * 
-		 * @see increase()
-		 */
-		void update
-		(const FMCell * c) {
-			heap_.update(handles_[c->getIndex()], c);
-		}
-		
-		/**
-		 * Updates the position of the cell in the heap. Its priority can only increase.
-		 * It is more efficient than the update() function if it is ensured that the priority
-		 * will increase.
-		 * 
-		 * @param c FMCell to be updated.
-		 * 
-		 * @see update()
-		 */
-		void increase
-		(const FMCell * c) {
-			heap_.increase(handles_[c->getIndex()],c);
-		}
 			
 		
 	protected:
-		boost::heap::fibonacci_heap<const FMCell *, boost::heap::compare<compare_cells>> heap_;  /*!< The actual heap for FMCells. */
-		std::vector<handle_t> handles_;  /*!< Stores the handles of each cell by keeping the indices: handles_(0) is the handle for
-											the cell with index 0 in the grid. Makes possible to update the heap.*/
+		boost::heap::priority_queue<const FMCell *, boost::heap::compare<compare_cells_pq>> heap_;  /*!< The actual heap for FMCells. */
 };
 
 
-#endif /* FMFIBHEAP_H_ */
+#endif /* FMPRIORITYQUEUE_H_ */
 

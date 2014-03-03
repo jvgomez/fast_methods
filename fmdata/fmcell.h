@@ -71,7 +71,7 @@ class FMCell : public Cell{
         
         inline bool isObstacle() const;
 
-    private:
+    protected:
 		//value_ is in this case the time of arrival.
 		FMState state_;  /*!< State of the cell */
         float velocity_;  /*!< Wave propagation velocity through this cell */

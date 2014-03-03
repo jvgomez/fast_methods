@@ -80,5 +80,27 @@ Although there are a lot of folders, they are quite simple. It is organized this
 ===========================
 
 
+===========================
+Known issues:
+
+- In points with occupancy false (obstacles) grid values will be NaN if the map is loaded with the MapLoader class. It appears the values are not correctly initialized.
+
+- There is not reset in the grid values if the same grid is used in Fast Marching Methods twice. Be aware of this, it can lead to wrong FMM results.
+
+===========================
+
+
+
+===========================
+TODO:
+
+In the top part of each file there are specific TODO comments.
+
+- Restructure the folder and the CMake files in order to properly have examples and that stuff.
+
+===========================
+
+
+
 
 
