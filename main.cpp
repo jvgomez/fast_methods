@@ -122,9 +122,9 @@ int main(int argc, const char ** argv)
 	
 	
 	console::info("Testing 3D!");
-	nDGridMap<FMCell, ndims3> grid3 (std::array<int,ndims3>({100,100,50}));
+	nDGridMap<FMCell, ndims3> grid3 (std::array<int,ndims3>{100,100,50});
 	init_points.clear();
-	grid3.coord2idx(std::array<int,ndims3>({50,50,25}),idx); // Reusing the previous int.
+	grid3.coord2idx(std::array<int,ndims3>{50,50,25},idx); // Reusing the previous int.
 	init_points.push_back(idx);
 	FastMarching<FMCell, ndims3> fmm3;
 	fmm3.setEnvironment(&grid3);

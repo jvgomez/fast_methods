@@ -63,6 +63,8 @@ class Cell {
         virtual double getValue() const        		{return value_;}
         virtual bool getOccupancy() const			{return occupancy_;}
 		virtual int getIndex() const				{return index_;}
+		
+		virtual bool isOccupied() const				{return !occupancy_;}			
         
 
     protected:

@@ -41,9 +41,6 @@
 // TODO: when computing FM on the same grid twice it could fail. It should reset the grid in that case.
 // TODO: check initial and goal points are not the same, not on obstacles, etc.
 
-// TODO: check why those cells not reached by the wave stay as NaN values. 
-//		 It is because they are not checked as obstacles, so Eikonal tries to be evaluated.
-
 template <class T, size_t ndims> class FastMarching {
 	
     public: 
@@ -104,7 +101,7 @@ template <class T, size_t ndims> class FastMarching {
 				n_neighs = grid_->getNeighbors(i, neighbors);
 				for (int s = 0; s < n_neighs; ++s){  // For each neighbor
 					j = neighbors[s];
-					if (grid_->getCell(j).getState() == FMState::FROZEN) // TODO: Or obstacle!
+					if ((grid_->getCell(j).getState() == FMState::FROZEN) || grid_->getCell(j).isOccupied()) // If Frozen or obstacle
 						continue;
 					else {
 						double new_arrival_time = solveEikonal(j);
@@ -195,7 +192,7 @@ template <class T, size_t ndims> class FastMarching {
 
 				for (int s = 0; s < n_neighs; ++s) {
 					j = neighbors[s];
-					if (grid_->getCell(j).getState() == FMState::FROZEN) // TODO: Or obstacle!
+					if ((grid_->getCell(j).getState() == FMState::FROZEN) || grid_->getCell(j).isOccupied()) // If Frozen or obstacle
 						continue;
 					else {
 						double new_arrival_time = solveEikonal(j);
