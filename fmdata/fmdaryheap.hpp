@@ -1,5 +1,5 @@
 /*! \file fmfibheap.hpp
-    \brief Wrap for the Boost Fibonacci Heap class.
+    \brief Wrap for the Boost D-ary Heap class.
     
     Copyright (C) 2014 Javier V. Gomez
     www.javiervgomez.com
@@ -17,11 +17,11 @@
 */
 
 
-#ifndef FMFIBHEAP_H_
-#define FMFIBHEAP_H_
+#ifndef FMDARYHEAP_H_
+#define FMDARYHEAP_H_
 
 
-#include <boost/heap/fibonacci_heap.hpp>
+#include <boost/heap/d_ary_heap.hpp>
 
 #include "fmcell.h"
 
@@ -31,7 +31,7 @@
  * is desired the operation checked is param1 > param2 as seen in this
  * [Stack Overflow post](http://stackoverflow.com/a/16706002/2283531)
  * */
-struct compare_cells {
+struct compare_cells_d_ary {
 	inline bool operator()
 	(const FMCell * c1 , const FMCell * c2) const {
 
@@ -40,15 +40,15 @@ struct compare_cells {
 };
 
 // TODO: Template this class.
-class FMFibHeap {
+class FMDaryHeap {
 	
-	typedef boost::heap::fibonacci_heap<const FMCell *, boost::heap::compare<compare_cells>> fib_heap_t;
-	typedef fib_heap_t::handle_type handle_t;
+	typedef boost::heap::d_ary_heap<const FMCell *, boost::heap::mutable_<true>, boost::heap::arity<2>, boost::heap::compare<compare_cells_d_ary>> d_ary_heap_t;
+	typedef d_ary_heap_t::handle_type handle_t;
 	
 	public:
-		FMFibHeap () {};
-		FMFibHeap (const int & n) {	handles_.resize(n);}
-		virtual ~ FMFibHeap() {};
+		FMDaryHeap () {};
+		FMDaryHeap (const int & n) {	handles_.resize(n);}
+		virtual ~ FMDaryHeap() {};
 		
 		/**
 		 * Set the maximum number of cells the heap will contain.
@@ -110,11 +110,11 @@ class FMFibHeap {
 			
 		
 	protected:
-		fib_heap_t heap_;  /*!< The actual heap for FMCells. */
+		d_ary_heap_t heap_;  /*!< The actual heap for FMCells. */
 		std::vector<handle_t> handles_;  /*!< Stores the handles of each cell by keeping the indices: handles_(0) is the handle for
 											the cell with index 0 in the grid. Makes possible to update the heap.*/
 };
 
 
-#endif /* FMFIBHEAP_H_ */
+#endif /* FMDARYHEAP_H_ */
 

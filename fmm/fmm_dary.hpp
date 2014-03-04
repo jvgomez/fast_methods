@@ -1,5 +1,5 @@
-/*! \file fastmarching.hpp
-    \brief Templated class which computes the basic Fast Marching Method.
+/*! \file sfmm.hpp
+    \brief Fast Marching Method using a Binary Heap
     
     It uses as a main container the nDGridMap class. The nDGridMap type T
     has to be an FMCell or something inherited from it.
@@ -7,6 +7,12 @@
     The leafsize of the grid map is ignored since it has to be >=1 and that 
     depends on the units employed.
     
+    This method is introduced in the paper "3D Distance Fields: A Survey of Techniques and Applications"
+    M.W. Jones, J.A. Baerentzen and M. Sramek, 2006.
+    * 
+    However, in this implementation, the results are not that satistactory as in their paper. In fact, 
+    this method is much slower than the standard FMM.
+    * 
     Copyright (C) 2014 Javier V. Gomez
     www.javiervgomez.com
 
@@ -23,69 +29,39 @@
 */
 
 
-#ifndef FASTMARCHING_H_
-#define FASTMARCHING_H_
+#ifndef FMM_DARY_H_
+#define FMM_DARY_H_
 
-#include <iostream>
-#include <cmath>
-#include <algorithm>
-#include <numeric>
-#include <fstream>
-#include <array>
+#include "fastmarching.hpp"
+#include "../fmdata/fmdaryheap.hpp"
 
-#include "../fmdata/fmcell.h"
-#include "../ndgridmap/ndgridmap.hpp"
-#include "../console/console.h"
-#include "../fmdata/fmfibheap.hpp"
-
-// TODO: when computing FM on the same grid twice it could fail. It should reset the grid in that case.
-// TODO: check initial and goal points are not the same, not on obstacles, etc.
-// TODO: implement the heap type as a policy, since in derived classes setEnvironment 
-//		 function has to be copied (FMM_Dary) in order to properly start the heap.
-
-template <class T, size_t ndims> class FastMarching {
+template <class T, size_t ndims> class FMM_Dary : public FastMarching <T, ndims> {
+	
+	// Solving the two-phase name lookup issue.
+	using FastMarching<T,ndims>::grid_;
+	using FastMarching<T,ndims>::neighbors;
+	using FastMarching<T,ndims>::solveEikonal;
+	using FastMarching<T,ndims>::init_points_;
+	using FastMarching<T,ndims>::leafsize_;
 	
     public: 
-        FastMarching <T,ndims> () {
-			
-		};
-        virtual ~FastMarching <T,ndims>() {};
-            
-         /**
+        FMM_Dary <T,ndims> () {};
+        virtual ~FMM_Dary <T,ndims>() {};
+        
+          /**
           * Sets the input grid in which operations will be performed.
           * 
           * @param g input grid map.
           */   
         virtual void setEnvironment 
         (nDGridMap<T,ndims> * g) {
+			// If this code is not taken from FastMarching, the narrow band is not properly initialized.
 			grid_ = g;
 			leafsize_ = grid_->getLeafSize();
 			narrow_band_.setMaxSize(grid_->size());
 		}
-        
-		
-		/**
-		 * Set the initial points by the indices in the nDGridMap and 
-		 * computes the initialization of the Fast Marching Method calling
-		 * the init() function.
-		 * 
-		 * @param contains the indices of the init points. 
-		 * 
-		 * @see init()
-		 */	
-		virtual void setInitialPoints
-		(const std::vector<int> & init_points) {
-			init_points_ = init_points;
-			for (const int &i: init_points) {
-				grid_->getCell(i).setArrivalTime(0);
-				grid_->getCell(i).setState(FMState::FROZEN);
-			}
-			
-			init();
-		}	
-		
-		 /**
-		 * Internal function although it is set to public so it can be accessed if desired.
+      
+		/* * Internal function although it is set to public so it can be accessed if desired.
 		 * 
 		 * Computes the Fast Marching Method initialization from the initial points given. Programmed following the paper:
 			A. Valero, J.V. Gómez, S. Garrido and L. Moreno, The Path to Efficiency: Fast Marching Method for Safer,
@@ -123,61 +99,7 @@ template <class T, size_t ndims> class FastMarching {
 			} // For each initial point.
 		} // init()
 			
-		
-		//IMPORTANT NOTE: Assuming inc(1) = inc(y) =...= leafsize_
-		// Possible improvement: If we include the neighbors in the cells information
-		// this could be (most probably) speeded up.
-		// This implementation is focused to be used with any number of dimensions.
-		
-		 /**
-		 * Solves the Eikonal equation for a given cell. This function is generalized
-		 * to any number of dimensions.
-		 * 
-		 * @param idx index of the cell to be evaluated.
-		 * 
-		 * @return the distance (or time of arrival) value.
-		 */ 
-		virtual double solveEikonal
-		(const int & idx) {
-			// TODO: Here neighbors are computed and then in the computeFM. There should be a way to avoid computing
-			// neighbors twice.
-			 
-			
-			int a = ndims; // a parameter of the Eikonal equation.
-			
-			double updatedT;
-			sumT = 0;
-			sumTT = 0;
-
-			for (int dim = 0; dim < ndims; ++dim) {
-				double minTInDim = grid_->getMinValueInDim(idx, dim);
-				if (!isinf(minTInDim)) {
-					Tvalues[dim] = minTInDim;
-					sumT += Tvalues[dim];
-					TTvalues[dim] = Tvalues[dim]*Tvalues[dim];
-					sumTT += TTvalues[dim];
-				}
-				else {
-					Tvalues[dim] = 0;
-					TTvalues[dim] = 0;
-					a -=1 ;
-				}
-			}
-			
-			double b = -2*sumT;
-			double c = sumTT - 1/(grid_->getCell(idx).getVelocity()*grid_->getCell(idx).getVelocity()); // leafsize not taken into account here.
-			double quad_term = b*b - 4*a*c;
-			if (quad_term < 0) {
-				double minT = *(std::min_element(Tvalues.begin(), Tvalues.end()));
-				updatedT = 1/(grid_->getCell(idx).getVelocity()*grid_->getCell(idx).getVelocity()) + minT; // leafsize not taken into account here.
-			}
-			else 
-				updatedT = (-b + sqrt(quad_term))/(2*a);
-			
-			return updatedT;
-		}	
-		
-		/**
+       	/**
 		 * Main Fast Marching Function. It requires to call first the setInitialPoints() function.
 		 * 
 		 * @see setInitialPoints()
@@ -214,21 +136,11 @@ template <class T, size_t ndims> class FastMarching {
 			} // while narrow band not empty
 		}
  
-		
     protected:
-		nDGridMap<T, ndims> *  grid_; /*!< Main container.. */
-		
-		std::vector<int> init_points_;	/*!< Initial points for the Fast Marching Method. */
-		FMFibHeap narrow_band_; /*!< Instance of the Fibonacci Heap used. */
-		
-		double leafsize_; /*!< Although it is on grid, it is stored here so that it has not to be accessed. */
-		double sumT; /*!< Auxiliar value wich computes T1+T2+T3... Useful for generalizing the Eikonal solver. */
-		double sumTT; /*!< Auxiliar value wich computes T1^2+T2^2+T3^2... Useful for generalizing the Eikonal solver. */
-		
-		std::array<double,ndims> Tvalues;  /*!< Auxiliar array with values T0,T1...Tn-1 variables in the Discretized Eikonal Equation. */
-		std::array<double,ndims> TTvalues;  /*!< Auxiliar array with values T0^2,T1^2...Tn-1^2 variables in the Discretized Eikonal Equation. */
-		std::array <int,2*ndims> neighbors;  /*!< Auxiliar array which stores the neighbor of each iteration of the computeFM() function. */
+    
+		FMDaryHeap narrow_band_;
+    
 };
 
 
-#endif /* FASTMARCHING_H_*/
+#endif /* FMM_DARY_H_*/

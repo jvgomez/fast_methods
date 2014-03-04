@@ -42,6 +42,7 @@ template <class T, size_t ndims> class SFMM : public FastMarching <T, ndims> {
 	using FastMarching<T,ndims>::neighbors;
 	using FastMarching<T,ndims>::solveEikonal;
 	using FastMarching<T,ndims>::init_points_;
+	using FastMarching<T,ndims>::leafsize_;
 
     public: 
         SFMM <T,ndims> () {};
