@@ -37,6 +37,13 @@ The current version relies on Boost 1.55 (probably previous versions work as wel
 include_directories (~/boost_1_55_0)
 
 Change this line if necessary
+
+
+CImg dependencies:
+The code provides a copy of the CImg library. This will take carge of loading and savig images. Depending on the extension used, you will need to install another libraries as said in the main page of CImg: http://cimg.sourceforge.net/
+
+The example code uses png, therefore examples of libraries to be installed are libpng, Magick++, ImageMagick, etc.
+
 ===========================
 
 ===========================
