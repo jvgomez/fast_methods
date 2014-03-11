@@ -29,7 +29,7 @@ http://cimg.sourceforge.net/
 ===========================
 Dependencies:
 
-This code uses C++11 so a compiler g++ 4.7 or equivalent is required.
+This code uses C++11 so a compiler g++ 4.8 or equivalent is required. With GCC 4.7 some runtime problems can occur.
 
 The current version relies on Boost 1.55 (probably previous versions work as well). The current CMakeLists.txt assumes you have uncompressed boost into the home directory
 
@@ -89,8 +89,6 @@ Although there are a lot of folders, they are quite simple. It is organized this
 
 ===========================
 Known issues:
-
-- In points with occupancy false (obstacles) grid values will be NaN if the map is loaded with the MapLoader class. It appears the values are not correctly initialized.
 
 - There is not reset in the grid values if the same grid is used in Fast Marching Methods twice. Be aware of this, it can lead to wrong FMM results.
 
