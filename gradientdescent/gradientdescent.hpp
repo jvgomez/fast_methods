@@ -63,10 +63,7 @@ template <class T, size_t ndims> class GradientDescent {
 				d_[i] = dimsize[i]*d_[i-1];
 			
 			grid.idx2coord(idx, current_coord);
-			
-			for (int i = 0; i < ndims; ++i)
-				current_point[i] = static_cast<double>(current_coord[i]);
-									
+			std::copy_n( current_coord.begin(), ndims, current_point.begin() ); // Cast to int.								
 			path.push_back(current_point);
 
 			while(grid[idx].getArrivalTime() != 0) {
@@ -80,17 +77,20 @@ template <class T, size_t ndims> class GradientDescent {
 					grad_i = sgn<double>(grad_i);
 					// Moving the point in dim 0.
 				current_point[0] = current_point[0] - step*grad_i;
-				current_coord[0] = static_cast<int>(current_point[0]);
+				//current_coord[0] = static_cast<int>(current_point[0]);
+				current_coord[0] = current_point[0];
 				
 				// Rest of dimensions.
 				for (int i = 1; i < ndims; ++i) {
 					grad_i = - grid[idx-d_[i-1]].getValue()/2 + grid[idx+d_[i-1]].getValue()/2;
 					
 					if (isinf(grad_i))
-						grad_i = static_cast<double>( sgn<double>(grad_i) );
+						//grad_i = static_cast<double>( sgn<double>(grad_i) );
+						grad_i = sgn<double>(grad_i);
 						// Moving the point in dim i.
 					current_point[i] = current_point[i] - step*grad_i;
-					current_coord[i] = static_cast<int>(current_point[i]);
+					//current_coord[i] = static_cast<int>(current_point[i]);
+					current_coord[i] = current_point[i];
 				}
 				
 				path.push_back(current_point);
@@ -99,10 +99,7 @@ template <class T, size_t ndims> class GradientDescent {
 			
 			//Adding exactly the last point at the end.
 			grid.idx2coord(idx, current_coord);
-			std::copy_n( current_coord.begin(), ndims, current_point.begin() );
-			//for (int i = 0; i < ndims; ++i) 
-			//	current_point[i] = static_cast<double>(current_coord[i]);
-
+			std::copy_n( current_coord.begin(), ndims, current_point.begin() ); // Cast to double.
 			path.push_back(current_point); 
 		}
 		
