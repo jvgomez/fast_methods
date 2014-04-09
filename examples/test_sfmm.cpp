@@ -26,14 +26,14 @@ int main(int argc, const char ** argv)
 	time_point<std::chrono::system_clock> start, end; // Time measuring.
 	double time_elapsed;
 	
-	array<int, ndims2> dimsize = {3000,3000};
+	array<int, ndims2> dimsize = {300,300};
 	nDGridMap<FMCell, ndims2> grid_fmm (dimsize);
 	nDGridMap<FMCell, ndims2> grid_sfmm (dimsize);
 	nDGridMap<FMCell, ndims2> grid_fmm_dary (dimsize);
 	
 	vector<int> init_points;
 	int idx;
-	grid_fmm.coord2idx(array<int,ndims2>{1500,1500} , idx);
+	grid_fmm.coord2idx(array<int,ndims2>{150,150} , idx);
 	init_points.push_back(idx);
 	
 	

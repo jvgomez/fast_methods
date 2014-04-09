@@ -1,6 +1,10 @@
 /*! \file sfmm.hpp
     \brief Simplified Fast Marching Method
     
+    This class keeps the narrow band in a standard priority queue and it is possible
+    to have many instances of the same cell in the narrow band. Just the first cell popped is taken
+    into account and the rest instances of the same cell are immediately ignored when popped.
+    *
     It uses as a main container the nDGridMap class. The nDGridMap type T
     has to be an FMCell or something inherited from it.
     
@@ -9,10 +13,13 @@
     
     This method is introduced in the paper "3D Distance Fields: A Survey of Techniques and Applications"
     M.W. Jones, J.A. Baerentzen and M. Sramek, 2006.
-    * 
-    However, in this implementation, the results are not that satistactory as in their paper. In fact, 
-    this method is much slower than the standard FMM.
-    * 
+    
+    This method is faster than standard FMM for most common situations: small grids, 
+    the narrow band is not big. However, to define "small grid or small narrow band" is highly dependent 
+    on the problem.
+    
+    A binary-heap based version has been tested and it is much slower than this version.
+    
     Copyright (C) 2014 Javier V. Gomez
     www.javiervgomez.com
 
@@ -47,7 +54,7 @@ template <class T, size_t ndims> class SFMM : public FastMarching <T, ndims> {
     public: 
         SFMM <T,ndims> () {};
         virtual ~SFMM <T,ndims>() {};
-               	
+                          	
        	void init
 		() {
 			// TODO: neighbors computed twice for every cell. We can save time here.
@@ -88,9 +95,12 @@ template <class T, size_t ndims> class SFMM : public FastMarching <T, ndims> {
 						j = neighbors[s];
 						if (grid_->getCell(j).getState() != FMState::FROZEN) {
 							double new_arrival_time = solveEikonal(j);
-							grid_->getCell(j).setArrivalTime(new_arrival_time);
-							narrow_band_.push( &(grid_->getCell(j)) );
-						
+							// Specific in this implementation. This if is not in the paper but there is no
+							// any advantages in this method if this condition is not included.
+							if (new_arrival_time < grid_->getCell(j).getArrivalTime()) {
+								grid_->getCell(j).setArrivalTime(new_arrival_time);
+								narrow_band_.push( &(grid_->getCell(j)) );
+							}
 						}	
 					}
 				}
@@ -100,7 +110,6 @@ template <class T, size_t ndims> class SFMM : public FastMarching <T, ndims> {
     protected:
     
 		FMPriorityQueue narrow_band_;
-    
 };
 
 

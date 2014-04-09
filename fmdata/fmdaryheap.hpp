@@ -65,6 +65,7 @@ class FMDaryHeap {
 			handles_[c->getIndex()] = heap_.push(c);
 		}
 		
+		
 		/**
 		 * pops index of the element with lowest value and removes it from the heap.
 		 * 
