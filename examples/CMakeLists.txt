@@ -29,11 +29,11 @@ include_directories (${EXAMPLES_SOURCE_DIR}/../thirdparty)
 # External dependencies
 include_directories (~/boost_1_55_0)
 
-add_executable (sfmm test_sfmm.cpp
+add_executable (test_fmm test_fmm.cpp
 					../console/console.cpp
 					../ndgridmap/cell.cpp
 					../fmdata/fmcell.cpp
 					) 
 
 # Linking CImg dependencies.
-target_link_libraries (sfmm X11 pthread ) 
+target_link_libraries (test_fmm X11 pthread ) 

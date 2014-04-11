@@ -57,7 +57,23 @@ class FMPriorityQueue{
 			heap_.reserve(n);
 		}
 		
+		/**
+		 * Adds an element to the heap.
+		 * 
+		 * @param cell to add.
+		 */
 		void push 
+		(const FMCell * c) {
+			heap_.push(c);
+		}
+		
+		/**
+		 * Priority queues do not allow key increasing. Therefore, it pushes the element again.
+		 * This is done for FMM-SFMM compatibility.
+		 * 
+		 * @param cell to add.
+		 */
+		void increase 
 		(const FMCell * c) {
 			heap_.push(c);
 		}

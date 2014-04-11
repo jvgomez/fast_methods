@@ -1,11 +1,30 @@
 /*! \file fastmarching.hpp
-    \brief Templated class which computes the basic Fast Marching Method.
+    \brief Templated class which computes the basic Fast Marching Method (FMM).
     
     It uses as a main container the nDGridMap class. The nDGridMap type T
     has to be an FMCell or something inherited from it.
     
     The leafsize of the grid map is ignored since it has to be >=1 and that 
     depends on the units employed.
+     
+    The type of the heap introduced is very important for the behaviour of the 
+    algorithm. The following heaps are provided:
+   
+	- FMDaryHeap wrap for the Boost D_ary heap (generalization of binary heaps). 
+	* Set by default if no other heap is specified. The arity has been set to 2 
+	* (binary heap) since it has been tested to be the more efficient in this algorithm.
+	- FMFibHeap wrap for the Boost Fibonacci heap.
+	- FMPriorityQueue wrap to the std::PriorityQueue class. This heap implies the implementation
+	* of the Simplified FMM (SFMM) method, done automatically because of the FMPriorityQueue::increase implementation.
+	* 
+	@par External documentation:
+		FMM: 
+          A. Valero, J.V. Gómez, S. Garrido and L. Moreno, The Path to Efficiency: Fast Marching Method for Safer, More Efficient Mobile Robot Trajectories, IEEE Robotics and Automation Magazine, Vol. 20, No. 4, 2013. DOI: <a href="http://dx.doi.org/10.1109/MRA.2013.2248309">10.1109/MRA.2013.2248309></a><br>
+           <a href="http://ieeexplore.ieee.org/xpl/articleDetails.jsp?arnumber=6582543">[PDF]</a>
+        
+        SFMM: 
+          M.W. Jones, J.A. Baerentzen, M. Sramek, 3D Distance Fields: A Survey of Techniques and Applications, IEEE Transactions on Visualization and Computer Graphics, Vol. 12, No. 4, 2006. DOI <a href=http://dx.doi.org/10.1109/TVCG.2006.56">110.1109/TVCG.2006.56</a><br>
+          <a href="http://ieeexplore.ieee.org/xpl/articleDetails.jsp?arnumber=1634323">[PDF]</a>
     
     Copyright (C) 2014 Javier V. Gomez
     www.javiervgomez.com
@@ -36,20 +55,22 @@
 #include "../fmdata/fmcell.h"
 #include "../ndgridmap/ndgridmap.hpp"
 #include "../console/console.h"
-#include "../fmdata/fmfibheap.hpp"
+#include "../fmdata/fmdaryheap.hpp"
 
 // TODO: when computing FM on the same grid twice it could fail. It should reset the grid in that case.
 // TODO: check initial and goal points are not the same, not on obstacles, etc.
 // TODO: implement the heap type as a policy, since in derived classes setEnvironment 
 //		 function has to be copied (FMM_Dary) in order to properly start the heap.
 
-template <class T, size_t ndims> class FastMarching {
+// IMPORTANT TODO: substitute grid_->getCell(j).isOccupied() by grid_->getCell(j).getVelocity() == 0 (conceptually is not the same).
+
+template < class grid_t, class heap_t = FMDaryHeap >  class FastMarching {
 	
     public: 
-        FastMarching <T,ndims> () {
+        FastMarching <grid_t, heap_t> () {
 			
 		};
-        virtual ~FastMarching <T,ndims>() {};
+        virtual ~FastMarching <grid_t, heap_t>() {};
             
          /**
           * Sets the input grid in which operations will be performed.
@@ -57,7 +78,7 @@ template <class T, size_t ndims> class FastMarching {
           * @param g input grid map.
           */   
         virtual void setEnvironment 
-        (nDGridMap<T,ndims> * g) {
+        (grid_t * g) {
 			grid_ = g;
 			leafsize_ = grid_->getLeafSize();
 			narrow_band_.setMaxSize(grid_->size());
@@ -103,7 +124,7 @@ template <class T, size_t ndims> class FastMarching {
 				n_neighs = grid_->getNeighbors(i, neighbors);
 				for (int s = 0; s < n_neighs; ++s){  // For each neighbor
 					j = neighbors[s];
-					if ((grid_->getCell(j).getState() == FMState::FROZEN) || grid_->getCell(j).isOccupied()) // If Frozen or obstacle
+					if ((grid_->getCell(j).getState() == FMState::FROZEN) || grid_->getCell(j).isOccupied() || grid_->getCell(j).getVelocity() == 0) // If Frozen or obstacle
 						continue;
 					else {
 						double new_arrival_time = solveEikonal(j);
@@ -143,13 +164,13 @@ template <class T, size_t ndims> class FastMarching {
 			// neighbors twice.
 			 
 			
-			int a = ndims; // a parameter of the Eikonal equation.
+			int a = grid_t::getNDims(); // a parameter of the Eikonal equation.
 			
 			double updatedT;
 			sumT = 0;
 			sumTT = 0;
 
-			for (int dim = 0; dim < ndims; ++dim) {
+			for (int dim = 0; dim < grid_t::getNDims(); ++dim) {
 				double minTInDim = grid_->getMinValueInDim(idx, dim);
 				if (!isinf(minTInDim)) {
 					Tvalues[dim] = minTInDim;
@@ -216,18 +237,18 @@ template <class T, size_t ndims> class FastMarching {
  
 		
     protected:
-		nDGridMap<T, ndims> *  grid_; /*!< Main container.. */
+		grid_t* grid_; /*!< Main container. */
+		heap_t narrow_band_; /*!< Instance of the heap used. */
 		
 		std::vector<int> init_points_;	/*!< Initial points for the Fast Marching Method. */
-		FMFibHeap narrow_band_; /*!< Instance of the Fibonacci Heap used. */
 		
 		double leafsize_; /*!< Although it is on grid, it is stored here so that it has not to be accessed. */
 		double sumT; /*!< Auxiliar value wich computes T1+T2+T3... Useful for generalizing the Eikonal solver. */
 		double sumTT; /*!< Auxiliar value wich computes T1^2+T2^2+T3^2... Useful for generalizing the Eikonal solver. */
 		
-		std::array<double,ndims> Tvalues;  /*!< Auxiliar array with values T0,T1...Tn-1 variables in the Discretized Eikonal Equation. */
-		std::array<double,ndims> TTvalues;  /*!< Auxiliar array with values T0^2,T1^2...Tn-1^2 variables in the Discretized Eikonal Equation. */
-		std::array <int,2*ndims> neighbors;  /*!< Auxiliar array which stores the neighbor of each iteration of the computeFM() function. */
+		std::array<double, grid_t::getNDims()> Tvalues;  /*!< Auxiliar array with values T0,T1...Tn-1 variables in the Discretized Eikonal Equation. */
+		std::array<double, grid_t::getNDims()> TTvalues;  /*!< Auxiliar array with values T0^2,T1^2...Tn-1^2 variables in the Discretized Eikonal Equation. */
+		std::array <int, 2*grid_t::getNDims()> neighbors;  /*!< Auxiliar array which stores the neighbor of each iteration of the computeFM() function. */
 };
 
 

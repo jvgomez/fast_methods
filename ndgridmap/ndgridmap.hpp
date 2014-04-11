@@ -60,7 +60,7 @@ template <class T, size_t ndims> class nDGridMap {
 	}
 	
     public: 
-     
+      
      /**
        Default constructor sets leafsize_ = 1.0f;
        */
@@ -140,7 +140,7 @@ template <class T, size_t ndims> class nDGridMap {
         
         float getLeafSize() const {return leafsize_;}
         
-        int getNDims() const {return ndims;}
+        //int getNDims() const {return ndims;}
         
         /*
          * @see operator[]
@@ -380,8 +380,13 @@ template <class T, size_t ndims> class nDGridMap {
 			return max;
 		};
 		
+		/** Makes the number of dimensions of the grid available at compilation time.
+        @return number of dimensions of the grid.
+         * */  
+		static constexpr size_t getNDims() {return ndims;}
         
     private:
+		
 		std::vector<T> cells_;  /*!< The main container for the class. */
         std::array<int, ndims> dimsize_;  /*!< Contains the size of each dimension. */
         float leafsize_;  /*!< Real size of the cells. It is assumed that the cells in the grid are cubic. */

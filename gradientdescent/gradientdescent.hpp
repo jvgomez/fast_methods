@@ -16,12 +16,14 @@ template <typename T> double sgn(T val) {
     return (T(0) < val) - (val < T(0));
 }
 
-template <class T, size_t ndims> class GradientDescent {
-
-	// Short-hand.
-	typedef typename std::array<int, ndims> Coord;
-	typedef typename std::array<double, ndims> Point;
-	typedef typename std::vector <Point> Path;
+template <class grid_t> class GradientDescent {
+	private:
+		static constexpr size_t ndims_ = grid_t::getNDims();
+       
+		// Short-hand.
+		typedef typename std::array<int, ndims_> Coord;
+		typedef typename std::array<double, ndims_> Point;
+		typedef typename std::vector <Point> Path;
 
     public: 
         GradientDescent() {}; // Default constructor not used.    
@@ -29,8 +31,8 @@ template <class T, size_t ndims> class GradientDescent {
                  
          /** 
           * Computes the path from the given index to a minimum (the one
-          * gradient descent choses). The T class chosen must inherite from Cell class
-          * or have a double getValue() function.
+          * gradient descent choses). The T class chosen must be an nDGridMap or
+          * similar whose Cell element should be inherited from Cell class.
           * 
           * Simple gradient approximation is used: dimension 0: gx = f((x-1,y)+f(x+1,y))/2
           * dimension 1: gy = f((x,y-1)+f(x,y+1))/2
@@ -50,20 +52,20 @@ template <class T, size_t ndims> class GradientDescent {
           * @param the step size to be applied.
           */
         static void apply
-        (nDGridMap<T,ndims> & grid, int &  idx, Path & path, const double step = 1) {
+        (grid_t & grid, int &  idx, Path & path, const double step = 1) {
 			
 			Coord current_coord;
 			Point current_point;
 			Coord dimsize = grid.getDimSizes();
 			double grad_i;
 			
-			std::array<int, ndims-1> d_; //  Same as nDGridMap class auxiliar array d_.
+			std::array<int, ndims_-1> d_; //  Same as nDGridMap class auxiliar array d_.
 			d_[0] = dimsize[0];
-			for (int i = 1; i < ndims; ++i)
+			for (int i = 1; i < ndims_; ++i)
 				d_[i] = dimsize[i]*d_[i-1];
 			
 			grid.idx2coord(idx, current_coord);
-			std::copy_n( current_coord.begin(), ndims, current_point.begin() ); // Cast to int.								
+			std::copy_n( current_coord.begin(), ndims_, current_point.begin() ); // Cast to int.								
 			path.push_back(current_point);
 
 			while(grid[idx].getArrivalTime() != 0) {
@@ -81,7 +83,7 @@ template <class T, size_t ndims> class GradientDescent {
 				current_coord[0] = current_point[0];
 				
 				// Rest of dimensions.
-				for (int i = 1; i < ndims; ++i) {
+				for (int i = 1; i < ndims_; ++i) {
 					grad_i = - grid[idx-d_[i-1]].getValue()/2 + grid[idx+d_[i-1]].getValue()/2;
 					
 					if (isinf(grad_i))
@@ -99,15 +101,14 @@ template <class T, size_t ndims> class GradientDescent {
 			
 			//Adding exactly the last point at the end.
 			grid.idx2coord(idx, current_coord);
-			std::copy_n( current_coord.begin(), ndims, current_point.begin() ); // Cast to double.
+			std::copy_n( current_coord.begin(), ndims_, current_point.begin() ); // Cast to double.
 			path.push_back(current_point); 
 		}
 		
         
     protected:
     
-    private:
-       
+    
 };
 
 

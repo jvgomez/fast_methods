@@ -10,6 +10,10 @@
 #include "ndgridmap/ndgridmap.hpp"
 #include "console/console.h"
 #include "fmm/fastmarching.hpp"
+#include "fmdata/fmfibheap.hpp"
+#include "fmdata/fmpriorityqueue.hpp"
+#include "fmdata/fmdaryheap.hpp"
+#include "fmdata/fmdaryheap.hpp"
 #include "io/maploader.hpp"
 #include "io/gridplotter.hpp"
 #include "io/gridwriter.hpp"
@@ -50,7 +54,7 @@ int main(int argc, const char ** argv)
 	grid.coord2idx(coords, idx);
 	init_points.push_back(idx); // Setting the initial point.
 	
-	FastMarching<FMCell, ndims> fmm;
+	FastMarching< nDGridMap<FMCell, ndims> > fmm;
 	fmm.setEnvironment(&grid);
 		start = system_clock::now();
 	fmm.setInitialPoints(init_points);
@@ -71,21 +75,20 @@ int main(int argc, const char ** argv)
 	
 	Path path;
 		start = system_clock::now();
-	GradientDescent<FMCell, ndims>::apply(grid,goal,path);
+	GradientDescent< nDGridMap<FMCell, ndims> > grad;
+	grad.apply(grid,goal,path);
 		end = system_clock::now();
 		time_elapsed = duration_cast<milliseconds>(end-start).count();
 		cout << "\tElapsed gradient descent time: " << time_elapsed << " ms" << endl;
 	GridWriter::savePath("test_path.txt", grid, path);
 	GridPlotter::plotMapPath(grid,path);
 	
-	
-	
 	console::info("Now using all black points as wave sources");
 	nDGridMap<FMCell, ndims> grid2;
 	init_points.clear();
 	MapLoader::loadMapFromImg(filename2.c_str(), grid2, init_points); // This is the only thing that changes.
 	
-	FastMarching<FMCell, ndims> fmm2;
+	FastMarching< nDGridMap<FMCell, ndims> > fmm2;
 	fmm2.setEnvironment(&grid2);
 		start = system_clock::now();
 	fmm2.setInitialPoints(init_points);
@@ -103,7 +106,7 @@ int main(int argc, const char ** argv)
 	console::info("Now let's try different velocities.");
 	nDGridMap<FMCell, ndims> grid_vels;
 	MapLoader::loadVelocitiesFromImg(filename_vels.c_str(), grid_vels);
-	FastMarching<FMCell, ndims> fmm_vels;
+	FastMarching< nDGridMap<FMCell, ndims> , FMFibHeap> fmm_vels;
 	init_points.clear();
 	init_points.push_back(80000); // Init point randomly chosen.
 	fmm_vels.setEnvironment(&grid_vels);
@@ -126,7 +129,7 @@ int main(int argc, const char ** argv)
 	init_points.clear();
 	grid3.coord2idx(std::array<int,ndims3>{50,50,25},idx); // Reusing the previous int.
 	init_points.push_back(idx);
-	FastMarching<FMCell, ndims3> fmm3;
+	FastMarching< nDGridMap<FMCell, ndims3> > fmm3;
 	fmm3.setEnvironment(&grid3);
 		start = system_clock::now();
 	fmm3.setInitialPoints(init_points);
@@ -145,7 +148,8 @@ int main(int argc, const char ** argv)
 
 	Path3D path3D;
 		start = system_clock::now();
-	GradientDescent<FMCell, ndims3>::apply(grid3,goal,path3D);
+	GradientDescent< nDGridMap<FMCell, ndims3> > grad3D;
+	grad3D.apply(grid3,goal,path3D);
 		end = system_clock::now();
 		time_elapsed = duration_cast<milliseconds>(end-start).count();
 		cout << "\tElapsed gradient descent time: " << time_elapsed << " ms" << endl;
