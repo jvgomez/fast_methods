@@ -106,7 +106,7 @@ int main(int argc, const char ** argv)
 	console::info("Now let's try different velocities.");
 	nDGridMap<FMCell, ndims> grid_vels;
 	MapLoader::loadVelocitiesFromImg(filename_vels.c_str(), grid_vels);
-	FastMarching< nDGridMap<FMCell, ndims> , FMFibHeap> fmm_vels;
+	FastMarching< nDGridMap<FMCell, ndims> , FMFibHeap<>> fmm_vels;
 	init_points.clear();
 	init_points.push_back(80000); // Init point randomly chosen.
 	fmm_vels.setEnvironment(&grid_vels);

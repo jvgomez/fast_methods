@@ -44,7 +44,7 @@ int main(int argc, const char ** argv)
 	grid_fmm.coord2idx(init_point , idx);
 	init_points.push_back(idx);
 	
-	FastMarching<FMGrid2D, FMFibHeap> fmm;
+	FastMarching<FMGrid2D, FMFibHeap<FMCell> > fmm;
 	fmm.setEnvironment(&grid_fmm);
 		start = system_clock::now();
 	fmm.setInitialPoints(init_points);
@@ -64,8 +64,8 @@ int main(int argc, const char ** argv)
 		cout << "\tElapsed FMM_Dary time: " << time_elapsed << " ms" << endl;
 		//GridWriter::saveGridValues("test_fmmdary.txt", grid_fmm_dary);
 		
-	// Using priority queue implies the use of the SFMM.	
-	FastMarching<FMGrid2D, FMPriorityQueue> sfmm;
+	// Using priority queue implies the use of the SFMM. Priority queue uses by default FMCell.	
+	FastMarching<FMGrid2D, FMPriorityQueue<> > sfmm; //Choosing the default cell class.
 	sfmm.setEnvironment(&grid_sfmm);	
 		start = system_clock::now();
 	sfmm.setInitialPoints(init_points);

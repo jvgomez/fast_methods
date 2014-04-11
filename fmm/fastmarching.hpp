@@ -64,7 +64,7 @@
 
 // IMPORTANT TODO: substitute grid_->getCell(j).isOccupied() by grid_->getCell(j).getVelocity() == 0 (conceptually is not the same).
 
-template < class grid_t, class heap_t = FMDaryHeap >  class FastMarching {
+template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FastMarching {
 	
     public: 
         FastMarching <grid_t, heap_t> () {

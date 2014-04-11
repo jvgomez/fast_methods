@@ -31,20 +31,20 @@
  * is desired the operation checked is param1 > param2 as seen in this
  * [Stack Overflow post](http://stackoverflow.com/a/16706002/2283531)
  * */
-struct compare_cells_pq {
+template <class cell_t>struct compare_cells_pq {
 	inline bool operator()
-	(const FMCell * c1 , const FMCell * c2) const {
+	(const cell_t * c1 , const cell_t * c2) const {
 
 		return c1->getArrivalTime() > c2->getArrivalTime();			 
 	}
 };
 
 // TODO: Template this class.
-class FMPriorityQueue{
+template <class cell_t = FMCell> class FMPriorityQueue{
 	
 	public:
 		FMPriorityQueue () {};
-		FMPriorityQueue (const int & n) {	heap_.reserve(n);}
+		FMPriorityQueue (const int & n) { heap_.reserve(n); }
 		virtual ~ FMPriorityQueue() {};
 		
 		/**
@@ -63,7 +63,7 @@ class FMPriorityQueue{
 		 * @param cell to add.
 		 */
 		void push 
-		(const FMCell * c) {
+		(const cell_t * c) {
 			heap_.push(c);
 		}
 		
@@ -97,7 +97,7 @@ class FMPriorityQueue{
 			
 		
 	protected:
-		boost::heap::priority_queue<const FMCell *, boost::heap::compare<compare_cells_pq>> heap_;  /*!< The actual heap for FMCells. */
+		boost::heap::priority_queue<const cell_t *, boost::heap::compare<compare_cells_pq<cell_t> > > heap_;  /*!< The actual heap for FMCells. */
 };
 
 

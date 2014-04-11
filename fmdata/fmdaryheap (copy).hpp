@@ -1,5 +1,5 @@
 /*! \file fmfibheap.hpp
-    \brief Wrap for the Boost Fibonacci Heap class.
+    \brief Wrap for the Boost D-ary Heap class.
     
     Copyright (C) 2014 Javier V. Gomez
     www.javiervgomez.com
@@ -17,11 +17,11 @@
 */
 
 
-#ifndef FMFIBHEAP_H_
-#define FMFIBHEAP_H_
+#ifndef FMDARYHEAP_H_
+#define FMDARYHEAP_H_
 
 
-#include <boost/heap/fibonacci_heap.hpp>
+#include <boost/heap/d_ary_heap.hpp>
 
 #include "fmcell.h"
 
@@ -31,24 +31,24 @@
  * is desired the operation checked is param1 > param2 as seen in this
  * [Stack Overflow post](http://stackoverflow.com/a/16706002/2283531)
  * */
-template <class cell_t> struct compare_cells {
+struct compare_cells_d_ary {
 	inline bool operator()
-	(const cell_t * c1 , const cell_t * c2) const {
+	(const FMCell * c1 , const FMCell * c2) const {
 
 		return c1->getArrivalTime() > c2->getArrivalTime();			 
 	}
 };
 
 // TODO: Template this class.
-template <class cell_t = FMCell> class FMFibHeap {
+class FMDaryHeap {
 	
-	typedef boost::heap::fibonacci_heap<const cell_t *, boost::heap::compare<compare_cells<cell_t> > > fib_heap_t;
-	typedef typename fib_heap_t::handle_type handle_t;
+	typedef boost::heap::d_ary_heap<const FMCell *, boost::heap::mutable_<true>, boost::heap::arity<2>, boost::heap::compare<compare_cells_d_ary>> d_ary_heap_t;
+	typedef d_ary_heap_t::handle_type handle_t;
 	
 	public:
-		FMFibHeap () {};
-		FMFibHeap (const int & n) {	handles_.resize(n);}
-		virtual ~ FMFibHeap() {};
+		FMDaryHeap () {};
+		FMDaryHeap (const int & n) {	handles_.resize(n);}
+		virtual ~ FMDaryHeap() {};
 		
 		/**
 		 * Set the maximum number of cells the heap will contain.
@@ -61,9 +61,10 @@ template <class cell_t = FMCell> class FMFibHeap {
 		}
 		
 		void push 
-		(const cell_t * c) {
+		(const FMCell * c) {
 			handles_[c->getIndex()] = heap_.push(c);
 		}
+		
 		
 		/**
 		 * pops index of the element with lowest value and removes it from the heap.
@@ -85,12 +86,12 @@ template <class cell_t = FMCell> class FMFibHeap {
 		/**
 		 * Updates the position of the cell in the heap. Its priority can increase or decrease.
 		 * 
-		 * @param c cell_t to be updated.
+		 * @param c FMCell to be updated.
 		 * 
 		 * @see increase()
 		 */
 		void update
-		(const cell_t * c) {
+		(const FMCell * c) {
 			heap_.update(handles_[c->getIndex()], c);
 		}
 		
@@ -99,22 +100,22 @@ template <class cell_t = FMCell> class FMFibHeap {
 		 * It is more efficient than the update() function if it is ensured that the priority
 		 * will increase.
 		 * 
-		 * @param c cell_t to be updated.
+		 * @param c FMCell to be updated.
 		 * 
 		 * @see update()
 		 */
 		void increase
-		(const cell_t * c) {
+		(const FMCell * c) {
 			heap_.increase(handles_[c->getIndex()],c);
 		}
 			
 		
 	protected:
-		fib_heap_t heap_;  /*!< The actual heap for cell_t. */
+		d_ary_heap_t heap_;  /*!< The actual heap for FMCells. */
 		std::vector<handle_t> handles_;  /*!< Stores the handles of each cell by keeping the indices: handles_(0) is the handle for
 											the cell with index 0 in the grid. Makes possible to update the heap.*/
 };
 
 
-#endif /* FMFIBHEAP_H_ */
+#endif /* FMDARYHEAP_H_ */
 

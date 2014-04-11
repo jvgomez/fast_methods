@@ -31,23 +31,23 @@
  * is desired the operation checked is param1 > param2 as seen in this
  * [Stack Overflow post](http://stackoverflow.com/a/16706002/2283531)
  * */
-struct compare_cells_d_ary {
+template <class cell_t> struct compare_cells_d_ary {
 	inline bool operator()
-	(const FMCell * c1 , const FMCell * c2) const {
+	(const cell_t * c1 , const cell_t * c2) const {
 
 		return c1->getArrivalTime() > c2->getArrivalTime();			 
 	}
 };
 
 // TODO: Template this class.
-class FMDaryHeap {
+template <class cell_t = FMCell> class FMDaryHeap {
 	
-	typedef boost::heap::d_ary_heap<const FMCell *, boost::heap::mutable_<true>, boost::heap::arity<2>, boost::heap::compare<compare_cells_d_ary>> d_ary_heap_t;
-	typedef d_ary_heap_t::handle_type handle_t;
+	typedef boost::heap::d_ary_heap<const cell_t *, boost::heap::mutable_<true>, boost::heap::arity<2>, boost::heap::compare<compare_cells_d_ary<cell_t> > > d_ary_heap_t;
+	typedef typename d_ary_heap_t::handle_type handle_t;
 	
 	public:
 		FMDaryHeap () {};
-		FMDaryHeap (const int & n) {	handles_.resize(n);}
+		FMDaryHeap (const int & n) { handles_.resize(n); }
 		virtual ~ FMDaryHeap() {};
 		
 		/**
@@ -61,7 +61,7 @@ class FMDaryHeap {
 		}
 		
 		void push 
-		(const FMCell * c) {
+		(const cell_t * c) {
 			handles_[c->getIndex()] = heap_.push(c);
 		}
 		
@@ -86,12 +86,12 @@ class FMDaryHeap {
 		/**
 		 * Updates the position of the cell in the heap. Its priority can increase or decrease.
 		 * 
-		 * @param c FMCell to be updated.
+		 * @param c cell_t to be updated.
 		 * 
 		 * @see increase()
 		 */
 		void update
-		(const FMCell * c) {
+		(const cell_t * c) {
 			heap_.update(handles_[c->getIndex()], c);
 		}
 		
@@ -100,18 +100,18 @@ class FMDaryHeap {
 		 * It is more efficient than the update() function if it is ensured that the priority
 		 * will increase.
 		 * 
-		 * @param c FMCell to be updated.
+		 * @param c cell_t to be updated.
 		 * 
 		 * @see update()
 		 */
 		void increase
-		(const FMCell * c) {
+		(const cell_t * c) {
 			heap_.increase(handles_[c->getIndex()],c);
 		}
 			
 		
 	protected:
-		d_ary_heap_t heap_;  /*!< The actual heap for FMCells. */
+		d_ary_heap_t heap_;  /*!< The actual heap for cell_t. */
 		std::vector<handle_t> handles_;  /*!< Stores the handles of each cell by keeping the indices: handles_(0) is the handle for
 											the cell with index 0 in the grid. Makes possible to update the heap.*/
 };
