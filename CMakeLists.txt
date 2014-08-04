@@ -4,7 +4,7 @@ project (FMM)
 # Set a default build type for single-configuration
 # CMake generators if no build type is set.
 IF(NOT CMAKE_CONFIGURATION_TYPES AND NOT CMAKE_BUILD_TYPE)
-   SET(CMAKE_BUILD_TYPE Debug)
+   SET(CMAKE_BUILD_TYPE Release)
 ENDIF(NOT CMAKE_CONFIGURATION_TYPES AND NOT CMAKE_BUILD_TYPE)
 
 # Select flags.
@@ -17,7 +17,8 @@ SET(CMAKE_CXX_FLAGS_DEBUG  "-Wall -Wno-unused-local-typedefs -g")
 include_directories (${FMM_SOURCE_DIR}/console) 
 include_directories (${FMM_SOURCE_DIR}/ndgridmap) 
 include_directories (${FMM_SOURCE_DIR}/fmdata) 
-include_directories (${FMM_SOURCE_DIR}/fmm) 
+include_directories (${FMM_SOURCE_DIR}/fmm)
+include_directories (${FMM_SOURCE_DIR}/fmm2)
 include_directories (${FMM_SOURCE_DIR}/io) 
 include_directories (${FMM_SOURCE_DIR}/gradientdescent) 
 

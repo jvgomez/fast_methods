@@ -139,6 +139,8 @@ template <class T, size_t ndims> class nDGridMap {
 		} 
         
         float getLeafSize() const {return leafsize_;}
+
+        void setLeafSize(const float leafsize) {leafsize_=leafsize;}
         
         //int getNDims() const {return ndims;}
         
@@ -165,16 +167,36 @@ template <class T, size_t ndims> class nDGridMap {
          * */       
         double getMinValueInDim
         (const int idx, const int dim)   {
-			n_neighs = 0; // How many neighbors obtained in that dimension.
-			getNeighborsInDim(idx,n,dim);
-			
-			if (n_neighs == 1)
-				return cells_[n[0]].getValue();
-			else
-				return (cells_[n[0]].getValue()<cells_[n[1]].getValue()) ? cells_[n[0]].getValue() : cells_[n[1]].getValue();
-			
-		}	
-		
+            n_neighs = 0; // How many neighbors obtained in that dimension.
+            getNeighborsInDim(idx,n,dim);
+
+            if (n_neighs == 1)
+                return cells_[n[0]].getValue();
+            else
+                return (cells_[n[0]].getValue()<cells_[n[1]].getValue()) ? cells_[n[0]].getValue() : cells_[n[1]].getValue();
+
+        }
+
+        int getNumberNeighborsInDim
+        (const int idx, std::array<int, ndims> &m, const int dim)   {
+            n_neighs = 0;
+            getNeighborsInDim(idx,n,dim);
+            m = n;
+            return n_neighs;
+        }
+
+ /*       double getMinValueInDimDirectional
+        (const int idx, const int dim)   {
+            n_neighs = 0; // How many neighbors obtained in that dimension.
+            getNeighborsInDim(idx,n,dim);
+
+            if (n_neighs == 1)
+                return cells_[n[0]].getDirectionalTime();
+            else
+                return (cells_[n[0]].getDirectionalTime()<cells_[n[1]].getDirectionalTime()) ? cells_[n[0]].getDirectionalTime() : cells_[n[1]].getDirectionalTime();
+
+        }
+        */
 		/**
          * Computes the indices of the 4-connectivity neighbors. As it is based
          * on arrays (to improve performance) the number of neighbors found is
@@ -197,7 +219,7 @@ template <class T, size_t ndims> class nDGridMap {
 		/**
          * Computes the indices of the 4-connectivity neighbors in a specified direction. 
          * This function is designed to be used within getNeighbors() or getMinValueInDim()
-         * since it increments the private member n_neighs and it is only reset in 
+         * since it increments the private member n_neighs and it is only reset in
          * those functions.
          * 
          * @param idx index of the cell the neighbors are desired.

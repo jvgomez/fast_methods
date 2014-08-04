@@ -53,9 +53,12 @@
 #include <array>
 
 #include "../fmdata/fmcell.h"
+#include "../fmdata/fmstarcell.h"
+#include "../fmdata/fmdirectionalcell.h"
 #include "../ndgridmap/ndgridmap.hpp"
 #include "../console/console.h"
 #include "../fmdata/fmdaryheap.hpp"
+#include "../fmdata/fmdaryheapstar.hpp"
 
 // TODO: when computing FM on the same grid twice it could fail. It should reset the grid in that case.
 // TODO: check initial and goal points are not the same, not on obstacles, etc.
@@ -80,7 +83,6 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FastMarching
         virtual void setEnvironment 
         (grid_t * g) {
 			grid_ = g;
-			leafsize_ = grid_->getLeafSize();
 			narrow_band_.setMaxSize(grid_->size());
 		}
         
@@ -186,7 +188,7 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FastMarching
 			}
 			
 			double b = -2*sumT;
-			double c = sumTT - 1/(grid_->getCell(idx).getVelocity()*grid_->getCell(idx).getVelocity()); // leafsize not taken into account here.
+            double c = sumTT - grid_->getLeafSize()*grid_->getLeafSize()/(grid_->getCell(idx).getVelocity()*grid_->getCell(idx).getVelocity()); // leafsize not taken into account here.
 			double quad_term = b*b - 4*a*c;
 			if (quad_term < 0) {
 				double minT = *(std::min_element(Tvalues.begin(), Tvalues.end()));
@@ -242,7 +244,6 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FastMarching
 		
 		std::vector<int> init_points_;	/*!< Initial points for the Fast Marching Method. */
 		
-		double leafsize_; /*!< Although it is on grid, it is stored here so that it has not to be accessed. */
 		double sumT; /*!< Auxiliar value wich computes T1+T2+T3... Useful for generalizing the Eikonal solver. */
 		double sumTT; /*!< Auxiliar value wich computes T1^2+T2^2+T3^2... Useful for generalizing the Eikonal solver. */
 		
