@@ -185,18 +185,6 @@ template <class T, size_t ndims> class nDGridMap {
             return n_neighs;
         }
 
- /*       double getMinValueInDimDirectional
-        (const int idx, const int dim)   {
-            n_neighs = 0; // How many neighbors obtained in that dimension.
-            getNeighborsInDim(idx,n,dim);
-
-            if (n_neighs == 1)
-                return cells_[n[0]].getDirectionalTime();
-            else
-                return (cells_[n[0]].getDirectionalTime()<cells_[n[1]].getDirectionalTime()) ? cells_[n[0]].getDirectionalTime() : cells_[n[1]].getDirectionalTime();
-
-        }
-        */
 		/**
          * Computes the indices of the 4-connectivity neighbors. As it is based
          * on arrays (to improve performance) the number of neighbors found is
@@ -402,10 +390,10 @@ template <class T, size_t ndims> class nDGridMap {
 			return max;
 		};
 		
-		/** Makes the number of dimensions of the grid available at compilation time.
+        /** Makes the number of dimensions of the grid available at compilation time.
         @return number of dimensions of the grid.
-         * */  
-		static constexpr size_t getNDims() {return ndims;}
+         * */
+        static constexpr size_t getNDims() {return ndims;}
         
     private:
 		

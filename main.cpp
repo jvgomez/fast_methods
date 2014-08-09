@@ -36,7 +36,7 @@ int main(int argc, const char ** argv)
     console::info("Parsing input arguments.");
     string filename;
     float leafsize, maxDistance;
-    double maxVelocityRobot=1;
+
     console::parseArguments(argc,argv, "-map", filename);
     console::parseArguments(argc,argv, "-ls", leafsize);
     console::parseArguments(argc,argv, "-md", maxDistance);
@@ -70,7 +70,7 @@ int main(int argc, const char ** argv)
     fm2directional.setEnvironment(&grid);
         start = system_clock::now();
     fm2directional.setInitialAndGoalPoints(init_points, fmm2_sources, goal);
-    fm2directional.computeFM2Directional(maxVelocityRobot);
+    fm2directional.computeFM2Directional();
         end = system_clock::now();
          time_elapsed = duration_cast<milliseconds>(end-start).count();
         cout << "\tElapsed FM time: " << time_elapsed << " ms" << endl;
@@ -80,8 +80,6 @@ int main(int argc, const char ** argv)
         end = system_clock::now();
         time_elapsed = duration_cast<milliseconds>(end-start).count();
         cout << "\tElapsed gradient descent time: " << time_elapsed << " ms" << endl;
-        GridPlotter::plotArrivalTimes(grid);
-        GridWriter::saveGridValues("grid.txt",grid);
 
     Path pathFM2;
 
@@ -100,9 +98,6 @@ int main(int argc, const char ** argv)
         end = system_clock::now();
         time_elapsed = duration_cast<milliseconds>(end-start).count();
         cout << "\tElapsed gradient descent time: " << time_elapsed << " ms" << endl;
-
-        GridWriter::saveGridValues("gridFM2.txt",gridFM2);
-    //GridWriter::savePath("test_path.txt", grid, path);
 
     std::vector<Path> paths;
 

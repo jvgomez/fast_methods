@@ -58,7 +58,6 @@ template <class grid_t> class GradientDescent {
             Coord current_coord;
             Point current_point;
             Coord dimsize = grid.getDimSizes();
-            double grad_i;
 
             std::array<int, ndims_-1> d_; //  Same as nDGridMap class auxiliar array d_.
             d_[0] = dimsize[0];
@@ -111,7 +110,6 @@ template <class grid_t> class GradientDescent {
             Coord current_coord;
             Point current_point;
             Coord dimsize = grid.getDimSizes();
-            double grad_i;
 
             std::array<int, ndims_-1> d_; //  Same as nDGridMap class auxiliar array d_.
             d_[0] = dimsize[0];
@@ -151,7 +149,6 @@ template <class grid_t> class GradientDescent {
                     current_coord[i] = current_point[i];
                 }
 
-
                 path.push_back(current_point);
                 grid.coord2idx(current_coord,idx);
             }
@@ -160,8 +157,6 @@ template <class grid_t> class GradientDescent {
             std::copy_n( current_coord.begin(), ndims_, current_point.begin() ); // Cast to double.
             path.push_back(current_point);
         }
-
-
 
     protected:
 
