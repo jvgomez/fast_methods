@@ -5,7 +5,7 @@
    of a gridmap and its typical members.
    
    IMPORTANT NOTE: no checks are done in the set functions.
-    Copyright (C) 2014 Javier V. Gomez
+    Copyright (C) 2014 Javier V. Gomez and Jose Pardeiro
     www.javiervgomez.com
 
 	This program is free software: you can redistribute it and/or modify

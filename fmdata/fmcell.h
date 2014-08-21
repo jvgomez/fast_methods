@@ -6,7 +6,7 @@
    * case the value_ member represents the distance value (or time of arrival).
    
    IMPORTANT NOTE: no checks are done in the set functions.
-    Copyright (C) 2014 Javier V. Gomez
+    Copyright (C) 2014 Javier V. Gomez and Jose Pardeiro
     www.javiervgomez.com
 
 	This program is free software: you can redistribute it and/or modify

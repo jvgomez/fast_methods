@@ -8,6 +8,7 @@
     * It has 2 template parameters: the cells employed, should be Cell class or inherited.
     * 								number of dimensions of the grid. Helps compiler to optimize.
     * 
+    Copyright (C) 2014 Javier V. Gomez and Jose Pardeiro
     www.javiervgomez.com
 
 	This program is free software: you can redistribute it and/or modify

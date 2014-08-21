@@ -238,7 +238,7 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FastMarching
 							narrow_band_.push( &(grid_->getCell(j)) );
 						} // neighbors open.
 					} // neighbors not frozen.
-                    if (j == goal_point_ && stop == true)
+                    if (idxMin == goal_point_ && stop == true)
                         stopWavePropagation = 1;
                 } // For each neighbor.
 			} // while narrow band not empty

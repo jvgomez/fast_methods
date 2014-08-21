@@ -1,7 +1,7 @@
 /*! \file fmfibheap.hpp
     \brief Wrap for the Boost D-ary Heap class.
     
-    Copyright (C) 2014 Javier V. Gomez
+    Copyright (C) 2014 Javier V. Gomez and Jose Pardeiro
     www.javiervgomez.com
 
 	This program is free software: you can redistribute it and/or modify

@@ -65,21 +65,25 @@ int main(int argc, const char ** argv)
     typedef typename std::vector< std::array<double, ndims> > Path; // A bit of short-hand.
     Path pathFM2Directional;
 
+    std::vector <double> path_velocity; // Velocity of the path
+
     FastMarching2Directional< nDGridMap<FMDirectionalCell, ndims>, Path > fm2directional;
 
     fm2directional.setEnvironment(&grid);
         start = system_clock::now();
     fm2directional.setInitialAndGoalPoints(init_points, fmm2_sources, goal);
-    fm2directional.computeFM2Directional();
+    fm2directional.computeFM2Directional(true);
         end = system_clock::now();
          time_elapsed = duration_cast<milliseconds>(end-start).count();
         cout << "\tElapsed FM time: " << time_elapsed << " ms" << endl;
 
         start = system_clock::now();
-    fm2directional.computePath(&pathFM2Directional);
+    fm2directional.computePath(&pathFM2Directional, &path_velocity);
         end = system_clock::now();
         time_elapsed = duration_cast<milliseconds>(end-start).count();
         cout << "\tElapsed gradient descent time: " << time_elapsed << " ms" << endl;
+
+        GridWriter::savePathVelocity("path_velocity.txt", grid, pathFM2Directional, path_velocity);
 
     Path pathFM2;
 
