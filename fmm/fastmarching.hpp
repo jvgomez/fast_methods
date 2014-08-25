@@ -53,9 +53,12 @@
 #include <array>
 
 #include "../fmdata/fmcell.h"
+#include "../fmdata/fmstarcell.h"
+#include "../fmdata/fmdirectionalcell.h"
 #include "../ndgridmap/ndgridmap.hpp"
 #include "../console/console.h"
 #include "../fmdata/fmdaryheap.hpp"
+#include "../fmdata/fmdaryheapstar.hpp"
 
 // TODO: when computing FM on the same grid twice it could fail. It should reset the grid in that case.
 // TODO: check initial and goal points are not the same, not on obstacles, etc.
@@ -80,30 +83,32 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FastMarching
         virtual void setEnvironment 
         (grid_t * g) {
 			grid_ = g;
-			leafsize_ = grid_->getLeafSize();
 			narrow_band_.setMaxSize(grid_->size());
 		}
         
 		
-		/**
-		 * Set the initial points by the indices in the nDGridMap and 
-		 * computes the initialization of the Fast Marching Method calling
-		 * the init() function.
-		 * 
-		 * @param contains the indices of the init points. 
-		 * 
-		 * @see init()
-		 */	
-		virtual void setInitialPoints
-		(const std::vector<int> & init_points) {
-			init_points_ = init_points;
-			for (const int &i: init_points) {
-				grid_->getCell(i).setArrivalTime(0);
-				grid_->getCell(i).setState(FMState::FROZEN);
-			}
-			
-			init();
-		}	
+        /**
+         * Set the initial points by the indices in the nDGridMap and
+         * computes the initialization of the Fast Marching Method calling
+         * the init() function.
+         *
+         * @param contains the indices of the init points.
+         *
+         * @param contains the indice of the goal point.
+         *
+         * @see init()
+         */
+        virtual void setInitialPoints
+        (const std::vector<int> & init_points, int goal) {
+            init_points_ = init_points;
+            goal_idx_ = goal;
+            for (const int &i: init_points) {
+                grid_->getCell(i).setArrivalTime(0);
+                grid_->getCell(i).setState(FMState::FROZEN);
+            }
+
+            init();
+        }
 		
 		 /**
 		 * Internal function although it is set to public so it can be accessed if desired.
@@ -186,7 +191,7 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FastMarching
 			}
 			
 			double b = -2*sumT;
-			double c = sumTT - 1/(grid_->getCell(idx).getVelocity()*grid_->getCell(idx).getVelocity()); // leafsize not taken into account here.
+            double c = sumTT - grid_->getLeafSize()/(grid_->getCell(idx).getVelocity()*grid_->getCell(idx).getVelocity()); // leafsize not taken into account here.
 			double quad_term = b*b - 4*a*c;
 			if (quad_term < 0) {
 				double minT = *(std::min_element(Tvalues.begin(), Tvalues.end()));
@@ -201,14 +206,18 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FastMarching
 		/**
 		 * Main Fast Marching Function. It requires to call first the setInitialPoints() function.
 		 * 
+         * @param select if the wave has to stop when it arrives to the goal point
+         *
 		 * @see setInitialPoints()
 		 */
 		virtual void computeFM
-		() {
+        (bool stop = true) {
 			// TODO: check if the previous steps have been done (initialization).
 			int j= 0;
 			int n_neighs = 0;
-			while (narrow_band_.size() > 0) {
+            bool stopWavePropagation = 0;
+
+            while (narrow_band_.size() > 0 && stopWavePropagation == 0) {
 				int idxMin = narrow_band_.popMinIdx();
 				n_neighs = grid_->getNeighbors(idxMin, neighbors);
 				grid_->getCell(idxMin).setState(FMState::FROZEN);
@@ -231,7 +240,9 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FastMarching
 							narrow_band_.push( &(grid_->getCell(j)) );
 						} // neighbors open.
 					} // neighbors not frozen.
-				} // For each neighbor.
+                    if (idxMin == goal_idx_ && stop)
+                        stopWavePropagation = 1;
+                } // For each neighbor.
 			} // while narrow band not empty
 		}
  
@@ -240,9 +251,9 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FastMarching
 		grid_t* grid_; /*!< Main container. */
 		heap_t narrow_band_; /*!< Instance of the heap used. */
 		
-		std::vector<int> init_points_;	/*!< Initial points for the Fast Marching Method. */
+        std::vector<int> init_points_;	/*!< Initial points for the Fast Marching Method. */
+        int goal_idx_;
 		
-		double leafsize_; /*!< Although it is on grid, it is stored here so that it has not to be accessed. */
 		double sumT; /*!< Auxiliar value wich computes T1+T2+T3... Useful for generalizing the Eikonal solver. */
 		double sumTT; /*!< Auxiliar value wich computes T1^2+T2^2+T3^2... Useful for generalizing the Eikonal solver. */
 		

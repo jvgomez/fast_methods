@@ -18,6 +18,9 @@ include_directories (${EXAMPLES_SOURCE_DIR}/../console)
 include_directories (${EXAMPLES_SOURCE_DIR}/../ndgridmap) 
 include_directories (${EXAMPLES_SOURCE_DIR}/../fmdata) 
 include_directories (${EXAMPLES_SOURCE_DIR}/../fmm) 
+include_directories (${EXAMPLES_SOURCE_DIR}/../fm2)
+include_directories (${EXAMPLES_SOURCE_DIR}/../fm2directional)
+include_directories (${EXAMPLES_SOURCE_DIR}/../fm2star)   
 include_directories (${EXAMPLES_SOURCE_DIR}/../io) 
 include_directories (${EXAMPLES_SOURCE_DIR}/../gradientdescent) 
 
@@ -37,3 +40,39 @@ add_executable (test_fmm test_fmm.cpp
 
 # Linking CImg dependencies.
 target_link_libraries (test_fmm X11 pthread ) 
+
+add_executable (test_sfmm test_fmm.cpp
+					../console/console.cpp
+					../ndgridmap/cell.cpp
+					../fmdata/fmcell.cpp
+					) 
+
+# Linking CImg dependencies.
+target_link_libraries (test_sfmm X11 pthread ) 
+
+add_executable (test_fm2 test_fm2.cpp
+					../console/console.cpp
+					../ndgridmap/cell.cpp
+					../fmdata/fmcell.cpp
+					) 
+
+# Linking CImg dependencies.
+target_link_libraries (test_fm2 X11 pthread ) 
+
+add_executable (test_fm2star test_fm2star.cpp
+					../console/console.cpp
+					../ndgridmap/cell.cpp
+					../fmdata/fmcell.cpp
+					) 
+
+# Linking CImg dependencies.
+target_link_libraries (test_fm2star X11 pthread ) 
+
+add_executable (test_fm2directional test_fm2directional.cpp
+					../console/console.cpp
+					../ndgridmap/cell.cpp
+					../fmdata/fmcell.cpp
+					) 
+
+# Linking CImg dependencies.
+target_link_libraries (test_fm2directional X11 pthread ) 

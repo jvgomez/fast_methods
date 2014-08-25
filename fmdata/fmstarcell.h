@@ -1,5 +1,5 @@
-/*! \file fmcell.h
-    \brief Header of the FMCell class
+/*! \file FMStarcell.h
+    \brief Header of the FMStarCell class
     
    A stand-alone, standard C++ class which represents each one of the cells
    of a gridmap and its typical members. Inherited from Cell class, in this
@@ -21,60 +21,49 @@
 	along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef FMCELL_H_
-#define FMCELL_H_
+#ifndef FMSTARCELL_H_
+#define FMSTARCELL_H_
 
 #include <iostream>
 #include <string>
 #include <limits>
 
 #include "../ndgridmap/cell.h"
+#include "../fmdata/fmcell.h"
 
 		/**
-          * Possible states of the FMCells
+          * Possible states of the FMStarCells
           * */
-enum class FMState {OPEN, NARROW, FROZEN};
-
-class FMCell : public Cell{
+class FMStarCell : public FMCell{
 	/**
 	   * ostream operator << overloaded for this class.
        */
-	friend std::ostream& operator << (std::ostream & os, const FMCell & c);
+    friend std::ostream& operator << (std::ostream & os, const FMStarCell & c);
 	
     public: 
      /**
 	   * Default constructor which performs and implicit Fast Marching-like initialization of the grid,
        */
-       FMCell() : Cell(std::numeric_limits<double>::infinity(), true), state_(FMState::OPEN), velocity_(1)  {};
+    FMStarCell() : FMCell()  {};
 
-       virtual ~FMCell() {};
+       virtual ~FMStarCell() {};
         
         // NOTE: no checks are done (out of bounds, correct states, etc) no improve efficienty.
         // TODO: overload functions to add the option of input checking.
-        virtual void setVelocity (const float v)    		{velocity_ = v;}
-        virtual void setArrivalTime (const double at)    	{value_= at;}
-        virtual void setState (const FMState state)			{state_ = state;}
+        virtual void setHeuristic (const double heuristic)  {heuristic_= heuristic;}
         // Occupied means velocity 0 but not vice-versa.
         /** 
          * Set the occupancy_
          * 
          * IMPORTANT NOTE: a flase occupancy sets the velocity also to 0.
          */ 
-        virtual void setOccupancy(const bool o)				{occupancy_ = o;
-															 if (o == false) setVelocity(0);}
-															 
-        std::string type () {return std::string("FMCell - Fast Marching cell");}
-           
-        virtual double getArrivalTime () const				{return value_;}
-        virtual float getVelocity () const					{return velocity_;}
-        virtual FMState getState () const					{return state_;}
-        
-        inline bool isObstacle() const;
+
+        virtual double getHeuristic () const                {return heuristic_;}
+
 
     protected:
-		//value_ is in this case the time of arrival.
-		FMState state_;  /*!< State of the cell */
-        float velocity_;  /*!< Wave propagation velocity through this cell */
+
+        double heuristic_;
 };
 
 

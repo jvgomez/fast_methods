@@ -1,5 +1,5 @@
 /*! \file fmfibheap.hpp
-    \brief Wrap for the Boost Fibonacci Heap class.
+    \brief Wrap for the Boost D-ary Heap class.
     
     Copyright (C) 2014 Javier V. Gomez and Jose Pardeiro
     www.javiervgomez.com
@@ -17,38 +17,43 @@
 */
 
 
-#ifndef FMFIBHEAP_H_
-#define FMFIBHEAP_H_
+#ifndef FMDaryHeapStar_H_
+#define FMDaryHeapStar_H_
 
 
-#include <boost/heap/fibonacci_heap.hpp>
+#include <boost/heap/d_ary_heap.hpp>
 
 #include "fmcell.h"
+#include "fmstarcell.h"
 
 
-/** 
+/**
  * This struct is used a comparator for the heap. Since a minimum-heap
  * is desired the operation checked is param1 > param2 as seen in this
  * [Stack Overflow post](http://stackoverflow.com/a/16706002/2283531)
  * */
-template <class cell_t> struct compare_cells {
-	inline bool operator()
-	(const cell_t * c1 , const cell_t * c2) const {
+template <class cell_t, const bool FMStar_t> struct compare_cells_d_ary_star {
+    inline bool operator()
+    (const cell_t * c1 , const cell_t * c2) const {
 
-		return c1->getArrivalTime() > c2->getArrivalTime();			 
-	}
+        if (FMStar_t==false)
+            return c1->getArrivalTime() > c2->getArrivalTime();
+        else if (FMStar_t==true)
+            return (c1->getArrivalTime() + c1->getHeuristic() > c2->getArrivalTime() + c2->getHeuristic());
+    }
 };
 
 // TODO: Template this class.
-template <class cell_t = FMCell> class FMFibHeap {
+template <class cell_t = FMCell, const bool FMStar_t = false> class FMDaryHeapStar {
 	
-	typedef boost::heap::fibonacci_heap<const cell_t *, boost::heap::compare<compare_cells<cell_t> > > fib_heap_t;
-	typedef typename fib_heap_t::handle_type handle_t;
+    typedef boost::heap::d_ary_heap<const cell_t *, boost::heap::mutable_<true>, boost::heap::arity<2>, boost::heap::compare<compare_cells_d_ary_star<cell_t, FMStar_t> > > d_ary_heap_t;
+
+	typedef typename d_ary_heap_t::handle_type handle_t;
 	
 	public:
-		FMFibHeap () {};
-		FMFibHeap (const int & n) {	handles_.resize(n);}
-		virtual ~ FMFibHeap() {};
+        FMDaryHeapStar () {};
+        FMDaryHeapStar (const int & n) { handles_.resize(n); }
+        virtual ~ FMDaryHeapStar() {};
 		
 		/**
 		 * Set the maximum number of cells the heap will contain.
@@ -64,6 +69,7 @@ template <class cell_t = FMCell> class FMFibHeap {
 		(const cell_t * c) {
 			handles_[c->getIndex()] = heap_.push(c);
 		}
+		
 		
 		/**
 		 * pops index of the element with lowest value and removes it from the heap.
@@ -110,11 +116,11 @@ template <class cell_t = FMCell> class FMFibHeap {
 			
 		
 	protected:
-		fib_heap_t heap_;  /*!< The actual heap for cell_t. */
+		d_ary_heap_t heap_;  /*!< The actual heap for cell_t. */
 		std::vector<handle_t> handles_;  /*!< Stores the handles of each cell by keeping the indices: handles_(0) is the handle for
 											the cell with index 0 in the grid. Makes possible to update the heap.*/
 };
 
 
-#endif /* FMFIBHEAP_H_ */
+#endif /* FMDaryHeapStar_H_ */
 

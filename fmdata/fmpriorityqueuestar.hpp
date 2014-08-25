@@ -1,7 +1,7 @@
-/*! \file fmpriorityqueue.hpp
+/*! \file fmpriorityqueuestar.hpp
     \brief Wrap for the Boost Priority Queue class.
     
-    Copyright (C) 2014 Javier V. Gomez
+    Copyright (C) 2014 Javier V. Gomez and Jose Pardeiro
     www.javiervgomez.com
 
 	This program is free software: you can redistribute it and/or modify
@@ -17,13 +17,14 @@
 */
 
 
-#ifndef FMPRIORITYQUEUE_H_
-#define FMPRIORITYQUEUE_H_
+#ifndef FMPRIORITYQUEUESTAR_H_
+#define FMPRIORITYQUEUESTAR_H_
 
 
 #include <boost/heap/priority_queue.hpp>
 
 #include "fmcell.h"
+#include "fmstarcell.h"
 
 
 /** 
@@ -31,21 +32,24 @@
  * is desired the operation checked is param1 > param2 as seen in this
  * [Stack Overflow post](http://stackoverflow.com/a/16706002/2283531)
  * */
-template <class cell_t>struct compare_cells_pq {
+template <class cell_t, bool FMStar_t>struct compare_cells_pq_star {
 	inline bool operator()
 	(const cell_t * c1 , const cell_t * c2) const {
 
-		return c1->getArrivalTime() > c2->getArrivalTime();			 
+        if (FMStar_t==false)
+            return c1->getArrivalTime() > c2->getArrivalTime();
+        else if (FMStar_t==true)
+            return (c1->getArrivalTime() + c1->getHeuristic() > c2->getArrivalTime() + c2->getHeuristic());
 	}
 };
 
 // TODO: Template this class.
-template <class cell_t = FMCell> class FMPriorityQueue{
-	
+template <class cell_t = FMCell, bool FMStar_t = false> class FMPriorityQueueStar{
+
 	public:
-		FMPriorityQueue () {};
-		FMPriorityQueue (const int & n) { heap_.reserve(n); }
-		virtual ~ FMPriorityQueue() {};
+        FMPriorityQueueStar () {};
+        FMPriorityQueueStar (const int & n) { heap_.reserve(n); }
+        virtual ~ FMPriorityQueueStar() {};
 		
 		/**
 		 * Set the maximum number of cells the heap will contain.
@@ -97,9 +101,9 @@ template <class cell_t = FMCell> class FMPriorityQueue{
 			
 		
 	protected:
-		boost::heap::priority_queue<const cell_t *, boost::heap::compare<compare_cells_pq<cell_t> > > heap_;  /*!< The actual heap for FMCells. */
+        boost::heap::priority_queue<const cell_t *, boost::heap::compare<compare_cells_pq_star<cell_t, FMStar_t> > > heap_;  /*!< The actual heap for FMCells. */
 };
 
 
-#endif /* FMPRIORITYQUEUE_H_ */
+#endif /* FMPRIORITYQUEUESTAR_H_ */
 
