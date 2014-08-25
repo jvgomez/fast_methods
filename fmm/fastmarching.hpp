@@ -87,26 +87,28 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FastMarching
 		}
         
 		
-		/**
-		 * Set the initial points by the indices in the nDGridMap and 
-		 * computes the initialization of the Fast Marching Method calling
-		 * the init() function.
-		 * 
-		 * @param contains the indices of the init points. 
-		 * 
-		 * @see init()
-		 */	
-		virtual void setInitialPoints
+        /**
+         * Set the initial points by the indices in the nDGridMap and
+         * computes the initialization of the Fast Marching Method calling
+         * the init() function.
+         *
+         * @param contains the indices of the init points.
+         *
+         * @param contains the indice of the goal point.
+         *
+         * @see init()
+         */
+        virtual void setInitialPoints
         (const std::vector<int> & init_points, int goal) {
-			init_points_ = init_points;
+            init_points_ = init_points;
             goal_idx_ = goal;
-			for (const int &i: init_points) {
-				grid_->getCell(i).setArrivalTime(0);
-				grid_->getCell(i).setState(FMState::FROZEN);
-			}
-			
-			init();
-		}	
+            for (const int &i: init_points) {
+                grid_->getCell(i).setArrivalTime(0);
+                grid_->getCell(i).setState(FMState::FROZEN);
+            }
+
+            init();
+        }
 		
 		 /**
 		 * Internal function although it is set to public so it can be accessed if desired.
