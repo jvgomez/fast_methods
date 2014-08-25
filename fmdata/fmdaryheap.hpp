@@ -1,7 +1,7 @@
 /*! \file fmfibheap.hpp
     \brief Wrap for the Boost D-ary Heap class.
     
-    Copyright (C) 2014 Javier V. Gomez
+    Copyright (C) 2014 Javier V. Gomez and Jose Pardeiro
     www.javiervgomez.com
 
 	This program is free software: you can redistribute it and/or modify
@@ -25,24 +25,24 @@
 
 #include "fmcell.h"
 
-
-/** 
+/**
  * This struct is used a comparator for the heap. Since a minimum-heap
  * is desired the operation checked is param1 > param2 as seen in this
  * [Stack Overflow post](http://stackoverflow.com/a/16706002/2283531)
  * */
 template <class cell_t> struct compare_cells_d_ary {
-	inline bool operator()
-	(const cell_t * c1 , const cell_t * c2) const {
+    inline bool operator()
+    (const cell_t * c1 , const cell_t * c2) const {
+        return c1->getArrivalTime() > c2->getArrivalTime();
 
-		return c1->getArrivalTime() > c2->getArrivalTime();			 
-	}
+    }
 };
 
 // TODO: Template this class.
 template <class cell_t = FMCell> class FMDaryHeap {
 	
-	typedef boost::heap::d_ary_heap<const cell_t *, boost::heap::mutable_<true>, boost::heap::arity<2>, boost::heap::compare<compare_cells_d_ary<cell_t> > > d_ary_heap_t;
+    typedef boost::heap::d_ary_heap<const cell_t *, boost::heap::mutable_<true>, boost::heap::arity<2>, boost::heap::compare<compare_cells_d_ary<cell_t> > > d_ary_heap_t;
+
 	typedef typename d_ary_heap_t::handle_type handle_t;
 	
 	public:

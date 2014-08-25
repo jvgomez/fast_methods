@@ -1,4 +1,4 @@
-/*! \file fmfibheap.hpp
+/*! \file fmfibheapstar.hpp
     \brief Wrap for the Boost Fibonacci Heap class.
     
     Copyright (C) 2014 Javier V. Gomez and Jose Pardeiro
@@ -17,38 +17,41 @@
 */
 
 
-#ifndef FMFIBHEAP_H_
-#define FMFIBHEAP_H_
+#ifndef FMFIBHEAPSTAR_H_
+#define FMFIBHEAPSTAR_H_
 
 
 #include <boost/heap/fibonacci_heap.hpp>
 
 #include "fmcell.h"
-
+#include "fmstarcell.h"
 
 /** 
  * This struct is used a comparator for the heap. Since a minimum-heap
  * is desired the operation checked is param1 > param2 as seen in this
  * [Stack Overflow post](http://stackoverflow.com/a/16706002/2283531)
  * */
-template <class cell_t> struct compare_cells {
+template <class cell_t, const bool FMStar_t> struct compare_cells_star {
 	inline bool operator()
 	(const cell_t * c1 , const cell_t * c2) const {
 
-		return c1->getArrivalTime() > c2->getArrivalTime();			 
+        if (FMStar_t==false)
+            return c1->getArrivalTime() > c2->getArrivalTime();
+        else if (FMStar_t==true)
+            return (c1->getArrivalTime() + c1->getHeuristic() > c2->getArrivalTime() + c2->getHeuristic());
 	}
 };
 
 // TODO: Template this class.
-template <class cell_t = FMCell> class FMFibHeap {
+template <class cell_t = FMCell, const bool FMStar_t = false> class FMFibHeapStar {
 	
-	typedef boost::heap::fibonacci_heap<const cell_t *, boost::heap::compare<compare_cells<cell_t> > > fib_heap_t;
+    typedef boost::heap::fibonacci_heap<const cell_t *, boost::heap::compare<compare_cells_star<cell_t, FMStar_t> > > fib_heap_t;
 	typedef typename fib_heap_t::handle_type handle_t;
 	
 	public:
-		FMFibHeap () {};
-		FMFibHeap (const int & n) {	handles_.resize(n);}
-		virtual ~ FMFibHeap() {};
+        FMFibHeapStar () {};
+        FMFibHeapStar (const int & n) {	handles_.resize(n);}
+        virtual ~ FMFibHeapStar() {};
 		
 		/**
 		 * Set the maximum number of cells the heap will contain.
@@ -116,5 +119,5 @@ template <class cell_t = FMCell> class FMFibHeap {
 };
 
 
-#endif /* FMFIBHEAP_H_ */
+#endif /* FMFIBHEAPSTAR_H_ */
 

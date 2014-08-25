@@ -1,10 +1,10 @@
-#include "fmcell.h"
+#include "fmstarcell.h"
 
 #include "../console/console.h"
 
 using namespace std;
 
-inline bool FMCell::isObstacle 
+inline bool FMStarCell::isObstacle
 () const {
     if (velocity_ == 0)
         return true;
@@ -13,7 +13,7 @@ inline bool FMCell::isObstacle
 }
 
 ostream& operator << 
-(ostream & os, const FMCell & c) {
+(ostream & os, const FMStarCell & c) {
 	os << console::str_info("Fast Marching cell information:");
 	os << "\t" << "Index: " << c.index_ << endl;
 	os << "\t" << "Value: " 	<< c.value_ << endl;
@@ -21,13 +21,13 @@ ostream& operator <<
 	os << "\t" << "State: " ;
 	
 	switch (c.state_) {
-		case FMState::OPEN:
+        case FMState::OPEN:
 			os << "OPEN" << endl;
 			break;
-		case FMState::NARROW:
+        case FMState::NARROW:
 			os << "NARROW" << endl;
 			break;
-		case FMState::FROZEN:
+        case FMState::FROZEN:
 			os << "FROZEN" << endl;
 			break;		
 		}	
