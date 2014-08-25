@@ -116,6 +116,8 @@ template <class grid_t> class GradientDescent {
         *
         * No checks are done (points in the borders, points in obstacles...).
         *
+        * Saves the velocities profile of the path extracting the velocity value of each cell.
+        *
         * The included scripts will parse the saved path.
         *
         * IMPORTANT NOTE: both minimum and initial index cannot be in the
@@ -125,7 +127,7 @@ template <class grid_t> class GradientDescent {
         * @param grid the grid to apply gradient descent on.
         * @param idx index of the initial path point.
         * @param path the resulting path (output).
-        * @param velocity the resulting path (output).
+        * @param the velocities profile of the path (output).
         * @param the step size to be applied.
         */
       static void apply
@@ -275,6 +277,8 @@ template <class grid_t> class GradientDescent {
        *
        * No checks are done (points in the borders, points in obstacles...).
        *
+       * Saves the velocities profile of the path extracting the velocity value of each cell.
+       *
        * The included scripts will parse the saved path.
        *
        * IMPORTANT NOTE: both minimum and initial index cannot be in the
@@ -284,7 +288,7 @@ template <class grid_t> class GradientDescent {
        * @param grid the grid to apply gradient descent on.
        * @param idx index of the initial path point.
        * @param path the resulting path (output).
-       * @param velocity the resulting path (output).
+       * @param the velocities profile of the path (output).
        * @param the step size to be applied.
        */
 
@@ -345,8 +349,6 @@ template <class grid_t> class GradientDescent {
       }
 
     protected:
-
-
 };
 
 

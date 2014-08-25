@@ -2,6 +2,7 @@ N-Dimensional Fast Marching Method V1.0
 
 Authors: Javier V. Gomez engjotauve __at__ gmail.com
 	www.javiervgomez.com
+
 		 Jose Pardeiro jose.pardeiro __at__ gmail.com
 
 

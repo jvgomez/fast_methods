@@ -120,10 +120,7 @@ class GridPlotter {
         template<class T, size_t ndims = 2>
         static void plotMapPath
         (nDGridMap<T, ndims> & grid, const Path2D & path, const bool flipY = true) {
-
-            //std::vector <const Path2D *> & path    - (*path[i])[j]
             std::array<int,2> d = grid.getDimSizes();
-            //double max_val = grid.getMaxValue();
             CImg<double> img(d[0],d[1],1,3,0);
 
             if (flipY)  {
@@ -164,10 +161,7 @@ class GridPlotter {
         template<class T, size_t ndims = 2>
         static void plotMapPath
         (nDGridMap<T, ndims> & grid, const Paths2D & paths, const bool flipY = true) {
-
-            //std::vector <const Path2D *> & path    - (*path[i])[j]
             std::array<int,2> d = grid.getDimSizes();
-            //double max_val = grid.getMaxValue();
             CImg<double> img(d[0],d[1],1,3,0);
 
             if (flipY)  {
@@ -245,8 +239,7 @@ class GridPlotter {
 
 
       }
-	
-	
+
 	protected:
 	
 };

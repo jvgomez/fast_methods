@@ -99,7 +99,7 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FastMarching
 		virtual void setInitialPoints
         (const std::vector<int> & init_points, int goal) {
 			init_points_ = init_points;
-            goal_point_ = goal;
+            goal_idx_ = goal;
 			for (const int &i: init_points) {
 				grid_->getCell(i).setArrivalTime(0);
 				grid_->getCell(i).setState(FMState::FROZEN);
@@ -189,7 +189,7 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FastMarching
 			}
 			
 			double b = -2*sumT;
-            double c = sumTT - grid_->getLeafSize()*grid_->getLeafSize()/(grid_->getCell(idx).getVelocity()*grid_->getCell(idx).getVelocity()); // leafsize not taken into account here.
+            double c = sumTT - grid_->getLeafSize()/(grid_->getCell(idx).getVelocity()*grid_->getCell(idx).getVelocity()); // leafsize not taken into account here.
 			double quad_term = b*b - 4*a*c;
 			if (quad_term < 0) {
 				double minT = *(std::min_element(Tvalues.begin(), Tvalues.end()));
@@ -209,7 +209,7 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FastMarching
 		 * @see setInitialPoints()
 		 */
 		virtual void computeFM
-        (bool stop = false) {
+        (bool stop = true) {
 			// TODO: check if the previous steps have been done (initialization).
 			int j= 0;
 			int n_neighs = 0;
@@ -238,7 +238,7 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FastMarching
 							narrow_band_.push( &(grid_->getCell(j)) );
 						} // neighbors open.
 					} // neighbors not frozen.
-                    if (idxMin == goal_point_ && stop == true)
+                    if (idxMin == goal_idx_ && stop)
                         stopWavePropagation = 1;
                 } // For each neighbor.
 			} // while narrow band not empty
@@ -250,7 +250,7 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FastMarching
 		heap_t narrow_band_; /*!< Instance of the heap used. */
 		
         std::vector<int> init_points_;	/*!< Initial points for the Fast Marching Method. */
-        int goal_point_;
+        int goal_idx_;
 		
 		double sumT; /*!< Auxiliar value wich computes T1+T2+T3... Useful for generalizing the Eikonal solver. */
 		double sumTT; /*!< Auxiliar value wich computes T1^2+T2^2+T3^2... Useful for generalizing the Eikonal solver. */

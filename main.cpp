@@ -1,5 +1,4 @@
 /* n dimensional Fast Marching example with the main functions used */
- 
 #include <iostream>
 #include <cmath>
 #include <chrono>
