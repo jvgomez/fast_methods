@@ -54,10 +54,7 @@ int main(int argc, const char ** argv)
 
     grid_fmm.coord2idx(goal_point , goal);
 
-    typedef typename std::vector< std::array<double, ndims2> > Path; // A bit of short-hand.
-    Path path;
-
-	FastMarching2<FMGrid2D, Path, FMFibHeap<FMCell> > fm2;
+    FastMarching2<FMGrid2D, FMFibHeap<FMCell> > fm2;
 	fm2.setEnvironment(&grid_fmm);
 		start = system_clock::now();
 	fm2.setInitialAndGoalPoints(init_points, fm2_sources, goal);
@@ -66,7 +63,7 @@ int main(int argc, const char ** argv)
 		time_elapsed = duration_cast<milliseconds>(end-start).count();
 		cout << "\tElapsed FMM time: " << time_elapsed << " ms" << endl;
 
-	FastMarching2<FMGrid2D, Path> fm2_dary;
+    FastMarching2<FMGrid2D> fm2_dary;
 	fm2_dary.setEnvironment(&grid_fmm_dary);
 		start = system_clock::now();
 	fm2_dary.setInitialAndGoalPoints(init_points, fm2_sources, goal);
@@ -76,7 +73,7 @@ int main(int argc, const char ** argv)
 		cout << "\tElapsed FMM_Dary time: " << time_elapsed << " ms" << endl;
 
 	// Using priority queue implies the use of the SFMM. Priority queue uses by default FMCell.
-	FastMarching2<FMGrid2D, Path, FMPriorityQueue<> > sfm2; //Choosing the default cell class.
+    FastMarching2<FMGrid2D, FMPriorityQueue<> > sfm2; //Choosing the default cell class.
 	sfm2.setEnvironment(&grid_sfmm);
 		start = system_clock::now();
 	sfm2.setInitialAndGoalPoints(init_points, fm2_sources, goal);

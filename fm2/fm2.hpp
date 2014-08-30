@@ -51,15 +51,15 @@
 #include "../fmm/fastmarching.hpp"
 #include "../gradientdescent/gradientdescent.hpp"
 
-using namespace std::chrono;
-
-template < class grid_t, class path_t, class heap_t = FMDaryHeap<FMCell>  >  class FastMarching2 {
+template < class grid_t, class heap_t = FMDaryHeap<FMCell>  >  class FastMarching2 {
 
     public:
-        FastMarching2 <grid_t, path_t, heap_t> () {
+        typedef std::vector< std::array< double, grid_t::getNDims() > > path_t;
+
+        FastMarching2 <grid_t, heap_t> () {
 
         };
-        virtual ~FastMarching2 <grid_t, path_t, heap_t> () {};
+        virtual ~FastMarching2 <grid_t, heap_t> () {};
 
          /**
           * Sets the input grid in which operations will be performed.
@@ -93,97 +93,26 @@ template < class grid_t, class path_t, class heap_t = FMDaryHeap<FMCell>  >  cla
         }
 
         /**
-         * Main Fast Marching Square Function. It requires to call first the setInitialPoints() function.
-         *
-         * @see setInitialPoints()
-         */
-
-        virtual void computeFM2
-        () {
-            FastMarching< grid_t, heap_t> fmm;
-
-            fmm.setEnvironment(grid_);
-            fmm.setInitialPoints(fmm2_sources_, goal_idx_);
-            fmm.computeFM(false);
-
-            float max_value=grid_->getMaxValue();
-
-
-            for (int i=0; i<grid_->size(); i++) {
-                grid_->getCell(i).setVelocity(grid_->getCell(i).getValue()/max_value);
-                grid_->getCell(i).setValue(inf_);
-                grid_->getCell(i).setState(FMState::OPEN);
-            }
-
-            fmm.setEnvironment(grid_);
-            start = system_clock::now();
-            fmm.setInitialPoints(initial_point_, goal_idx_);
-            fmm.computeFM(true);
-            end = system_clock::now();
-            time_elapsed = duration_cast<milliseconds>(end-start).count();
-            std::cout << "\tFM2 second wave time: " << time_elapsed << " ms" << std::endl;
-        }
-
-        /**
          * Main Fast Marching Square Function with velocity saturation. It requires to call first the setInitialPoints() function.
          *
-         * @param Saturation distance
+         * @param saturation distance. If this value is -1 the potential is not saturated.
          *
          * @see setInitialPoints()
          */
 
         virtual void computeFM2
-        (const float maxDistance) {
+        (const float maxDistance = -1) {
+            if (maxDistance != -1) {
+                maxDistance_ = maxDistance;
+                computeFirstPotential(true);
+            } else
+                computeFirstPotential();
+
             FastMarching< grid_t, heap_t> fmm;
 
             fmm.setEnvironment(grid_);
-            fmm.setInitialPoints(fmm2_sources_, goal_idx_);
-            fmm.computeFM();
-
-            float maxValue=grid_->getMaxValue();
-            double maxVelocity=maxDistance/grid_->getLeafSize(); // Calculate max velocity using the max distance and the leaf size of the cell
-
-            for (int i=0; i<grid_->size(); i++) {
-
-                double vel=grid_->getCell(i).getValue()/maxValue;
-
-                if (vel<maxVelocity)
-                    grid_->getCell(i).setVelocity(vel/maxVelocity);
-                else
-                    grid_->getCell(i).setVelocity(1);
-
-                grid_->getCell(i).setValue(inf_);
-                grid_->getCell(i).setState(FMState::OPEN);
-            }
-
-            fmm.setEnvironment(grid_);
-            fmm.setInitialPoints(initial_point_, goal_idx_);
-            start = system_clock::now();
-            fmm.setInitialPoints(initial_point_, goal_idx_);
+            fmm.setInitialAndGoalPoints(initial_point_, goal_idx_);
             fmm.computeFM(true);
-            end = system_clock::now();
-            time_elapsed = duration_cast<milliseconds>(end-start).count();
-            std::cout << "\tFM2 second wave time: " << time_elapsed << " ms" << std::endl;
-        }
-
-        /**
-         * Computes the path from the given index to a minimum (the one
-         * gradient descent choses).
-         *
-         * No checks are done (points in the borders, points in obstacles...).
-         *
-         * The included scripts will parse the saved path.
-         *
-         * @param path the resulting path (output).
-         */
-
-        virtual void computePath
-        (path_t * p) {
-            path_ = p;
-            constexpr int ndims=grid_->getNDims();
-
-            GradientDescent< nDGridMap<FMCell, ndims> > grad;
-            grad.apply(*grid_,goal_idx_,*path_);
         }
 
         /**
@@ -201,26 +130,62 @@ template < class grid_t, class path_t, class heap_t = FMDaryHeap<FMCell>  >  cla
 
         virtual void computePath
         (path_t * p, std::vector <double> * path_velocity) {
-            path_ = p;
-            constexpr int ndims=grid_->getNDims();
+            path_t* path_ = p;
+            constexpr int ndims = grid_->getNDims();
 
             GradientDescent< nDGridMap<FMCell, ndims> > grad;
             grad.apply(*grid_,goal_idx_,*path_, *path_velocity);
         }
 
+    private:
+
+        /**
+         * Computes the first potential expansion of the wave to perform the velocity map.
+         *
+         * @param select if the potential is saturated
+         */
+
+        void computeFirstPotential
+        (bool saturate = false) {
+            FastMarching< grid_t, heap_t> fmm;
+
+            fmm.setEnvironment(grid_);
+            fmm.setInitialAndGoalPoints(fmm2_sources_, goal_idx_);
+            fmm.computeFM();
+
+            //Rescaling and saturating to relative velocities: [0-1]
+            float maxValue = grid_->getMaxValue();
+            double maxVelocity = 0;
+
+            if (saturate)
+                maxVelocity = maxDistance_/grid_->getLeafSize(); // Calculate max velocity using the max distance and the leaf size of the cell
+
+            for (int i = 0; i < grid_->size(); i++) {
+                double vel=grid_->getCell(i).getValue()/maxValue;
+
+                if (saturate)
+                    if (vel < maxVelocity)
+                        grid_->getCell(i).setVelocity(vel/maxVelocity);
+                    else
+                        grid_->getCell(i).setVelocity(1);
+                else
+                    grid_->getCell(i).setVelocity(vel/maxVelocity);
+
+                grid_->getCell(i).setValue(inf_);
+                grid_->getCell(i).setState(FMState::OPEN);
+            }
+        }
 
     protected:
         grid_t* grid_; /*!< Main container. */
-        path_t* path_; /*!< Path container. */
 
-        double inf_=std::numeric_limits<double>::infinity();
+        double inf_ = std::numeric_limits<double>::infinity();
 
         std::vector<int> fmm2_sources_;	/*!< Wave propagation sources for the Fast Marching Square. */
         std::vector<int> initial_point_;	/*!< Initial point for the Fast Marching Square. */
         int goal_idx_; /*!< Goal point for the Fast Marching Square. */
 
-        time_point<std::chrono::system_clock> start, end; // Time measuring.
-        double time_elapsed;
+        double maxDistance_; /*!< Distance value to saturate the first potential. */
 };
 
 

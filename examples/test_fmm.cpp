@@ -25,7 +25,6 @@ using namespace std::chrono;
 int main(int argc, const char ** argv)
 {
 	constexpr int ndims2 = 2; // Setting two dimensions.
-	constexpr int ndims3 = 3; // Setting three dimensions.
 
 	typedef nDGridMap<FMCell, ndims2> FMGrid2D;
 	typedef array<int, ndims2> Coord2D;
@@ -47,7 +46,7 @@ int main(int argc, const char ** argv)
 	FastMarching<FMGrid2D, FMFibHeap<FMCell> > fmm;
 	fmm.setEnvironment(&grid_fmm);
 		start = system_clock::now();
-	fmm.setInitialPoints(init_points, -1);
+    fmm.setInitialAndGoalPoints(init_points, -1);
 	fmm.computeFM();
 		end = system_clock::now();
 		time_elapsed = duration_cast<milliseconds>(end-start).count();
@@ -57,7 +56,7 @@ int main(int argc, const char ** argv)
 	FastMarching<FMGrid2D> fmm_dary;
 	fmm_dary.setEnvironment(&grid_fmm_dary);
 		start = system_clock::now();
-	fmm_dary.setInitialPoints(init_points, -1);
+    fmm_dary.setInitialAndGoalPoints(init_points, -1);
 	fmm_dary.computeFM();
 		end = system_clock::now();
 		time_elapsed = duration_cast<milliseconds>(end-start).count();
@@ -68,7 +67,7 @@ int main(int argc, const char ** argv)
 	FastMarching<FMGrid2D, FMPriorityQueue<> > sfmm; //Choosing the default cell class.
 	sfmm.setEnvironment(&grid_sfmm);
 		start = system_clock::now();
-	sfmm.setInitialPoints(init_points, -1);
+    sfmm.setInitialAndGoalPoints(init_points, -1);
 	sfmm.computeFM();
 		end = system_clock::now();
 		time_elapsed = duration_cast<milliseconds>(end-start).count();

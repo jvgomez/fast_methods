@@ -7,19 +7,17 @@
 #include <string>
 #include <algorithm>
 
-#include "../fmdata/fmstarcell.h"
+#include "../fmdata/fmcell.h"
 #include "../ndgridmap/ndgridmap.hpp"
 #include "../console/console.h"
 #include "../fm2star/fm2star.hpp"
 #include "../fmdata/fmfibheap.hpp"
 #include "../fmdata/fmpriorityqueue.hpp"
 #include "../fmdata/fmdaryheap.hpp"
-#include "../fmdata/fmdaryheap.hpp"
 #include "../io/maploadertext.hpp"
 
 using namespace std;
 using namespace std::chrono;
-
 
 int main(int argc, const char ** argv)
 {
@@ -29,7 +27,7 @@ int main(int argc, const char ** argv)
     string filename;
     console::parseArguments(argc,argv, "-map", filename);
 
-	typedef nDGridMap<FMStarCell, ndims2> FMGrid2D;
+    typedef nDGridMap<FMCell, ndims2> FMGrid2D;
 	typedef array<int, ndims2> Coord2D;
 
 	time_point<std::chrono::system_clock> start, end; // Time measuring.
@@ -54,19 +52,16 @@ int main(int argc, const char ** argv)
 
     grid_fmm.coord2idx(goal_point , goal);
 
-    typedef typename std::vector< std::array<double, ndims2> > Path; // A bit of short-hand.
-    Path path;
-
-	FastMarching2Star<FMGrid2D, Path, FMFibHeap<FMStarCell> > fm2star;
+    FastMarching2Star<FMGrid2D, FMFibHeap<FMCell> > fm2star;
 	fm2star.setEnvironment(&grid_fmm);
 		start = system_clock::now();
-	fm2star.setInitialAndGoalPoints(init_points, fm2_sources, goal);
-	fm2star.computeFM2Star();
-		end = system_clock::now();
+    fm2star.setInitialAndGoalPoints(init_points, fm2_sources, goal);
+    fm2star.computeFM2Star();
+        end = system_clock::now();
 		time_elapsed = duration_cast<milliseconds>(end-start).count();
 		cout << "\tElapsed FMM time: " << time_elapsed << " ms" << endl;
 
-	FastMarching2Star<FMGrid2D, Path> fm2star_dary;
+    FastMarching2Star<FMGrid2D> fm2star_dary;
 	fm2star_dary.setEnvironment(&grid_fmm_dary);
 		start = system_clock::now();
 	fm2star_dary.setInitialAndGoalPoints(init_points, fm2_sources, goal);
@@ -76,12 +71,12 @@ int main(int argc, const char ** argv)
 		cout << "\tElapsed FMM_Dary time: " << time_elapsed << " ms" << endl;
 
 	// Using priority queue implies the use of the SFMM. Priority queue uses by default FMCell.
-	FastMarching2Star<FMGrid2D, Path, FMPriorityQueue<> > sfm2star; //Choosing the default cell class.
+    FastMarching2Star<FMGrid2D, FMPriorityQueue<> > sfm2star; //Choosing the default cell class.
 	sfm2star.setEnvironment(&grid_sfmm);
 		start = system_clock::now();
 	sfm2star.setInitialAndGoalPoints(init_points, fm2_sources, goal);
 	sfm2star.computeFM2Star();
 		end = system_clock::now();
 		time_elapsed = duration_cast<milliseconds>(end-start).count();
-		cout << "\tElapsed SFMM time: " << time_elapsed << " ms" << endl;
+        cout << "\tElapsed SFMM time: " << time_elapsed << " ms" << endl;
 }

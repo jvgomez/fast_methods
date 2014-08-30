@@ -7,7 +7,7 @@
 #include <string>
 #include <algorithm>
 
-#include "../fmdata/fmcell.h"
+#include "../fmdata/fmdirectionalcell.h"
 #include "../ndgridmap/ndgridmap.hpp"
 #include "../console/console.h"
 #include "../fm2directional/fm2directional.hpp"
@@ -54,10 +54,7 @@ int main(int argc, const char ** argv)
 
     grid_fmm.coord2idx(goal_point , goal);
 
-    typedef typename std::vector< std::array<double, ndims2> > Path; // A bit of short-hand.
-    Path path;
-
-	FastMarching2Directional<FMGrid2D, Path, FMFibHeap<FMDirectionalCell> > fm2directional;
+    FastMarching2Directional<FMGrid2D, FMFibHeap<FMDirectionalCell> > fm2directional;
 	fm2directional.setEnvironment(&grid_fmm);
 		start = system_clock::now();
 	fm2directional.setInitialAndGoalPoints(init_points, fm2_sources, goal);
@@ -66,7 +63,7 @@ int main(int argc, const char ** argv)
 		time_elapsed = duration_cast<milliseconds>(end-start).count();
 		cout << "\tElapsed FMM time: " << time_elapsed << " ms" << endl;
 
-	FastMarching2Directional<FMGrid2D, Path> fm2directional_dary;
+    FastMarching2Directional<FMGrid2D> fm2directional_dary;
 	fm2directional_dary.setEnvironment(&grid_fmm_dary);
 		start = system_clock::now();
 	fm2directional_dary.setInitialAndGoalPoints(init_points, fm2_sources, goal);
@@ -76,7 +73,7 @@ int main(int argc, const char ** argv)
 		cout << "\tElapsed FMM_Dary time: " << time_elapsed << " ms" << endl;
 
 	// Using priority queue implies the use of the SFMM. Priority queue uses by default FMCell.
-	FastMarching2Directional<FMGrid2D, Path, FMPriorityQueue<> > sfm2directional; //Choosing the default cell class.
+    FastMarching2Directional<FMGrid2D, FMPriorityQueue<> > sfm2directional; //Choosing the default cell class.
 	sfm2directional.setEnvironment(&grid_sfmm);
 		start = system_clock::now();
 	sfm2directional.setInitialAndGoalPoints(init_points, fm2_sources, goal);

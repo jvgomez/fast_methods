@@ -61,7 +61,7 @@ int main(int argc, const char ** argv)
     FastMarching< nDGridMap<FMCell, ndims> > fmm;
     fmm.setEnvironment(&grid);
         start = system_clock::now();
-    fmm.setInitialPoints(init_points, goal);
+    fmm.setInitialAndGoalPoints(init_points, goal);
     fmm.computeFM();
         end = system_clock::now();
         time_elapsed = duration_cast<milliseconds>(end-start).count();
@@ -97,7 +97,7 @@ int main(int argc, const char ** argv)
     FastMarching< nDGridMap<FMCell, ndims> > fmm2;
     fmm2.setEnvironment(&grid2);
         start = system_clock::now();
-    fmm2.setInitialPoints(init_points, goal);
+    fmm2.setInitialAndGoalPoints(init_points, goal);
     fmm2.computeFM(false);
         end = system_clock::now();
          time_elapsed = duration_cast<milliseconds>(end-start).count();
@@ -117,7 +117,7 @@ int main(int argc, const char ** argv)
     init_points.push_back(80000); // Init point randomly chosen.
     fmm_vels.setEnvironment(&grid_vels);
         start = system_clock::now();
-    fmm_vels.setInitialPoints(init_points, goal);
+    fmm_vels.setInitialAndGoalPoints(init_points, goal);
     fmm_vels.computeFM();
         end = system_clock::now();
         time_elapsed = duration_cast<milliseconds>(end-start).count();
@@ -140,7 +140,7 @@ int main(int argc, const char ** argv)
     FastMarching< nDGridMap<FMCell, ndims3> > fmm3;
     fmm3.setEnvironment(&grid3);
         start = system_clock::now();
-    fmm3.setInitialPoints(init_points, goal);
+    fmm3.setInitialAndGoalPoints(init_points, goal);
     fmm3.computeFM();
         end = system_clock::now();
         time_elapsed = duration_cast<milliseconds>(end-start).count();
@@ -155,7 +155,7 @@ int main(int argc, const char ** argv)
     Path3D path3D;
         start = system_clock::now();
     GradientDescent< nDGridMap<FMCell, ndims3> > grad3D;
-    grad3D.apply(grid3,goal,path3D);
+    grad3D.apply(grid3,goal,path3D,path_velocity);
         end = system_clock::now();
         time_elapsed = duration_cast<milliseconds>(end-start).count();
         cout << "\tElapsed gradient descent time: " << time_elapsed << " ms" << endl;

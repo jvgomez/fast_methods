@@ -53,12 +53,10 @@
 #include <array>
 
 #include "../fmdata/fmcell.h"
-#include "../fmdata/fmstarcell.h"
 #include "../fmdata/fmdirectionalcell.h"
 #include "../ndgridmap/ndgridmap.hpp"
 #include "../console/console.h"
 #include "../fmdata/fmdaryheap.hpp"
-#include "../fmdata/fmdaryheapstar.hpp"
 
 // TODO: when computing FM on the same grid twice it could fail. It should reset the grid in that case.
 // TODO: check initial and goal points are not the same, not on obstacles, etc.
@@ -98,7 +96,7 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FastMarching
          *
          * @see init()
          */
-        virtual void setInitialPoints
+        virtual void setInitialAndGoalPoints
         (const std::vector<int> & init_points, int goal) {
             init_points_ = init_points;
             goal_idx_ = goal;
@@ -191,7 +189,7 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FastMarching
 			}
 			
 			double b = -2*sumT;
-            double c = sumTT - grid_->getLeafSize()/(grid_->getCell(idx).getVelocity()*grid_->getCell(idx).getVelocity()); // leafsize not taken into account here.
+            double c = sumTT - grid_->getLeafSize() * grid_->getLeafSize()/(grid_->getCell(idx).getVelocity()*grid_->getCell(idx).getVelocity()); // leafsize not taken into account here.
 			double quad_term = b*b - 4*a*c;
 			if (quad_term < 0) {
 				double minT = *(std::min_element(Tvalues.begin(), Tvalues.end()));

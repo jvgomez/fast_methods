@@ -10,11 +10,11 @@
     The type of the heap introduced is very important for the behaviour of the
     algorithm. The following heaps are provided:
 
-    - FMDaryHeapDirectional wrap for the Boost D_ary heap (generalization of binary heaps).
+    - FMDaryHeap wrap for the Boost D_ary heap (generalization of binary heaps).
 	* Set by default if no other heap is specified. The arity has been set to 2
 	* (binary heap) since it has been tested to be the more efficient in this algorithm.
-	- FMFibHeap wrap for the Boost Fibonacci heap.
-	- FMPriorityQueue wrap to the std::PriorityQueue class. This heap implies the implementation
+    - FMFibHeap wrap for the Boost Fibonacci heap.
+    - FMPriorityQueue wrap to the std::PriorityQueue class. This heap implies the implementation
 	* of the Simplified FMM (SFMM) method, done automatically because of the FMPriorityQueue::increase implementation.
 	*
 
@@ -53,15 +53,15 @@
 
 #define PI 4 * std::atan(1)
 
-using namespace std::chrono;
-
-template < class grid_t, class path_t, class heap_t = FMDaryHeap<FMDirectionalCell> >  class FastMarching2Directional : public FastMarching <grid_t, heap_t> {
+template < class grid_t, class heap_t = FMDaryHeap<FMDirectionalCell> >  class FastMarching2Directional : public FastMarching <grid_t, heap_t> {
 
     public:
-        FastMarching2Directional <grid_t, path_t, heap_t> () {
+        typedef std::vector< std::array< double, grid_t::getNDims() > > path_t;
+
+        FastMarching2Directional <grid_t, heap_t> () {
 
 		};
-        virtual ~FastMarching2Directional <grid_t, path_t, heap_t> () {};
+        virtual ~FastMarching2Directional <grid_t, heap_t> () {};
 
         using FastMarching<grid_t, heap_t>::grid_;
         using FastMarching<grid_t, heap_t>::neighbors;
@@ -111,10 +111,12 @@ template < class grid_t, class path_t, class heap_t = FMDaryHeap<FMDirectionalCe
          *
          * @param contains the indices of the init points.
          *
+         * @param param to select if the velocity profile must be saved
+         *
          * @see init()
          */
         virtual void setInitialPoints
-        (const std::vector<int> & init_points, const bool velocity = false) {
+        (const std::vector<int> & init_points, const bool save_velocity = false) {
             init_points_ = init_points;
             for (const int &i: init_points) {
                 grid_->getCell(i).setArrivalTime(0);
@@ -125,7 +127,7 @@ template < class grid_t, class path_t, class heap_t = FMDaryHeap<FMDirectionalCe
             if (init_points.size()>1)
                 init();
             else
-                init(velocity, true);
+                init(save_velocity, true);
         }
 
          /**
@@ -139,7 +141,7 @@ template < class grid_t, class path_t, class heap_t = FMDaryHeap<FMDirectionalCe
          */
 
         virtual void init
-        (const bool velocity = false, const bool directional = false) {
+        (const bool save_velocity = false, const bool directional = false) {
             // TODO: neighbors computed twice for every cell. We can save time here.
             // TODO: check if the previous steps have been done (loading grid map and setting initial points.)
             int j = 0;
@@ -161,7 +163,7 @@ template < class grid_t, class path_t, class heap_t = FMDaryHeap<FMDirectionalCe
                             if (new_arrival_time < grid_->getCell(j).getArrivalTime()) {
                                 grid_->getCell(j).setArrivalTime(new_arrival_time);
 
-                                if (velocity)
+                                if (save_velocity)
                                     velocity_map_[j] = vel;
 
                                 if (directional)
@@ -173,7 +175,7 @@ template < class grid_t, class path_t, class heap_t = FMDaryHeap<FMDirectionalCe
                             grid_->getCell(j).setState(FMState::NARROW);
                             grid_->getCell(j).setArrivalTime(new_arrival_time);
 
-                            if (velocity)
+                            if (save_velocity)
                                 velocity_map_[j] = vel;
 
                             if (directional ==  true)
@@ -234,7 +236,6 @@ template < class grid_t, class path_t, class heap_t = FMDaryHeap<FMDirectionalCe
                 // First dimension done apart.
                 grads[0] = - (grid_->getCell(idx).getValue() - min_dim);
 
-
                 if (isinf(grads[0]))
                     grads[0] = 0;
 
@@ -245,7 +246,6 @@ template < class grid_t, class path_t, class heap_t = FMDaryHeap<FMDirectionalCe
                         min_dim = grid_->getCell(idx-d_[i-1]).getValue();
 
                     grads[i] = - (grid_->getCell(idx).getValue() - min_dim);
-
 
                     if (isinf(grads[i]))
                         grads[i] = 0;
@@ -259,15 +259,17 @@ template < class grid_t, class path_t, class heap_t = FMDaryHeap<FMDirectionalCe
         // This implementation is focused to be used with any number of dimensions.
 
         /**
-        * Solves the Eikonal equation for a given cell. This function is generalized
-        * to any number of dimensions.
+        * Solves the Eikonal equation for a given cell using the heuristic criteria of the FM2*.
+        * This function is generalized to any number of dimensions.
         *
         * @param idx index of the cell to be evaluated.
+        *
+        * @param idx index of the source cell of the wave. If this value is -1 the heuristic is not applied
         *
         * @return the distance (or time of arrival) value.
         */
        virtual double solveEikonal
-       (const int & idx) {
+       (const int & idx, const int & idx_source = -1) {
            // TODO: Here neighbors are computed and then in the computeFM. There should be a way to avoid computing
            // neighbors twice.
 
@@ -292,103 +294,58 @@ template < class grid_t, class path_t, class heap_t = FMDaryHeap<FMDirectionalCe
                }
            }
 
+           vel = 0;
+
+           if (idx_source == -1)
+               vel = grid_->getCell(idx).getVelocity();
+           else {
+               // Calculate velocity and wave gradient
+               solveGradient(grads_velocity, idx, true);
+
+               solveGradient(grads_wave, idx, false);
+
+               std::array<int,grid_->getNDims()> coords_source, coords_wave;
+
+               grid_->idx2coord(idx_source, coords_source);
+               grid_->idx2coord(idx, coords_wave);
+
+               // Calculate the gradients angle
+               angle_velocity = std::atan2(grads_velocity[1], grads_velocity[0]);
+               angle_wave = std::atan2(grads_wave[1], grads_wave[0]);
+
+               if (angle_velocity<0)
+                   angle_velocity +=  2 * PI;
+
+               if (angle_wave<0)
+                   angle_wave +=  2 * PI;
+
+               // Calculate the angle between the gradients
+               diff_angle = std::abs(angle_velocity-angle_wave);
+
+               if (diff_angle > PI )
+                   diff_angle = 2 * PI - diff_angle;
+
+              vel = 0;
+
+               // Apply the heuristic
+               if (std::abs(diff_angle) <=  (0.5 * PI) && grid_->getCell(idx).getVelocity() > 0.05)
+                   vel = 1;
+               else
+                   vel = grid_->getCell(idx).getVelocity();
+           }
+
            double b = -2*sumT;
-           double c = sumTT - grid_->getLeafSize()/(grid_->getCell(idx).getVelocity()*grid_->getCell(idx).getVelocity()); // leafsize not taken into account here.
+           double c = sumTT - grid_->getLeafSize() * grid_->getLeafSize()/(vel * vel); // leafsize not taken into account here.
            double quad_term = b*b - 4*a*c;
            if (quad_term < 0) {
                double minT = *(std::min_element(Tvalues.begin(), Tvalues.end()));
-               updatedT = 1/(grid_->getCell(idx).getVelocity()*grid_->getCell(idx).getVelocity()) + minT; // leafsize not taken into account here.
+               updatedT = 1/(vel * vel) + minT; // leafsize not taken into account here.
            }
            else
                updatedT = (-b + sqrt(quad_term))/(2*a);
 
            return updatedT;
        }
-
-        /**
-        * Solves the Eikonal equation for a given cell using the euristic criteria of the FM2*.
-        * This function is generalized to any number of dimensions.
-        *
-        * @param idx index of the cell to be evaluated.
-        *
-        * @param idx index of the source cell of the wave.
-        *
-        * @return the distance (or time of arrival) value.
-        */
-
-        virtual double solveEikonal
-        (const int & idx, const int & idx_source) {
-            // TODO: Here neighbors are computed and then in the computeFM. There should be a way to avoid computing
-            // neighbors twice.
-
-            int a = grid_t::getNDims(); // a parameter of the Eikonal equation.
-
-            double updatedT;
-            sumT = 0;
-            sumTT = 0;
-
-            for (int dim = 0; dim < grid_t::getNDims(); ++dim) {
-                double minTInDim = getMinValueInDimDirectional(idx, dim);
-                if (!isinf(minTInDim)) {
-                    Tvalues[dim] = minTInDim;
-                    sumT +=  Tvalues[dim];
-                    TTvalues[dim] = Tvalues[dim]*Tvalues[dim];
-                    sumTT +=  TTvalues[dim];
-                }
-                else {
-                    Tvalues[dim] = 0;
-                    TTvalues[dim] = 0;
-                    a -= 1 ;
-                }
-            }
-
-            // Calculate velocity and wave gradient
-            solveGradient(grads_velocity, idx, true);
-
-            solveGradient(grads_wave, idx, false);
-
-            std::array<int,grid_->getNDims()> coords_source, coords_wave;
-
-            grid_->idx2coord(idx_source, coords_source);
-            grid_->idx2coord(idx, coords_wave);
-
-            // Calculate the gradients angle
-            angle_velocity = std::atan2(grads_velocity[1], grads_velocity[0]);
-            angle_wave = std::atan2(grads_wave[1], grads_wave[0]);
-
-            if (angle_velocity<0)
-                angle_velocity +=  2 * PI;
-
-            if (angle_wave<0)
-                angle_wave +=  2 * PI;
-
-            // Calculate the angle between the gradients
-            diff_angle = std::abs(angle_velocity-angle_wave);
-
-            if (diff_angle > PI )
-                diff_angle = 2 * PI - diff_angle;
-
-           vel = 0;
-
-            // Apply the heuristic
-            if (std::abs(diff_angle) <=  (0.5 * PI) && grid_->getCell(idx).getVelocity() > 0.05)
-                vel = 1;
-            else
-                vel = grid_->getCell(idx).getVelocity();
-
-            double b = -2*sumT;
-            double c = sumTT - grid_->getLeafSize()/(vel*vel); // leafsize not taken into account here.
-            double quad_term = b*b - 4*a*c;
-            if (quad_term < 0) {
-                double minT = *(std::min_element(Tvalues.begin(), Tvalues.end()));
-                updatedT = 1/(vel*vel) + minT; // leafsize not taken into account here.
-            }
-            else
-                updatedT = (-b + sqrt(quad_term))/(2*a);
-
-            return updatedT;
-        }
-
 
         /**
          * Main Fast Marching Function. It requires to call first the setInitialPoints() function.
@@ -401,7 +358,7 @@ template < class grid_t, class path_t, class heap_t = FMDaryHeap<FMDirectionalCe
          */
 
         virtual void computeFM
-        (const bool stop = true, const bool velocity = false, const bool directional = false) {
+        (const bool stop = true, const bool directional = false) {
             // TODO: check if the previous steps have been done (initialization).
             int j =  0;
             int n_neighs = 0;
@@ -428,22 +385,18 @@ template < class grid_t, class path_t, class heap_t = FMDaryHeap<FMDirectionalCe
                             if (new_arrival_time < grid_->getCell(j).getArrivalTime()) {
                                 grid_->getCell(j).setArrivalTime(new_arrival_time);
                                 narrow_band_.increase( &(grid_->getCell(j)) );
-
-                                if (velocity)
-                                    velocity_map_[j] = vel;
+                                velocity_map_[j] = vel;
                             }
-                            if (directional ==  true)
+                            if (directional)
                                 if (dir_time < grid_->getCell(j).getDirectionalTime())
                                     grid_->getCell(j).setDirectionalTime(dir_time);
                         }
                         else {
                             grid_->getCell(j).setState(FMState::NARROW);
                             grid_->getCell(j).setArrivalTime(new_arrival_time);
+                            velocity_map_[j] = vel;
 
-                            if (velocity)
-                                velocity_map_[j] = vel;
-
-                            if (directional ==  true)
+                            if (directional)
                                 grid_->getCell(j).setDirectionalTime(dir_time);
                             narrow_band_.push( &(grid_->getCell(j)) );
                         } // neighbors open.
@@ -452,114 +405,30 @@ template < class grid_t, class path_t, class heap_t = FMDaryHeap<FMDirectionalCe
                         stopWavePropagation = 1;
                 } // For each neighbor.
             } // while narrow band not empty
-
-
         }
 
         /**
-         * Main Fast Marching Square Star Function. It requires to call first the setInitialPoints() function.
+         * Main Fast Marching Square Directional Function with velocity saturation. It requires to call first the setInitialPoints() function.
          *
-         * @param choose if the final velocity map must be safe
+         * @param saturation distance. If this value is -1 the potential is not saturated
          *
          * @see setInitialPoints()
          */
 
         virtual void computeFM2Directional
-        (const bool velocity = false) {
-
-            if (velocity)
-                velocity_map_.resize(grid_->size());
-
-            setInitialPoints(fmm2_sources_);
-            computeFM(false);
-
-            float max_value = grid_->getMaxValue();
-
-            for (int i = 0; i< grid_->size(); i++) {
-                grid_->getCell(i).setVelocity(grid_->getCell(i).getValue()/max_value);
-                grid_->getCell(i).setValue(inf_);
-                grid_->getCell(i).setDirectionalTime(inf_);
-                grid_->getCell(i).setState(FMState::OPEN);
-            }
+        (const float maxDistance = -1) {
+            velocity_map_.resize(grid_->size());
+            if (maxDistance != -1) {
+                maxDistance_ = maxDistance;
+                computeFirstPotential(true);
+            } else
+                computeFirstPotential();
 
             // The wave has to be expanded from the goal to the intial point
             std::vector<int> goals;
             goals.push_back(goal_idx_);
-
-            start = system_clock::now();
-            setInitialPoints(goals, velocity);
-            computeFM(true, velocity, true);
-            end = system_clock::now();
-            time_elapsed = duration_cast<milliseconds>(end-start).count();
-            std::cout << "\tFM2Directional second wave time: " << time_elapsed << " ms" << std::endl;
-
-        }
-
-        /**
-         * Main Fast Marching Square Star Function with velocity saturation. It requires to call first the setInitialPoints() function.
-         *
-         * @param saturation distance
-         *
-         * @param choose if the final velocity map must be safe
-         *
-         * @see setInitialPoints()
-         */
-
-        virtual void computeFM2Directional
-        (const float maxDistance, const bool velocity = false) {
-
-            if (velocity)
-                velocity_map_.resize(grid_->size());
-
-            setInitialPoints(fmm2_sources_);
-            computeFM(false);
-
-            float maxValue = grid_->getMaxValue();
-            double maxVelocity = maxDistance/grid_->getLeafSize(); // Calculate max velocity using the max distance and the leaf size of the cell
-
-            for (int i = 0; i< grid_->size(); i++) {
-
-                double vel = grid_->getCell(i).getValue()/maxValue;
-
-                if (vel<maxVelocity)
-                    grid_->getCell(i).setVelocity(vel/maxVelocity);
-                else
-                    grid_->getCell(i).setVelocity(1);
-
-                grid_->getCell(i).setValue(inf_);
-                grid_->getCell(i).setState(FMState::OPEN);
-            }
-
-            // The wave has to be expanded from the goal to the intial point
-            std::vector<int> goals;
-            goals.push_back(goal_idx_);
-
-            start = system_clock::now();
-            setInitialPoints(goals, velocity);
-            computeFM(true, velocity, true);
-            end = system_clock::now();
-            time_elapsed = duration_cast<milliseconds>(end-start).count();
-            std::cout << "\tFM2Directional second wave time: " << time_elapsed << " ms" << std::endl;
-        }
-
-        /**
-         * Computes the path from the given index to a minimum (the one
-         * gradient descent choses).
-         *
-         * No checks are done (points in the borders, points in obstacles...).
-         *
-         * The included scripts will parse the saved path.
-         *
-         * @param path the resulting path (output).
-         */
-
-        virtual void computePath
-        (path_t * p) {
-            path_ = p;
-            constexpr int ndims = grid_->getNDims();
-
-            GradientDescent< nDGridMap<FMDirectionalCell, ndims> > grad;
-            grad.apply_directional(*grid_,initial_point_[0],*path_);
+            setInitialPoints(goals, true);
+            computeFM(true, true);
         }
 
         /**
@@ -577,7 +446,7 @@ template < class grid_t, class path_t, class heap_t = FMDaryHeap<FMDirectionalCe
 
         virtual void computePath
         (path_t * p, std::vector <double> * path_velocity) {
-            path_ = p;
+            path_t* path_ = p;
             constexpr int ndims=grid_->getNDims();
 
             GradientDescent< nDGridMap<FMDirectionalCell, ndims> > grad;
@@ -609,10 +478,43 @@ template < class grid_t, class path_t, class heap_t = FMDaryHeap<FMDirectionalCe
 
         }
 
+    private:
+
+        /**
+         * Computes the first potential expansion of the wave to perform the velocity map.
+         *
+         * @param select if the potential is saturated
+         */
+
+        void computeFirstPotential
+        (bool saturate = false) {
+            setInitialPoints(fmm2_sources_);
+            computeFM(false);
+
+            //Rescaling and saturating to relative velocities: [0-1]
+            float maxValue = grid_->getMaxValue();
+            double maxVelocity = 0;
+
+            if (saturate)
+                maxVelocity = maxDistance_/grid_->getLeafSize(); // Calculate max velocity using the max distance and the leaf size of the cell
+
+            for (int i = 0; i < grid_->size(); i++) {
+                double velocity = grid_->getCell(i).getValue()/maxValue;
+
+                if (saturate)
+                    if (velocity < maxVelocity)
+                        grid_->getCell(i).setVelocity(velocity/maxVelocity);
+                    else
+                        grid_->getCell(i).setVelocity(1);
+                else
+                    grid_->getCell(i).setVelocity(velocity/maxVelocity);
+
+                grid_->getCell(i).setValue(inf_);
+                grid_->getCell(i).setState(FMState::OPEN);
+            }
+        }
+
     protected:
-
-        path_t* path_; /*!< Path container. */
-
         double inf_ = std::numeric_limits<double>::infinity();
 
         double sumT; /*!< Auxiliar value wich computes T1+T2+T3... Useful for generalizing the Eikonal solver. */
@@ -620,13 +522,11 @@ template < class grid_t, class path_t, class heap_t = FMDaryHeap<FMDirectionalCe
         double sumDistance; /*!< Auxiliar value wich computes euclidean distance between narrow band and goal point. Useful for generalizing the Eikonal solver with euristic. */
 
         double vel; /*!< Auxiliar value wich contains the velocity of the cell used on the Eikonal solver. */
+        double maxDistance_; /*!< Distance value to saturate the first potential. */
 
         int goal_idx_; /*!< Goal point for the Fast Marching Square Star. */
         std::vector<int> fmm2_sources_;	/*!< Wave propagation sources for the Fast Marching Square Star. */
         std::vector<int> initial_point_;	/*!< Initial point for the Fast Marching Square Star. */
-
-        time_point<std::chrono::system_clock> start, end; // Time measuring.
-        double time_elapsed;
 
         std::array<int, grid_t::getNDims()-1> d_;
         std::array<int, grid_t::getNDims()> dimsize_;
