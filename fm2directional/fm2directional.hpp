@@ -507,7 +507,7 @@ template < class grid_t, class heap_t = FMDaryHeap<FMDirectionalCell> >  class F
                     else
                         grid_->getCell(i).setVelocity(1);
                 else
-                    grid_->getCell(i).setVelocity(velocity/maxVelocity);
+                    grid_->getCell(i).setVelocity(velocity);
 
                 grid_->getCell(i).setValue(inf_);
                 grid_->getCell(i).setState(FMState::OPEN);

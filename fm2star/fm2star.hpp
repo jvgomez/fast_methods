@@ -403,7 +403,7 @@ private:
                 else
                     grid_->getCell(i).setVelocity(1);
             else
-                grid_->getCell(i).setVelocity(vel/maxVelocity);
+                grid_->getCell(i).setVelocity(vel);
 
             grid_->getCell(i).setValue(inf_);
             grid_->getCell(i).setState(FMState::OPEN);
