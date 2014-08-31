@@ -304,11 +304,6 @@ template < class grid_t, class heap_t = FMDaryHeap<FMDirectionalCell> >  class F
 
                solveGradient(grads_wave, idx, false);
 
-               std::array<int,grid_->getNDims()> coords_source, coords_wave;
-
-               grid_->idx2coord(idx_source, coords_source);
-               grid_->idx2coord(idx, coords_wave);
-
                // Calculate the gradients angle
                angle_velocity = std::atan2(grads_velocity[1], grads_velocity[0]);
                angle_wave = std::atan2(grads_wave[1], grads_wave[0]);
