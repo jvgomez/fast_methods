@@ -1,7 +1,8 @@
 N-Dimensional Fast Marching Method V1.0
 
-Author: Javier V. Gomez engjotauve __at__ gmail.com
+Authors: Javier V. Gomez engjotauve __at__ gmail.com
 	www.javiervgomez.com
+		 Jose Pardeiro jose.pardeiro __at__ gmail.com
 
 
 ===========================
@@ -20,7 +21,7 @@ Because of this, the code is not deeply tested. I've just tested it works for th
 The compilation time is highly increased due to CImg library. Please, omit it when possible. When doing this, you can erase the following lines of the CMakeLists.txt:
 
 # Linking CImg dependencies.
-target_link_libraries (fmm X11 pthread ) 
+target_link_libraries (fmm X11 pthread )
 
 The CImg dependency is included in the thirdparty folder. For more information:
 http://cimg.sourceforge.net/
@@ -104,8 +105,3 @@ In the top part of each file there are specific TODO comments.
 - Restructure the folder and the CMake files in order to properly have examples and that stuff.
 
 ===========================
-
-
-
-
-

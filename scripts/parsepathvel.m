@@ -1,4 +1,4 @@
-function path = parsepath (filename)
+function [path, vel] = parsepathvel (filename)
 
 fid = fopen(filename);
 data = fscanf(fid, '%f');
@@ -14,9 +14,10 @@ end
 
 path = zeros((size(data,1)-(ndims+2))/ndims , ndims);
 count = 0;
-for i = ndims+3:ndims:size(data,1)
+for i = ndims+3:ndims+1:size(data,1)
     count = count + 1;
     for j = 1:ndims
        path(count,j) = data(i+j-1) +1; % The +1 adapts the array indexing from C++ to Matlab.
     end
+    vel(count) = data(i+j);
 end
