@@ -2,7 +2,7 @@
     \brief Auxiliar class which helps to save nDGridMaps into text files.
     
     Additional Matlab scripts are provided to parse these grids.
-    Copyright (C) 2014 Javier V. Gomez
+    Copyright (C) 2014 Javier V. Gomez and Jose Pardeiro
     www.javiervgomez.com
 
 	This program is free software: you can redistribute it and/or modify
@@ -115,39 +115,74 @@ class GridWriter {
 		}
 		
 	
-		/** 
-		 * Saves the 2D path in an ASCII file with the following format:
-		 *
-		 * leafsize_\n 							(float)
-		 * ndims\n								(size_t)
-		 * dimsize_[0]\n						(int)
-		 * dimsize_[1]\n						(int)
-		 * x1\ty1\tz1...\n 						(double)
-		 * x2\ty2\tz2...\n 						(double)
-		 * ...
-		 * 		 * 
-		 * Use the parsegrid.m and parsepath.m Matlab scripts to parse the data.
-		 */
-		template <class T, size_t ndims> 
-		static void savePath
-		(const char * filename, nDGridMap<T, ndims> & grid, std::vector< std::array<double,ndims> > & path) {
-			std::ofstream ofs;
-			ofs.open (filename,  std::ofstream::out | std::ofstream::trunc);
-			
-			ofs << grid.getLeafSize() << std::endl << ndims;
-			
-			std::array<int, ndims> dimsize = grid.getDimSizes();
-			for (int i = 0; i < ndims; ++i)
-				ofs << std::endl << dimsize[i] << "\t";
-				   
-			for (int i = 0; i < path.size(); ++i) {
-				ofs << std::endl;
-				for (int j = 0; j < ndims; ++j)	
-					ofs << path[i][j] << "\t" ; 
-			}
-				
-			ofs.close(); 
-		}
+        /**
+         * Saves the 2D path in an ASCII file with the following format:
+         *
+         * leafsize_\n 							(float)
+         * ndims\n								(size_t)
+         * dimsize_[0]\n						(int)
+         * dimsize_[1]\n						(int)
+         * x1\ty1\tz1...\n 						(double)
+         * x2\ty2\tz2...\n 						(double)
+         * ...
+         * 		 *
+         * Use the parsegrid.m and parsepath.m Matlab scripts to parse the data.
+         */
+        template <class T, size_t ndims>
+        static void savePath
+        (const char * filename, nDGridMap<T, ndims> & grid, std::vector< std::array<double,ndims> > & path) {
+            std::ofstream ofs;
+            ofs.open (filename,  std::ofstream::out | std::ofstream::trunc);
+
+            ofs << grid.getLeafSize() << std::endl << ndims;
+
+            std::array<int, ndims> dimsize = grid.getDimSizes();
+            for (int i = 0; i < ndims; ++i)
+                ofs << std::endl << dimsize[i] << "\t";
+
+            for (int i = 0; i < path.size(); ++i) {
+                ofs << std::endl;
+                for (int j = 0; j < ndims; ++j)
+                    ofs << path[i][j] << "\t" ;
+            }
+
+            ofs.close();
+        }
+
+        /**
+         * Saves the 2D path with velocity values in an ASCII file with the following format:
+         *
+         * leafsize_\n 							(float)
+         * ndims\n								(size_t)
+         * dimsize_[0]\n						(int)
+         * dimsize_[1]\n						(int)
+         * x1\ty1\tz1\tv1...\n 					(double)
+         * x2\ty2\tz2\tv2...\n 					(double)
+         * ...
+         * 		 *
+         * Use the parsegrid.m and parsepathvelocity.m Matlab scripts to parse the data.
+         */
+        template <class T, size_t ndims>
+        static void savePathVelocity
+        (const char * filename, nDGridMap<T, ndims> & grid, std::vector< std::array<double,ndims> > & path, std::vector <double> path_velocity) {
+            std::ofstream ofs;
+            ofs.open (filename,  std::ofstream::out | std::ofstream::trunc);
+
+            ofs << grid.getLeafSize() << std::endl << ndims;
+
+            std::array<int, ndims> dimsize = grid.getDimSizes();
+            for (int i = 0; i < ndims; ++i)
+                ofs << std::endl << dimsize[i] << "\t";
+
+            for (int i = 0; i < path.size(); ++i) {
+                ofs << std::endl;
+                for (int j = 0; j < ndims; ++j)
+                    ofs << path[i][j] << "\t" ;
+                ofs << path_velocity[i] << "\t" ;
+            }
+
+            ofs.close();
+        }
 		
 		
 		protected:

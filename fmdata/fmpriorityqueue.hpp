@@ -74,7 +74,7 @@ template <class cell_t = FMCell> class FMPriorityQueue{
 		 * @param cell to add.
 		 */
 		void increase 
-		(const FMCell * c) {
+        (const cell_t * c) {
 			heap_.push(c);
 		}
 		

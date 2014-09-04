@@ -1,7 +1,8 @@
 N-Dimensional Fast Marching Method V1.0
 
-Author: Javier V. Gomez engjotauve __at__ gmail.com
-	www.javiervgomez.com
+Authors: 
+ - Javier V. Gomez javvgomez __at__ gmail.com www.javiervgomez.com
+ - Jose Pardeiro jose.pardeiro __at__ gmail.com
 
 
 ===========================
@@ -105,9 +106,9 @@ In the top part of each file there are specific TODO comments.
 
 - Substitute arg parsing with boost_options.
 
+fm2_algs branch:
+
+- remove the mandatory parameter in computeFM methods.
+- check function naming.
+
 ===========================
-
-
-
-
-
