@@ -1,2 +1,5 @@
 build/
 *.*~
+*.*user
+examples/build/
+.idea
