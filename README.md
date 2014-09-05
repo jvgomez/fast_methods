@@ -1,8 +1,8 @@
 N-Dimensional Fast Marching Method V1.0
 
-Authors: Javier V. Gomez engjotauve __at__ gmail.com
-	www.javiervgomez.com
-		 Jose Pardeiro jose.pardeiro __at__ gmail.com
+Authors: 
+ - Javier V. Gomez javvgomez __at__ gmail.com www.javiervgomez.com
+ - Jose Pardeiro jose.pardeiro __at__ gmail.com
 
 
 ===========================
@@ -21,7 +21,7 @@ Because of this, the code is not deeply tested. I've just tested it works for th
 The compilation time is highly increased due to CImg library. Please, omit it when possible. When doing this, you can erase the following lines of the CMakeLists.txt:
 
 # Linking CImg dependencies.
-target_link_libraries (fmm X11 pthread )
+target_link_libraries (fmm X11 pthread)
 
 The CImg dependency is included in the thirdparty folder. For more information:
 http://cimg.sourceforge.net/
@@ -32,7 +32,7 @@ Dependencies:
 
 This code uses C++11 so a compiler g++ 4.8 or equivalent is required. With GCC 4.7 some runtime problems can occur.
 
-The current version relies on Boost 1.55 (probably previous versions work as well). The current CMakeLists.txt assumes you have uncompressed boost into the home directory
+The current version relies on Boost 1.55 (probably previous versions work as well). The current CMakeLists.txt assumes you have uncompressed boost into the home directory.
 
 # External dependencies
 include_directories (~/boost_1_55_0)
@@ -103,5 +103,13 @@ TODO:
 In the top part of each file there are specific TODO comments.
 
 - Restructure the folder and the CMake files in order to properly have examples and that stuff.
+
+- Substitute arg parsing with boost_options.
+
+fm2_algs branch:
+
+- remove the mandatory parameter in computeFM methods.
+- check function naming.
+- provide default arguments for examples.
 
 ===========================

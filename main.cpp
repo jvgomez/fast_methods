@@ -10,6 +10,7 @@
 #include "ndgridmap/ndgridmap.hpp"
 #include "console/console.h"
 #include "fmm/fastmarching.hpp"
+#include "fm2/fm2.hpp"
 #include "fmdata/fmfibheap.hpp"
 #include "fmdata/fmpriorityqueue.hpp"
 #include "fmdata/fmdaryheap.hpp"
@@ -36,7 +37,6 @@ int main(int argc, const char ** argv)
     console::parseArguments(argc,argv, "-map1", filename1);
     console::parseArguments(argc,argv, "-map2", filename2);
     console::parseArguments(argc,argv, "-vel", filename_vels);
-
 
     console::info("Creating grid from image.");
     nDGridMap<FMCell, ndims> grid;
@@ -66,17 +66,14 @@ int main(int argc, const char ** argv)
         end = system_clock::now();
         time_elapsed = duration_cast<milliseconds>(end-start).count();
         cout << "\tElapsed FM time: " << time_elapsed << " ms" << endl;
-
     console::info("Plotting the results and saving into test_fm.txt");
     GridPlotter::plotArrivalTimes(grid);
     GridWriter::saveGridValues("test_fm.txt", grid);
 
     console::info("Computing gradient descent ");
-
     typedef typename std::vector< std::array<double, ndims> > Path; // A bit of short-hand.
 
     Path path;
-
     std::vector <double> path_velocity; // Velocities profile
 
         start = system_clock::now();
@@ -89,6 +86,38 @@ int main(int argc, const char ** argv)
     GridWriter::savePathVelocity("path_velocity.txt", grid, path, path_velocity);
     GridPlotter::plotMapPath(grid,path);
 
+    console::info("Testing Fast Marching Square Method.");
+    std::vector <int> fm2_sources;
+    path_velocity.clear();
+    grid.coord2idx(coords_goal, goal);
+    Path pathFM2;
+
+    MapLoader::loadMapFromImg(filename2.c_str(), grid, fm2_sources);
+
+    FastMarching2<nDGridMap<FMCell, ndims>> fm2;
+    fm2.setEnvironment(&grid);
+        start = system_clock::now();
+    fm2.setInitialAndGoalPoints(init_points, fm2_sources, goal);
+    fm2.computeFM2();
+        end = system_clock::now();
+        time_elapsed = duration_cast<milliseconds>(end-start).count();
+        cout << "\tElapsed FM2 time: " << time_elapsed << " ms" << endl;
+
+        start = system_clock::now();
+    fm2.computePath(&pathFM2, &path_velocity);
+        end = system_clock::now();
+        time_elapsed = duration_cast<milliseconds>(end-start).count();
+        cout << "\tElapsed gradient descent time: " << time_elapsed << " ms" << endl;
+
+    GridPlotter::plotMapPath(grid,pathFM2);
+
+    console::info("Comparing FMM and FM2 paths.");
+    std::vector <Path> paths;
+    paths.push_back(path);
+    paths.push_back(pathFM2);
+
+    GridPlotter::plotMapPath(grid,paths);
+
     console::info("Now using all black points as wave sources");
     nDGridMap<FMCell, ndims> grid2;
     init_points.clear();
@@ -100,7 +129,7 @@ int main(int argc, const char ** argv)
     fmm2.setInitialAndGoalPoints(init_points, goal);
     fmm2.computeFM(false);
         end = system_clock::now();
-         time_elapsed = duration_cast<milliseconds>(end-start).count();
+        time_elapsed = duration_cast<milliseconds>(end-start).count();
         cout << "\tElapsed FM time: " << time_elapsed << " ms" << endl;
 
     console::info("Plotting the results ");
@@ -112,6 +141,7 @@ int main(int argc, const char ** argv)
     console::info("Now let's try different velocities.");
     nDGridMap<FMCell, ndims> grid_vels;
     MapLoader::loadVelocitiesFromImg(filename_vels.c_str(), grid_vels);
+
     FastMarching< nDGridMap<FMCell, ndims> , FMFibHeap<>> fmm_vels;
     init_points.clear();
     init_points.push_back(80000); // Init point randomly chosen.
@@ -128,7 +158,6 @@ int main(int argc, const char ** argv)
 
     console::info("Saving velocities");
     GridWriter::saveVelocities("test_vels.txt", grid_vels);
-
 
     console::info("Testing 3D!");
     nDGridMap<FMCell, ndims3> grid3 (std::array<int,ndims3>{100,100,50});
@@ -152,6 +181,8 @@ int main(int argc, const char ** argv)
     console::info("Testing 3D gradient descent.");
     typedef typename std::vector< std::array<double, ndims3> > Path3D; // A bit of short-hand.
 
+    grid3.coord2idx(std::array<int, ndims3> {20, 10, 45}, goal);
+
     Path3D path3D;
         start = system_clock::now();
     GradientDescent< nDGridMap<FMCell, ndims3> > grad3D;
@@ -160,7 +191,6 @@ int main(int argc, const char ** argv)
         time_elapsed = duration_cast<milliseconds>(end-start).count();
         cout << "\tElapsed gradient descent time: " << time_elapsed << " ms" << endl;
     GridWriter::savePath("test_path3d.txt", grid3, path3D);
-
 
     return 0;
 }

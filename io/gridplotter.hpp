@@ -36,71 +36,71 @@ typedef typename std::vector <Path2D> Paths2D;
 
 // TODO: include checks which ensure that the grids are adecuate for the functions used.
 class GridPlotter {
-	public:
-		GridPlotter() {};
-		virtual ~GridPlotter() {};
-	
-	
-		/**
-		 * Plots the initial binary map included in a given grid. It is based on the
-		 * nDGridMap::getOccupancy() which has to be bool valued. This function has to be
-		 * overloaded in another occupancy type is being used.
-		 * 
-		 * Should be used only in 2D grids.
-		 * 
-		 *  The Y dimension flipping is because nDGridMap works in X-Y coordinates, not in image indices as CImg.
-		 * 
-		 * IMPORTANT NOTE: no type-checkings are done. T type has to be Cell or any class with bool getOccupancy() method.
-		 * 
-		 * @param grid 2D nDGridmap
-		 * @param flipY true: flips the Y dimension. 0 does not flip.
-		 */
-		template<class T, size_t ndims> 
-		static void plotMap
-		(nDGridMap<T, ndims> & grid, const bool flipY = 1) {
-			// TODO: image checking: B/W, correct reading, etc.
-			std::array<int,2> d = grid.getDimSizes();
-			CImg<bool> img(d[0],d[1],1,1,0);
-			if (flipY)
-				// Filling the image flipping Y dim. We want now top left to be the (0,0).
-				cimg_forXY(img,x,y) { img(x,y) = grid[img.width()*(img.height()-y-1)+x].getOccupancy(); }	
-			else 
-				cimg_forXY(img,x,y) { img(x,y) = grid[img.width()*y+x].getOccupancy(); }	
-				
-			img.display("Grid map", false);
-		}
-	
-	
-	   /**
-		 * Plots the value map included in a given grid. It is based on the
-		 * nDGridMap::getValue() which has to be float valued. This function has to be
-		 * overloaded in another value type is being used.
-		 * 
-		 * Should be used only in 2D grids.
-		 * 
-		 * The Y dimension flipping is because nDGridMap works in X-Y coordinates, not in image indices as CImg.
-		 * 
-		 * IMPORTANT NOTE: no type-checkings are done. T type has to be Cell or any class with bool getValue() method.
-		 * 
-		 * @param grid 2D nDGridmap
-		 * @param flipY true: flips the Y dimension. 0 does not flip.
-		 */
-		template<class T, size_t ndims = 2> 
-		static void plotArrivalTimes
-		(nDGridMap<T, ndims> & grid, const bool flipY = true) {
-			std::array<int,2> d = grid.getDimSizes();
-			double max_val = grid.getMaxValue();
-			CImg<double> img(d[0],d[1],1,1,0);
+    public:
+        GridPlotter() {};
+        virtual ~GridPlotter() {};
 
-			if (flipY) 
-				// Filling the image flipping Y dim. We want now top left to be the (0,0).
-				cimg_forXY(img,x,y) { img(x,y) = grid[img.width()*(img.height()-y-1)+x].getValue()/max_val*255; }
-			else 
-				cimg_forXY(img,x,y) { img(x,y) = grid[img.width()*y+x].getValue()/max_val*255; }	
-				
-			img.map( CImg<float>::jet_LUT256() );
-			img.display("Grid values", false);	
-		}
+
+        /**
+         * Plots the initial binary map included in a given grid. It is based on the
+         * nDGridMap::getOccupancy() which has to be bool valued. This function has to be
+         * overloaded in another occupancy type is being used.
+         * 
+         * Should be used only in 2D grids.
+         * 
+         *  The Y dimension flipping is because nDGridMap works in X-Y coordinates, not in image indices as CImg.
+         * 
+         * IMPORTANT NOTE: no type-checkings are done. T type has to be Cell or any class with bool getOccupancy() method.
+         * 
+         * @param grid 2D nDGridmap
+         * @param flipY true: flips the Y dimension. 0 does not flip.
+         */
+        template<class T, size_t ndims> 
+        static void plotMap
+        (nDGridMap<T, ndims> & grid, const bool flipY = 1) {
+            // TODO: image checking: B/W, correct reading, etc.
+            std::array<int,2> d = grid.getDimSizes();
+            CImg<bool> img(d[0],d[1],1,1,0);
+            if (flipY)
+                // Filling the image flipping Y dim. We want now top left to be the (0,0).
+                cimg_forXY(img,x,y) { img(x,y) = grid[img.width()*(img.height()-y-1)+x].getOccupancy(); }	
+            else 
+                cimg_forXY(img,x,y) { img(x,y) = grid[img.width()*y+x].getOccupancy(); }	
+                
+            img.display("Grid map", false);
+        }
+
+
+       /**
+         * Plots the value map included in a given grid. It is based on the
+         * nDGridMap::getValue() which has to be float valued. This function has to be
+         * overloaded in another value type is being used.
+         * 
+         * Should be used only in 2D grids.
+         * 
+         * The Y dimension flipping is because nDGridMap works in X-Y coordinates, not in image indices as CImg.
+         * 
+         * IMPORTANT NOTE: no type-checkings are done. T type has to be Cell or any class with bool getValue() method.
+         * 
+         * @param grid 2D nDGridmap
+         * @param flipY true: flips the Y dimension. 0 does not flip.
+         */
+        template<class T, size_t ndims = 2> 
+        static void plotArrivalTimes
+        (nDGridMap<T, ndims> & grid, const bool flipY = true) {
+            std::array<int,2> d = grid.getDimSizes();
+            double max_val = grid.getMaxValue();
+            CImg<double> img(d[0],d[1],1,1,0);
+
+            if (flipY) 
+                // Filling the image flipping Y dim. We want now top left to be the (0,0).
+                cimg_forXY(img,x,y) { img(x,y) = grid[img.width()*(img.height()-y-1)+x].getValue()/max_val*255; }
+            else 
+                cimg_forXY(img,x,y) { img(x,y) = grid[img.width()*y+x].getValue()/max_val*255; }	
+                
+            img.map( CImg<float>::jet_LUT256() );
+            img.display("Grid values", false);	
+        }
 
         /**
          * Plots the initial binary map included in a given grid and the given path. It is based on the
@@ -240,8 +240,8 @@ class GridPlotter {
 
       }
 
-	protected:
-	
+    protected:
+
 };
 
 
