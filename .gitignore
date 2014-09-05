@@ -1,5 +1,7 @@
 build/
 *.*~
-*.*user
 examples/build/
+
+#QtCreator temps
 .idea
+*.*user
