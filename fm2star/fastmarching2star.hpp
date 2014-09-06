@@ -1,4 +1,4 @@
-/*! \file fm2star.hpp
+/*! \file fastmarching2star.hpp
     \brief Templated class which computes the Fast Marching Square Star (FM2*).
     
     It uses as a main container the nDGridMap class. The nDGridMap type T
@@ -35,7 +35,6 @@
 	You should have received a copy of the GNU General Public License
     along with this program. If not, see  < http://www.gnu.org/licenses/>.
 */
-
 
 #ifndef FASTMARCHING2STAR_H_
 #define FASTMARCHING2STAR_H_
@@ -88,15 +87,15 @@ template  <  class grid_t, class heap_t = FMDaryHeap <FMCell> >  class FastMarch
          *
          * @param fmm2_sources contains the indices of the initial points corresponding to all black cells.
          *
-         * @param goal_point contains the index of the goal point.
+         * @param goal_idx contains the index of the goal point.
          *
          * @see init()
          */
         virtual void setInitialAndGoalPoints
-        (const std::vector <int> & initial_point, const std::vector <int> & fmm2_sources, const int goal_point) {
+        (const std::vector <int> & initial_point, const std::vector <int> & fmm2_sources, const int goal_idx) {
             initial_point_ = initial_point;
             fmm2_sources_ = fmm2_sources;
-            goal_idx_ = goal_point;
+            goal_idx_ = goal_idx;
             grid_->idx2coord(goal_idx_, goal);
         }
 
@@ -169,7 +168,7 @@ template  <  class grid_t, class heap_t = FMDaryHeap <FMCell> >  class FastMarch
             grid_->idx2coord(idx, position);
 
             for (int i = 0; i < grid_->getNDims(); i++)
-               distance[i] = std::abs(position[i]-goal[i]);
+               distance[i] = std::abs(position[i] - goal[i]);
 
             int idx_dist;
             grid_->coord2idx(distance, idx_dist);
@@ -184,7 +183,9 @@ template  <  class grid_t, class heap_t = FMDaryHeap <FMCell> >  class FastMarch
             A. Valero, J.V. Gómez, S. Garrido and L. Moreno, The Path to Efficiency: Fast Marching Method for Safer,
             More Efficient Mobile Robot Trajectories, IEEE Robotics and Automation Magazine, Vol. 20, No. 4, 2013.
          *
-         * @param selection of mode to expand the wave.
+         * @param stop selects if the wave has to stop when it arrives to the goal point
+         *
+         * @param star selects of mode to expand the wave.
          *
          * @see setInitialPoints()
          */
@@ -233,7 +234,7 @@ template  <  class grid_t, class heap_t = FMDaryHeap <FMCell> >  class FastMarch
         *
         * @param idx index of the cell to be evaluated.
         *
-        * @param selection of mode to resolve Eikonal equation depending of the heuristic
+        * @param star selects of mode to resolve Eikonal equation depending of the heuristic
         *
         * @return the distance (or time of arrival) value.
         */
@@ -285,7 +286,9 @@ template  <  class grid_t, class heap_t = FMDaryHeap <FMCell> >  class FastMarch
         /**
          * Main Fast Marching Function. It requires to call first the setInitialPoints() function.
          *
-         * @param selection of mode to expand the wave.
+         * @param stop selects if the wave has to stop when it arrives to the goal point
+         *
+         * @param star selects if star heuristic must be applied
          *
          * @see setInitialPoints()
          */
@@ -331,19 +334,17 @@ template  <  class grid_t, class heap_t = FMDaryHeap <FMCell> >  class FastMarch
         /**
          * Main Fast Marching Square Star Function with velocity saturation. It requires to call first the setInitialPoints() function.
          *
-         * @param saturation distance
-         *
-         * @param max velocity value of the robot.
+         * @param maxDistance saturation distance (relative, where 1 means maximum distance). If this value is -1 (default) the velocities map is not saturated.
          *
          * @see setInitialPoints()
          */
         virtual void computeFM2Star
         (const float maxDistance = -1) {
+            maxDistance_ = maxDistance;
             if (maxDistance != -1) {
-                maxDistance_ = maxDistance;
-                computeFirstPotential(true);
+                computeVelocitiesMap(true);
             } else
-                computeFirstPotential();
+                computeVelocitiesMap();
 
             setInitialPoints(initial_point_);
             computeFM(true, true);
@@ -374,47 +375,46 @@ template  <  class grid_t, class heap_t = FMDaryHeap <FMCell> >  class FastMarch
     private:
 
         /**
-         * Computes the first potential expansion of the wave to perform the velocity map.
+         * Computes the velocities map of the FM2 algorithm.
          *
-         * @param select if the potential is saturated
+         * @param saturate select if the potential is saturated according to maxDistance_ .
          */
-        void computeFirstPotential
+        void computeVelocitiesMap
         (bool saturate = false) {
             setInitialPoints(fmm2_sources_);
             computeFM(false, false);
 
             //Rescaling and saturating to relative velocities: [0-1]
-            float maxValue = grid_->getMaxValue();
+            double maxValue = grid_->getMaxValue();
             double maxVelocity = 0;
 
             if (saturate)
-                maxVelocity = maxDistance_/grid_->getLeafSize(); // Calculate max velocity using the max distance and the leaf size of the cell
+                maxVelocity = maxDistance_ / grid_->getLeafSize(); // Calculate max velocity using the max distance and the leaf size of the cell
 
             for (int i = 0; i < grid_->size(); i++) {
-                double vel = grid_->getCell(i).getValue()/maxValue;
+                double vel = grid_->getCell(i).getValue() / maxValue;
 
                 if (saturate)
                     if (vel < maxVelocity)
-                        grid_->getCell(i).setVelocity(vel/maxVelocity);
+                        grid_->getCell(i).setVelocity(vel / maxVelocity);
                     else
                         grid_->getCell(i).setVelocity(1);
                 else
                     grid_->getCell(i).setVelocity(vel);
 
-                grid_->getCell(i).setValue(inf_);
-                grid_->getCell(i).setState(FMState::OPEN);
+              // Restarting grid values for second wave expasion.
+              grid_->getCell(i).setValue(std::numeric_limits<double>::infinity());
+              grid_->getCell(i).setState(FMState::OPEN);
             }
         }
 
     protected:
-        double inf_ = std::numeric_limits < double>::infinity();
-
         double sumT; /*! <  Auxiliar value wich computes T1+T2+T3... Useful for generalizing the Eikonal solver. */
         double sumTT; /*! <  Auxiliar value wich computes T1^2+T2^2+T3^2... Useful for generalizing the Eikonal solver. */
 
         int goal_idx_; /*! <  Goal point for the Fast Marching Square Star. */
-        std::vector <int> fmm2_sources_;	/*! <  Wave propagation sources for the Fast Marching Square Star. */
-        std::vector <int> initial_point_;	/*! <  Initial point for the Fast Marching Square Star. */
+        std::vector <int> fmm2_sources_; /*! <  Wave propagation sources for the Fast Marching Square Star. */
+        std::vector <int> initial_point_; /*! <  Initial point for the Fast Marching Square Star. */
         std::array <int,grid_t::getNDims()> goal; /*! <  Goal coord for the Fast Marching Square Star. */
         double *distances; /*! <  Auxiliar container of euclidean distances for the Fast Marching Square Star heuristic. */
         double maxDistance_; /*!< Distance value to saturate the first potential. */

@@ -10,7 +10,7 @@
 #include "../fmdata/fmcell.h"
 #include "../ndgridmap/ndgridmap.hpp"
 #include "../console/console.h"
-#include "../fm2/fm2.hpp"
+#include "../fm2/fastmarching2.hpp"
 #include "../fmdata/fmfibheap.hpp"
 #include "../fmdata/fmpriorityqueue.hpp"
 #include "../fmdata/fmdaryheap.hpp"

@@ -1,4 +1,4 @@
-/*! \file fm2.hpp
+/*! \file fastmarching2.hpp
     \brief Templated class which computes the Fast Marching Square (FM2).
 
     It uses as a main container the nDGridMap class. The nDGridMap type T
