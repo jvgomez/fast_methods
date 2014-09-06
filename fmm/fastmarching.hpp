@@ -68,9 +68,8 @@
 template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FastMarching {
 
     public:
-        FastMarching <grid_t, heap_t> () {
+        FastMarching <grid_t, heap_t> () {};
 
-        };
         virtual ~FastMarching <grid_t, heap_t>() {};
 
          /**
@@ -84,22 +83,21 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FastMarching
             narrow_band_.setMaxSize(grid_->size());
         }
 
-
         /**
-         * Set the initial points by the indices in the nDGridMap and
+         * Sets the initial points by the indices in the nDGridMap and
          * computes the initialization of the Fast Marching Method calling
          * the init() function.
          *
-         * @param contains the indices of the init points.
+         * @param init_points contains the indices of the init points.
          *
-         * @param contains the indice of the goal point.
+         * @param goal contains the index of the goal point. If -1 (default) no goal point is set.
          *
          * @see init()
          */
         virtual void setInitialAndGoalPoints
-        (const std::vector<int> & init_points, int goal = -1) {
+        (const std::vector<int> & init_points, int goal_idx = -1) {
             init_points_ = init_points;
-            goal_idx_ = goal;
+            goal_idx_ = goal_idx;
             for (const int &i: init_points) {
                 grid_->getCell(i).setArrivalTime(0);
                 grid_->getCell(i).setState(FMState::FROZEN);
@@ -109,13 +107,11 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FastMarching
         }
 
         /**
-         * Set the initial points by the indices in the nDGridMap and
+         * Sets the initial points by the indices in the nDGridMap and
          * computes the initialization of the Fast Marching Method calling
          * the init() function.
          *
-         * @param contains the indices of the init points.
-         *
-         * @param contains the indice of the goal point.
+         * @param init_point contains the indices of the init points.
          *
          * @see init()
          */

@@ -80,15 +80,15 @@ template  <  class grid_t, class heap_t = FMDaryHeap <FMCell> >  class FastMarch
         }
 
         /**
-         * Set the initial points by the indices in the nDGridMap and
+         * Sets the initial points by the indices in the nDGridMap and
          * computes the initialization of the Fast Marching Square calling
          * the init() function.
          *
-         * @param contains the indice of the init point.
+         * @param initial_point contains the index of the initial point of the query.
          *
-         * @param contains the indices of the init points corresponding to all black cells.
+         * @param fmm2_sources contains the indices of the initial points corresponding to all black cells.
          *
-         * @param contains the indice of the goal point.
+         * @param goal_point contains the index of the goal point.
          *
          * @see init()
          */
@@ -101,12 +101,12 @@ template  <  class grid_t, class heap_t = FMDaryHeap <FMCell> >  class FastMarch
         }
 
         /**
-         * Set the initial points by the indices in the nDGridMap,
+         * Sets the initial points by the indices in the nDGridMap,
          * computes the initialization of the Fast Marching Method calling
          * the init() function and the euclidean distance between every pixel
          * calling the precomputeDistances() function.
          *
-         * @param contains the indices of the init points.
+         * @param init_points contains the indices of the init points.
          *
          * @see init()
          *
@@ -120,7 +120,7 @@ template  <  class grid_t, class heap_t = FMDaryHeap <FMCell> >  class FastMarch
                 grid_->getCell(i).setState(FMState::FROZEN);
             }
 
-            if (init_points.size()>1)
+            if (init_points.size() > 1)
                 init(false, false);
             else
             {
@@ -130,7 +130,7 @@ template  <  class grid_t, class heap_t = FMDaryHeap <FMCell> >  class FastMarch
         }
 
         /**
-         * Calculate the euclidean distance between every pixel filling an
+         * Calculates the euclidean distance between every pixel filling an
          * array with all of them. This method has been generalized to be used
          * on n-dimensional grids.
          */
