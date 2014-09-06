@@ -109,6 +109,8 @@ int main(int argc, const char ** argv)
         time_elapsed = duration_cast<milliseconds>(end-start).count();
         cout << "\tElapsed gradient descent time: " << time_elapsed << " ms" << endl;
 
+    GridPlotter::plotArrivalTimes(grid);
+
     GridPlotter::plotMapPath(grid,pathFM2);
 
     console::info("Comparing FMM and FM2 paths.");
@@ -142,12 +144,12 @@ int main(int argc, const char ** argv)
     nDGridMap<FMCell, ndims> grid_vels;
     MapLoader::loadVelocitiesFromImg(filename_vels.c_str(), grid_vels);
 
-    FastMarching< nDGridMap<FMCell, ndims> , FMFibHeap<>> fmm_vels;
+    FastMarching< nDGridMap<FMCell, ndims> , FMFibHeap<> > fmm_vels;
     init_points.clear();
-    init_points.push_back(80000); // Init point randomly chosen.
+    init_points.push_back(80000); // Just an init point as any other.
     fmm_vels.setEnvironment(&grid_vels);
         start = system_clock::now();
-    fmm_vels.setInitialAndGoalPoints(init_points, goal);
+    fmm_vels.setInitialPoints(init_points);
     fmm_vels.computeFM();
         end = system_clock::now();
         time_elapsed = duration_cast<milliseconds>(end-start).count();

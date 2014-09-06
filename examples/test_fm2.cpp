@@ -27,7 +27,12 @@ int main(int argc, const char ** argv)
 
     console::info("Parsing input arguments.");
     string filename;
-    console::parseArguments(argc,argv, "-map", filename);
+    if (argc > 2)
+        console::parseArguments(argc,argv, "-map", filename);
+    else {
+        console::info("No enough arguments given. Loading default example map: examples/data/grid.txt");
+        filename = "../data/grid.txt";
+    }
 
     typedef nDGridMap<FMCell, ndims2> FMGrid2D;
     typedef array<int, ndims2> Coord2D;
