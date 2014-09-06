@@ -10,6 +10,7 @@
 #include "ndgridmap/ndgridmap.hpp"
 #include "console/console.h"
 #include "fmm/fastmarching.hpp"
+#include "fm2/fm2.hpp"
 #include "fmdata/fmfibheap.hpp"
 #include "fmdata/fmpriorityqueue.hpp"
 #include "fmdata/fmdaryheap.hpp"
@@ -85,6 +86,38 @@ int main(int argc, const char ** argv)
     GridWriter::savePathVelocity("path_velocity.txt", grid, path, path_velocity);
     GridPlotter::plotMapPath(grid,path);
 
+    console::info("Testing Fast Marching Square Method.");
+    std::vector <int> fm2_sources;
+    path_velocity.clear();
+    grid.coord2idx(coords_goal, goal);
+    Path pathFM2;
+
+    MapLoader::loadMapFromImg(filename2.c_str(), grid, fm2_sources);
+
+    FastMarching2<nDGridMap<FMCell, ndims>> fm2;
+    fm2.setEnvironment(&grid);
+        start = system_clock::now();
+    fm2.setInitialAndGoalPoints(init_points, fm2_sources, goal);
+    fm2.computeFM2();
+        end = system_clock::now();
+        time_elapsed = duration_cast<milliseconds>(end-start).count();
+        cout << "\tElapsed FM2 time: " << time_elapsed << " ms" << endl;
+
+        start = system_clock::now();
+    fm2.computePath(&pathFM2, &path_velocity);
+        end = system_clock::now();
+        time_elapsed = duration_cast<milliseconds>(end-start).count();
+        cout << "\tElapsed gradient descent time: " << time_elapsed << " ms" << endl;
+
+    GridPlotter::plotMapPath(grid,pathFM2);
+
+    console::info("Comparing FMM and FM2 paths.");
+    std::vector <Path> paths;
+    paths.push_back(path);
+    paths.push_back(pathFM2);
+
+    GridPlotter::plotMapPath(grid,paths);
+
     console::info("Now using all black points as wave sources");
     nDGridMap<FMCell, ndims> grid2;
     init_points.clear();
@@ -125,7 +158,6 @@ int main(int argc, const char ** argv)
 
     console::info("Saving velocities");
     GridWriter::saveVelocities("test_vels.txt", grid_vels);
-
 
     console::info("Testing 3D!");
     nDGridMap<FMCell, ndims3> grid3 (std::array<int,ndims3>{100,100,50});
