@@ -46,7 +46,7 @@ int main(int argc, const char ** argv)
     FastMarching<FMGrid2D, FMFibHeap<FMCell> > fmm_fib;
     fmm_fib.setEnvironment(&grid_fmm_fib);
         start = system_clock::now();
-    fmm_fib.setInitialAndGoalPoints(init_points, -1);
+    fmm_fib.setInitialPoints(init_points);
     fmm_fib.computeFM();
         end = system_clock::now();
         time_elapsed = duration_cast<milliseconds>(end-start).count();
@@ -56,7 +56,7 @@ int main(int argc, const char ** argv)
     FastMarching<FMGrid2D> fmm;
     fmm.setEnvironment(&grid_fmm);
         start = system_clock::now();
-    fmm.setInitialAndGoalPoints(init_points, -1);
+    fmm.setInitialPoints(init_points);
     fmm.computeFM();
         end = system_clock::now();
         time_elapsed = duration_cast<milliseconds>(end-start).count();
@@ -67,7 +67,7 @@ int main(int argc, const char ** argv)
     FastMarching<FMGrid2D, FMPriorityQueue<> > sfmm; //Choosing the default cell class.
     sfmm.setEnvironment(&grid_sfmm);
         start = system_clock::now();
-    sfmm.setInitialAndGoalPoints(init_points, -1);
+    sfmm.setInitialPoints(init_points);
     sfmm.computeFM();
         end = system_clock::now();
         time_elapsed = duration_cast<milliseconds>(end-start).count();
