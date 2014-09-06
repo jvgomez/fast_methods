@@ -53,13 +53,12 @@
 #include "../gradientdescent/gradientdescent.hpp"
 
 template  <  class grid_t, class heap_t = FMDaryHeap <FMCell> >  class FastMarching2Star : public FastMarching  < grid_t, heap_t> {
-	
+
     public:
         typedef std::vector< std::array< double, grid_t::getNDims() > > path_t;
 
-        FastMarching2Star  < grid_t, heap_t> () {
-			
-		};
+        FastMarching2Star  < grid_t, heap_t> () {};
+
         virtual ~FastMarching2Star  < grid_t, heap_t> () {};
 
         using FastMarching < grid_t, heap_t>::grid_;
@@ -93,7 +92,6 @@ template  <  class grid_t, class heap_t = FMDaryHeap <FMCell> >  class FastMarch
          *
          * @see init()
          */
-
         virtual void setInitialAndGoalPoints
         (const std::vector <int> & initial_point, const std::vector <int> & fmm2_sources, const int goal_point) {
             initial_point_ = initial_point;
@@ -339,7 +337,6 @@ template  <  class grid_t, class heap_t = FMDaryHeap <FMCell> >  class FastMarch
          *
          * @see setInitialPoints()
          */
-
         virtual void computeFM2Star
         (const float maxDistance = -1) {
             if (maxDistance != -1) {
@@ -373,49 +370,48 @@ template  <  class grid_t, class heap_t = FMDaryHeap <FMCell> >  class FastMarch
             GradientDescent < nDGridMap < FMCell, ndims > > grad;
             grad.apply(*grid_,goal_idx_,*path_, *path_velocity);
         }
-		
-private:
 
-    /**
-     * Computes the first potential expansion of the wave to perform the velocity map.
-     *
-     * @param select if the potential is saturated
-     */
+    private:
 
-    void computeFirstPotential
-    (bool saturate = false) {
-        setInitialPoints(fmm2_sources_);
-        computeFM(false, false);
+        /**
+         * Computes the first potential expansion of the wave to perform the velocity map.
+         *
+         * @param select if the potential is saturated
+         */
+        void computeFirstPotential
+        (bool saturate = false) {
+            setInitialPoints(fmm2_sources_);
+            computeFM(false, false);
 
-        //Rescaling and saturating to relative velocities: [0-1]
-        float maxValue = grid_->getMaxValue();
-        double maxVelocity = 0;
-
-        if (saturate)
-            maxVelocity = maxDistance_/grid_->getLeafSize(); // Calculate max velocity using the max distance and the leaf size of the cell
-
-        for (int i = 0; i < grid_->size(); i++) {
-            double vel = grid_->getCell(i).getValue()/maxValue;
+            //Rescaling and saturating to relative velocities: [0-1]
+            float maxValue = grid_->getMaxValue();
+            double maxVelocity = 0;
 
             if (saturate)
-                if (vel < maxVelocity)
-                    grid_->getCell(i).setVelocity(vel/maxVelocity);
-                else
-                    grid_->getCell(i).setVelocity(1);
-            else
-                grid_->getCell(i).setVelocity(vel);
+                maxVelocity = maxDistance_/grid_->getLeafSize(); // Calculate max velocity using the max distance and the leaf size of the cell
 
-            grid_->getCell(i).setValue(inf_);
-            grid_->getCell(i).setState(FMState::OPEN);
+            for (int i = 0; i < grid_->size(); i++) {
+                double vel = grid_->getCell(i).getValue()/maxValue;
+
+                if (saturate)
+                    if (vel < maxVelocity)
+                        grid_->getCell(i).setVelocity(vel/maxVelocity);
+                    else
+                        grid_->getCell(i).setVelocity(1);
+                else
+                    grid_->getCell(i).setVelocity(vel);
+
+                grid_->getCell(i).setValue(inf_);
+                grid_->getCell(i).setState(FMState::OPEN);
+            }
         }
-    }
 
     protected:
         double inf_ = std::numeric_limits < double>::infinity();
 
         double sumT; /*! <  Auxiliar value wich computes T1+T2+T3... Useful for generalizing the Eikonal solver. */
         double sumTT; /*! <  Auxiliar value wich computes T1^2+T2^2+T3^2... Useful for generalizing the Eikonal solver. */
-		
+
         int goal_idx_; /*! <  Goal point for the Fast Marching Square Star. */
         std::vector <int> fmm2_sources_;	/*! <  Wave propagation sources for the Fast Marching Square Star. */
         std::vector <int> initial_point_;	/*! <  Initial point for the Fast Marching Square Star. */
@@ -423,6 +419,5 @@ private:
         double *distances; /*! <  Auxiliar container of euclidean distances for the Fast Marching Square Star heuristic. */
         double maxDistance_; /*!< Distance value to saturate the first potential. */
 };
-
 
 #endif /* FASTMARCHING2STAR_H_*/

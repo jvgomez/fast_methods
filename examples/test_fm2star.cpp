@@ -21,17 +21,17 @@ using namespace std::chrono;
 
 int main(int argc, const char ** argv)
 {
-	constexpr int ndims2 = 2; // Setting two dimensions.
+    constexpr int ndims2 = 2; // Setting two dimensions.
 
     console::info("Parsing input arguments.");
     string filename;
     console::parseArguments(argc,argv, "-map", filename);
 
     typedef nDGridMap<FMCell, ndims2> FMGrid2D;
-	typedef array<int, ndims2> Coord2D;
+    typedef array<int, ndims2> Coord2D;
 
-	time_point<std::chrono::system_clock> start, end; // Time measuring.
-	double time_elapsed;
+    time_point<std::chrono::system_clock> start, end; // Time measuring.
+    double time_elapsed;
 
     FMGrid2D grid_fmm;
     FMGrid2D grid_fmm_dary;
@@ -43,40 +43,40 @@ int main(int argc, const char ** argv)
     MapLoaderText::loadMapFromText(filename.c_str(), grid_fmm_dary, fm2_sources);
     MapLoaderText::loadMapFromText(filename.c_str(), grid_sfmm, fm2_sources);
 
-	Coord2D init_point = {377, 664};
+    Coord2D init_point = {377, 664};
     Coord2D goal_point = {379, 91};
-	vector<int> init_points;
-	int idx, goal;
-	grid_fmm.coord2idx(init_point , idx);
-	init_points.push_back(idx);
+    vector<int> init_points;
+    int idx, goal;
+    grid_fmm.coord2idx(init_point , idx);
+    init_points.push_back(idx);
 
     grid_fmm.coord2idx(goal_point , goal);
 
     FastMarching2Star<FMGrid2D, FMFibHeap<FMCell> > fm2star;
-	fm2star.setEnvironment(&grid_fmm);
-		start = system_clock::now();
+    fm2star.setEnvironment(&grid_fmm);
+        start = system_clock::now();
     fm2star.setInitialAndGoalPoints(init_points, fm2_sources, goal);
     fm2star.computeFM2Star();
         end = system_clock::now();
-		time_elapsed = duration_cast<milliseconds>(end-start).count();
-		cout << "\tElapsed FMM time: " << time_elapsed << " ms" << endl;
+        time_elapsed = duration_cast<milliseconds>(end-start).count();
+        cout << "\tElapsed FMM time: " << time_elapsed << " ms" << endl;
 
     FastMarching2Star<FMGrid2D> fm2star_dary;
-	fm2star_dary.setEnvironment(&grid_fmm_dary);
-		start = system_clock::now();
-	fm2star_dary.setInitialAndGoalPoints(init_points, fm2_sources, goal);
-	fm2star_dary.computeFM2Star();
-		end = system_clock::now();
-		time_elapsed = duration_cast<milliseconds>(end-start).count();
-		cout << "\tElapsed FMM_Dary time: " << time_elapsed << " ms" << endl;
+    fm2star_dary.setEnvironment(&grid_fmm_dary);
+        start = system_clock::now();
+    fm2star_dary.setInitialAndGoalPoints(init_points, fm2_sources, goal);
+    fm2star_dary.computeFM2Star();
+        end = system_clock::now();
+        time_elapsed = duration_cast<milliseconds>(end-start).count();
+        cout << "\tElapsed FMM_Dary time: " << time_elapsed << " ms" << endl;
 
-	// Using priority queue implies the use of the SFMM. Priority queue uses by default FMCell.
+    // Using priority queue implies the use of the SFMM. Priority queue uses by default FMCell.
     FastMarching2Star<FMGrid2D, FMPriorityQueue<> > sfm2star; //Choosing the default cell class.
-	sfm2star.setEnvironment(&grid_sfmm);
-		start = system_clock::now();
-	sfm2star.setInitialAndGoalPoints(init_points, fm2_sources, goal);
-	sfm2star.computeFM2Star();
-		end = system_clock::now();
-		time_elapsed = duration_cast<milliseconds>(end-start).count();
+    sfm2star.setEnvironment(&grid_sfmm);
+        start = system_clock::now();
+    sfm2star.setInitialAndGoalPoints(init_points, fm2_sources, goal);
+    sfm2star.computeFM2Star();
+        end = system_clock::now();
+        time_elapsed = duration_cast<milliseconds>(end-start).count();
         cout << "\tElapsed SFMM time: " << time_elapsed << " ms" << endl;
 }
