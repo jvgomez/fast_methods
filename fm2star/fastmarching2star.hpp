@@ -1,38 +1,38 @@
 /*! \file fastmarching2star.hpp
     \brief Templated class which computes the Fast Marching Square Star (FM2*).
-    
+
     It uses as a main container the nDGridMap class. The nDGridMap type T
     has to be an FMStarCell or something inherited from it.
-    
+
     The leafsize of the grid map is ignored since it has to be > = 1 and that
     depends on the units employed.
-     
-    The type of the heap introduced is very important for the behaviour of the 
+
+    The type of the heap introduced is very important for the behaviour of the
     algorithm. The following heaps are provided:
-   
+
     - FMDaryHeap wrap for the Boost D_ary heap (generalization of binary heaps).
-	* Set by default if no other heap is specified. The arity has been set to 2 
-	* (binary heap) since it has been tested to be the more efficient in this algorithm.
+    * Set by default if no other heap is specified. The arity has been set to 2
+    * (binary heap) since it has been tested to be the more efficient in this algorithm.
     - FMFibHeap wrap for the Boost Fibonacci heap.
     - FMPriorityQueue wrap to the std::PriorityQueue class. This heap implies the implementation
-	* of the Simplified FMM (SFMM) method, done automatically because of the FMPriorityQueue::increase implementation.
-	* 
-	@par External documentation:
-		FMM: 
+    * of the Simplified FMM (SFMM) method, done automatically because of the FMPriorityQueue::increase implementation.
+    *
+    @par External documentation:
+        FMM:
           A. Valero, J.V. Gómez, S. Garrido and L. Moreno, Fast Marching Method for Safer, More Efficient Mobile Robot Trajectories.
-    
+
     Copyright (C) 2014 Javier V. Gomez and Jose Pardeiro
     www.javiervgomez.com
 
-	This program is free software: you can redistribute it and/or modify
-	it under the terms of the GNU General Public License as published by
-	the Free Software Foundation, either version 3 of the License, or
-	(at your option) any later version.
-	This program is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-	GNU General Public License for more details.
-	You should have received a copy of the GNU General Public License
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+    GNU General Public License for more details.
+    You should have received a copy of the GNU General Public License
     along with this program. If not, see  < http://www.gnu.org/licenses/>.
 */
 
