@@ -34,6 +34,7 @@ int main(int argc, const char ** argv)
         filename = "../data/grid.txt";
     }
 
+    // A bit of shorthand.
     typedef nDGridMap<FMCell, ndims2> FMGrid2D;
     typedef array<int, ndims2> Coord2D;
 
