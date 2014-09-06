@@ -123,13 +123,14 @@ int main(int argc, const char ** argv)
     console::info("Now using all black points as wave sources");
     nDGridMap<FMCell, ndims> grid2;
     init_points.clear();
-    MapLoader::loadMapFromImg(filename2.c_str(), grid2, init_points); // This is the only thing that changes.
+    // We now fill init_points will all black points of the image
+    MapLoader::loadMapFromImg(filename2.c_str(), grid2, init_points);
 
     FastMarching< nDGridMap<FMCell, ndims> > fmm2;
     fmm2.setEnvironment(&grid2);
         start = system_clock::now();
-    fmm2.setInitialAndGoalPoints(init_points, goal);
-    fmm2.computeFM(false);
+    fmm2.setInitialPoints(init_points); // Do not set a goal point.
+    fmm2.computeFM();
         end = system_clock::now();
         time_elapsed = duration_cast<milliseconds>(end-start).count();
         cout << "\tElapsed FM time: " << time_elapsed << " ms" << endl;

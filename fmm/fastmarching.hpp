@@ -212,30 +212,32 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FastMarching
 
         /**
          * Main Fast Marching Function. It requires to call first the setInitialAndGoalPoints() function.
-         *
-         * @param select if the wave has to stop when it arrives to the goal point
+         * If a goal_idx_ was set through setInitialAndGoalPoints(), the wave will stop expanding once
+         * that cell is reached.
          *
          * @see setInitialAndGoalPoints()
          */
         virtual void computeFM
-        (bool stop = true) {
+        () {
             // TODO: check if the previous steps have been done (initialization).
             int j= 0;
             int n_neighs = 0;
-            bool stopWavePropagation = 0;
+            bool stopWavePropagation = 0; // To avoid use a double break.
 
-            while (narrow_band_.size() > 0 && stopWavePropagation == 0) {
+            while (!stopWavePropagation && narrow_band_.size() > 0) {
                 int idxMin = narrow_band_.popMinIdx();
                 n_neighs = grid_->getNeighbors(idxMin, neighbors);
                 grid_->getCell(idxMin).setState(FMState::FROZEN);
 
                 for (int s = 0; s < n_neighs; ++s) {
                     j = neighbors[s];
-                    if ((grid_->getCell(j).getState() == FMState::FROZEN) || grid_->getCell(j).isOccupied()) // If Frozen or obstacle
+                    // If Frozen or obstacle
+                    if ((grid_->getCell(j).getState() == FMState::FROZEN) || grid_->getCell(j).isOccupied())
                         continue;
                     else {
                         double new_arrival_time = solveEikonal(j);
-                        if (grid_->getCell(j).getState() == FMState::NARROW) { // Updating narrow band if necessary.
+                        // Updating narrow band if necessary.
+                        if (grid_->getCell(j).getState() == FMState::NARROW) {
                             if (new_arrival_time < grid_->getCell(j).getArrivalTime()) {
                                 grid_->getCell(j).setArrivalTime(new_arrival_time);
                                 narrow_band_.increase( &(grid_->getCell(j)) );
@@ -247,8 +249,8 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FastMarching
                             narrow_band_.push( &(grid_->getCell(j)) );
                         } // neighbors open.
                     } // neighbors not frozen.
-                    if (idxMin == goal_idx_ && stop)
-                        stopWavePropagation = 1;
+                    if (idxMin == goal_idx_)
+                        stopWavePropagation = true;
                 } // For each neighbor.
             } // while narrow band not empty
         }

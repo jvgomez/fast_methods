@@ -54,7 +54,9 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell>  >  class FastMarchin
     public:
         typedef std::vector< std::array< double, grid_t::getNDims() > > path_t;
 
-        FastMarching2 <grid_t, heap_t> () {};
+        FastMarching2 <grid_t, heap_t> () {
+            goal_idx_ = -1;
+        };
 
         virtual ~FastMarching2 <grid_t, heap_t> () {};
 
@@ -71,7 +73,8 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell>  >  class FastMarchin
         /**
          * Sets the initial points by the indices in the nDGridMap and
          * computes the initialization of the Fast Marching Square calling
-         * the init() function.
+         * the init() function. When the wave front reaches goal_idx, the propagation
+         * stops.
          *
          * @param initial_point contains the index of the initial point of the query.
          *
@@ -86,6 +89,25 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell>  >  class FastMarchin
             initial_point_ = initial_point;
             fmm2_sources_ = fmm2_sources;
             goal_idx_ = goal_idx;
+        }
+
+        /**
+         * Sets the initial points by the indices in the nDGridMap and
+         * computes the initialization of the Fast Marching Method calling
+         * the init() function.
+         *
+         * By default, the goal point is not set, so it will expand the second wave
+         * throughout the whole map.
+         *
+         * @param init_point contains the indices of the init points.
+         *
+         * @param fmm2_sources contains the indices of the initial points corresponding to all black cells.
+         *
+         * @see init()
+         */
+        virtual void setInitialPoints
+        (const std::vector<int> & init_points, const std::vector<int> & fmm2_sources) {
+            setInitialAndGoalPoints(init_points, fmm2_sources, goal_idx_);
         }
 
         /**
@@ -107,12 +129,12 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell>  >  class FastMarchin
 
             fmm.setEnvironment(grid_);
             fmm.setInitialAndGoalPoints(initial_point_, goal_idx_);
-            fmm.computeFM(true);
+            fmm.computeFM();
         }
 
         /**
-         * Computes the path from the given index to a minimum (the one
-         * gradient descent choses) and returns the velocity.
+         * Computes the path from the previous given goal index to the minimum
+         * of the times of arrival map.
          *
          * No checks are done (points in the borders, points in obstacles...).
          *
@@ -131,6 +153,29 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell>  >  class FastMarchin
             grad.apply(*grid_,goal_idx_,*path_, *path_velocity);
         }
 
+        /**
+         * Computes the path from the given goal index to the minimum
+         * of the times of arrival map.
+         *
+         * No checks are done (points in the borders, points in obstacles...).
+         *
+         * The included scripts will parse the saved path.
+         *
+         * @param path the resulting path (output).
+         *
+         * @param velocity the resulting path (output).
+         *
+         * @param goal_idx index of the goal point, where gradient descent will start.
+         */
+        virtual void computePath
+        (path_t * p, std::vector <double> * path_velocity, int goal_idx) {
+            path_t* path_ = p;
+            constexpr int ndims = grid_->getNDims();
+
+            GradientDescent< nDGridMap<FMCell, ndims> > grad;
+            grad.apply(*grid_,goal_idx,*path_, *path_velocity);
+        }
+
     private:
 
         /**
@@ -144,7 +189,7 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell>  >  class FastMarchin
 
             fmm.setEnvironment(grid_);
             fmm.setInitialPoints(fmm2_sources_);
-            fmm.computeFM(false);
+            fmm.computeFM();
 
             // Rescaling and saturating to relative velocities: [0,1]
             double maxValue = grid_->getMaxValue();
