@@ -112,5 +112,6 @@ fm2_algs branch:
 - check function naming.
 - provide default arguments for examples.
 - Remove relative file dependencies (#include "../../fmm", filename = "../../data", CMakeLists.txt deps, etc).
+- Implement a grid copy constructor and operator.
 
 ===========================

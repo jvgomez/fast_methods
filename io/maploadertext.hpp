@@ -17,40 +17,37 @@
 	along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-
-
 #ifndef MAPLOADERTEXT_H_
 #define MAPLOADERTEXT_H_
-
 
 #include "../ndgridmap/ndgridmap.hpp"
 #include <fstream>
 
 class MapLoaderText {
-	public:
+    public:
         MapLoaderText() {};
         virtual ~MapLoaderText() {};
-	
-	   /**
-		 *  Loads the initial binary map for a given grid. It is based on the
-		 * nDGridMap::setOccupancy() which has to be bool valued. This function has to be
-		 * overloaded in another occupancy type is being used.
-		 * 
-		 * The image should be monochromatic!
-		 * 
-		 * Should be used only in 2D grids.
-		 * 
-		 * The Y dimension flipping is because nDGridMap works in X-Y coordinates, not in image indices as CImg.
-		 * 
-		 * IMPORTANT NOTE: no type-checkings are done. T type has to be Cell or any class with bool setOccupancy() method.
-		 * 
+
+       /**
+         *  Loads the initial binary map for a given grid. It is based on the
+         * nDGridMap::setOccupancy() which has to be bool valued. This function has to be
+         * overloaded in another occupancy type is being used.
+         *
+         * The image should be monochromatic!
+         *
+         * Should be used only in 2D grids.
+         *
+         * The Y dimension flipping is because nDGridMap works in X-Y coordinates, not in image indices as CImg.
+         *
+         * IMPORTANT NOTE: no type-checkings are done. T type has to be Cell or any class with bool setOccupancy() method.
+         *
          * @param filename text file to be open
-		 * @param grid 2D nDGridmap
-		 * 
-		 */
-		template<class T, size_t ndims> 
+         * @param grid 2D nDGridmap
+         *
+         */
+        template<class T, size_t ndims>
         static void loadMapFromText
-		(const char * filename, nDGridMap<T, ndims> & grid) {
+        (const char * filename, nDGridMap<T, ndims> & grid) {
             std::ifstream file;
             file.open(filename);
 
@@ -80,32 +77,31 @@ class MapLoaderText {
                     grid[i].setOccupancy(occupancy);
                 }
             }
-		}
-		
-		
-	    /**
-		 * Loads the initial binary map for a given grid. It is based on the
-		 * nDGridMap::setOccupancy() which has to be bool valued. This function has to be
-		 * overloaded in another occupancy type is being used.
-		 * 
-		 * The image should be monochromatic!
-		 * 
-		 * In also stores all the false values to as initial points for a later computeFM function.
-		 * 
-		 * Should be used only in 2D grids.
-		 * 
-		 * The Y dimension flipping is because nDGridMap works in X-Y coordinates, not in image indices as CImg.
-		 * 
-		 * IMPORTANT NOTE: no type-checkings are done. T type has to be Cell or any class with bool setOccupancy() method.
-		 * 
+        }
+
+        /**
+         * Loads the initial binary map for a given grid. It is based on the
+         * nDGridMap::setOccupancy() which has to be bool valued. This function has to be
+         * overloaded in another occupancy type is being used.
+         *
+         * The image should be monochromatic!
+         *
+         * In also stores all the false values to as initial points for a later computeFM function.
+         *
+         * Should be used only in 2D grids.
+         *
+         * The Y dimension flipping is because nDGridMap works in X-Y coordinates, not in image indices as CImg.
+         *
+         * IMPORTANT NOTE: no type-checkings are done. T type has to be Cell or any class with bool setOccupancy() method.
+         *
          * @param filename text file to be open
-		 * @param grid 2D nDGridmap
-		 * @param init_points stores the indices of all the values which are false.
-		 * 
-		 */
-		template<class T, size_t ndims> 
+         * @param grid 2D nDGridmap
+         * @param init_points stores the indices of all the values which are false.
+         *
+         */
+        template<class T, size_t ndims>
         static void loadMapFromText
-		(const char * filename, nDGridMap<T, ndims> & grid, std::vector<int> & init_points) {
+        (const char * filename, nDGridMap<T, ndims> & grid, std::vector<int> & init_points) {
             std::ifstream file;
             file.open(filename);
 
@@ -138,12 +134,10 @@ class MapLoaderText {
                         init_points.push_back(i);
                 }
             }
-		}
+        }
 
-	protected:
-		
+    protected:
+
 };
-
-
 
 #endif /* MAPLOADER_H_ */
