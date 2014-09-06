@@ -103,15 +103,9 @@ TODO:
 In the top part of each file there are specific TODO comments.
 
 - Restructure the folder and the CMake files in order to properly have examples and that stuff.
-
 - Substitute arg parsing with boost_options.
-
-fm2_algs branch:
-
-- remove the mandatory parameter in computeFM methods.
-- check function naming.
-- provide default arguments for examples.
 - Remove relative file dependencies (#include "../../fmm", filename = "../../data", CMakeLists.txt deps, etc).
 - Implement a grid copy constructor and operator.
+- Code of fm2star, fm2directional and auxiliar classes (gridplotter, etc) not checked yet but it works well.
 
 ===========================
