@@ -56,9 +56,9 @@ template  <  class grid_t, class heap_t = FMDaryHeap <FMCell> >  class FastMarch
     public:
         typedef std::vector< std::array< double, grid_t::getNDims() > > path_t;
 
-        FastMarching2Star  < grid_t, heap_t> () {};
+        FastMarching2Star  < grid_t, heap_t> () {}
 
-        virtual ~FastMarching2Star  < grid_t, heap_t> () {};
+        virtual ~FastMarching2Star  < grid_t, heap_t> () {}
 
         using FastMarching < grid_t, heap_t>::grid_;
         using FastMarching < grid_t, heap_t>::neighbors;

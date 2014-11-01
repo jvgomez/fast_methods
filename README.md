@@ -3,6 +3,20 @@ N-Dimensional Fast Marching Method V1.0
 Authors: 
  - Javier V. Gomez javvgomez __at__ gmail.com www.javiervgomez.com
  - Jose Pardeiro jose.pardeiro __at__ gmail.com
+ - Pablo Gely
+
+FMM Versions:
+
+- Fast Marching Method (FMM) with Binary Queue and Fibonacci Queue.
+- Simplified Fast Marhching Method (SFMM, FMM with a simple priority queue).
+- Fast Marching Square Method (FM2).
+- Fast Marching Square Star (FM2*) FM2 with CostToGo heuristics.
+- Fast Marching Square Directioanl (FM2Dir)
+
+O(n) FMM versions:
+- Group Marching Method (GMM).
+- Untidy Fast Marching Method (By Yatziv et al, circular queue).
+- Fast Iterative Method (FIM).
 
 
 ===========================
@@ -102,6 +116,7 @@ TODO:
 
 In the top part of each file there are specific TODO comments.
 
+- Reimplement FM2* as FM2: as a high level FMM user, with underlying FMM templated.
 - Restructure the folder and the CMake files in order to properly have examples and that stuff.
 - Substitute arg parsing with boost_options.
 - Remove relative file dependencies (#include "../../fmm", filename = "../../data", CMakeLists.txt deps, etc).

@@ -61,3 +61,24 @@ add_executable (test_fm2directional test_fm2directional.cpp
                         ../ndgridmap/cell.cpp
                         ../fmdata/fmcell.cpp
                         ) 
+
+add_executable (test_gmm test_gmm.cpp
+			../console/console.cpp
+			../ndgridmap/cell.cpp
+			../fmdata/fmcell.cpp
+			) 
+
+add_executable (test_fim test_fim.cpp
+			../console/console.cpp
+			../ndgridmap/cell.cpp
+			../fmdata/fmcell.cpp
+			) 
+
+add_executable (test_untidy test_untidy.cpp
+			../console/console.cpp
+			../ndgridmap/cell.cpp
+			../fmdata/fmcell.cpp
+			)
+
+
+
