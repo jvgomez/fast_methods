@@ -27,7 +27,7 @@ TODO rq : kan laisse passser si bug, marche quand meme au top., meme avec 1 incm
 */
 
 namespace levelset {
-	
+
         template <class Element>
         class PriorityQueue
         {
@@ -35,8 +35,8 @@ namespace levelset {
                 typedef std::list<Element>               ElementList;
 
 
-                PriorityQueue(unsigned _size    = 1000, 
-                              double   _inc_max = 2  
+                PriorityQueue(unsigned _size    = 1000,
+                              double   _inc_max = 2
                         );
 
                 ~PriorityQueue();
@@ -57,13 +57,13 @@ namespace levelset {
 
 
 
-                ElementList *    m_tab;      
-                unsigned         m_size;     
-                unsigned         m_nb_elem;  
-                double           m_t0;       
-                int              m_i0;       
-                double           m_delta;    
-                double           m_inc_max;  
+                ElementList *    m_tab;
+                unsigned         m_size;
+                unsigned         m_nb_elem;
+                double           m_t0;
+                int              m_i0;
+                double           m_delta;
+                double           m_inc_max;
         };
 
 
@@ -72,16 +72,16 @@ namespace levelset {
 
         template <class Element>
                 PriorityQueue<Element>::PriorityQueue(unsigned _size, double _inc_max) 
-                : m_size(_size), m_t0(0), m_i0(0), m_nb_elem(0),m_inc_max(_inc_max)
+                : m_size(_size), m_nb_elem(0), m_t0(0), m_i0(0), m_inc_max(_inc_max)
         {
                 m_tab   = new ElementList[_size];
                 m_delta = _inc_max / static_cast<double>(_size);
         }
 
         template <class Element>
-                PriorityQueue<Element>::~PriorityQueue() 
+                PriorityQueue<Element>::~PriorityQueue()
         {
-                delete[] m_tab; 
+                delete[] m_tab;
         }
 
 
@@ -261,7 +261,7 @@ namespace levelset {
                                 for (typename ElementList::iterator it = m_tab[i].begin() ; it!= m_tab[i].end() ; it++)
                                         std::cout << " " << *it ;
         
-                                std::cout << std::endl; 
+                                std::cout << std::endl;
                         }
                 }
         }
