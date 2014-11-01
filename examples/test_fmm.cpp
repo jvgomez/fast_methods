@@ -4,15 +4,15 @@
 #include <array>
 #include <string>
 
-#include "../fmdata/fmcell.h"
+#include "../fmm/fmdata/fmcell.h"
 #include "../ndgridmap/ndgridmap.hpp"
 #include "../console/console.h"
 
 #include "../fmm/fastmarching.hpp"
 
-#include "../fmdata/fmfibheap.hpp"
-#include "../fmdata/fmdaryheap.hpp"
-#include "../fmdata/fmpriorityqueue.hpp"
+#include "../fmm/fmdata/fmfibheap.hpp"
+#include "../fmm/fmdata/fmdaryheap.hpp"
+#include "../fmm/fmdata/fmpriorityqueue.hpp"
 
 #include "../gradientdescent/gradientdescent.hpp"
 

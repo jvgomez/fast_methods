@@ -46,7 +46,7 @@
 
 #include <boost/math/constants/constants.hpp>
 
-#include "../fmdata/fmdirectionalcell.h"
+#include "../fmm/fmdata/fmdirectionalcell.h"
 #include "../fmm/fastmarching.hpp"
 #include "../gradientdescent/gradientdescent.hpp"
 

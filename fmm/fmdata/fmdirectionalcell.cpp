@@ -1,6 +1,6 @@
 #include "fmdirectionalcell.h"
 
-#include "../console/console.h"
+#include "../../console/console.h"
 
 using namespace std;
 

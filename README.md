@@ -91,8 +91,10 @@ Although there are a lot of folders, they are quite simple. It is organized this
 + console: the console class.
 + data: additional files and maps to test.
 + doc: doxygen documentation.
-+ fmdata: clases related to the data types of the Fast Marching Method.
++ examples: easy examples to understand how to use the code.
++ fm2: Fast Marching Square (FM2) algorithms.
 + fmm: Fast Marching Algorithms.
+  + fmdata: classes related to the data types of the Fast Marching Method and other algorithms.
 + gradientdescent: under development.
 + io: input/output helper classes.
 + ndgridmap: main container.

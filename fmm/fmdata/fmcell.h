@@ -28,7 +28,7 @@
 #include <string>
 #include <limits>
 
-#include "../ndgridmap/cell.h"
+#include "../../ndgridmap/cell.h"
 
 /**
   * Possible states of the FMCells

@@ -4,11 +4,11 @@
 #include <array>
 #include <string>
 
-#include "../fmdata/fmuntidycell.h"
+#include "../fmm/fmdata/fmuntidycell.h"
 #include "../ndgridmap/ndgridmap.hpp"
 #include "../console/console.h"
 
-#include "../ufmm/fmm_untidy.hpp"
+#include "../fmm/fmm_untidy.hpp"
 
 #include "../io/gridwriter.hpp"
 

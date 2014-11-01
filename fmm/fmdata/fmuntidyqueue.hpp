@@ -19,7 +19,7 @@
 #ifndef FMUNTIDYQUEUE_H_
 #define FMUNTIDYQUEUE_H_
 
-#include "../thirdparty/untidy_queue.hpp"
+#include "../../thirdparty/untidy_queue.hpp"
 #include "fmuntidycell.h"
 
 class FMUntidyqueue {

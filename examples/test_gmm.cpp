@@ -4,11 +4,11 @@
 #include <array>
 #include <string>
 
-#include "../fmdata/fmcell.h"
+#include "../fmm/fmdata/fmcell.h"
 #include "../ndgridmap/ndgridmap.hpp"
 #include "../console/console.h"
 
-#include "../gmm/groupmarching.hpp"
+#include "../fmm/groupmarching.hpp"
 
 #include "../io/gridwriter.hpp"
 

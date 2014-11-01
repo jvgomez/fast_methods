@@ -9,7 +9,7 @@
 #include <numeric>
 
 #include "../ndgridmap/ndgridmap.hpp"
-#include "../fmdata/fmcell.h"
+#include "../fmm/fmdata/fmcell.h"
 
 // TODO: check if points fall in obstacles, points in the borders, etc.
 

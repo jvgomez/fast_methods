@@ -51,11 +51,10 @@
 #include <fstream>
 #include <array>
 
-#include "../fmdata/fmcell.h"
-#include "../fmdata/fmdirectionalcell.h"
+#include "fmdata/fmcell.h"
+#include "fmdata/fmdaryheap.hpp"
 #include "../ndgridmap/ndgridmap.hpp"
 #include "../console/console.h"
-#include "../fmdata/fmdaryheap.hpp"
 
 // TODO: when computing FM on the same grid twice it could fail. It should reset the grid in that case.
 // TODO: check initial and goal points are not the same, not on obstacles, etc.

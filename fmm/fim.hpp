@@ -29,7 +29,7 @@
 #ifndef FASTITERATIVEMETHOD_H_
 #define FASTITERATIVEMETHOD_H_
 
-#include "../fmm/fastmarching.hpp"
+#include "fastmarching.hpp"
 
 template < class grid_t > class FastIterativeMethod : public FastMarching <grid_t> {
 

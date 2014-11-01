@@ -29,8 +29,8 @@
 #ifndef FMM_UNTIDY_H_
 #define FMM_UNTIDY_H_
 
-#include "../fmm/fastmarching.hpp"
-#include "../fmdata/fmuntidyqueue.hpp"
+#include "fastmarching.hpp"
+#include "fmdata/fmuntidyqueue.hpp"
 
 template < class grid_t > class FMM_Untidy : public FastMarching <grid_t> {
 

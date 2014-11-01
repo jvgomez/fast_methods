@@ -47,7 +47,7 @@
 #include  <array>
 #include  <limits>
 
-#include "../fmdata/fmcell.h"
+#include "../fmm/fmdata/fmcell.h"
 #include "../fmm/fastmarching.hpp"
 #include "../gradientdescent/gradientdescent.hpp"
 

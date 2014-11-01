@@ -7,14 +7,14 @@
 #include <string>
 #include <algorithm>
 
-#include "../fmdata/fmcell.h"
+#include "../fmm/fmdata/fmcell.h"
 #include "../ndgridmap/ndgridmap.hpp"
 #include "../console/console.h"
 #include "../fm2/fastmarching2.hpp"
-#include "../fmdata/fmfibheap.hpp"
-#include "../fmdata/fmpriorityqueue.hpp"
-#include "../fmdata/fmdaryheap.hpp"
-#include "../fmdata/fmdaryheap.hpp"
+#include "../fmm/fmdata/fmfibheap.hpp"
+#include "../fmm/fmdata/fmpriorityqueue.hpp"
+#include "../fmm/fmdata/fmdaryheap.hpp"
+#include "../fmm/fmdata/fmdaryheap.hpp"
 #include "../io/maploadertext.hpp"
 
 using namespace std;

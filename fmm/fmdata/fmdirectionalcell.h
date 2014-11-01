@@ -28,8 +28,8 @@
 #include <string>
 #include <limits>
 
-#include "../ndgridmap/cell.h"
-#include "../fmdata/fmcell.h"
+#include "../../ndgridmap/cell.h"
+#include "fmcell.h"
 
 class FMDirectionalCell : public FMCell{
       /**

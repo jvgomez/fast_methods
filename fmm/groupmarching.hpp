@@ -29,7 +29,7 @@
 #ifndef GROUPMARCHING_H_
 #define GROUPMARCHING_H_
 
-#include "../fmm/fastmarching.hpp"
+#include "fastmarching.hpp"
 
 template < class grid_t > class GroupMarching : public FastMarching <grid_t> {
 

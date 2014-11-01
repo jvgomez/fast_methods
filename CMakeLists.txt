@@ -14,15 +14,13 @@ SET(CMAKE_CXX_FLAGS_RELEASE "-Ofast -fno-finite-math-only")
 SET(CMAKE_CXX_FLAGS_DEBUG  "-Wall -Wno-unused-local-typedefs -g")
 
 # Self-made includes
-include_directories (${FMM_SOURCE_DIR}/console) 
-include_directories (${FMM_SOURCE_DIR}/ndgridmap) 
-include_directories (${FMM_SOURCE_DIR}/fmdata) 
+include_directories (${FMM_SOURCE_DIR}/console)
+include_directories (${FMM_SOURCE_DIR}/ndgridmap)
 include_directories (${FMM_SOURCE_DIR}/fmm)
+include_directories (${FMM_SOURCE_DIR}/fmm/fmdata) 
 include_directories (${FMM_SOURCE_DIR}/fm2)
-include_directories (${FMM_SOURCE_DIR}/fm2directional)
-include_directories (${FMM_SOURCE_DIR}/fm2star)
-include_directories (${FMM_SOURCE_DIR}/io) 
-include_directories (${FMM_SOURCE_DIR}/gradientdescent) 
+include_directories (${FMM_SOURCE_DIR}/io)
+include_directories (${FMM_SOURCE_DIR}/gradientdescent)
 
 
 # Third party internal includes
@@ -33,10 +31,10 @@ include_directories (${FMM_SOURCE_DIR}/thirdparty)
 include_directories (~/boost_1_55_0)
 
 add_executable (fmm main.cpp
-					console/console.cpp
-					ndgridmap/cell.cpp
-					fmdata/fmcell.cpp
-					) 
+                    console/console.cpp
+                    ndgridmap/cell.cpp
+                    fmm/fmdata/fmcell.cpp
+                    ) 
 
 # Linking CImg dependencies.
 target_link_libraries (fmm X11 pthread ) 
