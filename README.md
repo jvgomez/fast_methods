@@ -6,17 +6,20 @@ N-Dimensional Fast Marching Method V1.0
  - Pablo Gely
 
 **FMM Versions:**
-
 - Fast Marching Method (FMM) with Binary Queue and Fibonacci Queue.
 - Simplified Fast Marhching Method (SFMM, FMM with a simple priority queue).
 - Fast Marching Square Method (FM2).
 - Fast Marching Square Star (FM2*) FM2 with CostToGo heuristics.
 - Fast Marching Square Directioanl (FM2Dir)
 
-**O(n) FMM versions:*
+**O(n) FMM versions:**
 - Group Marching Method (GMM).
 - Untidy Fast Marching Method (By Yatziv et al, circular queue).
 - Fast Iterative Method (FIM).
+
+**ROS**
+ROS nodes using this code (tested in the TurtleBot) are provided in a separate repo:
+https://github.com/jpardeiro/fastmarching_node
 
 
 ## DISCLAIMER and IMPORTANT NOTES
