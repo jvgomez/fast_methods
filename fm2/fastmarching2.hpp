@@ -124,18 +124,22 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell>  >  class FastMarchin
                 computeVelocitiesMap(true);
             else
                 computeVelocitiesMap();
+            // According to the theoretical basis the wave is expanded from the goal point to the initial point.
+            std::vector <int> wave_init;
+            wave_init.push_back(goal_idx_);
+            int wave_goal = initial_point_[0];
 
             FastMarching< grid_t, heap_t> fmm;
-            std::vector <int> goals;
-            goals.push_back(goal_idx_);
             fmm.setEnvironment(grid_);
-            fmm.setInitialAndGoalPoints(goals, goal_idx_);
+            fmm.setInitialAndGoalPoints(wave_init, wave_goal);
             fmm.computeFM();
         }
 
         /**
          * Computes the path from the previous given goal index to the minimum
-         * of the times of arrival map.
+         * of the times of arrival map. According to the theoretical basis the 
+         * wave is expanded from the goal point to the initial point. For these 
+         * reasons the gradient must to be applied from the initial point.
          *
          * No checks are done (points in the borders, points in obstacles...).
          *

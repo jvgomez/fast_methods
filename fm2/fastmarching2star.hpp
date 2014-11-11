@@ -346,15 +346,19 @@ template  <  class grid_t, class heap_t = FMDaryHeap <FMCell> >  class FastMarch
             } else
                 computeVelocitiesMap();
 
-            std::vector<int> goals;
-            goals.push_back(goal_idx_);
-            setInitialPoints(goals);
+            // According to the theoretical basis the wave is expanded from the goal point to the initial point.
+            std::vector <int> wave_init;
+            wave_init.push_back(goal_idx_);
+            setInitialPoints(wave_init);
             computeFM(true, true);
         }
 
         /**
          * Computes the path from the given index to a minimum (the one
-         * gradient descent choses) and returns the velocity.
+         * gradient descent choses) and returns the velocity. According to 
+         * the theoretical basis the wave is expanded from the goal point 
+         * to the initial point. For these reasons the gradient must to be 
+         * applied from the initial point.
          *
          * No checks are done (points in the borders, points in obstacles...).
          *

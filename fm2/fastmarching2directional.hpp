@@ -255,7 +255,7 @@ template < class grid_t, class heap_t = FMDaryHeap<FMDirectionalCell> >  class F
                 if (grid_->getCell(idx).getVelocity() < grid_->getCell(idx_source).getVelocity() && grid_->getCell(idx).getVelocity() > 0.05)
                     vel = 1;
                 else
-                    vel = grid_->getCell(idx).getVelocity(); 
+                    vel = grid_->getCell(idx).getVelocity();
             }
 
             double b = -2*sumT;
@@ -348,16 +348,19 @@ template < class grid_t, class heap_t = FMDaryHeap<FMDirectionalCell> >  class F
             else
                 computeVelocitiesMap();
 
-            // The wave has to be expanded from the goal to the intial point
-            std::vector<int> goals;
-            goals.push_back(goal_idx_);
-            setInitialPoints(goals, true);
+            // According to the theoretical basis the wave is expanded from the goal point to the initial point.
+            std::vector <int> wave_init;
+            wave_init.push_back(goal_idx_);
+            setInitialPoints(wave_init, true);
             computeFM(true, true);
         }
 
         /**
          * Computes the path from the given index to a minimum (the one
-         * gradient descent choses) and returns the velocity.
+         * gradient descent choses) and returns the velocity. According to 
+         * the theoretical basis the wave is expanded from the goal point 
+         * to the initial point. For these reasons the gradient must to be 
+         * applied from the initial point.
          *
          * No checks are done (points in the borders, points in obstacles...).
          *
