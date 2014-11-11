@@ -187,78 +187,14 @@ template < class grid_t, class heap_t = FMDaryHeap<FMDirectionalCell> >  class F
             } // For each initial point.
         } // init()
 
-        /**
-        * Solves the gradient value for a given cell. This function is generalized
-        * to any number of dimensions.
-        *
-        * @param grads gradient results vector.
-        *
-        * @param idx index of the cell to be evaluated.
-        *
-        * @param velocity selects the attribute to calculate the gradient
-        *
-        */
-        virtual void solveGradient
-        (std::array<double, grid_t::getNDims()> & grads, const int idx, const bool velocity = false)
-        {
-            dimsize_ = grid_->getDimSizes();
-
-            d_[0] = dimsize_[0];
-            for (int i = 1; i < ndims_; ++i)
-                d_[i] = dimsize_[i]*d_[i-1];
-
-            // Apply gradient to velocity value
-            if (velocity ==  true)
-            {
-                // First dimension done apart.
-                grads[0] = - grid_->getCell(idx-1).getVelocity()/2 + grid_->getCell(idx+1).getVelocity()/2;
-
-                if (isinf(grads[0]))
-                  grads[0] = sgn<double>(grads[0]);
-
-                for (int i = 1; i < ndims_; ++i) {
-                    grads[i] = - grid_->getCell(idx-d_[i-1]).getVelocity()/2 + grid_->getCell(idx+d_[i-1]).getVelocity()/2;
-                    if (isinf(grads[i]))
-                        grads[i] = sgn<double>(grads[i]);
-                }
-            }
-            // Apply gradient to wave expansione
-            else
-            {
-                double min_dim;
-
-                if (grid_->getCell(idx-1).getValue() > grid_->getCell(idx+1).getValue())
-                    min_dim = grid_->getCell(idx+1).getValue();
-                else
-                    min_dim = grid_->getCell(idx-1).getValue();
-
-                // First dimension done apart.
-                grads[0] = - (grid_->getCell(idx).getValue() - min_dim);
-
-                if (isinf(grads[0]))
-                    grads[0] = 0;
-
-                for (int i = 1; i < ndims_; ++i) {
-                    if (grid_->getCell(idx-d_[i-1]).getValue() > grid_->getCell(idx+d_[i-1]).getValue())
-                        min_dim = grid_->getCell(idx+d_[i-1]).getValue();
-                    else
-                        min_dim = grid_->getCell(idx-d_[i-1]).getValue();
-
-                    grads[i] = - (grid_->getCell(idx).getValue() - min_dim);
-
-                    if (isinf(grads[i]))
-                        grads[i] = 0;
-                }
-            }
-        }
-
+        
         //IMPORTANT NOTE: Assuming inc(1) = inc(y)  = ... =  leafsize_
         // Possible improvement: If we include the neighbors in the cells information
         // this could be (most probably) speeded up.
         // This implementation is focused to be used with any number of dimensions.
 
         /**
-        * Solves the Eikonal equation for a given cell using the heuristic criteria of the FM2*.
+        * Solves the Eikonal equation for a given cell using the heuristic criteria of the FM2 Directional.
         * This function is generalized to any number of dimensions.
         *
         * @param idx index of the cell to be evaluated.
@@ -277,55 +213,49 @@ template < class grid_t, class heap_t = FMDaryHeap<FMDirectionalCell> >  class F
             double updatedT;
             sumT = 0;
             sumTT = 0;
-
-            for (int dim = 0; dim < grid_t::getNDims(); ++dim) {
-                double minTInDim = grid_->getMinValueInDim(idx, dim);
-                if (!isinf(minTInDim)) {
-                    Tvalues[dim] = minTInDim;
-                    sumT +=  Tvalues[dim];
-                    TTvalues[dim] = Tvalues[dim]*Tvalues[dim];
-                    sumTT +=  TTvalues[dim];
-                }
-                else {
-                    Tvalues[dim] = 0;
-                    TTvalues[dim] = 0;
-                    a -= 1 ;
-                }
-            }
+            double minTInDim = 0;
 
             vel = 0;
 
-            if (idx_source == -1)
+            if (idx_source == -1) {
+                for (int dim = 0; dim < grid_t::getNDims(); ++dim) {
+                    minTInDim = grid_->getMinValueInDim(idx, dim);
+                    if (!isinf(minTInDim)) {
+                        Tvalues[dim] = minTInDim;
+                        sumT +=  Tvalues[dim];
+                        TTvalues[dim] = Tvalues[dim]*Tvalues[dim];
+                        sumTT +=  TTvalues[dim];
+                    }
+                    else {
+                        Tvalues[dim] = 0;
+                        TTvalues[dim] = 0;
+                        a -= 1 ;
+                    }
+                }
+
                 vel = grid_->getCell(idx).getVelocity();
+            }
             else {
-                // Calculate velocity and wave gradient
-                solveGradient(grads_velocity, idx, true);
 
-                solveGradient(grads_wave, idx, false);
+                for (int dim = 0; dim < grid_t::getNDims(); ++dim) {
+                    minTInDim = getMinValueInDimDirectional(idx, dim);
+                    if (!isinf(minTInDim)) {
+                        Tvalues[dim] = minTInDim;
+                        sumT +=  Tvalues[dim];
+                        TTvalues[dim] = Tvalues[dim]*Tvalues[dim];
+                        sumTT +=  TTvalues[dim];
+                    }
+                    else {
+                        Tvalues[dim] = 0;
+                        TTvalues[dim] = 0;
+                        a -= 1 ;
+                    }
+                }
 
-                // Calculate the gradients angle
-                angle_velocity = std::atan2(grads_velocity[1], grads_velocity[0]);
-                angle_wave = std::atan2(grads_wave[1], grads_wave[0]);
-
-                if (angle_velocity<0)
-                    angle_velocity +=  2 * PI;
-
-                if (angle_wave<0)
-                    angle_wave +=  2 * PI;
-
-                // Calculate the angle between the gradients
-                diff_angle = std::abs(angle_velocity-angle_wave);
-
-                if (diff_angle > PI )
-                    diff_angle = 2 * PI - diff_angle;
-
-                vel = 0;
-
-                // Apply the heuristic
-                if (std::abs(diff_angle) <=  (0.5 * PI) && grid_->getCell(idx).getVelocity() > 0.05)
+                if (grid_->getCell(idx).getVelocity() < grid_->getCell(idx_source).getVelocity() && grid_->getCell(idx).getVelocity() > 0.05)
                     vel = 1;
                 else
-                    vel = grid_->getCell(idx).getVelocity();
+                    vel = grid_->getCell(idx).getVelocity(); 
             }
 
             double b = -2*sumT;
@@ -396,7 +326,7 @@ template < class grid_t, class heap_t = FMDaryHeap<FMDirectionalCell> >  class F
                         } // neighbors open.
                     } // neighbors not frozen.
                     if (idxMin ==  initial_point_[0] && stop)
-                    stopWavePropagation = 1;
+                        stopWavePropagation = 1;
                 } // For each neighbor.
             } // while narrow band not empty
         }
@@ -502,6 +432,7 @@ template < class grid_t, class heap_t = FMDaryHeap<FMDirectionalCell> >  class F
 
               // Restarting grid values for second wave expasion.
               grid_->getCell(i).setValue(std::numeric_limits<double>::infinity());
+              grid_->getCell(i).setDirectionalTime(std::numeric_limits<double>::infinity());
               grid_->getCell(i).setState(FMState::OPEN);
             }
         }
@@ -520,7 +451,6 @@ template < class grid_t, class heap_t = FMDaryHeap<FMDirectionalCell> >  class F
 
         std::array<int, grid_t::getNDims()-1> d_;
         std::array<int, grid_t::getNDims()> dimsize_;
-        std::array<double, grid_t::getNDims()> grads_velocity, grads_wave;
         std::vector<double> velocity_map_; /*!< Auxiliar vector which contains the final velocity map of the environment. */
 
         int ndims_;

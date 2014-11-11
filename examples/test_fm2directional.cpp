@@ -75,7 +75,7 @@ int main(int argc, const char ** argv)
     fm2directional.computeFM2Directional();
         end = system_clock::now();
         time_elapsed = duration_cast<milliseconds>(end-start).count();
-        cout << "\tElapsed FM2Directiona - Binary heap time:\t" << time_elapsed << " ms" << endl;
+        cout << "\tElapsed FM2Directional - Binary heap time:\t" << time_elapsed << " ms" << endl;
 
     // Using priority queue implies the use of the SFMM. Priority queue uses by default FMCell.
     FastMarching2Directional<FMGrid2D, FMPriorityQueue<> > sfm2directional; //Choosing the default cell class.

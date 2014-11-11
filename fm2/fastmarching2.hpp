@@ -126,9 +126,10 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell>  >  class FastMarchin
                 computeVelocitiesMap();
 
             FastMarching< grid_t, heap_t> fmm;
-
+            std::vector <int> goals;
+            goals.push_back(goal_idx_);
             fmm.setEnvironment(grid_);
-            fmm.setInitialAndGoalPoints(initial_point_, goal_idx_);
+            fmm.setInitialAndGoalPoints(goals, goal_idx_);
             fmm.computeFM();
         }
 
@@ -150,7 +151,7 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell>  >  class FastMarchin
             constexpr int ndims = grid_->getNDims();
 
             GradientDescent< nDGridMap<FMCell, ndims> > grad;
-            grad.apply(*grid_,goal_idx_,*path_, *path_velocity);
+            grad.apply(*grid_,initial_point_[0],*path_, *path_velocity);
         }
 
         /**
