@@ -1,11 +1,11 @@
 N-Dimensional Fast Marching Method V1.0
 
-Authors: 
- - Javier V. Gomez javvgomez __at__ gmail.com www.javiervgomez.com
- - Jose Pardeiro jose.pardeiro __at__ gmail.com
+**Authors:**
+ - Javier V. Gomez javvgomez _at_ gmail.com www.javiervgomez.com
+ - Jose Pardeiro jose.pardeiro _at_ gmail.com
  - Pablo Gely
 
-FMM Versions:
+**FMM Versions:**
 
 - Fast Marching Method (FMM) with Binary Queue and Fibonacci Queue.
 - Simplified Fast Marhching Method (SFMM, FMM with a simple priority queue).
@@ -13,18 +13,15 @@ FMM Versions:
 - Fast Marching Square Star (FM2*) FM2 with CostToGo heuristics.
 - Fast Marching Square Directioanl (FM2Dir)
 
-O(n) FMM versions:
+**O(n) FMM versions:*
 - Group Marching Method (GMM).
 - Untidy Fast Marching Method (By Yatziv et al, circular queue).
 - Fast Iterative Method (FIM).
 
 
-===========================
-DISCLAIMER and IMPORTANT NOTES
+## DISCLAIMER and IMPORTANT NOTES
 
-License GNU/GPL V3.
-
-IMPORTANT NOTES:
+License GNU/GPL V3: http://www.gnu.org/copyleft/gpl.html
 
 When using in 2D it works really fine. However, some problems appear for higher dimensions. I am working on that already.
 
@@ -32,45 +29,38 @@ This is a source code intended for my research. Although I want it to be useful 
 
 Because of this, the code is not deeply tested. I've just tested it works for the cases I need.
 
-The compilation time is highly increased due to CImg library. Please, omit it when possible. When doing this, you can erase the following lines of the CMakeLists.txt:
+The compilation time is highly increased due to CImg library. Please, omit it when possible.
 
-# Linking CImg dependencies.
-target_link_libraries (fmm X11 pthread)
+## Dependencies:
 
-The CImg dependency is included in the thirdparty folder. For more information:
-http://cimg.sourceforge.net/
-===========================
+This code uses C\++11 so a compiler g++ 4.8 or equivalent is required. With GCC 4.7 some runtime problems can occur.
 
-===========================
-Dependencies:
+### Linking CImg dependencies.
+If you want to compile code that uses the CImg library, you will need to add the following line to the CMakeLists.txt
 
-This code uses C++11 so a compiler g++ 4.8 or equivalent is required. With GCC 4.7 some runtime problems can occur.
+    target_link_libraries (fmm X11 pthread)
 
-The current version relies on Boost 1.55 (probably previous versions work as well). The current CMakeLists.txt assumes you have uncompressed boost into the home directory.
-
-# External dependencies
-include_directories (~/boost_1_55_0)
-
-Change this line if necessary
-
-
-CImg dependencies:
-The code provides a copy of the CImg library. This will take carge of loading and savig images. Depending on the extension used, you will need to install another libraries as said in the main page of CImg: http://cimg.sourceforge.net/
+The code provides a copy of the CImg library. This will take care of loading and savig images. Depending on the extension used, you will need to install another libraries as said in the main page of CImg: http://cimg.sourceforge.net/
 
 The example code uses png, therefore examples of libraries to be installed are libpng, Magick++, ImageMagick, etc.
 
-===========================
+### Boost dependencies
+The current version relies on header-only Boost 1.55 libraries (probably previous versions work as well). The current CMakeLists.txt assumes you have uncompressed boost into the home directory.
 
-===========================
+    include_directories (~/boost_1_55_0)
+
+Change this line if necessary
+
+## Documentation
+
 To build the documentation:
 
 $ cd doc
 $ doxygen
 
 Go into the HTML folder and open index.html.
-===========================
 
-===========================
+## Building the code
 To build the code:
 
 $ cd build
@@ -79,11 +69,8 @@ $ make
 $ ./fmm -map1 ../data/testimg.png -map2 ../data/map.png -vel ../data/velocities.png
 
 This main shows most of the utilities implemented so far.
-===========================
 
-
-===========================
-Folder structure:
+## Folder structure
 
 Although there are a lot of folders, they are quite simple. It is organized this way because I'm focusing on an upload to Biicode (www.biicode.com)
 
@@ -101,28 +88,18 @@ Although there are a lot of folders, they are quite simple. It is organized this
 + scripts: matlab scripts to parse outputs.
 + thirdparty: others' software included.
 
-===========================
-
-
-===========================
-Known issues:
+## Known issues:
 
 - There is not reset in the grid values if the same grid is used in Fast Marching Methods twice. Be aware of this, it can lead to wrong FMM results.
 
-===========================
+## TODO
 
-
-
-===========================
-TODO:
-
-In the top part of each file there are specific TODO comments.
+At the top of each file there are specific TODO comments.
 
 - Reimplement FM2* as FM2: as a high level FMM user, with underlying FMM templated.
+- Better setInitialAndGoalPoints() methods for FM2 versions, and compute fmm2_sources automatically or pass them in another different method.
 - Restructure the folder and the CMake files in order to properly have examples and that stuff.
 - Substitute arg parsing with boost_options.
 - Remove relative file dependencies (#include "../../fmm", filename = "../../data", CMakeLists.txt deps, etc).
-- Implement a grid copy constructor and operator.
-- Code of fm2star, fm2directional and auxiliar classes (gridplotter, etc) not checked yet but it works well.
-
-===========================
+- Implement a grid copy constructor and operator, clear, etc.
+- Review code of fm2star, fm2directional and auxiliar classes (gridplotter, etc) not checked yet but it works well.
