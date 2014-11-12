@@ -23,7 +23,7 @@ ROS nodes using this code (tested in the TurtleBot) are provided in a separate r
 https://github.com/jpardeiro/fastmarching_node
 
 **BIICODE**
-A version of this code is available at the [biicode](http://www.biicode.com) C/C++ dependency manager. Concretely
+A version of this code is available at the [biicode](https://www.biicode.com) C/C++ dependency manager. Concretely
 the corresponding blocks are:
 
 https://www.biicode.com/jvgomez
