@@ -18,8 +18,22 @@ N-Dimensional Fast Marching Method V1.0
 - Fast Iterative Method (FIM).
 
 **ROS**
+
 ROS nodes using this code (tested in the TurtleBot) are provided in a separate repo:
 https://github.com/jpardeiro/fastmarching_node
+
+**BIICODE**
+A version of this code is available at the [biicode](http://www.biicode.com) C/C++ dependency manager. Concretely
+the corresponding blocks are:
+
+https://www.biicode.com/jvgomez
+jvgomez/console
+jvgomez/ndgridmap
+jvgomez/fmm
+jvgomez/fm2examples
+
+https://www.biicode.com/endher
+endher/fm2
 
 
 ## DISCLAIMER and IMPORTANT NOTES
