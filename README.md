@@ -72,18 +72,18 @@ Change this line if necessary
 
 To build the documentation:
 
-$ cd doc
-$ doxygen
+    $ cd doc
+    $ doxygen
 
 Go into the HTML folder and open index.html.
 
 ## Building the code
 To build the code:
 
-$ cd build
-$ cmake .. -DCMAKE_BUILD_TYPE=Release (Release, RelWithDebInf or Debug, Debug by default)
-$ make
-$ ./fmm -map1 ../data/testimg.png -map2 ../data/map.png -vel ../data/velocities.png
+    $ cd build
+    $ cmake .. -DCMAKE_BUILD_TYPE=Release (Release, RelWithDebInf or Debug, Debug by default)
+    $ make
+    $ ./fmm -map1 ../data/testimg.png -map2 ../data/map.png -vel ../data/velocities.png
 
 This main shows most of the utilities implemented so far.
 
@@ -108,6 +108,7 @@ Although there are a lot of folders, they are quite simple. It is organized this
 ## Known issues:
 
 - There is not reset in the grid values if the same grid is used in Fast Marching Methods twice. Be aware of this, it can lead to wrong FMM results.
+- GCC 4.9 has a bug which causes compilation to fail https://gcc.gnu.org/bugzilla/show_bug.cgi?id=59937 Please use GCC 4.8.x (or other compilers with C++11 support).
 
 ## TODO
 
