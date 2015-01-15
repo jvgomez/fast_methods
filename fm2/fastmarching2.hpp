@@ -18,8 +18,8 @@
     * of the Simplified FMM (SFMM) method, done automatically because of the FMPriorityQueue::increase implementation.
     *
     @par External documentation:
-        FMM2:
-          J.V. Gómez, A. Lumbier, S. Garrido and L. Moreno, The Path to Efficiency: Fast Marching Methods in Path Planning.
+        FM2:
+          A. Valero, J.V. Gómez, S. Garrido and L. Moreno, The Path to Efficiency: Fast Marching Method for Safer, More Efficient Mobile Robot Trajectories, IEEE Robotics and Automation Magazine, Vol. 20, No. 4, 2013.
 
     Copyright (C) 2014 Javier V. Gomez and Jose Pardeiro
     www.javiervgomez.com
@@ -152,7 +152,7 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell>  >  class FastMarchin
         virtual void computePath
         (path_t * p, std::vector <double> * path_velocity) {
             path_t* path_ = p;
-            constexpr int ndims = grid_->getNDims();
+            constexpr int ndims = grid_t::getNDims();
 
             GradientDescent< nDGridMap<FMCell, ndims> > grad;
             grad.apply(*grid_,initial_point_[0],*path_, *path_velocity);
@@ -175,7 +175,7 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell>  >  class FastMarchin
         virtual void computePath
         (path_t * p, std::vector <double> * path_velocity, int goal_idx) {
             path_t* path_ = p;
-            constexpr int ndims = grid_->getNDims();
+            constexpr int ndims = grid_t::getNDims();
 
             GradientDescent< nDGridMap<FMCell, ndims> > grad;
             grad.apply(*grid_,goal_idx,*path_, *path_velocity);

@@ -373,7 +373,7 @@ template < class grid_t, class heap_t = FMDaryHeap<FMDirectionalCell> >  class F
         virtual void computePath
         (path_t * p, std::vector <double> * path_velocity) {
             path_t* path_ = p;
-            constexpr int ndims=grid_->getNDims();
+            constexpr int ndims = grid_t::getNDims();
 
             GradientDescent< nDGridMap<FMDirectionalCell, ndims> > grad;
             grad.apply_directional(*grid_,initial_point_[0],*path_, velocity_map_, *path_velocity);

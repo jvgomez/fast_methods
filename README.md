@@ -108,7 +108,7 @@ Although there are a lot of folders, they are quite simple. It is organized this
 ## Known issues:
 
 - There is not reset in the grid values if the same grid is used in Fast Marching Methods twice. Be aware of this, it can lead to wrong FMM results.
-- GCC 4.9 has a bug which causes compilation to fail https://gcc.gnu.org/bugzilla/show_bug.cgi?id=59937 Please use GCC 4.8.x (or other compilers with C++11 support).
+
 
 ## TODO
 
