@@ -33,6 +33,7 @@
 
 template < class grid_t > class GroupMarching : public FastMarching <grid_t> {
 
+    using FastMarching<grid_t>::name_;
     using FastMarching<grid_t>::grid_;
     using FastMarching<grid_t>::neighbors;
     using FastMarching<grid_t>::solveEikonal;
@@ -44,7 +45,9 @@ template < class grid_t > class GroupMarching : public FastMarching <grid_t> {
     using FastMarching<grid_t>::sumTT;
 
     public:
-        GroupMarching <grid_t> () {}
+        GroupMarching <grid_t> () {
+            Solver<grid_t>::Solver("GMM");
+        }
 
         virtual ~GroupMarching <grid_t>() {}
 

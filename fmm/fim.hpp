@@ -33,18 +33,8 @@
 
 template < class grid_t > class FastIterativeMethod : public FastMarching <grid_t> {
 
-    using FastMarching<grid_t>::grid_;
-    using FastMarching<grid_t>::neighbors;
-    using FastMarching<grid_t>::solveEikonal;
-    using FastMarching<grid_t>::init_points_;
-    //using FastMarching<grid_t>::leafsize_;
-    using FastMarching<grid_t>::Tvalues;
-    using FastMarching<grid_t>::TTvalues;
-    using FastMarching<grid_t>::sumT;
-    using FastMarching<grid_t>::sumTT;
-
     public:
-        FastIterativeMethod <grid_t> () {}
+        FastIterativeMethod() : FastMarching<grid_t>("FIM") {}
 
         virtual ~FastIterativeMethod <grid_t>() {}
 
@@ -55,7 +45,8 @@ template < class grid_t > class FastIterativeMethod : public FastMarching <grid_
           */
         virtual void setEnvironment
         (grid_t * g) {
-            grid_ = g;
+            //grid_ = g;
+            FastMarching<grid_t>::setEnvironment(g);
             //leafsize_ = grid_->getLeafSize();
         }
 
@@ -120,6 +111,17 @@ template < class grid_t > class FastIterativeMethod : public FastMarching <grid_
         }//compute fm
 
     protected:
+        //using FastMarching<grid_t>::name_;
+        using FastMarching<grid_t>::grid_;
+        using FastMarching<grid_t>::neighbors;
+        using FastMarching<grid_t>::solveEikonal;
+        using FastMarching<grid_t>::init_points_;
+        //using FastMarching<grid_t>::leafsize_;
+        //using FastMarching<grid_t>::Tvalues;
+        //using FastMarching<grid_t>::TTvalues;
+        //using FastMarching<grid_t>::sumT;
+        //using FastMarching<grid_t>::sumTT;
+
         std::list<int> active_list_; /*!< List wich stores the narrow band of each iteration. */
         double E_= 0; /*!< Error threshold value that reveals if a cell has converged. */
 };

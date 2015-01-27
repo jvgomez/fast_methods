@@ -51,6 +51,8 @@
 #include <fstream>
 #include <array>
 
+#include "solver.hpp"
+
 #include "fmdata/fmcell.h"
 #include "fmdata/fmdaryheap.hpp"
 #include "../ndgridmap/ndgridmap.hpp"
@@ -63,12 +65,14 @@
 
 // IMPORTANT TODO: substitute grid_->getCell(j).isOccupied() by grid_->getCell(j).getVelocity() == 0 (conceptually is not the same).
 
-template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FastMarching {
+template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FastMarching : public Solver<grid_t> {
 
     public:
-        FastMarching <grid_t, heap_t> () {};
+        FastMarching() : Solver<grid_t>("FMM") {}
 
-        virtual ~FastMarching <grid_t, heap_t>() {};
+        FastMarching(const std::string& name) : Solver<grid_t>(name) {}
+
+        virtual ~FastMarching <grid_t, heap_t>() {}
 
          /**
           * Sets the input grid in which operations will be performed.
@@ -77,7 +81,7 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FastMarching
           */
         virtual void setEnvironment
         (grid_t * g) {
-            grid_ = g;
+            Solver<grid_t>::setEnvironment(g);
             narrow_band_.setMaxSize(grid_->size());
         }
 
@@ -94,8 +98,7 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FastMarching
          */
         virtual void setInitialAndGoalPoints
         (const std::vector<int> & init_points, int goal_idx = -1) {
-            init_points_ = init_points;
-            goal_idx_ = goal_idx;
+            Solver<grid_t>::setInitialAndGoalPoints(init_points, goal_idx);
             for (const int &i: init_points) {
                 grid_->getCell(i).setArrivalTime(0);
                 grid_->getCell(i).setState(FMState::FROZEN);
@@ -216,7 +219,7 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FastMarching
          *
          * @see setInitialAndGoalPoints()
          */
-        virtual void computeFM
+        virtual void compute
         () {
             // TODO: check if the previous steps have been done (initialization).
             int j= 0;
@@ -256,11 +259,11 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FastMarching
 
 
     protected:
-        grid_t* grid_; /*!< Main container. */
-        heap_t narrow_band_; /*!< Instance of the heap used. */
+        using Solver<grid_t>::grid_;
+        using Solver<grid_t>::init_points_;
+        using Solver<grid_t>::goal_idx_;
 
-        std::vector<int> init_points_;	/*!< Initial points for the Fast Marching Method. */
-        int goal_idx_;
+        heap_t narrow_band_; /*!< Instance of the heap used. */
 
         double sumT; /*!< Auxiliar value wich computes T1+T2+T3... Useful for generalizing the Eikonal solver. */
         double sumTT; /*!< Auxiliar value wich computes T1^2+T2^2+T3^2... Useful for generalizing the Eikonal solver. */

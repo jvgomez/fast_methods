@@ -9,6 +9,8 @@
 #include "../console/console.h"
 
 #include "../fmm/fastmarching.hpp"
+#include "../fmm/fim.hpp"
+#include "../fmm/groupmarching.hpp"
 
 #include "../fmm/fmdata/fmfibheap.hpp"
 #include "../fmm/fmdata/fmdaryheap.hpp"
@@ -43,7 +45,17 @@ int main(int argc, const char ** argv)
     grid_fmm.coord2idx(init_point , idx);
     init_points.push_back(idx);
 
-    FastMarching<FMGrid2D, FMFibHeap<FMCell> > fmm_fib;
+    std::vector<Solver<FMGrid2D>*> solvers;
+    solvers.push_back(new FastMarching<FMGrid2D>);
+    solvers.push_back(new FastIterativeMethod<FMGrid2D>);
+    //solvers.push_back(new GroupMarching<FMGrid2D>);
+
+    for (const Solver<FMGrid2D>* s :solvers)
+    {
+        std::cout << s->getName() << '\n';
+    }
+
+    /*FastMarching<FMGrid2D, FMFibHeap<FMCell> > fmm_fib;
     fmm_fib.setEnvironment(&grid_fmm_fib);
         start = system_clock::now();
     fmm_fib.setInitialPoints(init_points);
@@ -51,20 +63,20 @@ int main(int argc, const char ** argv)
         end = system_clock::now();
         time_elapsed = duration_cast<milliseconds>(end-start).count();
         cout << "\tElapsed FMM - Fibonacci heap time: " << time_elapsed << " ms" << endl;
-    //GridWriter::saveGridValues("test_fmm.txt", grid_fmm_fib);
+    //GridWriter::saveGridValues("test_fmm.txt", grid_fmm_fib);*/
 
     FastMarching<FMGrid2D> fmm;
     fmm.setEnvironment(&grid_fmm);
         start = system_clock::now();
     fmm.setInitialPoints(init_points);
-    fmm.computeFM();
+    fmm.compute();
         end = system_clock::now();
         time_elapsed = duration_cast<milliseconds>(end-start).count();
         cout << "\tElapsed FMM_Dary time: " << time_elapsed << " ms" << endl;
         //GridWriter::saveGridValues("test_fmmdary.txt", grid_fmm);
 
     // Using priority queue implies the use of the SFMM. Priority queue uses by default FMCell.
-    FastMarching<FMGrid2D, FMPriorityQueue<> > sfmm; //Choosing the default cell class.
+    /*FastMarching<FMGrid2D, FMPriorityQueue<> > sfmm; //Choosing the default cell class.
     sfmm.setEnvironment(&grid_sfmm);
         start = system_clock::now();
     sfmm.setInitialPoints(init_points);
@@ -72,5 +84,5 @@ int main(int argc, const char ** argv)
         end = system_clock::now();
         time_elapsed = duration_cast<milliseconds>(end-start).count();
         cout << "\tElapsed SFMM time: " << time_elapsed << " ms" << endl;
-    //GridWriter::saveGridValues("test_sfmm.txt", grid_sfmm);
+    //GridWriter::saveGridValues("test_sfmm.txt", grid_sfmm);*/
 }

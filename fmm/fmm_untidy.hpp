@@ -45,7 +45,9 @@ template < class grid_t > class FMM_Untidy : public FastMarching <grid_t> {
     using FastMarching<grid_t>::sumTT;
 
     public:
-        FMM_Untidy <grid_t> () {}
+        FMM_Untidy <grid_t> () {
+            Solver<grid_t>::Solver("UFMM");
+        }
         virtual ~FMM_Untidy <grid_t>() {}
 
           /**
