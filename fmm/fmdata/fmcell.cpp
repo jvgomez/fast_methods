@@ -3,14 +3,6 @@
 
 using namespace std;
 
-inline bool FMCell::isObstacle
-() const {
-    if (velocity_ == 0)
-        return true;
-    else
-        return false;
-}
-
 ostream& operator << 
 (ostream & os, const FMCell & c) {
     os << console::str_info("Fast Marching cell information:");
@@ -31,4 +23,19 @@ ostream& operator <<
             break;
         }
     return os;
+}
+
+bool FMCell::isObstacle
+() const {
+    return occupancy_ == 0;
+    /*if (velocity_ == 0)
+        return true;
+    else
+        return false;*/
+}
+
+void FMCell::setDefault
+() {
+    value_ = std::numeric_limits<double>::infinity();
+    state_ = FMState::OPEN;
 }

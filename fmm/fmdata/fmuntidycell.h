@@ -21,8 +21,8 @@
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef FMUntidyCELL_H_
-#define FMUntidyCELL_H_
+#ifndef FMUNTIDYCELL_H_
+#define FMUNTIDYCELL_H_
 
 #include <iostream>
 #include <string>
@@ -32,7 +32,7 @@
 #include "../../ndgridmap/cell.h"
 
 
-class FMUntidyCell : public FMCell{
+class FMUntidyCell : public FMCell {
     /**
        * ostream operator << overloaded for this class.
        */
@@ -42,20 +42,20 @@ class FMUntidyCell : public FMCell{
      /**
        * Default constructor which performs and implicit Fast Marching-like initialization of the grid,
        */
-       FMUntidyCell() : FMCell()  {}
+       FMUntidyCell() : FMCell() {}
 
-        virtual ~FMUntidyCell() {}
-        
+    virtual ~FMUntidyCell() {}
+
     virtual void setBucket (const int b)    {bucket_ = b;}
 
     virtual int getbucket () const          {return bucket_;}
 
     protected:
-    //value_ is in this case the time of arrival.
-    FMState state_;  /*!< State of the cell */
-    int bucket_; /*!< Time travel discretization  */
-    float velocity_;  /*!< Wave propagation velocity through this cell */
+        //value_ is in this case the time of arrival.
+        //FMState state_;  /*!< State of the cell */
+        int bucket_; /*!< Time travel discretization  */
+        //float velocity_;  /*!< Wave propagation velocity through this cell */
 };
 
 
-#endif /* CELL_H_*/
+#endif /* FMUNTIDYCELL_H_*/

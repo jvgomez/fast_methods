@@ -45,21 +45,21 @@ class FMCell : public Cell{
         /**
           * Default constructor which performs and implicit Fast Marching-like initialization of the grid,
           */
-        FMCell() : Cell(std::numeric_limits<double>::infinity(), true), state_(FMState::OPEN), velocity_(1)  {};
+        FMCell() : Cell(std::numeric_limits<double>::infinity(), true), state_(FMState::OPEN), velocity_(1)  {}
 
-        virtual ~FMCell() {};
+        virtual ~FMCell() {}
 
         // NOTE: no checks are done (out of bounds, correct states, etc) no improve efficienty.
         // TODO: overload functions to add the option of input checking.
         virtual void setVelocity (const float v)            {velocity_ = v;}
         virtual void setArrivalTime (const double at)       {value_= at;}
         virtual void setState (const FMState state)         {state_ = state;}
+        virtual void setDefault();
 
-        // Occupied means velocity 0 but not vice-versa.
         /**
-         * Set the occupancy_
+         * Set the occupancy_. Occupied means velocity 0 but not vice-versa.
          *
-         * IMPORTANT NOTE: a flase occupancy sets the velocity also to 0.
+         * IMPORTANT NOTE: a false occupancy sets the velocity also to 0.
          */
         virtual void setOccupancy(const bool o) {
             occupancy_ = o;
@@ -73,11 +73,10 @@ class FMCell : public Cell{
         virtual float getVelocity () const                  {return velocity_;}
         virtual FMState getState () const                   {return state_;}
 
-        inline bool isObstacle() const;
+        virtual bool isObstacle() const;
 
     protected:
-        //value_ is in this case the time of arrival.
-        FMState state_;  /*!< State of the cell */
+        FMState state_;   /*!< State of the cell */
         float velocity_;  /*!< Wave propagation velocity through this cell */
 };
 

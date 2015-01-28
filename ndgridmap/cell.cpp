@@ -10,3 +10,8 @@ ostream& operator <<
     os << "\t" << "Value: " 	<< c.value_ << endl;
     return os;
 }
+
+void Cell::setDefault
+() {
+    value_ = -1;
+}

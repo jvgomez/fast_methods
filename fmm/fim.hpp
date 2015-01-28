@@ -35,20 +35,9 @@ template < class grid_t > class FastIterativeMethod : public FastMarching <grid_
 
     public:
         FastIterativeMethod() : FastMarching<grid_t>("FIM") {}
+        FastIterativeMethod(const std::string& name) : FastMarching<grid_t>(name) {}
 
-        virtual ~FastIterativeMethod <grid_t>() {}
-
-         /**
-          * Sets the input grid in which operations will be performed.
-          *
-          * @param g input grid map.
-          */
-        virtual void setEnvironment
-        (grid_t * g) {
-            //grid_ = g;
-            FastMarching<grid_t>::setEnvironment(g);
-            //leafsize_ = grid_->getLeafSize();
-        }
+        virtual ~FastIterativeMethod() {}
 
         /**
          * Internal function although it is set to public so it can be accessed if desired.
@@ -60,34 +49,39 @@ template < class grid_t > class FastIterativeMethod : public FastMarching <grid_
          */
         virtual void init
         () {
+            Solver<grid_t>::init();
             int j = 0;
             int n_neighs = 0;
-            for (int &i: init_points_) {// For each initial point
+
+            for (const int& i: init_points_) {
+                grid_->getCell(i).setArrivalTime(0);
+                grid_->getCell(i).setState(FMState::FROZEN);
+
                 n_neighs = grid_->getNeighbors(i, neighbors);
                 for (int s = 0; s < n_neighs; ++s) {// For each neighbor
                     j = neighbors[s];
-                    if ( (grid_->getCell(j).getState() == FMState::OPEN) && (grid_->getCell(j).getVelocity() != 0)) {// Only OPEN neighbors and with velocity
+                    if ( (grid_->getCell(j).getState() == FMState::OPEN) && !grid_->getCell(j).isObstacle()) {
                         active_list_.push_back(j);
                         grid_->getCell(j).setState(FMState::NARROW);
                     }
                 }
             }
-        } // init()
+        }
 
         /**
          * Main Fast Iterative Method Function. It requires to call first the setInitialPoints() function.
          *
          * @see setInitialPoints()
          */
-        virtual void computeFM
+        virtual void compute
         () {
-            double q=-1;
-            double p=-1;
+            double q =-1;
+            double p =-1;
             int n_neighs;
             int j = 0;
 
-            while(active_list_.size() != 0){ //while active list is not zero
-                for (std::list<int>::iterator i=active_list_.begin(); i!=active_list_.end(); ++i) {// for each cell of active_list
+            while(!active_list_.empty()){
+                for (std::list<int>::iterator i = active_list_.begin(); i!=active_list_.end(); ++i) {// for each cell of active_list
                     p = grid_->getCell(*i).getArrivalTime();
                     q = solveEikonal(*i);
                     if(p>q)
@@ -111,17 +105,12 @@ template < class grid_t > class FastIterativeMethod : public FastMarching <grid_
         }//compute fm
 
     protected:
-        //using FastMarching<grid_t>::name_;
         using FastMarching<grid_t>::grid_;
         using FastMarching<grid_t>::neighbors;
         using FastMarching<grid_t>::solveEikonal;
         using FastMarching<grid_t>::init_points_;
-        //using FastMarching<grid_t>::leafsize_;
-        //using FastMarching<grid_t>::Tvalues;
-        //using FastMarching<grid_t>::TTvalues;
-        //using FastMarching<grid_t>::sumT;
-        //using FastMarching<grid_t>::sumTT;
 
+    private:
         std::list<int> active_list_; /*!< List wich stores the narrow band of each iteration. */
         double E_= 0; /*!< Error threshold value that reveals if a cell has converged. */
 };

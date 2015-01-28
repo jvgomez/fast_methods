@@ -62,11 +62,9 @@ The code provides a copy of the CImg library. This will take care of loading and
 The example code uses png, therefore examples of libraries to be installed are libpng, Magick++, ImageMagick, etc.
 
 ### Boost dependencies
-The current version relies on header-only Boost 1.55 libraries (probably previous versions work as well). The current CMakeLists.txt assumes you have uncompressed boost into the home directory.
+When using Ubuntu, you should install Boost libraries (tested with 1.55+):
 
-    include_directories (~/boost_1_55_0)
-
-Change this line if necessary
+    sudo apt-get install libboost-all-dev
 
 ## Documentation
 
@@ -105,11 +103,6 @@ Although there are a lot of folders, they are quite simple. It is organized this
 + scripts: matlab scripts to parse outputs.
 + thirdparty: others' software included.
 
-## Known issues:
-
-- There is not reset in the grid values if the same grid is used in Fast Marching Methods twice. Be aware of this, it can lead to wrong FMM results.
-
-
 ## TODO
 
 At the top of each file there are specific TODO comments.
@@ -120,4 +113,4 @@ At the top of each file there are specific TODO comments.
 - Substitute arg parsing with boost_options.
 - Remove relative file dependencies (#include "../../fmm", filename = "../../data", CMakeLists.txt deps, etc).
 - Implement a grid copy constructor and operator, clear, etc.
-- Review code of fm2star, fm2directional and auxiliar classes (gridplotter, etc) not checked yet but it works well.
+- Review code of fm2star, fm2directional and auxiliar classes (gridplotter, etc) not checked yet but they work well.

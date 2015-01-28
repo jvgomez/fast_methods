@@ -36,19 +36,19 @@ class Cell {
         /**
           * Default constructor: sets value_ to -1 and occupancy_ to true (clear cell, not occupied).
           */
-        Cell() : value_(-1), occupancy_(true) {};
+        Cell() : value_(-1), occupancy_(true) {}
 
        /**
          Constructor overload.
          * @param v value_ initialization.
          * @param o occupancy_ initialization, true by default.
          */
-        Cell(float v, bool o = true) : value_(v), occupancy_(o) {};
+        Cell(float v, bool o = true) : value_(v), occupancy_(o) {}
 
         /**
           * Destructor not used.
          */
-        virtual ~Cell() {};
+        virtual ~Cell() {}
 
         // NOTE: no checks are done (out of bounds, correct states, etc) no improve efficienty.
         // TODO: overload functions to add the option of input checking.
@@ -57,6 +57,7 @@ class Cell {
         virtual void setOccupancy(const bool o)          {occupancy_ = o;}
         virtual std::string type()                       {return std::string("Cell - Basic cell");}
         virtual void setIndex(const int i)               {index_ = i;}
+        virtual void setDefault();
 
         // This function gets no arguments in this case, but in the derivated classes it could. The ...
         // says that parameters could be given (or not).

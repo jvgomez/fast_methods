@@ -34,32 +34,11 @@
 
 template < class grid_t > class FMM_Untidy : public FastMarching <grid_t> {
 
-    using FastMarching<grid_t>::grid_;
-    using FastMarching<grid_t>::neighbors;
-    using FastMarching<grid_t>::solveEikonal;
-    using FastMarching<grid_t>::init_points_;
-    //using FastMarching<grid_t>::leafsize_;
-    using FastMarching<grid_t>::Tvalues;
-    using FastMarching<grid_t>::TTvalues;
-    using FastMarching<grid_t>::sumT;
-    using FastMarching<grid_t>::sumTT;
-
     public:
-        FMM_Untidy <grid_t> () {
-            Solver<grid_t>::Solver("UFMM");
-        }
-        virtual ~FMM_Untidy <grid_t>() {}
+        FMM_Untidy () : FastMarching<grid_t>("UFMM") {}
+        FMM_Untidy (const std::string& name) : FastMarching<grid_t>(name) {}
 
-          /**
-          * Sets the input grid in which operations will be performed.
-          *
-          * @param g input grid map.
-          */
-        virtual void setEnvironment
-        (grid_t * g) {
-            grid_ = g;
-            //leafsize_ = grid_->getLeafSize();
-        }
+        virtual ~FMM_Untidy() {}
 
         /**
          * Internal function although it is set to public so it can be accessed if desired.
@@ -71,6 +50,7 @@ template < class grid_t > class FMM_Untidy : public FastMarching <grid_t> {
          */
         virtual void init
         () {
+            Solver<grid_t>::init();
             int j = 0;
             int n_neighs = 0;
             for (int &i: init_points_) { // For each initial point
@@ -102,7 +82,7 @@ template < class grid_t > class FMM_Untidy : public FastMarching <grid_t> {
          *
          * @see setInitialPoints()
          */
-        virtual void computeFM
+        virtual void compute
         () {
             int j= 0;
             int n_neighs = 0;
@@ -134,6 +114,12 @@ template < class grid_t > class FMM_Untidy : public FastMarching <grid_t> {
         }
 
     protected:
+        using FastMarching<grid_t>::grid_;
+        using FastMarching<grid_t>::neighbors;
+        using FastMarching<grid_t>::solveEikonal;
+        using FastMarching<grid_t>::init_points_;
+
+    private:
         FMUntidyqueue narrow_band_; /*!< Instance of the priority queue used. */
 };
 

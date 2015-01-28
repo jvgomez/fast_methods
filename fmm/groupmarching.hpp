@@ -33,34 +33,11 @@
 
 template < class grid_t > class GroupMarching : public FastMarching <grid_t> {
 
-    using FastMarching<grid_t>::name_;
-    using FastMarching<grid_t>::grid_;
-    using FastMarching<grid_t>::neighbors;
-    using FastMarching<grid_t>::solveEikonal;
-    using FastMarching<grid_t>::init_points_;
-    //using FastMarching<grid_t>::leafsize_;
-    using FastMarching<grid_t>::Tvalues;
-    using FastMarching<grid_t>::TTvalues;
-    using FastMarching<grid_t>::sumT;
-    using FastMarching<grid_t>::sumTT;
-
     public:
-        GroupMarching <grid_t> () {
-            Solver<grid_t>::Solver("GMM");
-        }
+        GroupMarching() : FastMarching<grid_t>("GMM") {}
+        GroupMarching(const std::string& name) : FastMarching<grid_t>(name) {}
 
-        virtual ~GroupMarching <grid_t>() {}
-
-         /**
-          * Sets the input grid in which operations will be performed.
-          *
-          * @param g input grid map.
-          */
-        virtual void setEnvironment
-        (grid_t * g) {
-            grid_ = g;
-            //leafsize_ = grid_->getLeafSize();
-        }
+        virtual ~GroupMarching() {}
 
          /**
          * Internal function although it is set to public so it can be accessed if desired.
@@ -72,11 +49,14 @@ template < class grid_t > class GroupMarching : public FastMarching <grid_t> {
          */
         virtual void init
         () {
+            Solver<grid_t>::init();
             deltau_= 1;
             int j = 0;
             int n_neighs = 0;
             tm_= std::numeric_limits<float>::infinity();
             for (int &i: init_points_) { // For each initial point
+                grid_->getCell(i).setArrivalTime(0);
+                grid_->getCell(i).setState(FMState::FROZEN);
                 n_neighs = grid_->getNeighbors(i, neighbors);
                 for (int s = 0; s < n_neighs; ++s){  // For each neighbor
                     j = neighbors[s];
@@ -100,7 +80,7 @@ template < class grid_t > class GroupMarching : public FastMarching <grid_t> {
          *
          * @see setInitialPoints()
          */
-        virtual void computeFM
+        virtual void compute
         () {
             while(gamma_.size() != 0) {
                 int n_neighs;
@@ -162,6 +142,11 @@ template < class grid_t > class GroupMarching : public FastMarching <grid_t> {
         }//compute fm
 
     protected:
+        using FastMarching<grid_t>::grid_;
+        using FastMarching<grid_t>::neighbors;
+        using FastMarching<grid_t>::solveEikonal;
+        using FastMarching<grid_t>::init_points_;
+
         double tm_; /*!< Global bound that determines the group of cells of gamma that will be updated in each step. */
         double deltau_; /*!< For each updating step, tm_ is increased by this value. */
         std::list<int> gamma_; /*!< List wich stores the narrow band of each iteration. */

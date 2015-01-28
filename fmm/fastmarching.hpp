@@ -68,75 +68,32 @@
 template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FastMarching : public Solver<grid_t> {
 
     public:
-        FastMarching() : Solver<grid_t>("FMM") {}
-
+        FastMarching() : Solver<grid_t>("FMMDary") {}
         FastMarching(const std::string& name) : Solver<grid_t>(name) {}
 
         virtual ~FastMarching <grid_t, heap_t>() {}
 
-         /**
-          * Sets the input grid in which operations will be performed.
-          *
-          * @param g input grid map.
-          */
-        virtual void setEnvironment
-        (grid_t * g) {
-            Solver<grid_t>::setEnvironment(g);
-            narrow_band_.setMaxSize(grid_->size());
-        }
-
         /**
-         * Sets the initial points by the indices in the nDGridMap and
-         * computes the initialization of the Fast Marching Method calling
-         * the init() function.
-         *
-         * @param init_points contains the indices of the init points.
-         *
-         * @param goal contains the index of the goal point. If -1 (default) no goal point is set.
-         *
-         * @see init()
-         */
-        virtual void setInitialAndGoalPoints
-        (const std::vector<int> & init_points, int goal_idx = -1) {
-            Solver<grid_t>::setInitialAndGoalPoints(init_points, goal_idx);
-            for (const int &i: init_points) {
-                grid_->getCell(i).setArrivalTime(0);
-                grid_->getCell(i).setState(FMState::FROZEN);
-            }
-
-            init();
-        }
-
-        /**
-         * Sets the initial points by the indices in the nDGridMap and
-         * computes the initialization of the Fast Marching Method calling
-         * the init() function.
-         *
-         * @param init_point contains the indices of the init points.
-         *
-         * @see init()
-         */
-        virtual void setInitialPoints
-        (const std::vector<int> & init_points) {
-            setInitialAndGoalPoints(init_points);
-        }
-
-         /**
-         * Internal function although it is set to public so it can be accessed if desired.
-         *
-         * Computes the Fast Marching Method initialization from the initial points given. Programmed following the paper:
-            A. Valero, J.V. Gómez, S. Garrido and L. Moreno, The Path to Efficiency: Fast Marching Method for Safer,
-            More Efficient Mobile Robot Trajectories, IEEE Robotics and Automation Magazine, Vol. 20, No. 4, 2013.
-         *
-         * @see setInitialAndGoalPoints()
-         */
+        * Internal function although it is set to public so it can be accessed if desired.
+        *
+        * Computes the Fast Marching Method initialization from the initial points given. Programmed following the paper:
+          A. Valero, J.V. Gómez, S. Garrido and L. Moreno, The Path to Efficiency: Fast Marching Method for Safer,
+          More Efficient Mobile Robot Trajectories, IEEE Robotics and Automation Magazine, Vol. 20, No. 4, 2013.
+        *
+        * @see setInitialAndGoalPoints()
+        */
         virtual void init
         () {
             // TODO: neighbors computed twice for every cell. We can save time here.
-            // TODO: check if the previous steps have been done (loading grid map and setting initial points.)
+            Solver<grid_t>::init();
+            narrow_band_.setMaxSize(grid_->size());
+
             int j = 0;
             int n_neighs = 0;
             for (int &i: init_points_) { // For each initial point
+                grid_->getCell(i).setArrivalTime(0);
+                grid_->getCell(i).setState(FMState::FROZEN);
+
                 n_neighs = grid_->getNeighbors(i, neighbors);
                 for (int s = 0; s < n_neighs; ++s){  // For each neighbor
                     j = neighbors[s];
@@ -263,14 +220,15 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FastMarching
         using Solver<grid_t>::init_points_;
         using Solver<grid_t>::goal_idx_;
 
-        heap_t narrow_band_; /*!< Instance of the heap used. */
-
         double sumT; /*!< Auxiliar value wich computes T1+T2+T3... Useful for generalizing the Eikonal solver. */
         double sumTT; /*!< Auxiliar value wich computes T1^2+T2^2+T3^2... Useful for generalizing the Eikonal solver. */
 
         std::array<double, grid_t::getNDims()> Tvalues;  /*!< Auxiliar array with values T0,T1...Tn-1 variables in the Discretized Eikonal Equation. */
         std::array<double, grid_t::getNDims()> TTvalues;  /*!< Auxiliar array with values T0^2,T1^2...Tn-1^2 variables in the Discretized Eikonal Equation. */
         std::array <int, 2*grid_t::getNDims()> neighbors;  /*!< Auxiliar array which stores the neighbor of each iteration of the computeFM() function. */
+
+    private:
+        heap_t narrow_band_; /*!< Instance of the heap used. */
 };
 
 #endif /* FASTMARCHING_H_*/

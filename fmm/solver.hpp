@@ -66,9 +66,11 @@ class Solver {
           *
           * @param g input grid map.
           */
-        virtual void setEnvironment
+        void setEnvironment
         (grid_t * g) {
             grid_ = g;
+            if (!grid_->isClear())
+                grid_->clear();
         }
 
         /**
@@ -82,16 +84,25 @@ class Solver {
          *
          * @see init()
          */
-        virtual void setInitialAndGoalPoints
+        void setInitialAndGoalPoints
         (const std::vector<int> & init_points, int goal_idx = -1) {
             init_points_ = init_points;
             goal_idx_ = goal_idx;
         }
 
-
-        virtual void setInitialPoints(const std::vector<int> & init_points)
+        void setInitialPoints(const std::vector<int> & init_points)
         {
             setInitialAndGoalPoints(init_points);
+        }
+
+        virtual void init
+        () {
+            if (!sanityChecks())
+            {
+                console::error("Global sanity checks not successful.");
+                exit(1);
+            }
+            grid_->setClear(false);
         }
 
         virtual void compute() = 0;
@@ -102,6 +113,15 @@ class Solver {
         }
 
     protected:
+
+        bool sanityChecks
+        () {
+            if (grid_ == NULL) return false;
+            if (!grid_->isClear()) return false;
+            if (init_points_.empty()) return false;
+            return true;
+        }
+
         grid_t* grid_; /*!< Main container. */
 
         std::string name_;

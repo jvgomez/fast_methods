@@ -60,31 +60,20 @@ template <class T, size_t ndims> class nDGridMap {
 
     public:
 
-     /**
-       Default constructor sets leafsize_ = 1.0f;
-       */
-        nDGridMap<T,ndims>() {leafsize_ = 1.0f;}
-
       /**
-       Overloaded constructor.
+       Constructor.
        *
        * @param dimsize constains the size of each dimension.
-       * @param leafsize real cell size (assumed to be cubic). 0.05m by default.
+       * @param leafsize real cell size (assumed to be cubic). 1 unit by default.
        */
-        nDGridMap<T,ndims>
-        (const std::array<int, ndims> & dimsize, const float leafsize = 1.0f) {
-            leafsize_ = leafsize;
-            ncells_= 1;
-            n_neighs = 0;
-
+        nDGridMap
+        (const std::array<int, ndims> & dimsize, const float leafsize = 1.0f) :
+        leafsize_(leafsize),
+        clear_(true) {
             resize(dimsize);
         }
 
-       /**
-       Default destructor
-       */
-        virtual ~nDGridMap<T,ndims>() {};
-
+        virtual ~nDGridMap<T,ndims>() {}
 
         /**
          * Resizes the grid.
@@ -101,14 +90,7 @@ template <class T, size_t ndims> class nDGridMap {
             for (int i = 0; i < ndims; ++i) {
                 ncells_ *= dimsize_[i];
                 d_[i] = ncells_;
-
             }
-
-            /*// Computing the auxiliar array dd_ for 8-connectivity neighbours.
-            dd_[0] = d_[0];
-            for (int i = 1; i < ndims; ++i)
-                dd_[i] *= d_[i] - dd_[i-1];
-            */
 
             //Resizing gridmap and initializing with default values.
             cells_.clear();
@@ -137,11 +119,9 @@ template <class T, size_t ndims> class nDGridMap {
             return cells_[idx];
         }
 
-        float getLeafSize() const {return leafsize_;}
+        float getLeafSize() const { return leafsize_; }
 
-        void setLeafSize(const float leafsize) {leafsize_=leafsize;}
-
-        //int getNDims() const {return ndims;}
+        void setLeafSize(const float leafsize) { leafsize_=leafsize; }
 
         /*
          * @see operator[]
@@ -152,9 +132,7 @@ template <class T, size_t ndims> class nDGridMap {
             return cells_[idx];
             }
 
-
         std::array<int, ndims> getDimSizes() const     { return dimsize_;}
-
 
          /**
          * For a cell with index idx, obtains the minimum value of the neigbours in dimension dim.
@@ -282,8 +260,6 @@ template <class T, size_t ndims> class nDGridMap {
             }
         }
 
-
-
         /**
          * Transforms from index coordinates to coordinates.
          *
@@ -367,9 +343,8 @@ template <class T, size_t ndims> class nDGridMap {
         (const std::array<int, ndims> & coords) {
             int idx;
             coord2idx(coords, idx);
-            std::cout << idx << std::endl;
+            std::cout << idx << '\n';
         }
-
 
         int size
         () const {
@@ -380,14 +355,31 @@ template <class T, size_t ndims> class nDGridMap {
         @return the maximum value of the cells within the grid.
          * */
         double getMaxValue
-        () {
+        () const {
             double max = 0;
             for (T & c:cells_) {
                 if (!isinf(c.getValue()) && c.getValue() > max)
                     max = c.getValue();
             }
             return max;
-        };
+        }
+
+        bool isClear
+        () const {
+            return clear_;
+        }
+
+        void setClear
+        (const bool c) {
+            clear_ = c;
+        }
+
+        void clear
+        () {
+            for (T & c:cells_)
+                c.setDefault();
+            clear_ = true;
+        }
 
         /** Makes the number of dimensions of the grid available at compilation time.
         @return number of dimensions of the grid.
@@ -400,6 +392,7 @@ template <class T, size_t ndims> class nDGridMap {
         std::array<int, ndims> dimsize_;  /*!< Contains the size of each dimension. */
         float leafsize_;  /*!< Real size of the cells. It is assumed that the cells in the grid are cubic. */
         int ncells_;  /*!< Number of cells in the grid (size) */
+        bool clear_;  /*!< Flag to indicate if the grid is ready to use. */
 
         // Auxiliar vectors to speed things up.
         std::array<int, ndims> d_;  /*!< Auxiliar array to speed up neighbor and indexing generalization: stores parcial multiplications of dimensions sizes. d_[0] = dimsize_[0];
