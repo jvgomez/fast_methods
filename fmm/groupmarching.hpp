@@ -39,20 +39,22 @@ template < class grid_t > class GroupMarching : public FastMarching <grid_t> {
 
         virtual ~GroupMarching() {}
 
-         /**
-         * Internal function although it is set to public so it can be accessed if desired.
-         *
-         * Computes the Group Marching Method initialization from the initial points given. Programmed following the paper:
-            S. Kim, An O(N) Level Set Method for Eikonal Equations, SIAM J. Sci. Comput., 22(6), 2178–2193.
+        /**
+         * Main Group Marching Function. It requires to call first the setInitialPoints() function.
          *
          * @see setInitialPoints()
          */
-        virtual void setup
+        virtual void compute
         () {
-            Solver<grid_t>::setup();
-            deltau_= 1;
+            if (!setup_)
+                setup();
+
+            int n_neighs;
             int j = 0;
-            int n_neighs = 0;
+            deltau_ = 1;
+            bool stopWavePropagation = false;
+
+            // Algorithm initialization
             tm_= std::numeric_limits<float>::infinity();
             for (int &i: init_points_) { // For each initial point
                 grid_->getCell(i).setArrivalTime(0);
@@ -73,24 +75,12 @@ template < class grid_t > class GroupMarching : public FastMarching <grid_t> {
                     } // neighbors open.
                 } // For each neighbor.
             } // For each initial point.
-        }//init
 
-        /**
-         * Main Group Marching Function. It requires to call first the setInitialPoints() function.
-         *
-         * @see setInitialPoints()
-         */
-        virtual void compute
-        () {
-            if (!setup_)
-                setup();
+            // Main loop
+            while(!stopWavePropagation && !gamma_.empty()) {
 
-            while(gamma_.size() != 0) {
-                int n_neighs;
-                int j = 0;
-    //M1
                 tm_ += deltau_;
-    //M2
+
                 std::list<int>::reverse_iterator k = gamma_.rbegin();
                 std::list<int>::iterator i = k.base();//iterator points to the next element the reverse_iterator is currently pointing to
                 i--;
@@ -99,6 +89,7 @@ template < class grid_t > class GroupMarching : public FastMarching <grid_t> {
                 q--;//the end of a reverse list is the first element of that list
                 //This is needed because some functions, like std::list::erase, do not work with reverse iterators
 
+                // First pass
                 for( ; i!=q; --i) {//for each gamma in the reverse order
                     if( grid_->getCell(*i).getArrivalTime() <= tm_) {
                         n_neighs = grid_->getNeighbors(*i, neighbors);
@@ -114,8 +105,9 @@ template < class grid_t > class GroupMarching : public FastMarching <grid_t> {
                         }//for each neighbor of gamma
                     }
                 }//for each gamma in the reverse order
-    //M3
-                double narrow_size= gamma_.size();
+
+                // Second pass
+                const double narrow_size = gamma_.size();
                 i = gamma_.begin();
                 for(int z = 0; z < narrow_size; ++z) {//for each gamma in the forward order
                     if( grid_->getCell(*i).getArrivalTime()<= tm_) {
@@ -136,21 +128,42 @@ template < class grid_t > class GroupMarching : public FastMarching <grid_t> {
                             }
                         }//for each neighbor of gamma
                     grid_->getCell(*i).setState(FMState::FROZEN);
+                    if (*i == goal_idx_)
+                        stopWavePropagation = true;
                     i = gamma_.erase(i);
                     }
                     else
                         ++i;
                 }//for each gamma in the forward order
             }//while gamma is not zero
-        }//compute fm
+        }//compute
+
+        virtual void clear
+        () {
+            FastMarching<grid_t>::clear();
+            gamma_.clear();
+            tm_ = 0;
+            deltau_ = 0;
+        }
+
+        virtual void reset
+        () {
+            FastMarching<grid_t>::reset();
+            gamma_.clear();
+            tm_ = 0;
+            deltau_ = 0;
+        }
 
     protected:
         using FastMarching<grid_t>::grid_;
         using FastMarching<grid_t>::neighbors;
         using FastMarching<grid_t>::solveEikonal;
         using FastMarching<grid_t>::init_points_;
+        using FastMarching<grid_t>::goal_idx_;
+        using FastMarching<grid_t>::setup;
         using FastMarching<grid_t>::setup_;
 
+    private:
         double tm_; /*!< Global bound that determines the group of cells of gamma that will be updated in each step. */
         double deltau_; /*!< For each updating step, tm_ is increased by this value. */
         std::list<int> gamma_; /*!< List wich stores the narrow band of each iteration. */

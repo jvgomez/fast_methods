@@ -26,7 +26,7 @@
 #include "fmcell.h"
 
 
-/** 
+/**
  * This struct is used a comparator for the heap. Since a minimum-heap
  * is desired the operation checked is param1 > param2 as seen in this
  * [Stack Overflow post](http://stackoverflow.com/a/16706002/2283531)
@@ -43,10 +43,10 @@ template <class cell_t>struct compare_cells_pq {
 template <class cell_t = FMCell> class FMPriorityQueue{
 
     public:
-        FMPriorityQueue () {};
+        FMPriorityQueue () {}
         FMPriorityQueue (const int & n) { heap_.reserve(n); }
-        virtual ~ FMPriorityQueue() {};
-        
+        virtual ~ FMPriorityQueue() {}
+
         /**
          * Set the maximum number of cells the heap will contain.
          * 
@@ -56,7 +56,7 @@ template <class cell_t = FMCell> class FMPriorityQueue{
         (const int & n) {
             heap_.reserve(n);
         }
-        
+
         /**
          * Adds an element to the heap.
          * 
@@ -66,18 +66,18 @@ template <class cell_t = FMCell> class FMPriorityQueue{
         (const cell_t * c) {
             heap_.push(c);
         }
-        
+
         /**
          * Priority queues do not allow key increasing. Therefore, it pushes the element again.
          * This is done for FMM-SFMM compatibility.
          * 
          * @param cell to add.
          */
-        void increase 
+        void increase
         (const cell_t * c) {
             heap_.push(c);
         }
-        
+
         /**
          * pops index of the element with lowest value and removes it from the heap.
          * 
@@ -89,13 +89,22 @@ template <class cell_t = FMCell> class FMPriorityQueue{
             heap_.pop();
             return idx;	
         }
-        
+
         size_t size
         () const {
             return heap_.size();
         }
-            
-        
+
+        bool empty
+        () const {
+            return heap_.empty();
+        }
+
+        void clear
+        () {
+            heap_.clear();
+        }
+
     protected:
         boost::heap::priority_queue<const cell_t *, boost::heap::compare<compare_cells_pq<cell_t> > > heap_;  /*!< The actual heap for FMCells. */
 };

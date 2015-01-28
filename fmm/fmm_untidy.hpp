@@ -89,7 +89,7 @@ template < class grid_t > class FMM_Untidy : public FastMarching <grid_t> {
 
             int j= 0;
             int n_neighs = 0;
-            while (narrow_band_.size() > 0) {
+            while (!narrow_band_.empty()) {
                 int idxMin = narrow_band_.index_min();
                 narrow_band_.popMinIdx();
                 n_neighs = grid_->getNeighbors(idxMin, neighbors);

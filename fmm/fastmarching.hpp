@@ -55,21 +55,21 @@
 
 #include "fmdata/fmcell.h"
 #include "fmdata/fmdaryheap.hpp"
+#include "fmdata/fmfibheap.hpp"
 #include "../ndgridmap/ndgridmap.hpp"
 #include "../console/console.h"
 
-// TODO: when computing FM on the same grid twice it could fail. It should reset the grid in that case.
 // TODO: check initial and goal points are not the same, not on obstacles, etc.
-// TODO: implement the heap type as a policy, since in derived classes setEnvironment 
-//       function has to be copied (FMM_Dary) in order to properly start the heap.
-
 // IMPORTANT TODO: substitute grid_->getCell(j).isOccupied() by grid_->getCell(j).getVelocity() == 0 (conceptually is not the same).
 
 template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FastMarching : public Solver<grid_t> {
 
     public:
-        FastMarching() : Solver<grid_t>("FMMDary") {}
-        FastMarching(const std::string& name) : Solver<grid_t>(name) {}
+        FastMarching(const std::string& name = "FMMDary") : Solver<grid_t>(name) {
+            // TODO: try to automate this.
+            //if (static_cast<FMFibHeap>(heap_t))
+             //   name_ = "FMMFib";
+        }
 
         virtual ~FastMarching <grid_t, heap_t>() {}
 
@@ -84,7 +84,6 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FastMarching
         */
         virtual void setup
         () {
-            // TODO: neighbors computed twice for every cell. We can save time here.
             Solver<grid_t>::setup();
             narrow_band_.setMaxSize(grid_->size());
         }
@@ -93,7 +92,6 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FastMarching
         //IMPORTANT NOTE: Assuming inc(1) = inc(y) =...= leafsize_
         // Possible improvement: If we include the neighbors in the cells information
         // this could be (most probably) speeded up.
-        // This implementation is focused to be used with any number of dimensions.
 
          /**
          * Solves the Eikonal equation for a given cell. This function is generalized
@@ -105,8 +103,7 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FastMarching
          */
         virtual double solveEikonal
         (const int & idx) {
-            // TODO: Here neighbors are computed and then in the computeFM. There should be a way to avoid computing
-            // neighbors twice.
+            // TODO: neighbors computed twice for every cell. We can save time here.
             int a = grid_t::getNDims(); // a parameter of the Eikonal equation.
 
             double updatedT;
@@ -165,7 +162,7 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FastMarching
             bool stopWavePropagation = 0;
 
             // Main loop.
-            while (!stopWavePropagation && narrow_band_.size() > 0) {
+            while (!stopWavePropagation && !narrow_band_.empty()) {
                 int idxMin = narrow_band_.popMinIdx();
                 n_neighs = grid_->getNeighbors(idxMin, neighbors);
                 grid_->getCell(idxMin).setState(FMState::FROZEN);
@@ -194,6 +191,18 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FastMarching
                         stopWavePropagation = true;
                 } // For each neighbor.
             } // while narrow band not empty
+        }
+
+        virtual void clear
+        () {
+            Solver<grid_t>::clear();
+            narrow_band_.clear();
+        }
+
+        virtual void reset
+        () {
+            Solver<grid_t>::reset();
+            narrow_band_.clear();
         }
 
     protected:

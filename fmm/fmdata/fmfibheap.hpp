@@ -76,12 +76,12 @@ template <class cell_t = FMCell> class FMFibHeap {
             heap_.pop();
             return idx;	
         }
-        
+
         size_t size
         () const {
             return heap_.size();
         }
-        
+
         /**
          * Updates the position of the cell in the heap. Its priority can increase or decrease.
          * 
@@ -93,7 +93,7 @@ template <class cell_t = FMCell> class FMFibHeap {
         (const cell_t * c) {
             heap_.update(handles_[c->getIndex()], c);
         }
-        
+
         /**
          * Updates the position of the cell in the heap. Its priority can only increase.
          * It is more efficient than the update() function if it is ensured that the priority
@@ -107,8 +107,18 @@ template <class cell_t = FMCell> class FMFibHeap {
         (const cell_t * c) {
             heap_.increase(handles_[c->getIndex()],c);
         }
-            
-        
+
+        bool empty
+        () const {
+            return heap_.empty();
+        }
+
+        void clear
+        () {
+            heap_.clear();
+            handles_.clear();
+        }
+
     protected:
         fib_heap_t heap_;  /*!< The actual heap for cell_t. */
         std::vector<handle_t> handles_;  /*!< Stores the handles of each cell by keeping the indices: handles_(0) is the handle for

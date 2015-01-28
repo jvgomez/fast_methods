@@ -85,6 +85,11 @@ class FMUntidyqueue {
             return index_pop;
         }
 
+        bool empty
+        () const {
+            return queue_.empty();
+        }
+
     protected:
         levelset::PriorityQueue<const FMCell * > queue_; /*!< Priority queue that stores cells of the narrow band. */
 };

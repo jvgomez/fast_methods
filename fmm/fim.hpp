@@ -40,19 +40,6 @@ template < class grid_t > class FastIterativeMethod : public FastMarching <grid_
         virtual ~FastIterativeMethod() {}
 
         /**
-         * Internal function although it is set to public so it can be accessed if desired.
-         *
-         * Computes the Fast Iterative Method initialization from the initial points given. Programmed following the paper:
-            W. Jeong and R. Whitaker, A Fast Iterative Method for Eiknal Equations, SIAM J. Sci. Comput., 30(5), 2512–2534.
-         *
-         * @see setInitialPoints()
-         */
-        virtual void setup
-        () {
-            Solver<grid_t>::setup();
-        }
-
-        /**
          * Main Fast Iterative Method Function.
          *
          * @see setInitialPoints()
@@ -66,6 +53,7 @@ template < class grid_t > class FastIterativeMethod : public FastMarching <grid_
             double p =-1;
             int n_neighs = 0;
             int j = 0;
+            bool stopWavePropagation = 0;
 
             // Algorithm initialization.
             for (const int& i: init_points_) {
@@ -83,7 +71,7 @@ template < class grid_t > class FastIterativeMethod : public FastMarching <grid_
             }
 
             // Main loop.
-            while(!active_list_.empty()) {
+            while(!stopWavePropagation && !active_list_.empty()) {
                 for (std::list<int>::iterator i = active_list_.begin(); i!=active_list_.end(); ++i) {// for each cell of active_list
                     p = grid_->getCell(*i).getArrivalTime();
                     q = solveEikonal(*i);
@@ -100,11 +88,25 @@ template < class grid_t > class FastIterativeMethod : public FastMarching <grid_
                             }
                         }// For each neighbor of converged cells of active_list
                     grid_->getCell(*i).setState(FMState::FROZEN);
+                    if (*i == goal_idx_)
+                        stopWavePropagation = true;
                     i = active_list_.erase(i);
                     i--;
                     }// if the cell has converged
                 }// for each cell of active_list
-            }//while active_list is not zero
+            }//while active_list is not empty
+        }
+
+        virtual void clear
+        () {
+            FastMarching<grid_t>::clear();
+            active_list_.clear();
+        }
+
+        virtual void reset
+        () {
+            FastMarching<grid_t>::reset();
+            active_list_.clear();
         }
 
     protected:
@@ -112,6 +114,8 @@ template < class grid_t > class FastIterativeMethod : public FastMarching <grid_
         using FastMarching<grid_t>::neighbors;
         using FastMarching<grid_t>::solveEikonal;
         using FastMarching<grid_t>::init_points_;
+        using FastMarching<grid_t>::goal_idx_;
+        using FastMarching<grid_t>::setup;
         using FastMarching<grid_t>::setup_;
 
     private:

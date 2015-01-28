@@ -40,26 +40,31 @@ int main(int argc, const char ** argv)
     FMGrid2D grid_fmm (dimsize);
 
     Coord2D init_point = {150, 150};
+    Coord2D goal_point = {250, 250};
     vector<int> init_points;
-    int idx;
+    int idx, goal_idx;
     grid_fmm.coord2idx(init_point , idx);
     init_points.push_back(idx);
+    grid_fmm.coord2idx(goal_point , goal_idx);
 
     std::vector<Solver<FMGrid2D>*> solvers;
     solvers.push_back(new FastMarching<FMGrid2D>);
+    solvers.push_back(new FastMarching<FMGrid2D, FMFibHeap<FMCell> >("FMFib"));
+    solvers.push_back(new FastMarching<FMGrid2D, FMPriorityQueue<FMCell> >("SFMM"));
     solvers.push_back(new FastIterativeMethod<FMGrid2D>);
     solvers.push_back(new GroupMarching<FMGrid2D>);
-    //solvers.push_back(new FMM_Untidy<UFMGrid2D>);
+    //solvers.push_back(new FMM_Untidy<UFMGrid2D>)
 
     for (Solver<FMGrid2D>* s :solvers)
     {
         s->setEnvironment(&grid_fmm);
             start = system_clock::now();
-        s->setInitialPoints(init_points);
+        //s->setInitialPoints(init_points);
+        s->setInitialAndGoalPoints(init_points, goal_idx);
         s->compute();
             end = system_clock::now();
             time_elapsed = duration_cast<milliseconds>(end-start).count();
-            cout << "\tElapsed "<< s->getName() <<" heap time: " << time_elapsed << " ms" << '\n';
+            cout << "\tElapsed "<< s->getName() <<" time: " << time_elapsed << " ms" << '\n';
 
         std::string filename ("test_");
         filename += s->getName();

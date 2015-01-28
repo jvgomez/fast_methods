@@ -65,7 +65,6 @@ template <class cell_t = FMCell> class FMDaryHeap {
             handles_[c->getIndex()] = heap_.push(c);
         }
         
-        
         /**
          * pops index of the element with lowest value and removes it from the heap.
          * 
@@ -109,7 +108,17 @@ template <class cell_t = FMCell> class FMDaryHeap {
             heap_.increase(handles_[c->getIndex()],c);
         }
             
-        
+        void clear
+        () {
+            heap_.clear();
+            handles_.clear();
+        }
+
+        bool empty
+        () const {
+            return heap_.empty();
+        }
+
     protected:
         d_ary_heap_t heap_;  /*!< The actual heap for cell_t. */
         std::vector<handle_t> handles_;  /*!< Stores the handles of each cell by keeping the indices: handles_(0) is the handle for
