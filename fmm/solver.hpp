@@ -55,9 +55,9 @@ template <class grid_t>
 class Solver {
 
     public:
-        Solver() :name_("GenericSolver") {}
+        Solver() :name_("GenericSolver"), initialized_(false) {}
 
-        Solver(const std::string& name) : name_(name) {}
+        Solver(const std::string& name) : name_(name), initialized_(false) {}
 
         virtual ~Solver() {}
 
@@ -103,6 +103,7 @@ class Solver {
                 exit(1);
             }
             grid_->setClear(false);
+            initialized_ = true;
         }
 
         virtual void compute() = 0;
@@ -110,6 +111,20 @@ class Solver {
         const std::string& getName() const
         {
             return name_;
+        }
+
+        virtual void clear
+        () {
+            initialized_ = false;
+            init_points_.clear();
+            goal_idx_ = -1;
+            grid_ = NULL;
+        }
+
+        virtual void reset
+        () {
+            initialized_ = false;
+            grid_->clear();
         }
 
     protected:
@@ -125,6 +140,7 @@ class Solver {
         grid_t* grid_; /*!< Main container. */
 
         std::string name_;
+        bool initialized_;
 
         std::vector<int> init_points_;  /*!< Initial points. */
         int goal_idx_;

@@ -75,6 +75,9 @@ template < class grid_t > class FastIterativeMethod : public FastMarching <grid_
          */
         virtual void compute
         () {
+            if (!initialized_)
+                init();
+
             double q =-1;
             double p =-1;
             int n_neighs;
@@ -109,6 +112,7 @@ template < class grid_t > class FastIterativeMethod : public FastMarching <grid_
         using FastMarching<grid_t>::neighbors;
         using FastMarching<grid_t>::solveEikonal;
         using FastMarching<grid_t>::init_points_;
+        using FastMarching<grid_t>::initialized_;
 
     private:
         std::list<int> active_list_; /*!< List wich stores the narrow band of each iteration. */

@@ -84,6 +84,9 @@ template < class grid_t > class FMM_Untidy : public FastMarching <grid_t> {
          */
         virtual void compute
         () {
+            if (!initialized_)
+                init();
+
             int j= 0;
             int n_neighs = 0;
             while (narrow_band_.size() > 0) {
@@ -118,6 +121,7 @@ template < class grid_t > class FMM_Untidy : public FastMarching <grid_t> {
         using FastMarching<grid_t>::neighbors;
         using FastMarching<grid_t>::solveEikonal;
         using FastMarching<grid_t>::init_points_;
+        using FastMarching<grid_t>::initialized_;
 
     private:
         FMUntidyqueue narrow_band_; /*!< Instance of the priority queue used. */

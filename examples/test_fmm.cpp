@@ -56,7 +56,6 @@ int main(int argc, const char ** argv)
         s->setEnvironment(&grid_fmm);
             start = system_clock::now();
         s->setInitialPoints(init_points);
-        s->init();
         s->compute();
             end = system_clock::now();
             time_elapsed = duration_cast<milliseconds>(end-start).count();
@@ -67,5 +66,4 @@ int main(int argc, const char ** argv)
         filename += ".txt";
         GridWriter::saveGridValues(filename.c_str(), grid_fmm);
     }
-
 }

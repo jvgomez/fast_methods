@@ -82,6 +82,9 @@ template < class grid_t > class GroupMarching : public FastMarching <grid_t> {
          */
         virtual void compute
         () {
+            if (!initialized_)
+                init();
+
             while(gamma_.size() != 0) {
                 int n_neighs;
                 int j = 0;
@@ -146,6 +149,7 @@ template < class grid_t > class GroupMarching : public FastMarching <grid_t> {
         using FastMarching<grid_t>::neighbors;
         using FastMarching<grid_t>::solveEikonal;
         using FastMarching<grid_t>::init_points_;
+        using FastMarching<grid_t>::initialized_;
 
         double tm_; /*!< Global bound that determines the group of cells of gamma that will be updated in each step. */
         double deltau_; /*!< For each updating step, tm_ is increased by this value. */

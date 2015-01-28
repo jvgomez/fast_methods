@@ -178,6 +178,8 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FastMarching
          */
         virtual void compute
         () {
+            if (!initialized_)
+                init();
             // TODO: check if the previous steps have been done (initialization).
             int j= 0;
             int n_neighs = 0;
@@ -214,11 +216,11 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FastMarching
             } // while narrow band not empty
         }
 
-
     protected:
         using Solver<grid_t>::grid_;
         using Solver<grid_t>::init_points_;
         using Solver<grid_t>::goal_idx_;
+        using Solver<grid_t>::initialized_;
 
         double sumT; /*!< Auxiliar value wich computes T1+T2+T3... Useful for generalizing the Eikonal solver. */
         double sumTT; /*!< Auxiliar value wich computes T1^2+T2^2+T3^2... Useful for generalizing the Eikonal solver. */
