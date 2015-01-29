@@ -49,7 +49,7 @@
 #include <algorithm>
 #include <numeric>
 #include <fstream>
-#include <array>
+#include <vector>
 
 #include "solver.hpp"
 
@@ -71,8 +71,6 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FastMarching
              //   name_ = "FMMFib";
         }
 
-        virtual ~FastMarching <grid_t, heap_t>() {}
-
         /**
         * Internal function although it is set to public so it can be accessed if desired.
         *
@@ -86,6 +84,10 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FastMarching
         () {
             Solver<grid_t>::setup();
             narrow_band_.setMaxSize(grid_->size());
+
+            neighbors.resize(2*grid_->getNDims());
+            Tvalues.resize(grid_->getNDims());
+            TTvalues.resize(grid_->getNDims());
         }
 
 
@@ -104,13 +106,13 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FastMarching
         virtual double solveEikonal
         (const int & idx) {
             // TODO: neighbors computed twice for every cell. We can save time here.
-            int a = grid_t::getNDims(); // a parameter of the Eikonal equation.
+            int a = grid_->getNDims(); // a parameter of the Eikonal equation.
 
             double updatedT;
             sumT = 0;
             sumTT = 0;
 
-            for (int dim = 0; dim < grid_t::getNDims(); ++dim) {
+            for (int dim = 0; dim < grid_->getNDims(); ++dim) {
                 double minTInDim = grid_->getMinValueInDim(idx, dim);
                 if (!isinf(minTInDim)) {
                     Tvalues[dim] = minTInDim;
@@ -211,14 +213,14 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FastMarching
         using Solver<grid_t>::goal_idx_;
         using Solver<grid_t>::setup_;
 
-        std::array <int, 2*grid_t::getNDims()> neighbors;  /*!< Auxiliar array which stores the neighbor of each iteration of the computeFM() function. */
+        std::vector <int> neighbors;  /*!< Auxiliar vector which stores the neighbor of each iteration of the computeFM() function. */
 
     private:
         double sumT; /*!< Auxiliar value wich computes T1+T2+T3... Useful for generalizing the Eikonal solver. */
         double sumTT; /*!< Auxiliar value wich computes T1^2+T2^2+T3^2... Useful for generalizing the Eikonal solver. */
 
-        std::array<double, grid_t::getNDims()> Tvalues;  /*!< Auxiliar array with values T0,T1...Tn-1 variables in the Discretized Eikonal Equation. */
-        std::array<double, grid_t::getNDims()> TTvalues;  /*!< Auxiliar array with values T0^2,T1^2...Tn-1^2 variables in the Discretized Eikonal Equation. */
+        std::vector<double> Tvalues;  /*!< Auxiliar vector with values T0,T1...Tn-1 variables in the Discretized Eikonal Equation. */
+        std::vector<double> TTvalues;  /*!< Auxiliar vector with values T0^2,T1^2...Tn-1^2 variables in the Discretized Eikonal Equation. */
 
         heap_t narrow_band_; /*!< Instance of the heap used. */
 };
