@@ -35,47 +35,9 @@
 template < class grid_t > class FMM_Untidy : public FastMarching <grid_t> {
 
     public:
-        FMM_Untidy () : FastMarching<grid_t>("UFMM") {}
-        FMM_Untidy (const std::string& name) : FastMarching<grid_t>(name) {}
+        FMM_Untidy (const std::string& name = "UFMM") : FastMarching<grid_t>(name) {}
 
         virtual ~FMM_Untidy() {}
-
-        /**
-         * Internal function although it is set to public so it can be accessed if desired.
-         *
-         * Computes the Fast Iterative Method initialization from the initial points given. Programmed following the paper:
-            L. Yatziv, A.Bartesaghi and G. Sapiro, O(n) implementation of the fast marching algorithm, Journal of Computational Physics
-
-         * @see setInitialPoints()
-         */
-        virtual void init
-        () {
-            Solver<grid_t>::init();
-            int j = 0;
-            int n_neighs = 0;
-            for (int &i: init_points_) { // For each initial point
-                n_neighs = grid_->getNeighbors(i, neighbors);
-                for (int s = 0; s < n_neighs; ++s){  // For each neighbor
-                    j = neighbors[s];
-                    if ( (grid_->getCell(j).getState() == FMState::FROZEN) || grid_->getCell(j).isOccupied() || (grid_->getCell(j).getVelocity() == 0) ) // If Frozen,obstacle or velocity = 0
-                        continue;
-                    else {
-                        double new_arrival_time = solveEikonal(j);
-                        if (grid_->getCell(j).getState() == FMState::NARROW) { // Updating narrow band if necessary.
-                            if (new_arrival_time < grid_->getCell(j).getArrivalTime()) {
-                                grid_->getCell(j).setArrivalTime(new_arrival_time);
-                                narrow_band_.increase( &(grid_->getCell(j))) ;
-                            }
-                        }
-                        else {
-                            grid_->getCell(j).setState(FMState::NARROW);
-                            grid_->getCell(j).setArrivalTime(new_arrival_time);
-                            narrow_band_.push( &(grid_->getCell(j)) );
-                        }
-                    }
-                } // For each neighbor.
-            } // For each initial point.
-        } // init()
 
         /**
          * Main Untidy Fast Marching Function. It requires to call first the setInitialPoints() function inherited from Fast Marching.
@@ -84,12 +46,22 @@ template < class grid_t > class FMM_Untidy : public FastMarching <grid_t> {
          */
         virtual void compute
         () {
-            if (!initialized_)
-                init();
+            if (!setup_)
+                setup();
 
             int j= 0;
             int n_neighs = 0;
-            while (!narrow_band_.empty()) {
+            bool stopWavePropagation = false;
+
+            // Algorithm initialization
+            for (int &i: init_points_) { // For each initial point
+                grid_->getCell(i).setArrivalTime(0);
+                grid_->getCell(i).setState(FMState::FROZEN);
+                narrow_band_.push( &(grid_->getCell(i)) );
+            }
+
+            // Main loop
+            while (!stopWavePropagation && !narrow_band_.empty()) {
                 int idxMin = narrow_band_.index_min();
                 narrow_band_.popMinIdx();
                 n_neighs = grid_->getNeighbors(idxMin, neighbors);
@@ -113,7 +85,21 @@ template < class grid_t > class FMM_Untidy : public FastMarching <grid_t> {
                         } // neighbors open.
                     } // neighbors not frozen.
                 } // For each neighbor.
+                if (idxMin == goal_idx_)
+                    stopWavePropagation = true;
             } // while narrow band is not empty
+        }
+
+        virtual void clear
+        () {
+            FastMarching<grid_t>::clear();
+            narrow_band_.clear();
+        }
+
+        virtual void reset
+        () {
+            FastMarching<grid_t>::reset();
+            narrow_band_.clear();
         }
 
     protected:
@@ -121,7 +107,9 @@ template < class grid_t > class FMM_Untidy : public FastMarching <grid_t> {
         using FastMarching<grid_t>::neighbors;
         using FastMarching<grid_t>::solveEikonal;
         using FastMarching<grid_t>::init_points_;
-        using FastMarching<grid_t>::initialized_;
+        using FastMarching<grid_t>::goal_idx_;
+        using FastMarching<grid_t>::setup;
+        using FastMarching<grid_t>::setup_;
 
     private:
         FMUntidyqueue narrow_band_; /*!< Instance of the priority queue used. */

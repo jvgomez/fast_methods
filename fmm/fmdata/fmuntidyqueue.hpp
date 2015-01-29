@@ -90,6 +90,11 @@ class FMUntidyqueue {
             return queue_.empty();
         }
 
+        void clear
+        () {
+            queue_.clear();
+        }
+
     protected:
         levelset::PriorityQueue<const FMCell * > queue_; /*!< Priority queue that stores cells of the narrow band. */
 };

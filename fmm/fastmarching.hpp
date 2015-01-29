@@ -150,16 +150,16 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FastMarching
             if (!setup_)
                 setup();
 
+            int j = 0;
+            int n_neighs = 0;
+            bool stopWavePropagation = 0;
+
             // Algorithm initialization
             for (int &i: init_points_) { // For each initial point
                 grid_->getCell(i).setArrivalTime(0);
                 grid_->getCell(i).setState(FMState::FROZEN);
                 narrow_band_.push( &(grid_->getCell(i)) );
             }
-
-            int j = 0;
-            int n_neighs = 0;
-            bool stopWavePropagation = 0;
 
             // Main loop.
             while (!stopWavePropagation && !narrow_band_.empty()) {
