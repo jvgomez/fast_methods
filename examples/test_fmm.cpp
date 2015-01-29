@@ -2,7 +2,6 @@
 #include <cmath>
 #include <chrono>
 #include <array>
-#include <vector>
 #include <string>
 
 #include "../fmm/fmdata/fmcell.h"
@@ -27,16 +26,16 @@ using namespace std::chrono;
 
 int main(int argc, const char ** argv)
 {
-    //constexpr int ndims2 = 2; // Setting two dimensions.
+    constexpr int ndims2 = 2; // Setting two dimensions.
 
     // A bit of shorthand.
-    typedef nDGridMap<FMCell> FMGrid2D;
-    typedef vector<int> Coord2D;
+    typedef nDGridMap<FMCell, ndims2> FMGrid2D;
+    typedef array<int, ndims2> Coord2D;
 
     time_point<std::chrono::system_clock> start, end; // Time measuring.
     double time_elapsed;
 
-    Coord2D dimsize = {300,300};
+    Coord2D dimsize {300,300};
     FMGrid2D grid_fmm (dimsize);
 
     Coord2D init_point = {150, 150};

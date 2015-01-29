@@ -1,7 +1,7 @@
 /*! \file solver.hpp
     \brief Templated class which computes the basic Fast Marching Method (FMM).
 
-    It uses as a main container the nDgrid_t class. The nDgrid_t type T
+    It uses as a main container the nDGridMap class. The nDGridMap type T
     has to be an FMCell or something inherited from it.
 
     The leafsize of the grid map is ignored since it has to be >=1 and that
@@ -51,8 +51,6 @@
 #include <fstream>
 #include <array>
 
-//#include <../ndgrid_t/Grid.h>
-
 template <class grid_t>
 class Solver {
 
@@ -69,14 +67,14 @@ class Solver {
           * @param g input grid map.
           */
         void setEnvironment
-        (grid_t *g) {
+        (grid_t * g) {
             grid_ = g;
             if (!grid_->isClear())
                 grid_->clear();
         }
 
         /**
-         * Sets the initial points by the indices in the nDgrid_t and
+         * Sets the initial points by the indices in the nDGridMap and
          * computes the initialization of the Fast Marching Method calling
          * the init() function.
          *
