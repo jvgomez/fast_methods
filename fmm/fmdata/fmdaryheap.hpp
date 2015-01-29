@@ -38,7 +38,6 @@ template <class cell_t> struct compare_cells_d_ary {
     }
 };
 
-// TODO: Template this class.
 template <class cell_t = FMCell> class FMDaryHeap {
 
     typedef boost::heap::d_ary_heap<const cell_t *, boost::heap::mutable_<true>, boost::heap::arity<2>, boost::heap::compare<compare_cells_d_ary<cell_t> > > d_ary_heap_t;
@@ -74,7 +73,7 @@ template <class cell_t = FMCell> class FMDaryHeap {
         () {
             const int idx = heap_.top()->getIndex();
             heap_.pop();
-            return idx;	
+            return idx;
         }
         
         size_t size

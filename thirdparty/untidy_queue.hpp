@@ -34,14 +34,11 @@ namespace levelset {
         public:
                 typedef std::list<Element>               ElementList;
 
-
                 PriorityQueue(unsigned _size    = 1000,
                               double   _inc_max = 2
                         );
 
                 ~PriorityQueue();
-
-
 
                 bool empty() const;
                 int push(const Element &e, double t);
@@ -54,9 +51,6 @@ namespace levelset {
                 void print() const;
 
         private:
-
-
-
                 ElementList *    m_tab;
                 unsigned         m_size;
                 unsigned         m_nb_elem;
@@ -86,8 +80,6 @@ namespace levelset {
 
 
         // Access/Modif the queue
-
-
         template <class Element>
                 bool PriorityQueue<Element>::empty() const
         {

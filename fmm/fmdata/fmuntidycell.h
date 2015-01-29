@@ -51,10 +51,7 @@ class FMUntidyCell : public FMCell {
     virtual int getbucket () const          {return bucket_;}
 
     protected:
-        //value_ is in this case the time of arrival.
-        //FMState state_;  /*!< State of the cell */
         int bucket_; /*!< Time travel discretization  */
-        //float velocity_;  /*!< Wave propagation velocity through this cell */
 };
 
 

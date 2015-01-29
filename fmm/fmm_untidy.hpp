@@ -32,7 +32,7 @@
 #include "fastmarching.hpp"
 #include "fmdata/fmuntidyqueue.hpp"
 
-template < class grid_t > class FMM_Untidy : public FastMarching <grid_t> {
+template <class grid_t> class FMM_Untidy : public FastMarching <grid_t> {
 
     public:
         FMM_Untidy (const std::string& name = "UFMM") : FastMarching<grid_t>(name) {}
@@ -54,7 +54,7 @@ template < class grid_t > class FMM_Untidy : public FastMarching <grid_t> {
             bool stopWavePropagation = false;
 
             // Algorithm initialization
-            for (int &i: init_points_) { // For each initial point
+            for (int &i : init_points_) { // For each initial point
                 grid_->getCell(i).setArrivalTime(0);
                 grid_->getCell(i).setState(FMState::FROZEN);
                 narrow_band_.push( &(grid_->getCell(i)) );
@@ -62,8 +62,7 @@ template < class grid_t > class FMM_Untidy : public FastMarching <grid_t> {
 
             // Main loop
             while (!stopWavePropagation && !narrow_band_.empty()) {
-                int idxMin = narrow_band_.index_min();
-                narrow_band_.popMinIdx();
+                int idxMin = narrow_band_.popMinIdx();
                 n_neighs = grid_->getNeighbors(idxMin, neighbors);
                 grid_->getCell(idxMin).setState(FMState::FROZEN);
                 for (int s = 0; s < n_neighs; ++s) { // For each neighbor
@@ -112,7 +111,7 @@ template < class grid_t > class FMM_Untidy : public FastMarching <grid_t> {
         using FastMarching<grid_t>::setup_;
 
     private:
-        FMUntidyqueue narrow_band_; /*!< Instance of the priority queue used. */
+        FMUntidyqueue<> narrow_band_; /*!< Instance of the priority queue used. */
 };
 
 #endif /* FMM_UNTIDY_H_*/

@@ -30,7 +30,6 @@ int main(int argc, const char ** argv)
 
     // A bit of shorthand.
     typedef nDGridMap<FMCell, ndims2> FMGrid2D;
-    typedef nDGridMap<FMUntidyCell, ndims2> UFMGrid2D;
     typedef array<int, ndims2> Coord2D;
 
     time_point<std::chrono::system_clock> start, end; // Time measuring.
@@ -44,8 +43,8 @@ int main(int argc, const char ** argv)
     vector<int> init_points;
     int idx, goal_idx;
     grid_fmm.coord2idx(init_point , idx);
-    init_points.push_back(idx);
     grid_fmm.coord2idx(goal_point , goal_idx);
+    init_points.push_back(idx);
 
     std::vector<Solver<FMGrid2D>*> solvers;
     solvers.push_back(new FastMarching<FMGrid2D>);
@@ -53,7 +52,7 @@ int main(int argc, const char ** argv)
     solvers.push_back(new FastMarching<FMGrid2D, FMPriorityQueue<FMCell> >("SFMM"));
     solvers.push_back(new FastIterativeMethod<FMGrid2D>);
     solvers.push_back(new GroupMarching<FMGrid2D>);
-    //solvers.push_back(new FMM_Untidy<UFMGrid2D>)
+    solvers.push_back(new FMM_Untidy<FMGrid2D>);
 
     for (Solver<FMGrid2D>* s :solvers)
     {

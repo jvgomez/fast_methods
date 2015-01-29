@@ -19,37 +19,21 @@
 #ifndef FMUNTIDYQUEUE_H_
 #define FMUNTIDYQUEUE_H_
 
-#include "../../thirdparty/untidy_queue.hpp"
-#include "fmuntidycell.h"
+#include <unordered_map>
 
-class FMUntidyqueue {
+#include "../../thirdparty/untidy_queue.hpp"
+#include "fmcell.h"
+
+template<class cell_t = FMCell> class FMUntidyqueue {
 
     public:
         FMUntidyqueue () {}
-        virtual ~ FMUntidyqueue() {}
-
-        /**
-         * Set the maximum number of cells the heap will contain.
-         *
-         * @param maximum number of cells.
-         */
-        void setMaxSize
-        (const int & n) {
-        }
+        virtual ~FMUntidyqueue() {}
 
         void push
-        ( FMUntidyCell * c) {
-            int i = queue_.push(c,c->getArrivalTime());
+        (cell_t * c) {
+            int i = queue_.push(c, c->getArrivalTime());
             c->setBucket(i);
-        }
-
-        /**
-         * pops index of the element with lowest value and removes it from the heap.
-         *
-         */
-        void popMinIdx
-        () {
-            queue_.pop();
         }
 
         size_t size
@@ -57,30 +41,27 @@ class FMUntidyqueue {
             return queue_.size();
         }
 
-        void update
-        (const FMUntidyCell * c) {
-        }
-
         /**
          * Updates the position of the cell in the priority queue. Its priority can only increase.
          * Also updates the bucket of the cell.
          *
-         * @param c FMUntidyCell to be updated.
+         * @param c cell_t to be updated.
          *
          */
         void increase
-        (FMUntidyCell * c) {
-            int i = queue_.increase_priority(c,c->getbucket(),c->getArrivalTime());
+        (cell_t * c) {
+            int i = queue_.increase_priority(c, c->getBucket(), c->getArrivalTime());
             c->setBucket(i);
         }
 
         /**
-         * pops index of the element with lowest value of the priority queue.
+         * pops and returns index of the element with lowest value of the priority queue.
          *
          */
-        int index_min
+        int popMinIdx
         (){
-            const FMCell * c = queue_.top();
+            const cell_t * c = queue_.top();
+            queue_.pop();
             int index_pop = c->getIndex();
             return index_pop;
         }
@@ -96,7 +77,7 @@ class FMUntidyqueue {
         }
 
     protected:
-        levelset::PriorityQueue<const FMCell * > queue_; /*!< Priority queue that stores cells of the narrow band. */
+        levelset::PriorityQueue<const cell_t * > queue_; /*!< Priority queue that stores cells of the narrow band. */
 };
 
 #endif /* FMUNTIDYQUEUE_H_ */

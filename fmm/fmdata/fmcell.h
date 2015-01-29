@@ -54,6 +54,7 @@ class FMCell : public Cell{
         virtual void setVelocity (const float v)            {velocity_ = v;}
         virtual void setArrivalTime (const double at)       {value_= at;}
         virtual void setState (const FMState state)         {state_ = state;}
+        virtual void setBucket(const int b)                 {bucket_ = b;}
         virtual void setDefault();
 
         /**
@@ -72,12 +73,13 @@ class FMCell : public Cell{
         virtual double getArrivalTime () const              {return value_;}
         virtual float getVelocity () const                  {return velocity_;}
         virtual FMState getState () const                   {return state_;}
-
+        virtual bool getBucket() const                      {return bucket_;}
         virtual bool isObstacle() const;
 
     protected:
         FMState state_;   /*!< State of the cell */
         float velocity_;  /*!< Wave propagation velocity through this cell */
+        int bucket_; /*!< Used when sorted with FMUntidyQueue */
 };
 
 #endif /* FMCELL_H_*/
