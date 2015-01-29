@@ -82,40 +82,12 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FastMarching
         *
         * @see setInitialAndGoalPoints()
         */
-        virtual void init
+        virtual void setup
         () {
             // TODO: neighbors computed twice for every cell. We can save time here.
-            Solver<grid_t>::init();
+            Solver<grid_t>::setup();
             narrow_band_.setMaxSize(grid_->size());
-
-            int j = 0;
-            int n_neighs = 0;
-            for (int &i: init_points_) { // For each initial point
-                grid_->getCell(i).setArrivalTime(0);
-                grid_->getCell(i).setState(FMState::FROZEN);
-
-                n_neighs = grid_->getNeighbors(i, neighbors);
-                for (int s = 0; s < n_neighs; ++s){  // For each neighbor
-                    j = neighbors[s];
-                    if ((grid_->getCell(j).getState() == FMState::FROZEN) || grid_->getCell(j).isOccupied() || grid_->getCell(j).getVelocity() == 0) // If Frozen or obstacle
-                        continue;
-                    else {
-                        double new_arrival_time = solveEikonal(j);
-                        if (grid_->getCell(j).getState() == FMState::NARROW) { // Updating narrow band if necessary.
-                            if (new_arrival_time < grid_->getCell(j).getArrivalTime()) {
-                                grid_->getCell(j).setArrivalTime(new_arrival_time);
-                                narrow_band_.increase( &(grid_->getCell(j))  ) ;
-                            }
-                        }
-                        else {
-                            grid_->getCell(j).setState(FMState::NARROW);
-                            grid_->getCell(j).setArrivalTime(new_arrival_time);
-                            narrow_band_.push( &(grid_->getCell(j)) );
-                        } // neighbors open.
-                    } // neighbors not frozen.
-                } // For each neighbor.
-            } // For each initial point.
-        } // init()
+        }
 
 
         //IMPORTANT NOTE: Assuming inc(1) = inc(y) =...= leafsize_
@@ -178,13 +150,21 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FastMarching
          */
         virtual void compute
         () {
-            if (!initialized_)
-                init();
-            // TODO: check if the previous steps have been done (initialization).
-            int j= 0;
-            int n_neighs = 0;
-            bool stopWavePropagation = 0; // To avoid use a double break.
+            if (!setup_)
+                setup();
 
+            // Algorithm initialization
+            for (int &i: init_points_) { // For each initial point
+                grid_->getCell(i).setArrivalTime(0);
+                grid_->getCell(i).setState(FMState::FROZEN);
+                narrow_band_.push( &(grid_->getCell(i)) );
+            }
+
+            int j = 0;
+            int n_neighs = 0;
+            bool stopWavePropagation = 0;
+
+            // Main loop.
             while (!stopWavePropagation && narrow_band_.size() > 0) {
                 int idxMin = narrow_band_.popMinIdx();
                 n_neighs = grid_->getNeighbors(idxMin, neighbors);
@@ -220,16 +200,17 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FastMarching
         using Solver<grid_t>::grid_;
         using Solver<grid_t>::init_points_;
         using Solver<grid_t>::goal_idx_;
-        using Solver<grid_t>::initialized_;
+        using Solver<grid_t>::setup_;
 
+        std::array <int, 2*grid_t::getNDims()> neighbors;  /*!< Auxiliar array which stores the neighbor of each iteration of the computeFM() function. */
+
+    private:
         double sumT; /*!< Auxiliar value wich computes T1+T2+T3... Useful for generalizing the Eikonal solver. */
         double sumTT; /*!< Auxiliar value wich computes T1^2+T2^2+T3^2... Useful for generalizing the Eikonal solver. */
 
         std::array<double, grid_t::getNDims()> Tvalues;  /*!< Auxiliar array with values T0,T1...Tn-1 variables in the Discretized Eikonal Equation. */
         std::array<double, grid_t::getNDims()> TTvalues;  /*!< Auxiliar array with values T0^2,T1^2...Tn-1^2 variables in the Discretized Eikonal Equation. */
-        std::array <int, 2*grid_t::getNDims()> neighbors;  /*!< Auxiliar array which stores the neighbor of each iteration of the computeFM() function. */
 
-    private:
         heap_t narrow_band_; /*!< Instance of the heap used. */
 };
 

@@ -34,8 +34,8 @@
 template < class grid_t > class FastIterativeMethod : public FastMarching <grid_t> {
 
     public:
-        FastIterativeMethod() : FastMarching<grid_t>("FIM") {}
-        FastIterativeMethod(const std::string& name) : FastMarching<grid_t>(name) {}
+        FastIterativeMethod(const double& error = 0) : FastMarching<grid_t>("FIM"), E_(error) {}
+        FastIterativeMethod(const std::string& name, const double& error = 0) : FastMarching<grid_t>(name), E_(error) {}
 
         virtual ~FastIterativeMethod() {}
 
@@ -47,12 +47,27 @@ template < class grid_t > class FastIterativeMethod : public FastMarching <grid_
          *
          * @see setInitialPoints()
          */
-        virtual void init
+        virtual void setup
         () {
-            Solver<grid_t>::init();
-            int j = 0;
-            int n_neighs = 0;
+            Solver<grid_t>::setup();
+        }
 
+        /**
+         * Main Fast Iterative Method Function.
+         *
+         * @see setInitialPoints()
+         */
+        virtual void compute
+        () {
+            if (!setup_)
+                setup();
+
+            double q =-1;
+            double p =-1;
+            int n_neighs = 0;
+            int j = 0;
+
+            // Algorithm initialization.
             for (const int& i: init_points_) {
                 grid_->getCell(i).setArrivalTime(0);
                 grid_->getCell(i).setState(FMState::FROZEN);
@@ -66,24 +81,9 @@ template < class grid_t > class FastIterativeMethod : public FastMarching <grid_
                     }
                 }
             }
-        }
 
-        /**
-         * Main Fast Iterative Method Function. It requires to call first the setInitialPoints() function.
-         *
-         * @see setInitialPoints()
-         */
-        virtual void compute
-        () {
-            if (!initialized_)
-                init();
-
-            double q =-1;
-            double p =-1;
-            int n_neighs;
-            int j = 0;
-
-            while(!active_list_.empty()){
+            // Main loop.
+            while(!active_list_.empty()) {
                 for (std::list<int>::iterator i = active_list_.begin(); i!=active_list_.end(); ++i) {// for each cell of active_list
                     p = grid_->getCell(*i).getArrivalTime();
                     q = solveEikonal(*i);
@@ -105,18 +105,18 @@ template < class grid_t > class FastIterativeMethod : public FastMarching <grid_
                     }// if the cell has converged
                 }// for each cell of active_list
             }//while active_list is not zero
-        }//compute fm
+        }
 
     protected:
         using FastMarching<grid_t>::grid_;
         using FastMarching<grid_t>::neighbors;
         using FastMarching<grid_t>::solveEikonal;
         using FastMarching<grid_t>::init_points_;
-        using FastMarching<grid_t>::initialized_;
+        using FastMarching<grid_t>::setup_;
 
     private:
         std::list<int> active_list_; /*!< List wich stores the narrow band of each iteration. */
-        double E_= 0; /*!< Error threshold value that reveals if a cell has converged. */
+        double E_; /*!< Error threshold value that reveals if a cell has converged. */
 };
 
 #endif /* FASTITERATIVEMETHOD_H_*/

@@ -55,9 +55,9 @@ template <class grid_t>
 class Solver {
 
     public:
-        Solver() :name_("GenericSolver"), initialized_(false) {}
+        Solver() :name_("GenericSolver"), setup_(false) {}
 
-        Solver(const std::string& name) : name_(name), initialized_(false) {}
+        Solver(const std::string& name) : name_(name), setup_(false) {}
 
         virtual ~Solver() {}
 
@@ -95,15 +95,29 @@ class Solver {
             setInitialAndGoalPoints(init_points);
         }
 
-        virtual void init
+        virtual void setup
         () {
-            if (!sanityChecks())
+            const int err = sanityChecks();
+            if (err)
             {
-                console::error("Global sanity checks not successful.");
+                console::error("Global sanity checks not successful: ");
+                switch(err) {
+                    case 1:
+                        console::error("No grid map set.");
+                        break;
+                    case 2:
+                        console::error("Grid map set is not clear.");
+                        break;
+                    case 3:
+                        console::error("Initial points were not set.");
+                        break;
+                    default:
+                        console::error("Uknown error.");
+                }
                 exit(1);
             }
             grid_->setClear(false);
-            initialized_ = true;
+            setup_ = true;
         }
 
         virtual void compute() = 0;
@@ -115,7 +129,7 @@ class Solver {
 
         virtual void clear
         () {
-            initialized_ = false;
+            setup_ = false;
             init_points_.clear();
             goal_idx_ = -1;
             grid_ = NULL;
@@ -123,24 +137,24 @@ class Solver {
 
         virtual void reset
         () {
-            initialized_ = false;
+            setup_ = false;
             grid_->clear();
         }
 
     protected:
 
-        bool sanityChecks
+        int sanityChecks
         () {
-            if (grid_ == NULL) return false;
-            if (!grid_->isClear()) return false;
-            if (init_points_.empty()) return false;
-            return true;
+            if (grid_ == NULL) return 1;
+            if (!grid_->isClear()) return 2;
+            if (init_points_.empty()) return 3;
+            return 0;
         }
 
         grid_t* grid_; /*!< Main container. */
 
         std::string name_;
-        bool initialized_;
+        bool setup_;
 
         std::vector<int> init_points_;  /*!< Initial points. */
         int goal_idx_;
