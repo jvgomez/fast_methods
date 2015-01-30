@@ -102,11 +102,11 @@ class Benchmark {
 
         void saveGrid
         (Solver<grid_t>* s) {
-            std::string filename ("grid_");
+            thread_local std::string filename;
+            filename.clear();
             filename += s->getName();
-            filename += '_';
             filename += getRunID();
-            filename += ".txt";
+            filename += ".grid";
             GridWriter::saveGridValues(filename.c_str(), *(s->getGrid()));
         }
 
@@ -120,9 +120,11 @@ class Benchmark {
             }
         }
 
-        const std::string getRunID
+        std::string getRunID
         () {
-            std::ostringstream oss;
+            thread_local std::ostringstream oss; // To optimize a bit.
+            oss.str("");
+            oss.clear();
             oss << std::setw(4) << std::setfill('0') << runID_;
             return oss.str();
         }

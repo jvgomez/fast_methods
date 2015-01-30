@@ -6,21 +6,21 @@
     * It is important to read this document in order to understand the class.
     * 
     * It has 2 template parameters: the cells employed, should be Cell class or inherited.
-    * 								number of dimensions of the grid. Helps compiler to optimize.
+    * number of dimensions of the grid. Helps compiler to optimize.
     * 
     Copyright (C) 2014 Javier V. Gomez and Jose Pardeiro
     www.javiervgomez.com
 
-	This program is free software: you can redistribute it and/or modify
-	it under the terms of the GNU General Public License as published by
-	the Free Software Foundation, either version 3 of the License, or
-	(at your option) any later version.
-	This program is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-	GNU General Public License for more details.
-	You should have received a copy of the GNU General Public License
-	along with this program. If not, see <http://www.gnu.org/licenses/>.
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+    GNU General Public License for more details.
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
 #ifndef NDGRIDMAP_H_
@@ -382,7 +382,7 @@ template <class T, size_t ndims> class nDGridMap {
             clear_ = true;
         }
 
-        const std::string getDimSizesStr()
+        std::string getDimSizesStr()
         {
             std::stringstream ss;
             for(const auto& d : dimsize_)
