@@ -36,7 +36,13 @@ add_executable (test_fmm test_fmm.cpp
                         ../console/console.cpp
                         ../ndgridmap/cell.cpp
                         ../fmm/fmdata/fmcell.cpp
-                        ) 
+                        )
+
+add_executable (test_benchmark test_benchmark.cpp
+                        ../console/console.cpp
+                        ../ndgridmap/cell.cpp
+                        ../fmm/fmdata/fmcell.cpp
+                        )  
 
 #add_executable (test_sfmm test_fmm.cpp
 #                        ../console/console.cpp

@@ -141,6 +141,11 @@ class Solver {
             grid_->clear();
         }
 
+        virtual grid_t* getGrid() const
+        {
+            return grid_;
+        }
+
     protected:
 
         int sanityChecks

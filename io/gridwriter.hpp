@@ -27,105 +27,98 @@
 #include "../ndgridmap/ndgridmap.hpp"
 
 // TODO: include checks which ensure that the grids are adecuate for the functions used.
-// TODO: there should be a check when writing grid: it is written alread? erase and write. Something like that.
+// TODO: there should be a check when writing grid: it is written already? erase and write. Something like that.
 class GridWriter {
-		
-	public:
-		GridWriter() {};
-		virtual ~GridWriter() {};
-		
-		/**
-		 * Saves grid values in ASCII format into the specified file.
-		 * 
-		 * Saved grid format:
-		 * CellClass - info of the cell type\n  (string)
-		 * leafsize_\n 							(float)
-		 * ndims\n								(size_t)
-		 * dimsize_[0]\n						(int)
-		 * dimsize_[1]\n						(int)
-		 * ...
-		 * dimsize_[ndims_-1]\n					(int)
-		 * getCell(0).getValue()\n 				(double)
-		 * ...
-		 * getCell(ncells_-1).getValue()\n 
-		 * 
-		 * Use the parsegrid.m Matlab script to parse the data.
-		 * 
-		 * @param filename name of the file to save.
-		 * @param grid nDGridMap to be stored.
-		 * */
-		template <class T, size_t ndims> 
-		static void saveGridValues
-		(const char * filename, nDGridMap<T, ndims> & grid) {
-			std::ofstream ofs;
-			ofs.open (filename,  std::ofstream::out | std::ofstream::trunc);
-			
-			ofs << grid.getCell(0).type() << std::endl;
-			ofs << grid.getLeafSize() << std::endl << ndims;
-			
-			std::array<int, ndims> dimsize = grid.getDimSizes();
-			for (int i = 0; i < ndims; ++i)
-				ofs << std::endl << dimsize[i] << "\t";
-				   
-			for (int i = 0; i < grid.size(); ++i)
-				ofs << std::endl << grid.getCell(i).getValue();  
-				
-			ofs.close(); 
-		}
-		
-		
-		
-		/**
-		 * Saves grid velocities in ASCII format into the specified file.
-		 * 
-		 * Saved grid format:
-		 * CellClass - info of the cell type\n  (string)
-		 * leafsize_\n 							(float)
-		 * ndims\n								(size_t)
-		 * dimsize_[0]\n						(int)
-		 * dimsize_[1]\n						(int)
-		 * ...
-		 * dimsize_[ndims_-1]\n					(int)
-		 * getCell(0).getVelocity()\n 	
-		 * ...
-		 * getCell(ncells_-1).getVelocity()\n 	
-		 * 		 * 
-		 * Use the parsegrid.m Matlab script to parse the data.
-		 * 
-		 * @param filename name of the file to save.
-		 * @param grid nDGridMap to be stored.
-		 * */
-		template <class T, size_t ndims> 
-		static void saveVelocities
-		(const char * filename, nDGridMap<T, ndims> & grid) {
-			std::ofstream ofs;
-			ofs.open (filename,  std::ofstream::out | std::ofstream::trunc);
-			
-			ofs << grid.getCell(0).type() << std::endl;
-			ofs << grid.getLeafSize() << std::endl << ndims;
-			
-			std::array<int, ndims> dimsize = grid.getDimSizes();
-			for (int i = 0; i < ndims; ++i)
-				ofs << std::endl << dimsize[i] << "\t";
-				   
-			for (int i = 0; i < grid.size(); ++i)
-				ofs << std::endl << grid.getCell(i).getVelocity();  
-			
-			ofs.close(); 
-		}
-		
-	
+    public:
+        /**
+         * Saves grid values in ASCII format into the specified file.
+         *
+         * Saved grid format:
+         * CellClass - info of the cell type\n  (string)
+         * leafsize_\n                          (float)
+         * ndims\n                              (size_t)
+         * dimsize_[0]\n                        (int)
+         * dimsize_[1]\n                        (int)
+         * ...
+         * dimsize_[ndims_-1]\n                 (int)
+         * getCell(0).getValue()\n              (double)
+         * ...
+         * getCell(ncells_-1).getValue()\n
+         *
+         * Use the parsegrid.m Matlab script to parse the data.
+         *
+         * @param filename name of the file to save.
+         * @param grid nDGridMap to be stored.
+         * */
+        template <class T, size_t ndims>
+        static void saveGridValues
+        (const char * filename, nDGridMap<T, ndims> & grid) {
+            std::ofstream ofs;
+            ofs.open (filename,  std::ofstream::out | std::ofstream::trunc);
+
+            ofs << grid.getCell(0).type() << std::endl;
+            ofs << grid.getLeafSize() << std::endl << ndims;
+
+            std::array<int, ndims> dimsize = grid.getDimSizes();
+            for (int i = 0; i < ndims; ++i)
+                ofs << std::endl << dimsize[i] << "\t";
+
+            for (int i = 0; i < grid.size(); ++i)
+                ofs << std::endl << grid.getCell(i).getValue();
+
+            ofs.close();
+        }
+
+        /**
+         * Saves grid velocities in ASCII format into the specified file.
+         *
+         * Saved grid format:
+         * CellClass - info of the cell type\n  (string)
+         * leafsize_\n                          (float)
+         * ndims\n                              (size_t)
+         * dimsize_[0]\n                        (int)
+         * dimsize_[1]\n                        (int)
+         * ...
+         * dimsize_[ndims_-1]\n                 (int)
+         * getCell(0).getVelocity()\n
+         * ...
+         * getCell(ncells_-1).getVelocity()\n
+         *
+         * Use the parsegrid.m Matlab script to parse the data.
+         *
+         * @param filename name of the file to save.
+         * @param grid nDGridMap to be stored.
+         * */
+        template <class T, size_t ndims>
+        static void saveVelocities
+        (const char * filename, nDGridMap<T, ndims> & grid) {
+            std::ofstream ofs;
+            ofs.open (filename,  std::ofstream::out | std::ofstream::trunc);
+
+            ofs << grid.getCell(0).type() << std::endl;
+            ofs << grid.getLeafSize() << std::endl << ndims;
+
+            std::array<int, ndims> dimsize = grid.getDimSizes();
+            for (int i = 0; i < ndims; ++i)
+                ofs << std::endl << dimsize[i] << "\t";
+
+            for (int i = 0; i < grid.size(); ++i)
+                ofs << std::endl << grid.getCell(i).getVelocity();
+
+            ofs.close();
+        }
+
         /**
          * Saves the 2D path in an ASCII file with the following format:
          *
-         * leafsize_\n 							(float)
-         * ndims\n								(size_t)
-         * dimsize_[0]\n						(int)
-         * dimsize_[1]\n						(int)
-         * x1\ty1\tz1...\n 						(double)
-         * x2\ty2\tz2...\n 						(double)
+         * leafsize_\n                          (float)
+         * ndims\n                              (size_t)
+         * dimsize_[0]\n                        (int)
+         * dimsize_[1]\n                        (int)
+         * x1\ty1\tz1...\n                      (double)
+         * x2\ty2\tz2...\n                      (double)
          * ...
-         * 		 *
+         *
          * Use the parsegrid.m and parsepath.m Matlab scripts to parse the data.
          */
         template <class T, size_t ndims>
@@ -152,14 +145,14 @@ class GridWriter {
         /**
          * Saves the 2D path with velocity values in an ASCII file with the following format:
          *
-         * leafsize_\n 							(float)
-         * ndims\n								(size_t)
-         * dimsize_[0]\n						(int)
-         * dimsize_[1]\n						(int)
-         * x1\ty1\tz1\tv1...\n 					(double)
-         * x2\ty2\tz2\tv2...\n 					(double)
+         * leafsize_\n                          (float)
+         * ndims\n                              (size_t)
+         * dimsize_[0]\n                        (int)
+         * dimsize_[1]\n                        (int)
+         * x1\ty1\tz1\tv1...\n                  (double)
+         * x2\ty2\tz2\tv2...\n                  (double)
          * ...
-         * 		 *
+         *
          * Use the parsegrid.m and parsepathvelocity.m Matlab scripts to parse the data.
          */
         template <class T, size_t ndims>
@@ -183,12 +176,6 @@ class GridWriter {
 
             ofs.close();
         }
-		
-		
-		protected:
-	
-	   
 };
 
 #endif /* GRIDWRITER_H_ */
-	   

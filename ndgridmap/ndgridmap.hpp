@@ -31,7 +31,8 @@
 #include <string>
 #include <algorithm>
 #include <cstddef>
-#include <array> 
+#include <array>
+#include <sstream>
 
 #include "../console/console.h"
 
@@ -379,6 +380,14 @@ template <class T, size_t ndims> class nDGridMap {
             for (T & c:cells_)
                 c.setDefault();
             clear_ = true;
+        }
+
+        const std::string getDimSizesStr()
+        {
+            std::stringstream ss;
+            for(const auto& d : dimsize_)
+                ss << d << "\t";
+            return ss.str();
         }
 
         /** Makes the number of dimensions of the grid available at compilation time.
