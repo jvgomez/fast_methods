@@ -16,20 +16,15 @@
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef FMUNTIDYQUEUE_H_
-#define FMUNTIDYQUEUE_H_
-
-#include <unordered_map>
+#ifndef FMUNTIDYQUEUE_HPP_
+#define FMUNTIDYQUEUE_HPP_
 
 #include "../../thirdparty/untidy_queue.hpp"
 #include "fmcell.h"
 
-template<class cell_t = FMCell> class FMUntidyqueue {
+template<class cell_t = FMCell> class FMUntidyQueue {
 
     public:
-        FMUntidyqueue () {}
-        virtual ~FMUntidyqueue() {}
-
         void push
         (cell_t * c) {
             int i = queue_.push(c, c->getArrivalTime());

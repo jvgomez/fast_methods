@@ -1,11 +1,10 @@
-/*! \file fastmarching.hpp
+/*! \file FMM.hpp
     \brief Templated class which computes the basic Fast Marching Method (FMM).
 
     It uses as a main container the nDGridMap class. The nDGridMap type T
     has to be an FMCell or something inherited from it.
 
-    The leafsize of the grid map is ignored since it has to be >=1 and that
-    depends on the units employed.
+    The grid is assumed to be squared, that is Delta(x) = Delta(y) = leafsize_
 
     The type of the heap introduced is very important for the behaviour of the
     algorithm. The following heaps are provided:
@@ -41,8 +40,8 @@
     along with this program. If not, see <http://www.gnu.org/licenses/>.
     */
 
-#ifndef FASTMARCHING_H_
-#define FASTMARCHING_H_
+#ifndef FMM_HPP_
+#define FMM_HPP_
 
 #include <iostream>
 #include <cmath>
@@ -62,16 +61,14 @@
 // TODO: check initial and goal points are not the same, not on obstacles, etc.
 // IMPORTANT TODO: substitute grid_->getCell(j).isOccupied() by grid_->getCell(j).getVelocity() == 0 (conceptually is not the same).
 
-template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FastMarching : public Solver<grid_t> {
+template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FMM : public Solver<grid_t> {
 
     public:
-        FastMarching(const std::string& name = "FMMDary") : Solver<grid_t>(name) {
+        FMM(const std::string& name = "FMMDary") : Solver<grid_t>(name) {
             // TODO: try to automate this.
             //if (static_cast<FMFibHeap>(heap_t))
              //   name_ = "FMMFib";
         }
-
-        virtual ~FastMarching <grid_t, heap_t>() {}
 
         /**
         * Internal function although it is set to public so it can be accessed if desired.
@@ -87,11 +84,6 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FastMarching
             Solver<grid_t>::setup();
             narrow_band_.setMaxSize(grid_->size());
         }
-
-
-        //IMPORTANT NOTE: Assuming inc(1) = inc(y) =...= leafsize_
-        // Possible improvement: If we include the neighbors in the cells information
-        // this could be (most probably) speeded up.
 
          /**
          * Solves the Eikonal equation for a given cell. This function is generalized
@@ -223,4 +215,4 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FastMarching
         heap_t narrow_band_; /*!< Instance of the heap used. */
 };
 
-#endif /* FASTMARCHING_H_*/
+#endif /* FMM_HPP_*/

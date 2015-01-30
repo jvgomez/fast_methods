@@ -8,10 +8,10 @@
 #include "../ndgridmap/ndgridmap.hpp"
 #include "../console/console.h"
 
-#include "../fmm/fastmarching.hpp"
+#include "../fmm/fmm.hpp"
 #include "../fmm/fim.hpp"
-#include "../fmm/groupmarching.hpp"
-#include "../fmm/fmm_untidy.hpp"
+#include "../fmm/gmm.hpp"
+#include "../fmm/ufmm.hpp"
 
 #include "../fmm/fmdata/fmfibheap.hpp"
 #include "../fmm/fmdata/fmdaryheap.hpp"
@@ -47,12 +47,12 @@ int main(int argc, const char ** argv)
     init_points.push_back(idx);
 
     std::vector<Solver<FMGrid2D>*> solvers;
-    solvers.push_back(new FastMarching<FMGrid2D>);
-    solvers.push_back(new FastMarching<FMGrid2D, FMFibHeap<FMCell> >("FMFib"));
-    solvers.push_back(new FastMarching<FMGrid2D, FMPriorityQueue<FMCell> >("SFMM"));
-    solvers.push_back(new FastIterativeMethod<FMGrid2D>);
-    solvers.push_back(new GroupMarching<FMGrid2D>);
-    solvers.push_back(new FMM_Untidy<FMGrid2D>);
+    solvers.push_back(new FMM<FMGrid2D>);
+    solvers.push_back(new FMM<FMGrid2D, FMFibHeap<FMCell> >("FMFib"));
+    solvers.push_back(new FMM<FMGrid2D, FMPriorityQueue<FMCell> >("SFMM"));
+    solvers.push_back(new FIM<FMGrid2D>);
+    solvers.push_back(new GMM<FMGrid2D>);
+    solvers.push_back(new UFMM<FMGrid2D>);
 
     for (Solver<FMGrid2D>* s :solvers)
     {

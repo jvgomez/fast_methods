@@ -1,4 +1,4 @@
-/*! \file fastmarching2star.hpp
+/*! \file fm2star.hpp
     \brief Templated class which computes the Fast Marching Square Star (FM2*).
 
     It uses as a main container the nDGridMap class. The nDGridMap type T
@@ -36,8 +36,8 @@
     along with this program. If not, see  < http://www.gnu.org/licenses/>.
 */
 
-#ifndef FASTMARCHING2STAR_H_
-#define FASTMARCHING2STAR_H_
+#ifndef FM2STAR_HPP_
+#define FM2STAR_HPP_
 
 #include  <iostream>
 #include  <cmath>
@@ -48,24 +48,13 @@
 #include  <limits>
 
 #include "../fmm/fmdata/fmcell.h"
-#include "../fmm/fastmarching.hpp"
+#include "../fmm/fmm.hpp"
 #include "../gradientdescent/gradientdescent.hpp"
 
-template  <  class grid_t, class heap_t = FMDaryHeap <FMCell> >  class FastMarching2Star : public FastMarching  < grid_t, heap_t> {
+template  <  class grid_t, class heap_t = FMDaryHeap <FMCell> >  class FM2Star : public FMM  < grid_t, heap_t> {
 
     public:
         typedef std::vector< std::array< double, grid_t::getNDims() > > path_t;
-
-        FastMarching2Star  < grid_t, heap_t> () {}
-
-        virtual ~FastMarching2Star  < grid_t, heap_t> () {}
-
-        using FastMarching < grid_t, heap_t>::grid_;
-        using FastMarching < grid_t, heap_t>::neighbors;
-        using FastMarching < grid_t, heap_t>::init_points_;
-        using FastMarching < grid_t, heap_t>::Tvalues;
-        using FastMarching < grid_t, heap_t>::TTvalues;
-        using FastMarching < grid_t, heap_t>::narrow_band_;
 
          /**
           * Sets the input grid in which operations will be performed.
@@ -222,12 +211,6 @@ template  <  class grid_t, class heap_t = FMDaryHeap <FMCell> >  class FastMarch
             } // For each initial point.
         } // init()
 
-
-        //IMPORTANT NOTE: Assuming inc(1) = inc(y)  = ... =  leafsize_
-        // Possible improvement: If we include the neighbors in the cells information
-        // this could be (most probably) speeded up.
-        // This implementation is focused to be used with any number of dimensions.
-
         /**
         * Solves the Eikonal equation for a given cell. This function is generalized
         * to any number of dimensions.
@@ -378,6 +361,14 @@ template  <  class grid_t, class heap_t = FMDaryHeap <FMCell> >  class FastMarch
             grad.apply(*grid_,initial_point_[0],*path_, *path_velocity);
         }
 
+    protected:
+        using FMM < grid_t, heap_t>::grid_;
+        using FMM < grid_t, heap_t>::neighbors;
+        using FMM < grid_t, heap_t>::init_points_;
+        using FMM < grid_t, heap_t>::Tvalues;
+        using FMM < grid_t, heap_t>::TTvalues;
+        using FMM < grid_t, heap_t>::narrow_band_;
+
     private:
 
         /**
@@ -414,7 +405,6 @@ template  <  class grid_t, class heap_t = FMDaryHeap <FMCell> >  class FastMarch
             }
         }
 
-    protected:
         double sumT; /*! <  Auxiliar value wich computes T1+T2+T3... Useful for generalizing the Eikonal solver. */
         double sumTT; /*! <  Auxiliar value wich computes T1^2+T2^2+T3^2... Useful for generalizing the Eikonal solver. */
 
@@ -426,4 +416,4 @@ template  <  class grid_t, class heap_t = FMDaryHeap <FMCell> >  class FastMarch
         double maxDistance_; /*!< Distance value to saturate the first potential. */
 };
 
-#endif /* FASTMARCHING2STAR_H_*/
+#endif /* FM2STAR_HPP_*/

@@ -1,4 +1,4 @@
-/*! \file fmm_untidy.hpp
+/*! \file UFMM.hpp
     \brief Fast Marching Method using a untidy priority queue (UFMM).
     
     It uses as a main container the nDGridMap class. The nDGridMap type T
@@ -26,18 +26,16 @@
 	along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef FMM_UNTIDY_H_
-#define FMM_UNTIDY_H_
+#ifndef UFMM_HPP_
+#define UFMM_HPP_
 
-#include "fastmarching.hpp"
+#include "fmm.hpp"
 #include "fmdata/fmuntidyqueue.hpp"
 
-template <class grid_t> class FMM_Untidy : public FastMarching <grid_t> {
+template <class grid_t> class UFMM : public FMM <grid_t> {
 
     public:
-        FMM_Untidy (const std::string& name = "UFMM") : FastMarching<grid_t>(name) {}
-
-        virtual ~FMM_Untidy() {}
+        UFMM (const std::string& name = "UFMM") : FMM<grid_t>(name) {}
 
         /**
          * Main Untidy Fast Marching Function. It requires to call first the setInitialPoints() function inherited from Fast Marching.
@@ -91,27 +89,27 @@ template <class grid_t> class FMM_Untidy : public FastMarching <grid_t> {
 
         virtual void clear
         () {
-            FastMarching<grid_t>::clear();
+            FMM<grid_t>::clear();
             narrow_band_.clear();
         }
 
         virtual void reset
         () {
-            FastMarching<grid_t>::reset();
+            FMM<grid_t>::reset();
             narrow_band_.clear();
         }
 
     protected:
-        using FastMarching<grid_t>::grid_;
-        using FastMarching<grid_t>::neighbors;
-        using FastMarching<grid_t>::solveEikonal;
-        using FastMarching<grid_t>::init_points_;
-        using FastMarching<grid_t>::goal_idx_;
-        using FastMarching<grid_t>::setup;
-        using FastMarching<grid_t>::setup_;
+        using FMM<grid_t>::grid_;
+        using FMM<grid_t>::neighbors;
+        using FMM<grid_t>::solveEikonal;
+        using FMM<grid_t>::init_points_;
+        using FMM<grid_t>::goal_idx_;
+        using FMM<grid_t>::setup;
+        using FMM<grid_t>::setup_;
 
     private:
-        FMUntidyqueue<> narrow_band_; /*!< Instance of the priority queue used. */
+        FMUntidyQueue<> narrow_band_; /*!< Instance of the priority queue used. */
 };
 
-#endif /* FMM_UNTIDY_H_*/
+#endif /* UFMM_HPP_*/

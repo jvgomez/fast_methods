@@ -1,4 +1,4 @@
-/*! \file fastmarching2.hpp
+/*! \file fm2.hpp
     \brief Templated class which computes the Fast Marching Square (FM2).
 
     It uses as a main container the nDGridMap class. The nDGridMap type T
@@ -35,8 +35,8 @@
     You should have received a copy of the GNU General Public License
     along with this program. If not, see <http://www.gnu.org/licenses/>.*/
 
-#ifndef FASTMARCHING2_H_
-#define FASTMARCHING2_H_
+#ifndef FM2_HPP_
+#define FM2_HPP_
 
 #include <iostream>
 #include <cmath>
@@ -46,19 +46,17 @@
 #include <array>
 #include <limits>
 
-#include "../fmm/fastmarching.hpp"
+#include "../fmm/fmm.hpp"
 #include "../gradientdescent/gradientdescent.hpp"
 
-template < class grid_t, class heap_t = FMDaryHeap<FMCell>  >  class FastMarching2 {
+template < class grid_t, class heap_t = FMDaryHeap<FMCell>  >  class FM2 {
 
     public:
         typedef std::vector< std::array< double, grid_t::getNDims() > > path_t;
 
-        FastMarching2 <grid_t, heap_t> () {
+        FM2 () {
             goal_idx_ = -1;
         };
-
-        virtual ~FastMarching2 <grid_t, heap_t> () {};
 
          /**
           * Sets the input grid in which operations will be performed.
@@ -230,4 +228,4 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell>  >  class FastMarchin
         double maxDistance_; /*!< Distance value to saturate the first potential. */
 };
 
-#endif /* FASTMARCHING2_H_*/
+#endif /* FM2_H_*/

@@ -14,30 +14,28 @@
     Copyright (C) 2014 Javier V. Gomez
     www.javiervgomez.com
 
-	This program is free software: you can redistribute it and/or modify
-	it under the terms of the GNU General Public License as published by
-	the Free Software Foundation, either version 3 of the License, or
-	(at your option) any later version.
-	This program is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-	GNU General Public License for more details.
-	You should have received a copy of the GNU General Public License
-	along with this program. If not, see <http://www.gnu.org/licenses/>.
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+    GNU General Public License for more details.
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef FASTITERATIVEMETHOD_H_
-#define FASTITERATIVEMETHOD_H_
+#ifndef FIM_HPP_
+#define FIM_HPP_
 
-#include "fastmarching.hpp"
+#include "fmm.hpp"
 
-template < class grid_t > class FastIterativeMethod : public FastMarching <grid_t> {
+template < class grid_t > class FIM : public FMM <grid_t> {
 
     public:
-        FastIterativeMethod(const double& error = 0) : FastMarching<grid_t>("FIM"), E_(error) {}
-        FastIterativeMethod(const std::string& name, const double& error = 0) : FastMarching<grid_t>(name), E_(error) {}
-
-        virtual ~FastIterativeMethod() {}
+        FIM(const double& error = 0) : FMM<grid_t>("FIM"), E_(error) {}
+        FIM(const std::string& name, const double& error = 0) : FMM<grid_t>(name), E_(error) {}
 
         /**
          * Main Fast Iterative Method Function.
@@ -99,28 +97,28 @@ template < class grid_t > class FastIterativeMethod : public FastMarching <grid_
 
         virtual void clear
         () {
-            FastMarching<grid_t>::clear();
+            FMM<grid_t>::clear();
             active_list_.clear();
         }
 
         virtual void reset
         () {
-            FastMarching<grid_t>::reset();
+            FMM<grid_t>::reset();
             active_list_.clear();
         }
 
     protected:
-        using FastMarching<grid_t>::grid_;
-        using FastMarching<grid_t>::neighbors;
-        using FastMarching<grid_t>::solveEikonal;
-        using FastMarching<grid_t>::init_points_;
-        using FastMarching<grid_t>::goal_idx_;
-        using FastMarching<grid_t>::setup;
-        using FastMarching<grid_t>::setup_;
+        using FMM<grid_t>::grid_;
+        using FMM<grid_t>::neighbors;
+        using FMM<grid_t>::solveEikonal;
+        using FMM<grid_t>::init_points_;
+        using FMM<grid_t>::goal_idx_;
+        using FMM<grid_t>::setup;
+        using FMM<grid_t>::setup_;
 
     private:
         std::list<int> active_list_; /*!< List wich stores the narrow band of each iteration. */
         double E_; /*!< Error threshold value that reveals if a cell has converged. */
 };
 
-#endif /* FASTITERATIVEMETHOD_H_*/
+#endif /* FIM_HPP_*/

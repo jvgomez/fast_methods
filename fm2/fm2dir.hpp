@@ -1,4 +1,4 @@
-/*! \file fastmarching2directional.hpp
+/*! \file fm2dir.hpp
     \brief Templated class which computes the Fast Marching Directional (FM2Directional).
 
     It uses as a main container the nDGridMap class. The nDGridMap type T
@@ -31,8 +31,8 @@
     You should have received a copy of the GNU General Public License
     along with this program. If not, see <http://www.gnu.org/licenses/>.*/
 
-#ifndef FASTMARCHING2DIRECTIONAL_H_
-#define FASTMARCHING2DIRECTIONAL_H_
+#ifndef FM2Dir_H_
+#define FM2Dir_H_
 
 #include <iostream>
 #include <cmath>
@@ -47,26 +47,15 @@
 #include <boost/math/constants/constants.hpp>
 
 #include "../fmm/fmdata/fmdirectionalcell.h"
-#include "../fmm/fastmarching.hpp"
+#include "../fmm/fmm.hpp"
 #include "../gradientdescent/gradientdescent.hpp"
 
 #define PI boost::math::constants::pi<double>()
 
-template < class grid_t, class heap_t = FMDaryHeap<FMDirectionalCell> >  class FastMarching2Directional : public FastMarching <grid_t, heap_t> {
+template < class grid_t, class heap_t = FMDaryHeap<FMDirectionalCell> >  class FM2Dir : public FMM <grid_t, heap_t> {
 
     public:
         typedef std::vector< std::array< double, grid_t::getNDims() > > path_t;
-
-        FastMarching2Directional <grid_t, heap_t> () {};
-
-        virtual ~FastMarching2Directional <grid_t, heap_t> () {};
-
-        using FastMarching<grid_t, heap_t>::grid_;
-        using FastMarching<grid_t, heap_t>::neighbors;
-        using FastMarching<grid_t, heap_t>::init_points_;
-        using FastMarching<grid_t, heap_t>::Tvalues;
-        using FastMarching<grid_t, heap_t>::TTvalues;
-        using FastMarching<grid_t, heap_t>::narrow_band_;
 
         /**
          * Sets the input grid in which operations will be performed.
@@ -441,6 +430,14 @@ template < class grid_t, class heap_t = FMDaryHeap<FMDirectionalCell> >  class F
         }
 
     protected:
+        using FMM<grid_t, heap_t>::grid_;
+        using FMM<grid_t, heap_t>::neighbors;
+        using FMM<grid_t, heap_t>::init_points_;
+        using FMM<grid_t, heap_t>::Tvalues;
+        using FMM<grid_t, heap_t>::TTvalues;
+        using FMM<grid_t, heap_t>::narrow_band_;
+
+    private:
         double sumT; /*!< Auxiliar value wich computes T1+T2+T3... Useful for generalizing the Eikonal solver. */
         double sumTT; /*!< Auxiliar value wich computes T1^2+T2^2+T3^2... Useful for generalizing the Eikonal solver. */
         double sumDistance; /*!< Auxiliar value wich computes euclidean distance between narrow band and goal point. Useful for generalizing the Eikonal solver with euristic. */
@@ -461,4 +458,4 @@ template < class grid_t, class heap_t = FMDaryHeap<FMDirectionalCell> >  class F
         double diff_angle;
 };
 
-#endif /* FASTMARCHING2DIRECTIONAL_H_*/
+#endif /* FM2Dir_H_*/

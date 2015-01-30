@@ -1,4 +1,4 @@
-/*! \file groupmarching.hpp
+/*! \file GMM.hpp
     \brief Templated class which computes Group Marching Method (GMM).
     
     It uses as a main container the nDGridMap class. The nDGridMap type T
@@ -26,18 +26,16 @@
 	along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef GROUPMARCHING_H_
-#define GROUPMARCHING_H_
+#ifndef GMM_HPP_
+#define GMM_HPP_
 
-#include "fastmarching.hpp"
+#include "fmm.hpp"
 
-template < class grid_t > class GroupMarching : public FastMarching <grid_t> {
+template < class grid_t > class GMM : public FMM <grid_t> {
 
     public:
-        GroupMarching() : FastMarching<grid_t>("GMM") {}
-        GroupMarching(const std::string& name) : FastMarching<grid_t>(name) {}
-
-        virtual ~GroupMarching() {}
+        GMM() : FMM<grid_t>("GMM") {}
+        GMM(const std::string& name) : FMM<grid_t>(name) {}
 
         /**
          * Main Group Marching Function. It requires to call first the setInitialPoints() function.
@@ -140,7 +138,7 @@ template < class grid_t > class GroupMarching : public FastMarching <grid_t> {
 
         virtual void clear
         () {
-            FastMarching<grid_t>::clear();
+            FMM<grid_t>::clear();
             gamma_.clear();
             tm_ = 0;
             deltau_ = 0;
@@ -148,20 +146,20 @@ template < class grid_t > class GroupMarching : public FastMarching <grid_t> {
 
         virtual void reset
         () {
-            FastMarching<grid_t>::reset();
+            FMM<grid_t>::reset();
             gamma_.clear();
             tm_ = 0;
             deltau_ = 0;
         }
 
     protected:
-        using FastMarching<grid_t>::grid_;
-        using FastMarching<grid_t>::neighbors;
-        using FastMarching<grid_t>::solveEikonal;
-        using FastMarching<grid_t>::init_points_;
-        using FastMarching<grid_t>::goal_idx_;
-        using FastMarching<grid_t>::setup;
-        using FastMarching<grid_t>::setup_;
+        using FMM<grid_t>::grid_;
+        using FMM<grid_t>::neighbors;
+        using FMM<grid_t>::solveEikonal;
+        using FMM<grid_t>::init_points_;
+        using FMM<grid_t>::goal_idx_;
+        using FMM<grid_t>::setup;
+        using FMM<grid_t>::setup_;
 
     private:
         double tm_; /*!< Global bound that determines the group of cells of gamma that will be updated in each step. */
@@ -169,4 +167,4 @@ template < class grid_t > class GroupMarching : public FastMarching <grid_t> {
         std::list<int> gamma_; /*!< List wich stores the narrow band of each iteration. */
 };
 
-#endif /* GROUPMARCHING_H_*/
+#endif /* GMM_H_*/
