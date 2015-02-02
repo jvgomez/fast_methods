@@ -49,17 +49,17 @@ template < class grid_t > class FIM : public FMM <grid_t> {
 
             double q =-1;
             double p =-1;
-            int n_neighs = 0;
-            int j = 0;
+            unsigned int n_neighs = 0;
+            unsigned int j = 0;
             bool stopWavePropagation = 0;
 
             // Algorithm initialization.
-            for (const int& i: init_points_) {
+            for (const unsigned int& i: init_points_) {
                 grid_->getCell(i).setArrivalTime(0);
                 grid_->getCell(i).setState(FMState::FROZEN);
 
                 n_neighs = grid_->getNeighbors(i, neighbors);
-                for (int s = 0; s < n_neighs; ++s) {// For each neighbor
+                for (unsigned int s = 0; s < n_neighs; ++s) {// For each neighbor
                     j = neighbors[s];
                     if ( (grid_->getCell(j).getState() == FMState::OPEN) && !grid_->getCell(j).isObstacle()) {
                         active_list_.push_back(j);
@@ -70,7 +70,7 @@ template < class grid_t > class FIM : public FMM <grid_t> {
 
             // Main loop.
             while(!stopWavePropagation && !active_list_.empty()) {
-                for (std::list<int>::iterator i = active_list_.begin(); i!=active_list_.end(); ++i) {// for each cell of active_list
+                for (std::list<unsigned int>::iterator i = active_list_.begin(); i!=active_list_.end(); ++i) {// for each cell of active_list
                     p = grid_->getCell(*i).getArrivalTime();
                     q = solveEikonal(*i);
                     if(p>q)
@@ -78,7 +78,7 @@ template < class grid_t > class FIM : public FMM <grid_t> {
                     if (fabs(p - q) <= E_) {// if the cell has converged
                         grid_->getCell(*i).setState(FMState::FROZEN);
                         n_neighs = grid_->getNeighbors(*i, neighbors);
-                        for (int s = 0; s < n_neighs; ++s){  // For each neighbor of converged cells of active_list
+                        for (unsigned int s = 0; s < n_neighs; ++s){  // For each neighbor of converged cells of active_list
                             j = neighbors[s];
                             if ((grid_->getCell(j).getState() == FMState::OPEN) && (grid_->getCell(j).getVelocity() != 0)) {
                                 active_list_.insert(i,j);
@@ -117,7 +117,7 @@ template < class grid_t > class FIM : public FMM <grid_t> {
         using FMM<grid_t>::setup_;
 
     private:
-        std::list<int> active_list_; /*!< List wich stores the narrow band of each iteration. */
+        std::list<unsigned int> active_list_; /*!< List wich stores the narrow band of each iteration. */
         double E_; /*!< Error threshold value that reveals if a cell has converged. */
 };
 

@@ -47,12 +47,12 @@ template <class grid_t> class UFMM : public FMM <grid_t> {
             if (!setup_)
                 setup();
 
-            int j= 0;
-            int n_neighs = 0;
+            unsigned int j= 0;
+            unsigned int n_neighs = 0;
             bool stopWavePropagation = false;
 
             // Algorithm initialization
-            for (int &i : init_points_) { // For each initial point
+            for (unsigned int &i : init_points_) { // For each initial point
                 grid_->getCell(i).setArrivalTime(0);
                 grid_->getCell(i).setState(FMState::FROZEN);
                 narrow_band_.push( &(grid_->getCell(i)) );
@@ -60,10 +60,10 @@ template <class grid_t> class UFMM : public FMM <grid_t> {
 
             // Main loop
             while (!stopWavePropagation && !narrow_band_.empty()) {
-                int idxMin = narrow_band_.popMinIdx();
+                unsigned int idxMin = narrow_band_.popMinIdx();
                 n_neighs = grid_->getNeighbors(idxMin, neighbors);
                 grid_->getCell(idxMin).setState(FMState::FROZEN);
-                for (int s = 0; s < n_neighs; ++s) { // For each neighbor
+                for (unsigned int s = 0; s < n_neighs; ++s) { // For each neighbor
                     j = neighbors[s];
                     if ( (grid_->getCell(j).getState() == FMState::FROZEN) || grid_->getCell(j).isOccupied()|| (grid_->getCell(j).getVelocity() == 0) ) // If Frozen,obstacle or velocity = 0
                         continue;

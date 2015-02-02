@@ -26,11 +26,11 @@ using namespace std::chrono;
 
 int main(int argc, const char ** argv)
 {
-    constexpr int ndims2 = 2; // Setting two dimensions.
+    constexpr unsigned int ndims2 = 2; // Setting two dimensions.
 
     // A bit of shorthand.
     typedef nDGridMap<FMCell, ndims2> FMGrid2D;
-    typedef array<int, ndims2> Coord2D;
+    typedef array<unsigned int, ndims2> Coord2D;
 
     time_point<std::chrono::system_clock> start, end; // Time measuring.
     double time_elapsed;
@@ -40,8 +40,8 @@ int main(int argc, const char ** argv)
 
     Coord2D init_point = {150, 150};
     Coord2D goal_point = {250, 250};
-    vector<int> init_points;
-    int idx, goal_idx;
+    vector<unsigned int> init_points;
+    unsigned int idx, goal_idx;
     grid_fmm.coord2idx(init_point , idx);
     grid_fmm.coord2idx(goal_point , goal_idx);
     init_points.push_back(idx);

@@ -27,7 +27,7 @@ template<class cell_t = FMCell> class FMUntidyQueue {
     public:
         void push
         (cell_t * c) {
-            int i = queue_.push(c, c->getArrivalTime());
+            unsigned int i = queue_.push(c, c->getArrivalTime());
             c->setBucket(i);
         }
 
@@ -45,7 +45,7 @@ template<class cell_t = FMCell> class FMUntidyQueue {
          */
         void increase
         (cell_t * c) {
-            int i = queue_.increase_priority(c, c->getBucket(), c->getArrivalTime());
+            unsigned int i = queue_.increase_priority(c, c->getBucket(), c->getArrivalTime());
             c->setBucket(i);
         }
 
@@ -53,7 +53,7 @@ template<class cell_t = FMCell> class FMUntidyQueue {
          * pops and returns index of the element with lowest value of the priority queue.
          *
          */
-        int popMinIdx
+        unsigned int popMinIdx
         (){
             const cell_t * c = queue_.top();
             queue_.pop();

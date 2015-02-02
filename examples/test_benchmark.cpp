@@ -21,24 +21,25 @@ using namespace std;
 
 int main(int argc, const char ** argv)
 {
-    constexpr int ndims2 = 2; // Setting two dimensions.
+    constexpr unsigned int ndims2 = 2; // Setting two dimensions.
 
     // A bit of shorthand.
     typedef nDGridMap<FMCell, ndims2> FMGrid2D;
-    typedef array<int, ndims2> Coord2D;
+    typedef array<unsigned int, ndims2> Coord2D;
 
     Coord2D dimsize {300,300};
     FMGrid2D grid (dimsize);
 
     Coord2D init_point = {150, 150};
     Coord2D goal_point = {250, 250};
-    vector<int> init_points;
-    int idx, goal_idx;
+    vector<unsigned int> init_points;
+    unsigned int idx, goal_idx;
     grid.coord2idx(init_point, idx);
     grid.coord2idx(goal_point, goal_idx);
     init_points.push_back(idx);
 
-    Benchmark<FMGrid2D> b(true);
+    Benchmark<FMGrid2D> b(false,false);
+    b.setNRuns(10);
     b.setEnvironment(&grid);
     b.setInitialAndGoalPoints(init_points,goal_idx);
 

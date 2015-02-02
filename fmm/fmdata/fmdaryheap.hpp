@@ -46,7 +46,7 @@ template <class cell_t = FMCell> class FMDaryHeap {
 
     public:
         FMDaryHeap () {}
-        FMDaryHeap (const int & n) { handles_.reserve(n); }
+        FMDaryHeap (const unsigned int & n) { handles_.reserve(n); }
         virtual ~ FMDaryHeap() {}
         
         /**
@@ -55,7 +55,7 @@ template <class cell_t = FMCell> class FMDaryHeap {
          * @param maximum number of cells.
          */
         void setMaxSize
-        (const int & n) {
+        (const size_t & n) {
             handles_.reserve(n);
         }
         
@@ -69,9 +69,9 @@ template <class cell_t = FMCell> class FMDaryHeap {
          * 
          * @return index of the cell with lowest value.
          */ 
-        int popMinIdx
+        unsigned int popMinIdx
         () {
-            const int idx = heap_.top()->getIndex();
+            const unsigned int idx = heap_.top()->getIndex();
             heap_.pop();
             return idx;
         }

@@ -53,7 +53,7 @@ template <class T, size_t ndims> class nDGridMap {
         os << "\t" << g.leafsize_ << " leafsize (m)." << std::endl;
         os << "\t" << ndims << " dimensions:" << std::endl;
 
-        for (int i = 0; i < ndims; ++i)
+        for (unsigned int i = 0; i < ndims; ++i)
             os << "\t\t" << "d" << i << "\tsize: " << g.dimsize_[i] << std::endl;
 
         return os;
@@ -68,7 +68,7 @@ template <class T, size_t ndims> class nDGridMap {
        * @param leafsize real cell size (assumed to be cubic). 1 unit by default.
        */
         nDGridMap
-        (const std::array<int, ndims> & dimsize, const float leafsize = 1.0f) :
+        (const std::array<unsigned int, ndims> & dimsize, const float leafsize = 1.0f) :
         leafsize_(leafsize),
         clear_(true) {
             resize(dimsize);
@@ -83,12 +83,12 @@ template <class T, size_t ndims> class nDGridMap {
          *
          * */
         void resize
-        (const std::array<int, ndims> & dimsize) {
+        (const std::array<unsigned int, ndims> & dimsize) {
             dimsize_ = dimsize;
             ncells_= 1;
 
             // Computing the total number of cells and the auxiliar array d_.
-            for (int i = 0; i < ndims; ++i) {
+            for (unsigned int i = 0; i < ndims; ++i) {
                 ncells_ *= dimsize_[i];
                 d_[i] = ncells_;
             }
@@ -98,7 +98,7 @@ template <class T, size_t ndims> class nDGridMap {
             cells_.resize(ncells_, T());
 
             // Setting the index_ member of the cells, which a-priori is unknown.
-            for (int i = 0; i < cells_.size(); ++i)
+            for (unsigned int i = 0; i < cells_.size(); ++i)
                 cells_[i].setIndex(i);
         }
 
@@ -116,7 +116,7 @@ template <class T, size_t ndims> class nDGridMap {
          *
          * */
         T & operator[]
-        (const int idx) {
+        (const unsigned int idx) {
             return cells_[idx];
         }
 
@@ -129,11 +129,11 @@ template <class T, size_t ndims> class nDGridMap {
          *
          * */
         T & getCell
-        (const int idx) {
+        (const unsigned int idx) {
             return cells_[idx];
             }
 
-        std::array<int, ndims> getDimSizes() const     { return dimsize_;}
+        std::array<unsigned int, ndims> getDimSizes() const     { return dimsize_;}
 
          /**
          * For a cell with index idx, obtains the minimum value of the neigbours in dimension dim.
@@ -144,7 +144,7 @@ template <class T, size_t ndims> class nDGridMap {
          * @return the corresponding minimum value.
          * */
         double getMinValueInDim
-        (const int idx, const int dim)   {
+        (const unsigned int idx, const unsigned int dim)   {
             n_neighs = 0; // How many neighbors obtained in that dimension.
             getNeighborsInDim(idx,n,dim);
 
@@ -155,8 +155,8 @@ template <class T, size_t ndims> class nDGridMap {
 
         }
 
-        int getNumberNeighborsInDim
-        (const int idx, std::array<int, ndims> &m, const int dim)   {
+        unsigned int getNumberNeighborsInDim
+        (const int idx, std::array<unsigned int, ndims> &m, const unsigned int dim)   {
             n_neighs = 0;
             getNeighborsInDim(idx,n,dim);
             m = n;
@@ -173,10 +173,10 @@ template <class T, size_t ndims> class nDGridMap {
          *
          * @return the number of neighbors found.
          * */
-        int getNeighbors
-        (const int idx, std::array<int, 2*ndims> & neighs) {
+        unsigned int getNeighbors
+        (const unsigned int idx, std::array<unsigned int, 2*ndims> & neighs) {
             n_neighs = 0;
-            for (int i = 0; i < ndims; ++i)
+            for (unsigned int i = 0; i < ndims; ++i)
                 getNeighborsInDim(idx,neighs,i);
 
             return n_neighs;
@@ -196,8 +196,8 @@ template <class T, size_t ndims> class nDGridMap {
          * @see getMinValueInDim()
          * */
         void getNeighborsInDim
-        (const int idx, std::array<int, 2*ndims>& neighs, const int dim) {
-            int c1,c2;
+        (const unsigned int idx, std::array<unsigned int, 2*ndims>& neighs, const unsigned int dim) {
+            unsigned int c1,c2;
             if (dim == 0) {
                 c1 = idx-1;
                 c2 = idx+1;
@@ -234,8 +234,8 @@ template <class T, size_t ndims> class nDGridMap {
          * @see getMinValueInDim()
          * */
         void getNeighborsInDim
-        (const int idx, std::array<int, 2>& neighs, const int dim) {
-            int c1,c2;
+        (const unsigned int idx, std::array<unsigned int, 2>& neighs, const unsigned int dim) {
+            unsigned int c1,c2;
             if (dim == 0) {
                 c1 = idx-1;
                 c2 = idx+1;
@@ -273,14 +273,14 @@ template <class T, size_t ndims> class nDGridMap {
          * @see showIdx()
          * @see coord2idx()
          * */
-        int idx2coord
-        (const int idx, std::array<int, ndims> & coords) {
+        unsigned int idx2coord
+        (const unsigned int idx, std::array<unsigned int, ndims> & coords) {
             if (coords.size() != ndims)
                 return -1;
             else {
                 coords[ndims-1] = idx/d_[ndims-2]; // First step done apart.
-                int aux = idx - coords[ndims-1]*d_[ndims-2];
-                for (int i = ndims - 2; i > 0; --i) {
+                unsigned int aux = idx - coords[ndims-1]*d_[ndims-2];
+                for (unsigned int i = ndims - 2; i > 0; --i) {
                     coords[i] = aux/d_[i-1];
                     aux -= coords[i]*d_[i-1];
                 }
@@ -301,13 +301,13 @@ template <class T, size_t ndims> class nDGridMap {
          * @see showIdx()
          * @see idx2coord()
          * */
-        int coord2idx
-        (const std::array<int, ndims> & coords, int & idx) {
+        unsigned int coord2idx
+        (const std::array<unsigned int, ndims> & coords, unsigned int & idx) {
             if (coords.size() != ndims)
                 return -1;
             else {
                 idx = coords[0];
-                for(int i = 1; i < ndims; ++i)
+                for(unsigned int i = 1; i < ndims; ++i)
                     idx += coords[i]*d_[i-1];
             }
             return 1;
@@ -323,10 +323,10 @@ template <class T, size_t ndims> class nDGridMap {
          * @see coord2idx()
          * */
         void showCoords
-        (const int idx) {
-            std::array<int, ndims> coords;
+        (const unsigned int idx) {
+            std::array<unsigned int, ndims> coords;
             idx2coord(idx, coords);
-            for (int i = 0; i < ndims; ++i)
+            for (unsigned int i = 0; i < ndims; ++i)
                 std::cout << coords[i] << "\t";
             std::cout << std::endl;
         }
@@ -341,13 +341,13 @@ template <class T, size_t ndims> class nDGridMap {
          * @see coord2idx()
          * */
         void showIdx
-        (const std::array<int, ndims> & coords) {
-            int idx;
+        (const std::array<unsigned int, ndims> & coords) {
+            unsigned int idx;
             coord2idx(coords, idx);
             std::cout << idx << '\n';
         }
 
-        int size
+        unsigned int size
         () const {
             return ncells_;
         }
@@ -398,17 +398,17 @@ template <class T, size_t ndims> class nDGridMap {
     private:
 
         std::vector<T> cells_;  /*!< The main container for the class. */
-        std::array<int, ndims> dimsize_;  /*!< Contains the size of each dimension. */
+        std::array<unsigned int, ndims> dimsize_;  /*!< Contains the size of each dimension. */
         float leafsize_;  /*!< Real size of the cells. It is assumed that the cells in the grid are cubic. */
-        int ncells_;  /*!< Number of cells in the grid (size) */
+        unsigned int ncells_;  /*!< Number of cells in the grid (size) */
         bool clear_;  /*!< Flag to indicate if the grid is ready to use. */
 
         // Auxiliar vectors to speed things up.
-        std::array<int, ndims> d_;  /*!< Auxiliar array to speed up neighbor and indexing generalization: stores parcial multiplications of dimensions sizes. d_[0] = dimsize_[0];
+        std::array<unsigned int, ndims> d_;  /*!< Auxiliar array to speed up neighbor and indexing generalization: stores parcial multiplications of dimensions sizes. d_[0] = dimsize_[0];
                                                                                                              d_[1] = dimsize_[0]*dimsize_[1]; etc.*/
         //std::array<int, ndims> dd_; /*!< Auxiliar array to speed up neighbor and indexing generalization:   dd_[0] = d_[0], dd_[1] = d_[1] - dd_[0], and so on. */
-        std::array<int, 2> n; /*!< Auxiliar array to speed up neighbor and indexing generalization: for getMinValueInDim() function.*/
-        int n_neighs; /*!<  Internal variable that counts the number of neighbors found in every iteration. Modified by getNeighbours(), getNeighborsInDim() and getMinValueInDim(). functions.*/
+        std::array<unsigned int, 2> n; /*!< Auxiliar array to speed up neighbor and indexing generalization: for getMinValueInDim() function.*/
+        unsigned int n_neighs; /*!<  Internal variable that counts the number of neighbors found in every iteration. Modified by getNeighbours(), getNeighborsInDim() and getMinValueInDim(). functions.*/
 };
 
 #endif /* NDGRIDCELL_H_*/

@@ -17,19 +17,26 @@
 
 #include <chrono>
 #include <sstream>
+#include <limits>
+
+#include <boost/filesystem.hpp>
+#include <boost/progress.hpp>
 
 #include "solver.hpp"
 #include "../io/gridwriter.hpp"
-
-// TODO: In case of poor performance, improve the logging (too many string copies and creations).
 
 template <class grid_t>
 class Benchmark {
 
     public:
 
-        Benchmark (const bool saveGrid = false) : saveGrid_(saveGrid) {
+        Benchmark
+        (bool saveGrid = false, bool saveLog = true) :
+        saveGrid_(saveGrid),
+        saveLog_(saveLog),
+        nruns_(10) {
             runID_ = 0;
+            path_ = "results";
         }
 
         void addSolver
@@ -38,7 +45,7 @@ class Benchmark {
         }
 
         void setSaveGrid
-        (const bool s) {
+        (bool s) {
             saveGrid_ = s;
         }
 
@@ -47,53 +54,64 @@ class Benchmark {
             grid_ = grid;
         }
 
+        void setNRuns
+        (unsigned int n) {
+            nruns_ = n;
+        }
+
         void setInitialAndGoalPoints
-        (const std::vector<int> & init_points, int goal_idx) {
+        (const std::vector<unsigned int> & init_points, unsigned int goal_idx) {
             init_points_ = init_points;
             goal_idx_ = goal_idx;
         }
 
-        void setInitialPoints(const std::vector<int> & init_points)
+        void setInitialPoints(const std::vector<unsigned int> & init_points)
         {
-            setInitialAndGoalPoints(init_points,-1);
+            setInitialAndGoalPoints(init_points, std::numeric_limits<unsigned int>::quiet_NaN());
         }
 
         void run
         () {
+            if (saveGrid_ || saveLog_)
+                boost::filesystem::create_directory(path_);
+
+            boost::progress_display showProgress (solvers_.size()*nruns_);
+
             setupSolvers();
 
             for (Solver<grid_t>* s :solvers_)
             {
-                ++runID_;
-                start_ = std::chrono::system_clock::now();
-                s->compute();
-                end_ = std::chrono::system_clock::now();
-                const double time_elapsed = getMilliSeconds(start_, end_);
+                for (unsigned int i = 0; i < nruns_; ++i)
+                {
+                    ++runID_;
+                    start_ = std::chrono::system_clock::now();
+                    s->compute();
+                    end_ = std::chrono::system_clock::now();
+                    const double time_elapsed = getMilliSeconds(start_, end_);
 
-                logRun(s, time_elapsed);
+                    logRun(s, time_elapsed);
 
-                if (saveGrid_)
-                    saveGrid(s);
+                    if (saveGrid_)
+                        saveGrid(s);
 
-                //std::cout << "\tElapsed "<< s->getName() <<" time: " << time_elapsed << " ms" << '\n';
-                /*std::string filename ("test_");
-                filename += s->getName();
-                filename += ".txt";
-                GridWriter::saveGridValues(filename.c_str(), grid_fmm);*/
-                s->reset();
+                    s->reset();
+                    ++showProgress;
+                }
             }
 
-            std::cout << log_.str();
+            if (saveLog_)
+                saveLog();
+            else
+                std::cout << log_.str();
         }
-
-    private:
 
         void logRun
         (const Solver<grid_t>* s, const double& time)
         {
             std::ios init(NULL);
             init.copyfmt(std::cout);
-            log_ << getRunID();
+            formatID();
+            log_ << fmtID_;
 
             std::cout.copyfmt(init);
             log_ << '\t' << s->getName() << "\t" << s->getGrid()->getNDims()
@@ -101,15 +119,23 @@ class Benchmark {
         }
 
         void saveGrid
-        (Solver<grid_t>* s) {
+        (Solver<grid_t>* s) const {
             thread_local std::string filename;
-            filename.clear();
-            filename += s->getName();
-            filename += getRunID();
+            filename = path_.string();
+            filename += '/';
+            filename += fmtID_;
             filename += ".grid";
             GridWriter::saveGridValues(filename.c_str(), *(s->getGrid()));
         }
 
+        void saveLog
+        () const {
+            std::ofstream ofs (path_.string() + "/benchmark.log");
+            ofs << log_.rdbuf();
+            ofs.close();
+        }
+
+    private:
         void setupSolvers
         () {
             for (Solver<grid_t>* s :solvers_)
@@ -120,13 +146,13 @@ class Benchmark {
             }
         }
 
-        std::string getRunID
+        void formatID
         () {
             thread_local std::ostringstream oss; // To optimize a bit.
             oss.str("");
             oss.clear();
             oss << std::setw(4) << std::setfill('0') << runID_;
-            return oss.str();
+            fmtID_ = oss.str();
         }
 
         double getMilliSeconds
@@ -138,15 +164,22 @@ class Benchmark {
         std::vector<Solver<grid_t>*> solvers_;
         grid_t * grid_;
 
-        std::vector<int> init_points_;  /*!< Initial points. */
-        int goal_idx_;   /*!< Index of goal point. */
+        std::vector<unsigned int> init_points_;  /*!< Initial points. */
+        unsigned int goal_idx_;   /*!< Index of goal point. */
 
         std::chrono::time_point<std::chrono::system_clock> start_, end_; /*!< Time measuring variables. */
 
-        std::ostringstream log_;
+        std::stringstream log_;
+
+        unsigned int runID_;
+        std::string fmtID_;
 
         bool saveGrid_;
-        int runID_;
+        bool saveLog_;
+
+        boost::filesystem::path path_;
+
+        unsigned int nruns_;
 };
 
 #endif /* BENCHMARK_HPP_*/

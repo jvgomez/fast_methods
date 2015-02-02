@@ -96,13 +96,13 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FMM : public
         virtual double solveEikonal
         (const int & idx) {
             // TODO: neighbors computed twice for every cell. We can save time here.
-            int a = grid_t::getNDims(); // a parameter of the Eikonal equation.
+            unsigned int a = grid_t::getNDims(); // a parameter of the Eikonal equation.
 
             double updatedT;
             sumT = 0;
             sumTT = 0;
 
-            for (int dim = 0; dim < grid_t::getNDims(); ++dim) {
+            for (unsigned int dim = 0; dim < grid_t::getNDims(); ++dim) {
                 double minTInDim = grid_->getMinValueInDim(idx, dim);
                 if (!isinf(minTInDim)) {
                     Tvalues[dim] = minTInDim;
@@ -142,12 +142,12 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FMM : public
             if (!setup_)
                 setup();
 
-            int j = 0;
-            int n_neighs = 0;
+            unsigned int j = 0;
+            unsigned int n_neighs = 0;
             bool stopWavePropagation = 0;
 
             // Algorithm initialization
-            for (int &i: init_points_) { // For each initial point
+            for (unsigned int &i: init_points_) { // For each initial point
                 grid_->getCell(i).setArrivalTime(0);
                 grid_->getCell(i).setState(FMState::FROZEN);
                 narrow_band_.push( &(grid_->getCell(i)) );
@@ -155,11 +155,11 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FMM : public
 
             // Main loop.
             while (!stopWavePropagation && !narrow_band_.empty()) {
-                int idxMin = narrow_band_.popMinIdx();
+                unsigned int idxMin = narrow_band_.popMinIdx();
                 n_neighs = grid_->getNeighbors(idxMin, neighbors);
                 grid_->getCell(idxMin).setState(FMState::FROZEN);
 
-                for (int s = 0; s < n_neighs; ++s) {
+                for (unsigned int s = 0; s < n_neighs; ++s) {
                     j = neighbors[s];
                     // If Frozen or obstacle
                     if ((grid_->getCell(j).getState() == FMState::FROZEN) || grid_->getCell(j).isOccupied())
@@ -203,7 +203,7 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FMM : public
         using Solver<grid_t>::goal_idx_;
         using Solver<grid_t>::setup_;
 
-        std::array <int, 2*grid_t::getNDims()> neighbors;  /*!< Auxiliar array which stores the neighbor of each iteration of the computeFM() function. */
+        std::array <unsigned int, 2*grid_t::getNDims()> neighbors;  /*!< Auxiliar array which stores the neighbor of each iteration of the computeFM() function. */
 
     private:
         double sumT; /*!< Auxiliar value wich computes T1+T2+T3... Useful for generalizing the Eikonal solver. */

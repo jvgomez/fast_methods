@@ -62,8 +62,6 @@ namespace levelset {
 
 
         // Constructors - Destructor
-
-
         template <class Element>
                 PriorityQueue<Element>::PriorityQueue(unsigned _size, double _inc_max) 
                 : m_size(_size), m_nb_elem(0), m_t0(0), m_i0(0), m_inc_max(_inc_max)
@@ -89,7 +87,7 @@ namespace levelset {
         template <class Element>
                 int PriorityQueue<Element>::push(const Element &e, double t)
         {
-                int i = 0;
+                unsigned int i = 0;
 
                 if (empty()) {
                         m_t0    = t;
@@ -107,7 +105,7 @@ namespace levelset {
                         }
 
                         // compute the indice in the circular array.
-                        i = static_cast<int>(floor((t-m_t0) * m_size / m_inc_max));
+                        i = static_cast<unsigned int>(floor((t-m_t0) * m_size / m_inc_max));
 
                         // compute the true indice in the regular array.
                         if (i >= 0){
@@ -141,7 +139,7 @@ namespace levelset {
 
                 return i;
         }
-                
+
         template <class Element>
                 void PriorityQueue<Element>::pop()
         {
@@ -169,7 +167,7 @@ namespace levelset {
 
                 return m_tab[m_i0].back();
         }
-                
+
         template <class Element>
                 int PriorityQueue<Element>::increase_priority(const Element& e, int bucket, double t_new)
         {
@@ -180,9 +178,9 @@ namespace levelset {
                         //TODO laisse passer le prog kan mm en cas de bug.
                         //exit(2);
                 }
-                
+
                 // compute the indice in the circular array
-                int  i = static_cast<int>(floor((t_new-m_t0) * m_size / m_inc_max));
+                unsigned int i = static_cast<unsigned int>(floor((t_new-m_t0) * m_size / m_inc_max));
 
                 // compute the true indice in the regular array.
                 if (i >= 0){
@@ -215,14 +213,14 @@ namespace levelset {
 
                 return i;
         }
-                
+
         template <class Element>
                 void PriorityQueue<Element>::clear()
         {
                 m_nb_elem = 0;
                 m_t0      = 0;
                 m_i0      = 0;
-                for (int i=0 ; i<m_size ; i++)
+                for (unsigned int i=0 ; i<m_size ; i++)
                         m_tab[i].clear();
         }
 
@@ -239,11 +237,11 @@ namespace levelset {
                 std::cout << "m_t0 = " << m_t0 << std::endl;
                 std::cout << "m_i0 = " << m_i0 << std::endl;
                 std::cout << "size = " << m_nb_elem << std::endl;
-                for (int i = 0; i < m_size; i++){
+                for (unsigned int i = 0; i < m_size; i++){
                         if (!m_tab[i].empty()){
                                 // index in the circular array, starting at m_i0
                                 int j = (i-(int)m_i0 >= 0)? i-(int)m_i0 : i-(int)m_i0+m_size;
-        
+
                                 // print infos concerning the bucket
                                 std::cout << "  i=" << std::setw(2) << i 
                                           << "| l=" << std::setw(2) << j 
@@ -252,12 +250,11 @@ namespace levelset {
                                 // print the elements in the bucket
                                 for (typename ElementList::iterator it = m_tab[i].begin() ; it!= m_tab[i].end() ; it++)
                                         std::cout << " " << *it ;
-        
+
                                 std::cout << std::endl;
                         }
                 }
         }
-
 }
 
 #endif // PRIORITY_QUEUE_H

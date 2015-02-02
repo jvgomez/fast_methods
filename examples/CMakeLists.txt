@@ -16,11 +16,8 @@ SET(CMAKE_CXX_FLAGS_DEBUG  "-Wall -Wno-unused-local-typedefs -g")
 # Self-made includes
 include_directories (${EXAMPLES_SOURCE_DIR}/../console) 
 include_directories (${EXAMPLES_SOURCE_DIR}/../ndgridmap) 
-include_directories (${EXAMPLES_SOURCE_DIR}/../fmdata) 
 include_directories (${EXAMPLES_SOURCE_DIR}/../fmm) 
 include_directories (${EXAMPLES_SOURCE_DIR}/../fm2)
-include_directories (${EXAMPLES_SOURCE_DIR}/../fm2directional)
-include_directories (${EXAMPLES_SOURCE_DIR}/../fm2star)   
 include_directories (${EXAMPLES_SOURCE_DIR}/../io) 
 include_directories (${EXAMPLES_SOURCE_DIR}/../gradientdescent) 
 
@@ -43,6 +40,7 @@ add_executable (test_benchmark test_benchmark.cpp
                         ../ndgridmap/cell.cpp
                         ../fmm/fmdata/fmcell.cpp
                         )  
+target_link_libraries ( test_benchmark boost_system boost_filesystem)
 
 #add_executable (test_sfmm test_fmm.cpp
 #                        ../console/console.cpp

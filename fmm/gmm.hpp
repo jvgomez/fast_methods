@@ -47,18 +47,18 @@ template < class grid_t > class GMM : public FMM <grid_t> {
             if (!setup_)
                 setup();
 
-            int n_neighs;
-            int j = 0;
+            unsigned int n_neighs;
+            unsigned int j = 0;
             deltau_ = 1;
             bool stopWavePropagation = false;
 
             // Algorithm initialization
             tm_= std::numeric_limits<float>::infinity();
-            for (int &i: init_points_) { // For each initial point
+            for (unsigned int &i: init_points_) { // For each initial point
                 grid_->getCell(i).setArrivalTime(0);
                 grid_->getCell(i).setState(FMState::FROZEN);
                 n_neighs = grid_->getNeighbors(i, neighbors);
-                for (int s = 0; s < n_neighs; ++s){  // For each neighbor
+                for (unsigned int s = 0; s < n_neighs; ++s){  // For each neighbor
                     j = neighbors[s];
                     if ((grid_->getCell(j).getState() == FMState::FROZEN) || grid_->getCell(j).isOccupied() || (grid_->getCell(j).getVelocity() == 0)) // If Frozen,obstacle or velocity = 0
                         continue;
@@ -79,11 +79,11 @@ template < class grid_t > class GMM : public FMM <grid_t> {
 
                 tm_ += deltau_;
 
-                std::list<int>::reverse_iterator k = gamma_.rbegin();
-                std::list<int>::iterator i = k.base();//iterator points to the next element the reverse_iterator is currently pointing to
+                std::list<unsigned int>::reverse_iterator k = gamma_.rbegin();
+                std::list<unsigned int>::iterator i = k.base();//iterator points to the next element the reverse_iterator is currently pointing to
                 i--;
                 k = gamma_.rend();
-                std::list<int>::iterator q = k.base();
+                std::list<unsigned int>::iterator q = k.base();
                 q--;//the end of a reverse list is the first element of that list
                 //This is needed because some functions, like std::list::erase, do not work with reverse iterators
 
@@ -91,7 +91,7 @@ template < class grid_t > class GMM : public FMM <grid_t> {
                 for( ; i!=q; --i) {//for each gamma in the reverse order
                     if( grid_->getCell(*i).getArrivalTime() <= tm_) {
                         n_neighs = grid_->getNeighbors(*i, neighbors);
-                        for (int s = 0; s < n_neighs; ++s){  // For each neighbor of gamma
+                        for (unsigned int s = 0; s < n_neighs; ++s){  // For each neighbor of gamma
                             j = neighbors[s];
                             if ( (grid_->getCell(j).getState() == FMState::FROZEN) || grid_->getCell(j).isOccupied() || (grid_->getCell(j).getVelocity() == 0)) // If Frozen,obstacle or velocity = 0
                                 continue;
@@ -105,12 +105,12 @@ template < class grid_t > class GMM : public FMM <grid_t> {
                 }//for each gamma in the reverse order
 
                 // Second pass
-                const double narrow_size = gamma_.size();
+                const size_t narrow_size = gamma_.size();
                 i = gamma_.begin();
-                for(int z = 0; z < narrow_size; ++z) {//for each gamma in the forward order
+                for(size_t z = 0; z < narrow_size; ++z) {//for each gamma in the forward order
                     if( grid_->getCell(*i).getArrivalTime()<= tm_) {
                         n_neighs = grid_->getNeighbors(*i, neighbors);
-                        for (int s = 0; s < n_neighs; ++s) {// for each neighbor of gamma
+                        for (unsigned int s = 0; s < n_neighs; ++s) {// for each neighbor of gamma
                             j = neighbors[s];
                             if ((grid_->getCell(j).getState() == FMState::FROZEN) || grid_->getCell(j).isOccupied() || (grid_->getCell(j).getVelocity() == 0)) // If Frozen,obstacle or velocity = 0
                                 continue;
@@ -164,7 +164,7 @@ template < class grid_t > class GMM : public FMM <grid_t> {
     private:
         double tm_; /*!< Global bound that determines the group of cells of gamma that will be updated in each step. */
         double deltau_; /*!< For each updating step, tm_ is increased by this value. */
-        std::list<int> gamma_; /*!< List wich stores the narrow band of each iteration. */
+        std::list<unsigned int> gamma_; /*!< List wich stores the narrow band of each iteration. */
 };
 
 #endif /* GMM_H_*/

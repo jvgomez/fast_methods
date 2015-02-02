@@ -59,11 +59,11 @@ class GridWriter {
             ofs << grid.getCell(0).type() << std::endl;
             ofs << grid.getLeafSize() << std::endl << ndims;
 
-            std::array<int, ndims> dimsize = grid.getDimSizes();
-            for (int i = 0; i < ndims; ++i)
+            std::array<unsigned int, ndims> dimsize = grid.getDimSizes();
+            for (unsigned int i = 0; i < ndims; ++i)
                 ofs << std::endl << dimsize[i] << "\t";
 
-            for (int i = 0; i < grid.size(); ++i)
+            for (unsigned int i = 0; i < grid.size(); ++i)
                 ofs << std::endl << grid.getCell(i).getValue();
 
             ofs.close();
@@ -98,11 +98,11 @@ class GridWriter {
             ofs << grid.getCell(0).type() << std::endl;
             ofs << grid.getLeafSize() << std::endl << ndims;
 
-            std::array<int, ndims> dimsize = grid.getDimSizes();
-            for (int i = 0; i < ndims; ++i)
+            std::array<unsigned int, ndims> dimsize = grid.getDimSizes();
+            for (unsigned int i = 0; i < ndims; ++i)
                 ofs << std::endl << dimsize[i] << "\t";
 
-            for (int i = 0; i < grid.size(); ++i)
+            for (unsigned int i = 0; i < grid.size(); ++i)
                 ofs << std::endl << grid.getCell(i).getVelocity();
 
             ofs.close();
@@ -129,13 +129,13 @@ class GridWriter {
 
             ofs << grid.getLeafSize() << std::endl << ndims;
 
-            std::array<int, ndims> dimsize = grid.getDimSizes();
-            for (int i = 0; i < ndims; ++i)
+            std::array<unsigned int, ndims> dimsize = grid.getDimSizes();
+            for (unsigned int i = 0; i < ndims; ++i)
                 ofs << std::endl << dimsize[i] << "\t";
 
-            for (int i = 0; i < path.size(); ++i) {
+            for (unsigned int i = 0; i < path.size(); ++i) {
                 ofs << std::endl;
-                for (int j = 0; j < ndims; ++j)
+                for (unsigned int j = 0; j < ndims; ++j)
                     ofs << path[i][j] << "\t" ;
             }
 
@@ -163,13 +163,13 @@ class GridWriter {
 
             ofs << grid.getLeafSize() << std::endl << ndims;
 
-            std::array<int, ndims> dimsize = grid.getDimSizes();
-            for (int i = 0; i < ndims; ++i)
+            std::array<unsigned int, ndims> dimsize = grid.getDimSizes();
+            for (unsigned int i = 0; i < ndims; ++i)
                 ofs << std::endl << dimsize[i] << "\t";
 
-            for (int i = 0; i < path.size(); ++i) {
+            for (unsigned int i = 0; i < path.size(); ++i) {
                 ofs << std::endl;
-                for (int j = 0; j < ndims; ++j)
+                for (unsigned int j = 0; j < ndims; ++j)
                     ofs << path[i][j] << "\t" ;
                 ofs << path_velocity[i] << "\t" ;
             }
