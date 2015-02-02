@@ -22,8 +22,9 @@
 #include <boost/filesystem.hpp>
 #include <boost/progress.hpp>
 
-#include "solver.hpp"
+#include "../fmm/solver.hpp"
 #include "../io/gridwriter.hpp"
+#include "benchmarkcfg.hpp"
 
 template <class grid_t>
 class Benchmark {
@@ -37,6 +38,11 @@ class Benchmark {
         nruns_(10) {
             runID_ = 0;
             path_ = "results";
+        }
+
+        Benchmark
+        (const BenchmarkCFG& bcfg) {
+
         }
 
         void addSolver

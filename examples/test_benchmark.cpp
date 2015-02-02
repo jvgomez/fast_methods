@@ -15,7 +15,8 @@
 #include "../fmm/fmdata/fmdaryheap.hpp"
 #include "../fmm/fmdata/fmpriorityqueue.hpp"
 
-#include "../fmm/benchmark.hpp"
+#include "../benchmark/benchmark.hpp"
+#include "../benchmark/benchmarkcfg.hpp"
 
 using namespace std;
 
@@ -23,8 +24,35 @@ int main(int argc, const char ** argv)
 {
     constexpr unsigned int ndims2 = 2; // Setting two dimensions.
 
+
+    if (argc < 2)
+    {
+        std::cerr << "Usage:\n\t " << argv[0] << " problem.cfg" << std::endl;
+        return 1;
+    }
+
+    BenchmarkCFG bcfg;
+    if (bcfg.readOptions(argv[1]))
+    {
+        // readOptions parse also parameters and assign values.
+        // Get cell type and dimensions
+        /*if (cell == "FMCell")
+        {
+            switch(ndims) {
+                case 2:
+                    Benchmark<nDGridMap<FMCell,2> > b(bcfg);
+                    b.run();
+                break;
+                // ...
+            }
+        }*/
+        Benchmark<nDGridMap<FMCell,2> > b(bcfg);
+        //Benchmark b(bcfg);
+
+    }
+
     // A bit of shorthand.
-    typedef nDGridMap<FMCell, ndims2> FMGrid2D;
+    /*typedef nDGridMap<FMCell, ndims2> FMGrid2D;
     typedef array<unsigned int, ndims2> Coord2D;
 
     Coord2D dimsize {300,300};
@@ -50,5 +78,5 @@ int main(int argc, const char ** argv)
     b.addSolver(new GMM<FMGrid2D>);
     b.addSolver(new UFMM<FMGrid2D>);
 
-    b.run();
+    b.run();*/
 }
