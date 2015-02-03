@@ -136,8 +136,6 @@ class BenchmarkCFG {
                 b.addSolver(solver);
             }
 
-            std::cout << b.getSolversN() << '\n';
-
             constexpr size_t N = grid_t::getNDims();
             const std::string & strToSplit = options_.find("grid.dimsize")->second;
             std::array<unsigned int, N> dimSize = splitAndCast<unsigned int, N>(strToSplit);

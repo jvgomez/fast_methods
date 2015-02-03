@@ -70,8 +70,8 @@ class Solver {
         void setEnvironment
         (grid_t * g) {
             grid_ = g;
-            if (!grid_->isClear())
-                grid_->clear();
+            if (!grid_->isClean())
+                grid_->clean();
         }
 
         /**
@@ -107,7 +107,7 @@ class Solver {
                         console::error("No grid map set.");
                         break;
                     case 2:
-                        console::error("Grid map set is not clear.");
+                        console::error("Grid map set is not clean.");
                         break;
                     case 3:
                         console::error("Initial points were not set.");
@@ -117,7 +117,7 @@ class Solver {
                 }
                 exit(1);
             }
-            grid_->setClear(false);
+            grid_->setClean(false);
             setup_ = true;
         }
 
@@ -139,7 +139,7 @@ class Solver {
         virtual void reset
         () {
             setup_ = false;
-            grid_->clear();
+            grid_->clean();
         }
 
         virtual grid_t* getGrid() const
@@ -152,7 +152,7 @@ class Solver {
         int sanityChecks
         () {
             if (grid_ == NULL) return 1;
-            if (!grid_->isClear()) return 2;
+            if (!grid_->isClean()) return 2;
             if (init_points_.empty()) return 3;
             return 0;
         }

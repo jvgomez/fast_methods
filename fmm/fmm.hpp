@@ -54,7 +54,7 @@
 
 #include "fmdata/fmcell.h"
 #include "fmdata/fmdaryheap.hpp"
-#include "fmdata/fmfibheap.hpp"
+
 #include "../ndgridmap/ndgridmap.hpp"
 #include "../console/console.h"
 

@@ -37,6 +37,11 @@ class Benchmark {
         nruns_(10),
         path_("results") {}
 
+        virtual ~Benchmark()
+        {
+            clear();
+        }
+
         void addSolver
         (Solver<grid_t>* solver) {
             solvers_.push_back(solver);
@@ -91,7 +96,6 @@ class Benchmark {
             {
                 for (unsigned int i = 0; i < nruns_; ++i)
                 {
-                    std::cout << "Running: " << s->getName() << '\n';
                     ++runID_;
                     start_ = std::chrono::system_clock::now();
                     s->compute();
@@ -117,7 +121,6 @@ class Benchmark {
         void logRun
         (const Solver<grid_t>* s, const double& time)
         {
-            std::cout << "Logging: " << s->getName() << '\n';
             std::ios init(NULL);
             init.copyfmt(std::cout);
             formatID();
@@ -145,9 +148,15 @@ class Benchmark {
             ofs.close();
         }
 
-        int getSolversN
-        () const {
-            return solvers_.size();
+        void clear
+        () {
+            for (auto & s : solvers_)
+            {
+                s->clear();
+                delete s;
+            }
+            solvers_.clear();
+            delete grid_;
         }
 
     private:

@@ -70,7 +70,7 @@ template <class T, size_t ndims> class nDGridMap {
         nDGridMap
         (const std::array<unsigned int, ndims> & dimsize, const float leafsize = 1.0f) :
         leafsize_(leafsize),
-        clear_(true) {
+        clean_(true) {
             resize(dimsize);
         }
 
@@ -365,21 +365,21 @@ template <class T, size_t ndims> class nDGridMap {
             return max;
         }
 
-        bool isClear
+        bool isClean
         () const {
-            return clear_;
+            return clean_;
         }
 
-        void setClear
+        void setClean
         (const bool c) {
-            clear_ = c;
+            clean_ = c;
         }
 
-        void clear
+        void clean
         () {
             for (T & c:cells_)
                 c.setDefault();
-            clear_ = true;
+            clean_ = true;
         }
 
         std::string getDimSizesStr()
@@ -401,7 +401,7 @@ template <class T, size_t ndims> class nDGridMap {
         std::array<unsigned int, ndims> dimsize_;  /*!< Contains the size of each dimension. */
         float leafsize_;  /*!< Real size of the cells. It is assumed that the cells in the grid are cubic. */
         unsigned int ncells_;  /*!< Number of cells in the grid (size) */
-        bool clear_;  /*!< Flag to indicate if the grid is ready to use. */
+        bool clean_;  /*!< Flag to indicate if the grid is ready to use. */
 
         // Auxiliar vectors to speed things up.
         std::array<unsigned int, ndims> d_;  /*!< Auxiliar array to speed up neighbor and indexing generalization: stores parcial multiplications of dimensions sizes. d_[0] = dimsize_[0];
