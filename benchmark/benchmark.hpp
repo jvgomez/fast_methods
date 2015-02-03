@@ -23,7 +23,6 @@
 
 #include "../fmm/solver.hpp"
 #include "../io/gridwriter.hpp"
-#include "benchmarkcfg.hpp"
 
 template <class grid_t>
 class Benchmark {
@@ -37,33 +36,6 @@ class Benchmark {
         runID_(0),
         nruns_(10),
         path_("results") {}
-
-        Benchmark
-        (BenchmarkCFG & bcfg) :
-        saveLog_(true),
-        runID_(0) {
-            saveGrid_ = bcfg.getValue<bool>("benchmark.savegrid");
-            nruns_ = bcfg.getValue<unsigned int>("benchmark.runs");
-            path_ = boost::filesystem::path("results_" + bcfg.getValue<std::string>("benchmark.name"));
-
-            for(const auto & s : bcfg.getSolverNames())
-            {
-                if (s == "fmm")
-                        std::cout << "FMM!" <<'\n';
-                else if (s == "fmmfib")
-                        std::cout << "FMMFib!" <<'\n';
-                else if (s == "sfmm")
-                        std::cout << "SFMM!" <<'\n';
-                else if (s == "gmm")
-                        std::cout << "GMM!" <<'\n';
-                else if (s == "fim")
-                        std::cout << "FIM!" <<'\n';
-                else if (s == "ufmm")
-                        std::cout << "UFMM!" <<'\n';
-            }
-
-
-        }
 
         void addSolver
         (Solver<grid_t>* solver) {
@@ -83,6 +55,16 @@ class Benchmark {
         void setNRuns
         (unsigned int n) {
             nruns_ = n;
+        }
+
+        void setPath
+        (const boost::filesystem::path & path) {
+            path_ = path;
+        }
+
+        void setSaveLog
+        (bool s) {
+            saveLog_ = s;
         }
 
         void setInitialAndGoalPoints
@@ -109,6 +91,7 @@ class Benchmark {
             {
                 for (unsigned int i = 0; i < nruns_; ++i)
                 {
+                    std::cout << "Running: " << s->getName() << '\n';
                     ++runID_;
                     start_ = std::chrono::system_clock::now();
                     s->compute();
@@ -134,6 +117,7 @@ class Benchmark {
         void logRun
         (const Solver<grid_t>* s, const double& time)
         {
+            std::cout << "Logging: " << s->getName() << '\n';
             std::ios init(NULL);
             init.copyfmt(std::cout);
             formatID();
@@ -159,6 +143,11 @@ class Benchmark {
             std::ofstream ofs (path_.string() + "/benchmark.log");
             ofs << log_.rdbuf();
             ofs.close();
+        }
+
+        int getSolversN
+        () const {
+            return solvers_.size();
         }
 
     private:
