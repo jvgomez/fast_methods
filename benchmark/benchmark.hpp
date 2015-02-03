@@ -16,7 +16,6 @@
 #define BENCHMARK_HPP_
 
 #include <chrono>
-#include <sstream>
 #include <limits>
 
 #include <boost/filesystem.hpp>
@@ -35,13 +34,34 @@ class Benchmark {
         (bool saveGrid = false, bool saveLog = true) :
         saveGrid_(saveGrid),
         saveLog_(saveLog),
-        nruns_(10) {
-            runID_ = 0;
-            path_ = "results";
-        }
+        runID_(0),
+        nruns_(10),
+        path_("results") {}
 
         Benchmark
-        (const BenchmarkCFG& bcfg) {
+        (BenchmarkCFG & bcfg) :
+        saveLog_(true),
+        runID_(0) {
+            saveGrid_ = bcfg.getValue<bool>("benchmark.savegrid");
+            nruns_ = bcfg.getValue<unsigned int>("benchmark.runs");
+            path_ = boost::filesystem::path("results_" + bcfg.getValue<std::string>("benchmark.name"));
+
+            for(const auto & s : bcfg.getSolverNames())
+            {
+                if (s == "fmm")
+                        std::cout << "FMM!" <<'\n';
+                else if (s == "fmmfib")
+                        std::cout << "FMMFib!" <<'\n';
+                else if (s == "sfmm")
+                        std::cout << "SFMM!" <<'\n';
+                else if (s == "gmm")
+                        std::cout << "GMM!" <<'\n';
+                else if (s == "fim")
+                        std::cout << "FIM!" <<'\n';
+                else if (s == "ufmm")
+                        std::cout << "UFMM!" <<'\n';
+            }
+
 
         }
 
@@ -177,15 +197,14 @@ class Benchmark {
 
         std::stringstream log_;
 
-        unsigned int runID_;
-        std::string fmtID_;
-
         bool saveGrid_;
         bool saveLog_;
 
-        boost::filesystem::path path_;
-
+        unsigned int runID_;
+        std::string fmtID_;
         unsigned int nruns_;
+
+        boost::filesystem::path path_;
 };
 
 #endif /* BENCHMARK_HPP_*/

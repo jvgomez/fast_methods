@@ -22,9 +22,7 @@ using namespace std;
 
 int main(int argc, const char ** argv)
 {
-    constexpr unsigned int ndims2 = 2; // Setting two dimensions.
-
-
+    //constexpr unsigned int ndims2 = 2;
     if (argc < 2)
     {
         std::cerr << "Usage:\n\t " << argv[0] << " problem.cfg" << std::endl;
@@ -34,21 +32,24 @@ int main(int argc, const char ** argv)
     BenchmarkCFG bcfg;
     if (bcfg.readOptions(argv[1]))
     {
-        // readOptions parse also parameters and assign values.
-        // Get cell type and dimensions
-        /*if (cell == "FMCell")
+        if(bcfg.getValue<std::string>("grid.cell") == "FMCell")
         {
-            switch(ndims) {
+            switch (bcfg.getValue<unsigned int>("grid.ndims"))
+            {
                 case 2:
+                {
                     Benchmark<nDGridMap<FMCell,2> > b(bcfg);
                     b.run();
-                break;
-                // ...
+                    break;
+                }
+                case 3:
+                {
+                    Benchmark<nDGridMap<FMCell,3> > b(bcfg);
+                    b.run();
+                    break;
+                }
             }
-        }*/
-        Benchmark<nDGridMap<FMCell,2> > b(bcfg);
-        //Benchmark b(bcfg);
-
+        }
     }
 
     // A bit of shorthand.
@@ -67,7 +68,7 @@ int main(int argc, const char ** argv)
     init_points.push_back(idx);
 
     Benchmark<FMGrid2D> b(false,false);
-    b.setNRuns(10);
+    b.setNRuns(1);
     b.setEnvironment(&grid);
     b.setInitialAndGoalPoints(init_points,goal_idx);
 

@@ -36,6 +36,8 @@
 #include "../fmm/solver.hpp"
 #include "../io/gridwriter.hpp"*/
 
+// TODO: the getter functions do not check if the types are admissible.
+
 class BenchmarkCFG {
 
     public:
@@ -66,19 +68,22 @@ class BenchmarkCFG {
 
             boost::program_options::options_description desc;
             desc.add_options()
-               ("grid.ndims", boost::program_options::value<std::string>(), "Number of dimensions")
-               ("grid.cell", boost::program_options::value<std::string>()->default_value("FMCell"), "Type of cell. FMCell by default.")
-               ("grid.dimsize", boost::program_options::value<std::string>(), "Size of dimensions: N,M,O...")
-               ("problem.start", boost::program_options::value<std::string>(), "Start point: s1,s2,s3...")
-               ("problem.goal", boost::program_options::value<std::string>(), "Goal point: g1,g2,g3...")
-               ("benchmark.runs", boost::program_options::value<std::string>(), "Number of runs per solver.");
+               ("grid.ndims",         boost::program_options::value<std::string>()->default_value("2"),         "Number of dimensions.")
+               ("grid.cell",          boost::program_options::value<std::string>()->default_value("FMCell"),    "Type of cell. FMCell by default.")
+               ("grid.dimsize",       boost::program_options::value<std::string>()->required(),                 "Size of dimensions: N,M,O...")
+               ("problem.start",      boost::program_options::value<std::string>()->required(),                 "Start point: s1,s2,s3...")
+               ("problem.goal",       boost::program_options::value<std::string>()->required(),                 "Goal point: g1,g2,g3...")
+               ("benchmark.name",     boost::program_options::value<std::string>()->default_value("benchmark"), "Name of the benchmark.")
+               ("benchmark.runs",     boost::program_options::value<std::string>()->default_value("10"),        "Number of runs per solver.")
+               ("benchmark.savegrid", boost::program_options::value<std::string>()->default_value("0"),         "Save grid values of each run.");
 
             boost::program_options::variables_map vm;
             boost::program_options::parsed_options po = boost::program_options::parse_config_file(cfg, desc, true);
             boost::program_options::store(po, vm);
+            boost::program_options::notify(vm);
             cfg.close();
 
-            // Storing registeres options, intended for gird, problem and benchmark configuration.
+            // Storing registered options, intended for grid, problem and benchmark configuration.
             for (const auto& var : vm)
                 options_[var.first] = boost::any_cast<std::string>(var.second.value());
 
@@ -105,7 +110,23 @@ class BenchmarkCFG {
             return 1;
        }
 
+        template<typename T>
+        T getValue
+        (const std::string & key) const {
+            std::unordered_map<std::string, std::string>::const_iterator iter = options_.find(key);
+            if (iter != options_.end())
+                return boost::lexical_cast<T>(iter->second);
+            else
+                return boost::lexical_cast<T>(0);
+        }
+
+        const std::vector<std::string> & getSolverNames
+        () {
+            return solverNames_;
+        }
+
     private:
+
        std::vector<std::string> solverNames_;
        std::unordered_map<std::string, std::string> options_;
 
