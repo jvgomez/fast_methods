@@ -50,7 +50,6 @@
 #include <numeric>
 #include <fstream>
 #include <array>
-#include <limits>
 
 template <class grid_t>
 class Solver {
@@ -93,7 +92,7 @@ class Solver {
 
         void setInitialPoints(const std::vector<unsigned int> & init_points)
         {
-            setInitialAndGoalPoints(init_points, std::numeric_limits<unsigned int>::quiet_NaN());
+            setInitialAndGoalPoints(init_points, -1);
         }
 
         virtual void setup

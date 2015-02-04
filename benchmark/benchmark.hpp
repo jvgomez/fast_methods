@@ -35,7 +35,8 @@ class Benchmark {
         saveLog_(saveLog),
         runID_(0),
         nruns_(10),
-        path_("results") {}
+        path_("results"),
+        name_("benchmark"){}
 
         virtual ~Benchmark()
         {
@@ -80,7 +81,7 @@ class Benchmark {
 
         void setInitialPoints(const std::vector<unsigned int> & init_points)
         {
-            setInitialAndGoalPoints(init_points, std::numeric_limits<unsigned int>::quiet_NaN());
+            setInitialAndGoalPoints(init_points, -1);
         }
 
         void run
@@ -91,6 +92,8 @@ class Benchmark {
             boost::progress_display showProgress (solvers_.size()*nruns_);
 
             setupSolvers();
+
+            logConfig();
 
             for (Solver<grid_t>* s :solvers_)
             {
@@ -127,8 +130,7 @@ class Benchmark {
             log_ << fmtID_;
 
             std::cout.copyfmt(init);
-            log_ << '\t' << s->getName() << "\t" << s->getGrid()->getNDims()
-                 << '\t' << s->getGrid()->getDimSizesStr() << time << '\n';
+            log_ << '\t' << s->getName() << "\t" << time << '\n';
         }
 
         void saveGrid
@@ -148,6 +150,12 @@ class Benchmark {
             ofs.close();
         }
 
+        void setName
+        (const std::string & n)
+        {
+            name_ = n;
+        }
+
         void clear
         () {
             for (auto & s : solvers_)
@@ -160,6 +168,25 @@ class Benchmark {
         }
 
     private:
+        void logConfig
+        () {
+            log_ << name_ << '\t' << nruns_ << '\t' << grid_->getNDims()
+                 << '\t' << grid_->getDimSizesStr();
+            printStartPoints(log_);
+
+            if (goal_idx_ == -1)
+                log_ << "nan";
+            else
+                log_ << goal_idx_;
+            log_ << '\n';
+        }
+
+        void printStartPoints
+        (std::ostream & os) {
+            std::copy(init_points_.begin(), init_points_.end(), std::ostream_iterator<unsigned int>(os, "\t"));
+        }
+
+
         void setupSolvers
         () {
             for (Solver<grid_t>* s :solvers_)
@@ -203,6 +230,7 @@ class Benchmark {
         unsigned int nruns_;
 
         boost::filesystem::path path_;
+        std::string name_;
 };
 
 #endif /* BENCHMARK_HPP_*/

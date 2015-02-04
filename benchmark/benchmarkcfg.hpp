@@ -34,6 +34,7 @@
 
 // TODO: the getter functions do not check if the types are admissible.
 // TODO: does not have support for multiple starts.
+// TODO: does not have support to change solvers name or parameters.
 
 class BenchmarkCFG {
 
@@ -69,7 +70,7 @@ class BenchmarkCFG {
                ("grid.cell",          boost::program_options::value<std::string>()->default_value("FMCell"),    "Type of cell. FMCell by default.")
                ("grid.dimsize",       boost::program_options::value<std::string>()->required(),                 "Size of dimensions: N,M,O...")
                ("problem.start",      boost::program_options::value<std::string>()->required(),                 "Start point: s1,s2,s3...")
-               ("problem.goal",       boost::program_options::value<std::string>()->default_value("-1"),        "Goal point: g1,g2,g3... By default no goal point.")
+               ("problem.goal",       boost::program_options::value<std::string>()->default_value("nan"),        "Goal point: g1,g2,g3... By default no goal point.")
                ("benchmark.name",     boost::program_options::value<std::string>()->default_value("benchmark"), "Name of the benchmark.")
                ("benchmark.runs",     boost::program_options::value<std::string>()->default_value("10"),        "Number of runs per solver.")
                ("benchmark.savegrid", boost::program_options::value<std::string>()->default_value("0"),         "Save grid values of each run.");
@@ -111,6 +112,7 @@ class BenchmarkCFG {
         void configure
         (Benchmark<grid_t> & b) {
             b.setSaveLog(true);
+            b.setName(getValue<std::string>("benchmark.name"));
             b.setSaveGrid(getValue<bool>("benchmark.savegrid"));
             b.setNRuns(getValue<unsigned int>("benchmark.runs"));
             b.setPath(boost::filesystem::path("results_" + getValue<std::string>("benchmark.name")));
@@ -149,14 +151,16 @@ class BenchmarkCFG {
             startIndices.push_back(startIdx);
 
             const std::string & strToSplit3 = options_.find("problem.goal")->second;
-            unsigned int goalIdx = -1;
-            if (strToSplit3 != "-1")
+            unsigned int goalIdx;
+            if (strToSplit3 != "nan")
             {
                 std::array<unsigned int, N> goalCoords = splitAndCast<unsigned int, N>(strToSplit3);
                 grid->coord2idx(goalCoords, goalIdx);
+                b.setInitialAndGoalPoints(startIndices, goalIdx);
             }
+            else
+                b.setInitialPoints(startIndices);
 
-            b.setInitialAndGoalPoints(startIndices, goalIdx);
             b.setEnvironment(grid);
         }
 
