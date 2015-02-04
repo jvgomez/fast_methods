@@ -86,7 +86,12 @@ class Benchmark {
 
         void run
         () {
-            if (saveGrid_ || saveLog_)
+            if (saveGrid_)
+            {
+                boost::filesystem::create_directory(path_);
+                boost::filesystem::create_directory(path_ / name_);
+            }
+            else if (saveLog_)
                 boost::filesystem::create_directory(path_);
 
             boost::progress_display showProgress (solvers_.size()*nruns_);
@@ -127,25 +132,23 @@ class Benchmark {
             std::ios init(NULL);
             init.copyfmt(std::cout);
             formatID();
-            log_ << fmtID_;
+            log_ << '\n' << fmtID_;
 
             std::cout.copyfmt(init);
-            log_ << '\t' << s->getName() << "\t" << time << '\n';
+            log_ << '\t' << s->getName() << "\t" << time;
         }
 
         void saveGrid
         (Solver<grid_t>* s) const {
-            thread_local std::string filename;
-            filename = path_.string();
-            filename += '/';
-            filename += fmtID_;
-            filename += ".grid";
-            GridWriter::saveGridValues(filename.c_str(), *(s->getGrid()));
+            thread_local boost::filesystem::path filename;
+            filename = path_ / name_ / fmtID_;
+            filename.replace_extension(".grid");
+            GridWriter::saveGridValues(filename.string().c_str(), *(s->getGrid()));
         }
 
         void saveLog
         () const {
-            std::ofstream ofs (path_.string() + "/benchmark.log");
+            std::ofstream ofs (path_.string() + "/" + name_ + ".log");
             ofs << log_.rdbuf();
             ofs.close();
         }
@@ -172,20 +175,16 @@ class Benchmark {
         () {
             log_ << name_ << '\t' << nruns_ << '\t' << grid_->getNDims()
                  << '\t' << grid_->getDimSizesStr();
-            printStartPoints(log_);
+
+            // Saving starting points.
+            log_ << init_points_.size() << '\t';
+            std::copy(init_points_.begin(), init_points_.end(), std::ostream_iterator<unsigned int>(log_, "\t"));
 
             if (goal_idx_ == -1)
                 log_ << "nan";
             else
                 log_ << goal_idx_;
-            log_ << '\n';
         }
-
-        void printStartPoints
-        (std::ostream & os) {
-            std::copy(init_points_.begin(), init_points_.end(), std::ostream_iterator<unsigned int>(os, "\t"));
-        }
-
 
         void setupSolvers
         () {

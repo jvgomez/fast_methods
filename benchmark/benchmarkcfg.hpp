@@ -64,6 +64,10 @@ class BenchmarkCFG {
                return 0;
             }
 
+            path_ = boost::filesystem::absolute( boost::filesystem::path(filename) );
+            boost::filesystem::path name = path_.filename();
+            name.replace_extension("");
+
             boost::program_options::options_description desc;
             desc.add_options()
                ("grid.ndims",         boost::program_options::value<std::string>()->default_value("2"),         "Number of dimensions.")
@@ -71,7 +75,7 @@ class BenchmarkCFG {
                ("grid.dimsize",       boost::program_options::value<std::string>()->required(),                 "Size of dimensions: N,M,O...")
                ("problem.start",      boost::program_options::value<std::string>()->required(),                 "Start point: s1,s2,s3...")
                ("problem.goal",       boost::program_options::value<std::string>()->default_value("nan"),        "Goal point: g1,g2,g3... By default no goal point.")
-               ("benchmark.name",     boost::program_options::value<std::string>()->default_value("benchmark"), "Name of the benchmark.")
+               ("benchmark.name",     boost::program_options::value<std::string>()->default_value(name.string()), "Name of the benchmark.")
                ("benchmark.runs",     boost::program_options::value<std::string>()->default_value("10"),        "Number of runs per solver.")
                ("benchmark.savegrid", boost::program_options::value<std::string>()->default_value("0"),         "Save grid values of each run.");
 
@@ -115,7 +119,7 @@ class BenchmarkCFG {
             b.setName(getValue<std::string>("benchmark.name"));
             b.setSaveGrid(getValue<bool>("benchmark.savegrid"));
             b.setNRuns(getValue<unsigned int>("benchmark.runs"));
-            b.setPath(boost::filesystem::path("results_" + getValue<std::string>("benchmark.name")));
+            b.setPath(boost::filesystem::path("results"));
 
             for(const auto & name : solverNames_)
             {
@@ -193,6 +197,8 @@ class BenchmarkCFG {
 
        std::vector<std::string> solverNames_;
        std::unordered_map<std::string, std::string> options_;
+
+       boost::filesystem::path path_;
 
 };
 
