@@ -38,7 +38,7 @@ function bm = parseBenchmarkLog (path_to_file)
 
     bm.exp = cell(bm.nexp/bm.nruns,2);
     for i = 1:bm.nexp/bm.nruns
-        bm.exp{i,1} = solvers{i*2};
+        bm.exp{i,1} = solvers{(i-1)*bm.nruns+1};
         bm.exp{i,2} = times((i-1)*bm.nruns+1:i*bm.nruns);
     end
 
