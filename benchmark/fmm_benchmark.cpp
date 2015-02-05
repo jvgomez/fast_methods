@@ -33,7 +33,6 @@ int main(int argc, const char ** argv)
     BenchmarkCFG bcfg;
     if (bcfg.readOptions(argv[1]))
     {
-        // TODO: move this code to bcfg.createBenchmark
         if(bcfg.getValue<std::string>("grid.cell") == "FMCell")
         {
             switch (bcfg.getValue<unsigned int>("grid.ndims"))
@@ -52,7 +51,12 @@ int main(int argc, const char ** argv)
                     b.run();
                     break;
                 }
+                // Include here new dimensions.
             }
+        }
+        else
+        {
+            // Include here new celltypes and include the corresponding switch dimensions as for FMCell.
         }
     }
 }
