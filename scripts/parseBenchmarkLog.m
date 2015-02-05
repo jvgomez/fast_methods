@@ -1,49 +1,44 @@
-clear all;
-close all;
+function bm = parseBenchmarkLog (path_to_file)
+    %% Opening file.
+    txt = fileread(path_to_file);
+    txt = regexp(txt, '[\t\n]', 'split');
 
-%% Params to set.
-path_to_file = '../examples/build/results_test/benchmark.log';
+    %% Parsing header.
+    bm.name = txt{1};
+    bm.nruns = str2double(txt{2});
+    bm.ndims = str2double(txt{3});
+    bm.dimsize = zeros(bm.ndims,1);
+    for i = 1:bm.ndims
+        bm.dimsize(i) = str2double(txt{i+3});
+    end
 
-%% Openning files.
-txt = fileread(path_to_file);
-txt = regexp(txt, '[\t\n]', 'split');
+    nstartpoints = str2double(txt{4+bm.ndims});
+    bm.startpoints = zeros(nstartpoints,1);
+    for i = 1:nstartpoints
+        bm.startpoints(i) = str2double(txt{4+bm.ndims+i});
+    end
 
-%% Parsing header.
-bm.name = txt{1};
-bm.nruns = str2double(txt{2});
-bm.ndims = str2double(txt{3});
-bm.dimsize = zeros(bm.ndims,1);
-for i = 1:bm.ndims
-    bm.dimsize(i) = str2double(txt{i+3});
-end
+    bm.goalpoint = str2double(txt{5+bm.ndims+nstartpoints});
 
-nstartpoints = str2double(txt{4+bm.ndims});
-bm.startpoints = zeros(nstartpoints,1);
-for i = 1:nstartpoints
-    bm.startpoints(i) = str2double(txt{4+bm.ndims+i});
-end
+    hs = 5+bm.ndims+nstartpoints; % Header's length
 
-bm.goalpoint = str2double(txt{5+bm.ndims+nstartpoints});
+    %% Parsing experiments. Might be a bit redundant.
+    bm.nexp = (length(txt)-hs)/3;
+    id = zeros(bm.nexp,1);
+    idstr = cell(bm.nexp,1);
+    solvers = cell(bm.nexp/bm.nruns,1);
+    times = zeros(bm.nexp,1);
+    for i = 1:bm.nexp
+        idx = hs+(i-1)*3 + 1;
+        idstr{i} = txt{idx};
+        id(i) = str2double(idstr(i));
+        solvers{i} = txt{idx+1};
+        times(i) = str2double(txt{idx+2});
+    end
 
-hs = 5+bm.ndims+nstartpoints; % Header's length
-
-%% Parsing experiments.
-bm.nexp = (length(txt)-hs)/3;
-id = zeros(bm.nexp,1);
-idstr = cell(bm.nexp,1);
-solvers = cell(bm.nexp/bm.nruns,1);
-times = zeros(bm.nexp,1);
-for i = 1:bm.nexp
-    idx = hs+(i-1)*3 + 1;
-    idstr{i} = txt{idx};
-    id(i) = str2double(idstr(i));
-    solvers{i} = txt{idx+1};
-    times(i) = str2double(txt{idx+2});
-end
-
-bm.exp = cell(bm.nexp/bm.nruns,2);
-for i = 1:bm.nexp/bm.nruns
-    bm.exp{i,1} = solvers{i*2};
-    bm.exp{i,2} = times((i-1)*bm.nruns+1:i*bm.nruns);
-end
+    bm.exp = cell(bm.nexp/bm.nruns,2);
+    for i = 1:bm.nexp/bm.nruns
+        bm.exp{i,1} = solvers{i*2};
+        bm.exp{i,2} = times((i-1)*bm.nruns+1:i*bm.nruns);
+    end
 
