@@ -13,22 +13,20 @@
 
 // TODO: check if points fall in obstacles, points in the borders, etc.
 
-template <typename T> double sgn(T val) {
+template <typename T>
+T sgn(T val) {
     return (T(0) < val) - (val < T(0));
 }
 
 template <class grid_t> class GradientDescent {
-    private:
-        static constexpr size_t ndims_ = grid_t::getNDims();
 
-        // Short-hand.
-        typedef typename std::array<int, ndims_> Coord;
-        typedef typename std::array<double, ndims_> Point;
-        typedef typename std::vector <Point> Path;
+    // Short-hand.
+    static constexpr size_t ndims_ = grid_t::getNDims();
+    typedef typename std::array<unsigned int, ndims_> Coord;
+    typedef typename std::array<double, ndims_> Point;
+    typedef typename std::vector <Point> Path;
 
     public:
-        GradientDescent() {}; // Default constructor not used.
-        virtual ~GradientDescent() {};
 
        /**
         * Computes the path from the given index to a minimum (the one
@@ -57,15 +55,15 @@ template <class grid_t> class GradientDescent {
         * @param the step size to be applied.
         */
       static void apply
-      (grid_t & grid, int &  idx, Path & path, std::vector <double> & path_velocity, const double step = 1) {
+      (grid_t & grid, unsigned int &  idx, Path & path, std::vector <double> & path_velocity, double step = 1) {
 
           Coord current_coord;
           Point current_point;
           Coord dimsize = grid.getDimSizes();
 
-          std::array<int, ndims_-1> d_; //  Same as nDGridMap class auxiliar array d_.
+          std::array<unsigned int, ndims_-1> d_; //  Same as nDGridMap class auxiliar array d_.
           d_[0] = dimsize[0];
-          for (int i = 1; i < ndims_; ++i)
+          for (size_t i = 1; i < ndims_; ++i)
               d_[i] = dimsize[i]*d_[i-1];
 
           grid.idx2coord(idx, current_coord);
@@ -85,7 +83,7 @@ template <class grid_t> class GradientDescent {
                   grads[0] = sgn<double>(grads[0]);
               double max_grad = std::abs(grads[0]);
 
-              for (int i = 1; i < ndims_; ++i) {
+              for (size_t i = 1; i < ndims_; ++i) {
                   grads[i] = - grid[idx-d_[i-1]].getValue()/2 + grid[idx+d_[i-1]].getValue()/2;
                   if (isinf(grads[i]))
                       grads[i] = sgn<double>(grads[i]);
@@ -94,7 +92,7 @@ template <class grid_t> class GradientDescent {
               }
 
               // Updating points
-              for (int i = 0; i < ndims_; ++i) {
+              for (size_t i = 0; i < ndims_; ++i) {
                   // Moving the point in dim i.
                   current_point[i] = current_point[i] - step*grads[i]/std::abs(max_grad);
                   current_coord[i] = current_point[i];
@@ -140,15 +138,15 @@ template <class grid_t> class GradientDescent {
        */
 
       static void apply_directional
-      (grid_t & grid, int &  idx, Path & path, std::vector <double> velocity_map, std::vector <double> & path_velocity, const double step = 1) {
+      (grid_t & grid, unsigned int &  idx, Path & path, std::vector <double> & velocity_map, std::vector <double> & path_velocity,  double step = 1) {
 
           Coord current_coord;
           Point current_point;
           Coord dimsize = grid.getDimSizes();
 
-          std::array<int, ndims_-1> d_; //  Same as nDGridMap class auxiliar array d_.
+          std::array<unsigned int, ndims_-1> d_; //  Same as nDGridMap class auxiliar array d_.
           d_[0] = dimsize[0];
-          for (int i = 1; i < ndims_; ++i)
+          for (size_t i = 1; i < ndims_; ++i)
               d_[i] = dimsize[i]*d_[i-1];
 
           grid.idx2coord(idx, current_coord);
@@ -169,7 +167,7 @@ template <class grid_t> class GradientDescent {
                   grads[0] = sgn<double>(grads[0]);
               double max_grad = std::abs(grads[0]);
 
-              for (int i = 1; i < ndims_; ++i) {
+              for (size_t i = 1; i < ndims_; ++i) {
                   grads[i] = - grid[idx-d_[i-1]].getDirectionalTime()/2 + grid[idx+d_[i-1]].getDirectionalTime()/2;
                   if (isinf(grads[i]))
                       grads[i] = sgn<double>(grads[i]);
@@ -178,7 +176,7 @@ template <class grid_t> class GradientDescent {
               }
 
               // Updating points
-              for (int i = 0; i < ndims_; ++i) {
+              for (size_t i = 0; i < ndims_; ++i) {
                   // Moving the point in dim i.
                   current_point[i] = current_point[i] - step*grads[i]/std::abs(max_grad);
                   current_coord[i] = current_point[i];
@@ -194,8 +192,6 @@ template <class grid_t> class GradientDescent {
           path.push_back(current_point);
           path_velocity.push_back(velocity_map[idx]);
       }
-
-    protected:
 };
 
 

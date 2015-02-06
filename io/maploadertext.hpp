@@ -25,60 +25,6 @@
 
 class MapLoaderText {
     public:
-        MapLoaderText() {};
-        virtual ~MapLoaderText() {};
-
-       /**
-         *  Loads the initial binary map for a given grid. It is based on the
-         * nDGridMap::setOccupancy() which has to be bool valued. This function has to be
-         * overloaded in another occupancy type is being used.
-         *
-         * The image should be monochromatic!
-         *
-         * Should be used only in 2D grids.
-         *
-         * The Y dimension flipping is because nDGridMap works in X-Y coordinates, not in image indices as CImg.
-         *
-         * IMPORTANT NOTE: no type-checkings are done. T type has to be Cell or any class with bool setOccupancy() method.
-         *
-         * @param filename text file to be open
-         * @param grid 2D nDGridmap
-         *
-         */
-        template<class T, size_t ndims>
-        static void loadMapFromText
-        (const char * filename, nDGridMap<T, ndims> & grid) {
-            std::ifstream file;
-            file.open(filename);
-
-            if (file.is_open())
-            {
-                std::string val;
-                std::getline(file, val);
-
-                float leafsize;
-                int width, height;
-                size_t ndims_aux;
-
-                file >> leafsize;
-                file >> ndims_aux;
-                file >> width;
-                file >> height;
-
-                std::array<int, ndims> dimsize = {width, height};
-                grid.resize(dimsize);
-                grid.setLeafSize(leafsize);
-
-                for (int i = 0; i < width*height; ++i)
-                {
-                    bool occupancy;
-                    file >> occupancy;
-
-                    grid[i].setOccupancy(occupancy);
-                }
-            }
-        }
-
         /**
          * Loads the initial binary map for a given grid. It is based on the
          * nDGridMap::setOccupancy() which has to be bool valued. This function has to be
@@ -100,9 +46,10 @@ class MapLoaderText {
          *
          */
         template<class T, size_t ndims>
-        static void loadMapFromText
-        (const char * filename, nDGridMap<T, ndims> & grid, std::vector<int> & init_points) {
+        static int loadMapFromText
+        (const char * filename, nDGridMap<T, ndims> & grid) {
             std::ifstream file;
+            std::vector<unsigned int> obs;
             file.open(filename);
 
             if (file.is_open())
@@ -110,8 +57,8 @@ class MapLoaderText {
                 std::string val;
                 std::getline(file, val);
 
-                float leafsize;
-                int width, height;
+                double leafsize;
+                unsigned int width, height;
                 size_t ndims_aux;
 
                 file >> leafsize;
@@ -119,11 +66,11 @@ class MapLoaderText {
                 file >> width;
                 file >> height;
 
-                std::array<int, ndims> dimsize = {width, height};
+                std::array<unsigned int, ndims> dimsize = {width, height};
                 grid.resize(dimsize);
                 grid.setLeafSize(leafsize);
 
-                for (int i = 0; i < width*height; ++i)
+                for (unsigned int i = 0; i < width*height; ++i)
                 {
                     bool occupancy;
                     file >> occupancy;
@@ -131,13 +78,17 @@ class MapLoaderText {
                     grid[i].setOccupancy(occupancy);
 
                     if (occupancy == 0)
-                        init_points.push_back(i);
+                        obs.push_back(i);
                 }
+                grid.setOccupiedCells(obs);
+                return 1;
+            }
+            else
+            {
+                console::error("File not found.");
+                return 0;
             }
         }
-
-    protected:
-
 };
 
 #endif /* MAPLOADER_H_ */

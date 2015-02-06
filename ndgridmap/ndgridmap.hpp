@@ -38,7 +38,6 @@
 
     // TODO: a neighbors precomputation could speed things up.
     // TODO: improve coord2idx function in order to just pass n coordinates and not an array.
-    // TODO: overload [] and getCell methods to return const.
 
 template <class T, size_t ndims> class nDGridMap {
 
@@ -46,7 +45,7 @@ template <class T, size_t ndims> class nDGridMap {
        Ostream operator << overload for this class.
        */
     friend std::ostream& operator <<
-    (std::ostream & os, const nDGridMap<T,ndims> & g) {
+    (std::ostream & os, nDGridMap<T,ndims> & g) {
         os << console::str_info("Grid cell information");
         os << "\t" << g.getCell(0).type() << std::endl;
         os << "\t" << g.ncells_ << " cells." << std::endl;
@@ -61,6 +60,8 @@ template <class T, size_t ndims> class nDGridMap {
 
     public:
 
+      nDGridMap () : clean_(true) {}
+
       /**
        Constructor.
        *
@@ -73,8 +74,6 @@ template <class T, size_t ndims> class nDGridMap {
         clean_(true) {
             resize(dimsize);
         }
-
-        virtual ~nDGridMap<T,ndims>() {}
 
         /**
          * Resizes the grid.
@@ -146,20 +145,20 @@ template <class T, size_t ndims> class nDGridMap {
         double getMinValueInDim
         (const unsigned int idx, const unsigned int dim)   {
             n_neighs = 0; // How many neighbors obtained in that dimension.
-            getNeighborsInDim(idx,n,dim);
+            getNeighborsInDim(idx,n_,dim);
 
             if (n_neighs == 1)
-                return cells_[n[0]].getValue();
+                return cells_[n_[0]].getValue();
             else
-                return (cells_[n[0]].getValue()<cells_[n[1]].getValue()) ? cells_[n[0]].getValue() : cells_[n[1]].getValue();
+                return (cells_[n_[0]].getValue()<cells_[n_[1]].getValue()) ? cells_[n_[0]].getValue() : cells_[n_[1]].getValue();
 
         }
 
         unsigned int getNumberNeighborsInDim
         (const int idx, std::array<unsigned int, ndims> &m, const unsigned int dim)   {
             n_neighs = 0;
-            getNeighborsInDim(idx,n,dim);
-            m = n;
+            getNeighborsInDim(idx,n_,dim);
+            m = n_;
             return n_neighs;
         }
 
@@ -353,12 +352,12 @@ template <class T, size_t ndims> class nDGridMap {
         }
 
         /**
-        @return the maximum value of the cells within the grid.
+           @return the maximum value of the cells within the grid.
          * */
         double getMaxValue
         () const {
             double max = 0;
-            for (T & c:cells_) {
+            for (const T & c:cells_) {
                 if (!isinf(c.getValue()) && c.getValue() > max)
                     max = c.getValue();
             }
@@ -377,9 +376,19 @@ template <class T, size_t ndims> class nDGridMap {
 
         void clean
         () {
+            if(!isClean())
+            {
+                for (T & c:cells_)
+                    c.setDefault();
+                clean_ = true;
+            }
+        }
+
+        void clear
+        () {
             for (T & c:cells_)
-                c.setDefault();
-            clean_ = true;
+                delete c;
+            cells_.clear();
         }
 
         std::string getDimSizesStr()
@@ -390,8 +399,18 @@ template <class T, size_t ndims> class nDGridMap {
             return ss.str();
         }
 
-        /** Makes the number of dimensions of the grid available at compilation time.
-        @return number of dimensions of the grid.
+        void setOccupiedCells
+        (const std::vector<unsigned int> & obs) {
+            occupied_ = obs;
+        }
+
+        void getOccupiedCells
+        (std::vector<unsigned int> & obs) const {
+            obs = occupied_;
+        }
+
+        /**  Makes the number of dimensions of the grid available at compilation time.
+             @return number of dimensions of the grid.
          * */
         static constexpr size_t getNDims() {return ndims;}
 
@@ -406,9 +425,9 @@ template <class T, size_t ndims> class nDGridMap {
         // Auxiliar vectors to speed things up.
         std::array<unsigned int, ndims> d_;  /*!< Auxiliar array to speed up neighbor and indexing generalization: stores parcial multiplications of dimensions sizes. d_[0] = dimsize_[0];
                                                                                                              d_[1] = dimsize_[0]*dimsize_[1]; etc.*/
-        //std::array<int, ndims> dd_; /*!< Auxiliar array to speed up neighbor and indexing generalization:   dd_[0] = d_[0], dd_[1] = d_[1] - dd_[0], and so on. */
-        std::array<unsigned int, 2> n; /*!< Auxiliar array to speed up neighbor and indexing generalization: for getMinValueInDim() function.*/
+        std::array<unsigned int, 2> n_; /*!< Auxiliar array to speed up neighbor and indexing generalization: for getMinValueInDim() function.*/
         unsigned int n_neighs; /*!<  Internal variable that counts the number of neighbors found in every iteration. Modified by getNeighbours(), getNeighborsInDim() and getMinValueInDim(). functions.*/
+        std::vector<unsigned int> occupied_; /*!< Caches the occupied cells (obstacles). */
 };
 
 #endif /* NDGRIDCELL_H_*/

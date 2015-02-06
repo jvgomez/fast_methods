@@ -32,44 +32,38 @@ add_executable (test_fmm test_fmm.cpp
                         )
 
 
-add_executable (test_sfmm test_fmm.cpp
-                        ../console/console.cpp
-                        ../ndgridmap/cell.cpp
-                        ../fmm/fmdata/fmcell.cpp
-                        )
-
 add_executable (test_fm2 test_fm2.cpp
                         ../console/console.cpp
                         ../ndgridmap/cell.cpp
                         ../fmm/fmdata/fmcell.cpp
                         )
                     
-add_executable (test_fm2star test_fm2star.cpp
-                        ../console/console.cpp
-                        ../ndgridmap/cell.cpp
-                        ../fmm/fmdata/fmcell.cpp
-                        )
+#add_executable (test_fm2star test_fm2star.cpp
+#                        ../console/console.cpp
+#                        ../ndgridmap/cell.cpp
+#                        ../fmm/fmdata/fmcell.cpp
+#                        )
 
-add_executable (test_fm2directional test_fm2directional.cpp
-                        ../console/console.cpp
-                        ../ndgridmap/cell.cpp
-                        ../fmm/fmdata/fmcell.cpp
-                        )
+#add_executable (test_fm2directional test_fm2directional.cpp
+#                        ../console/console.cpp
+#                        ../ndgridmap/cell.cpp
+#                        ../fmm/fmdata/fmcell.cpp
+#                        )
 
-add_executable (test_gmm test_gmm.cpp
-            ../console/console.cpp
-            ../ndgridmap/cell.cpp
-            ../fmm/fmdata/fmcell.cpp
-            )
+#add_executable (test_gmm test_gmm.cpp
+#            ../console/console.cpp
+#            ../ndgridmap/cell.cpp
+#            ../fmm/fmdata/fmcell.cpp
+#            )
 
-add_executable (test_fim test_fim.cpp
-            ../console/console.cpp
-            ../ndgridmap/cell.cpp
-            ../fmm/fmdata/fmcell.cpp
-            )
+#add_executable (test_fim test_fim.cpp
+#            ../console/console.cpp
+#            ../ndgridmap/cell.cpp
+#            ../fmm/fmdata/fmcell.cpp
+#            )
 
-add_executable (test_untidy test_untidy.cpp
-            ../console/console.cpp
-            ../ndgridmap/cell.cpp
-            ../fmm/fmdata/fmcell.cpp
-           )
+#add_executable (test_untidy test_untidy.cpp
+#            ../console/console.cpp
+#            ../ndgridmap/cell.cpp
+#            ../fmm/fmdata/fmcell.cpp
+#           )

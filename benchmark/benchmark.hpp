@@ -180,7 +180,7 @@ class Benchmark {
             log_ << init_points_.size() << '\t';
             std::copy(init_points_.begin(), init_points_.end(), std::ostream_iterator<unsigned int>(log_, "\t"));
 
-            if (goal_idx_ == -1)
+            if (int(goal_idx_) == -1)
                 log_ << "nan";
             else
                 log_ << goal_idx_;

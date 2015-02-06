@@ -36,6 +36,8 @@ bool FMCell::isObstacle
 
 void FMCell::setDefault
 () {
+    Cell::setDefault();
     value_ = std::numeric_limits<double>::infinity();
+    velocity_ = 1;
     state_ = FMState::OPEN;
 }

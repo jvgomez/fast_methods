@@ -70,6 +70,8 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FMM : public
              //   name_ = "FMMFib";
         }
 
+        virtual ~FMM () { clear(); }
+
         /**
         * Internal function although it is set to public so it can be accessed if desired.
         *
@@ -118,11 +120,11 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FMM : public
             }
 
             double b = -2*sumT;
-            double c = sumTT - grid_->getLeafSize() * grid_->getLeafSize()/(grid_->getCell(idx).getVelocity()*grid_->getCell(idx).getVelocity()); // leafsize not taken into account here.
+            double c = sumTT - grid_->getLeafSize() * grid_->getLeafSize()/(grid_->getCell(idx).getVelocity()*grid_->getCell(idx).getVelocity());
             double quad_term = b*b - 4*a*c;
             if (quad_term < 0) {
                 double minT = *(std::min_element(Tvalues.begin(), Tvalues.end()));
-                updatedT = 1/(grid_->getCell(idx).getVelocity()*grid_->getCell(idx).getVelocity()) + minT; // leafsize not taken into account here.
+                updatedT = grid_->getLeafSize() * grid_->getLeafSize()/(grid_->getCell(idx).getVelocity()*grid_->getCell(idx).getVelocity()) + minT;
             }
             else
                 updatedT = (-b + sqrt(quad_term))/(2*a);

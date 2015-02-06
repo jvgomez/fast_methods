@@ -59,14 +59,14 @@ class Solver {
 
         Solver(const std::string& name) : name_(name), setup_(false) {}
 
-        virtual ~Solver() {}
+        virtual ~Solver() { clear(); }
 
          /**
           * Sets the input grid in which operations will be performed.
           *
           * @param g input grid map.
           */
-        void setEnvironment
+        virtual void setEnvironment
         (grid_t * g) {
             grid_ = g;
             if (!grid_->isClean())
@@ -90,14 +90,15 @@ class Solver {
             goal_idx_ = goal_idx;
         }
 
-        void setInitialPoints(const std::vector<unsigned int> & init_points)
+        void setInitialPoints
+        (const std::vector<unsigned int> & init_points)
         {
             setInitialAndGoalPoints(init_points, -1);
         }
 
         virtual void setup
-        () {
-            const int err = sanityChecks();
+        (bool hasGoal = 0) {
+            const int err = sanityChecks(hasGoal);
             if (err)
             {
                 console::error("Global sanity checks not successful: ");
@@ -110,6 +111,9 @@ class Solver {
                         break;
                     case 3:
                         console::error("Initial points were not set.");
+                        break;
+                    case 4:
+                        console::error("Goal point was not set.");
                         break;
                     default:
                         console::error("Uknown error.");
@@ -129,19 +133,19 @@ class Solver {
 
         virtual void clear
         () {
-            setup_ = false;
             init_points_.clear();
             goal_idx_ = -1;
-            grid_ = NULL;
+            setup_ = false;
         }
 
         virtual void reset
-        () {
+        (bool cleanGrid = false) {
             setup_ = false;
-            grid_->clean();
+            if (cleanGrid)
+                grid_->clean();
         }
 
-        virtual grid_t* getGrid() const
+        grid_t* getGrid() const
         {
             return grid_;
         }
@@ -149,10 +153,11 @@ class Solver {
     protected:
 
         int sanityChecks
-        () {
+        (bool hasGoal = 0) {
             if (grid_ == NULL) return 1;
             if (!grid_->isClean()) return 2;
             if (init_points_.empty()) return 3;
+            if (hasGoal && int(goal_idx_) == -1) return 4;
             return 0;
         }
 

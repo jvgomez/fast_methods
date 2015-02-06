@@ -78,7 +78,7 @@ class FMCell : public Cell{
 
     protected:
         FMState state_;   /*!< State of the cell */
-        float velocity_;  /*!< Wave propagation velocity through this cell */
+        double velocity_;  /*!< Wave propagation velocity through this cell */
         int bucket_; /*!< Used when sorted with FMUntidyQueue */
 };
 
