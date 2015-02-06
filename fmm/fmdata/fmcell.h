@@ -71,7 +71,7 @@ class FMCell : public Cell{
         std::string type () {return std::string("FMCell - Fast Marching cell");}
 
         virtual double getArrivalTime () const              {return value_;}
-        virtual float getVelocity () const                  {return velocity_;}
+        virtual double getVelocity () const                  {return velocity_;}
         virtual FMState getState () const                   {return state_;}
         virtual bool getBucket() const                      {return bucket_;}
         virtual bool isObstacle() const;

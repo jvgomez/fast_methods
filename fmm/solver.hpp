@@ -66,7 +66,7 @@ class Solver {
           *
           * @param g input grid map.
           */
-        virtual void setEnvironment
+        void setEnvironment
         (grid_t * g) {
             grid_ = g;
             if (!grid_->isClean())
@@ -97,7 +97,12 @@ class Solver {
         }
 
         virtual void setup
-        (bool hasGoal = 0) {
+        () {
+            setup(false);
+        }
+
+        virtual void setup
+        (bool hasGoal) {
             const int err = sanityChecks(hasGoal);
             if (err)
             {

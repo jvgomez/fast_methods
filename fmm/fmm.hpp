@@ -70,7 +70,7 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FMM : public
              //   name_ = "FMMFib";
         }
 
-        virtual ~FMM () { clear(); }
+        virtual ~FMM() { clear(); }
 
         /**
         * Internal function although it is set to public so it can be accessed if desired.

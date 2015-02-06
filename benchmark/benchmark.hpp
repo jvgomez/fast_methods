@@ -115,7 +115,7 @@ class Benchmark {
                     if (saveGrid_)
                         saveGrid(s);
 
-                    s->reset();
+                    grid_->clean();
                     ++showProgress;
                 }
             }

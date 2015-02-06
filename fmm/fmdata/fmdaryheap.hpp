@@ -34,7 +34,6 @@ template <class cell_t> struct compare_cells_d_ary {
     inline bool operator()
     (const cell_t * c1 , const cell_t * c2) const {
         return c1->getArrivalTime() > c2->getArrivalTime();
-
     }
 };
 
@@ -46,8 +45,8 @@ template <class cell_t = FMCell> class FMDaryHeap {
 
     public:
         FMDaryHeap () {}
-        FMDaryHeap (const unsigned int & n) { handles_.reserve(n); }
-        virtual ~ FMDaryHeap() {}
+        FMDaryHeap (const size_t & n) { handles_.resize(n); } // Memory-inefficient, but faster.
+        virtual ~ FMDaryHeap() { clear(); }
         
         /**
          * Set the maximum number of cells the heap will contain.
@@ -56,7 +55,7 @@ template <class cell_t = FMCell> class FMDaryHeap {
          */
         void setMaxSize
         (const size_t & n) {
-            handles_.reserve(n);
+            handles_.resize(n);
         }
         
         void push
@@ -126,4 +125,3 @@ template <class cell_t = FMCell> class FMDaryHeap {
 
 
 #endif /* FMDARYHEAP_H_ */
-

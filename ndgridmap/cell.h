@@ -63,14 +63,14 @@ class Cell {
         // says that parameters could be given (or not).
         virtual double getValue() const             {return value_;}
         virtual bool getOccupancy() const           {return occupancy_;}
-        virtual int getIndex() const                {return index_;}
+        virtual unsigned int getIndex() const       {return index_;}
 
         virtual bool isOccupied() const             {return !occupancy_;}
 
     protected:
         double value_; /*!< Value of the cell. */
         bool occupancy_; /*!< Binary occupanxy, true means clear, false occupied. */
-        int index_; /*!< By design, each cell does not require to know its index within the grid
+        unsigned int index_; /*!< By design, each cell does not require to know its index within the grid
                         however, it is very useful when used in heaps*/
 };
 

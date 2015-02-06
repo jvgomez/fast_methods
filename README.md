@@ -108,9 +108,10 @@ Although there are a lot of folders, they are quite simple. It is organized this
 At the top of each file there are specific TODO comments.
 
 - Reimplement FM2* as FM2: as a high level FMM user, with underlying FMM templated.
-- Better setInitialAndGoalPoints() methods for FM2 versions, and compute fmm2_sources automatically or pass them in another different method.
+- Better setInitialAndGoalPoints() methods for FM2 versions.
 - Restructure the folder and the CMake files in order to properly have examples and that stuff.
 - Substitute arg parsing with boost_options.
 - Remove relative file dependencies (#include "../../fmm", filename = "../../data", CMakeLists.txt deps, etc).
 - Implement a grid copy constructor and operator, clear, etc.
 - Review code of fm2star, fm2directional and auxiliar classes (gridplotter, etc) not checked yet but they work well.
+- Most of the unsigned int should be replaced by size_t to be type-correct.
