@@ -41,19 +41,20 @@
 #include "../fmm/fmm.hpp"
 #include "../gradientdescent/gradientdescent.hpp"
 
-template < class grid_t, class heap_t = FMDaryHeap<FMCell>  >  class FM2 : public Solver<grid_t> {
+//template < class grid_t, class heap_t = FMDaryHeap<FMCell>  >  class FM2 : public Solver<grid_t> {
+template < class grid_t, class solver_t = FMM<grid_t> > class FM2 : public Solver<grid_t> {
 
     public:
         typedef std::vector< std::array<double, grid_t::getNDims()> > path_t;
 
         FM2
         (double maxDistance = -1) : Solver<grid_t>("FM2"), maxDistance_(maxDistance) {
-            solver_ = new FMM<grid_t,heap_t>();
+            solver_ = new solver_t();
         }
 
         FM2
         (const std::string& name, double maxDistance = -1) : Solver<grid_t>(name), maxDistance_(maxDistance) {
-            solver_ = new FMM<grid_t,heap_t>();
+            solver_ = new solver_t();
         }
 
         virtual ~FM2 () { clear(); }
@@ -185,7 +186,7 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell>  >  class FM2 : publi
 
         std::vector<unsigned int> fmm2_sources_;  /*!< Wave propagation sources for the Fast Marching Square. */
 
-        Solver<grid_t>* solver_;
+        solver_t* solver_;
 
         double maxDistance_; /*!< Distance value to saturate the first potential. */
 };

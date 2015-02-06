@@ -16,6 +16,10 @@
 #include "../fmm/fmdata/fmdaryheap.hpp"
 #include "../io/maploadertext.hpp"
 
+#include "../fmm/gmm.hpp"
+#include "../fmm/fim.hpp"
+#include "../fmm/ufmm.hpp"
+
 using namespace std;
 using namespace std::chrono;
 
@@ -54,9 +58,12 @@ int main(int argc, const char ** argv)
     grid_fm2.coord2idx(goal_point , goal_idx);
 
     std::vector<Solver<FMGrid2D>*> solvers;
-    solvers.push_back(new FM2<FMGrid2D>());
-    solvers.push_back(new FM2<FMGrid2D, FMFibHeap<FMCell> >("FM2Fib"));
-    solvers.push_back(new FM2<FMGrid2D, FMPriorityQueue<> >("SFMM"));
+    solvers.push_back(new FM2<FMGrid2D>("FM2_Dary"));
+    solvers.push_back(new FM2<FMGrid2D, FMM<FMGrid2D, FMFibHeap<FMCell> > >("FM2_Fib"));
+    solvers.push_back(new FM2<FMGrid2D, FMM<FMGrid2D, FMPriorityQueue<FMCell> > >("FM2_SFMM"));
+    solvers.push_back(new FM2<FMGrid2D, GMM<FMGrid2D> >("FM2_GMM"));
+    solvers.push_back(new FM2<FMGrid2D, FIM<FMGrid2D> >("FM2_FIM"));
+    solvers.push_back(new FM2<FMGrid2D, UFMM<FMGrid2D> >("FM2_UFMM"));
 
     for (Solver<FMGrid2D>* s :solvers)
     {
