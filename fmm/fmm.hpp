@@ -64,7 +64,11 @@
 template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FMM : public Solver<grid_t> {
 
     public:
-        FMM(const std::string& name = "FMMDary") : Solver<grid_t>(name) {
+
+        FMM(bool heuristics = false) : Solver<grid_t>("FMM"), heuristics_(heuristics) {
+        }
+
+        FMM(const std::string& name, bool heuristics = false) : Solver<grid_t>(name), heuristics_(heuristics) {
             // TODO: try to automate this.
             //if (static_cast<FMFibHeap>(heap_t))
              //   name_ = "FMMFib";
@@ -129,6 +133,9 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FMM : public
             else
                 updatedT = (-b + sqrt(quad_term))/(2*a);
 
+            if (heuristics_)
+                updatedT +=  distances_[idx]/grid_->getCell(idx).getVelocity();
+
             return updatedT;
         }
 
@@ -146,7 +153,7 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FMM : public
 
             unsigned int j = 0;
             unsigned int n_neighs = 0;
-            bool stopWavePropagation = 0;
+            bool stopWavePropagation = false;
 
             // Algorithm initialization
             for (unsigned int &i: init_points_) { // For each initial point
@@ -187,10 +194,21 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FMM : public
             } // while narrow band not empty
         }
 
+        void setHeuristics
+        (bool h) {
+            heuristics_ = h;
+        }
+
+        bool getHeuristics
+        () const {
+            return heuristics_;
+        }
+
         virtual void clear
         () {
             Solver<grid_t>::clear();
             narrow_band_.clear();
+            distances_.clear();
         }
 
         virtual void reset
@@ -199,13 +217,36 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FMM : public
             narrow_band_.clear();
         }
 
+        /**
+         * Calculates the euclidean distance between every pixel filling an
+         * array with all of them. This method has been generalized to be used
+         * on n-dimensional grids.
+         */
+        virtual void precomputeDistances
+        () {
+            distances_.reserve(grid_->size());
+            std::array <unsigned int, grid_t::getNDims()> coords;
+            double dist = 0;
+
+            for (size_t i = 0; i  <  grid_->size(); ++i)
+            {
+                dist = 0;
+                grid_->idx2coord(i, coords);
+
+                for (size_t j = 0; j  <  coords.size(); ++j)
+                    dist += pow(coords[j], 2);
+
+                distances_[i] = std::sqrt(dist);
+            }
+        }
+
     protected:
         using Solver<grid_t>::grid_;
         using Solver<grid_t>::init_points_;
         using Solver<grid_t>::goal_idx_;
         using Solver<grid_t>::setup_;
 
-        std::array <unsigned int, 2*grid_t::getNDims()> neighbors;  /*!< Auxiliar array which stores the neighbor of each iteration of the computeFM() function. */
+        std::array <unsigned int, 2*grid_t::getNDims()> neighbors; /*!< Auxiliar array which stores the neighbor of each iteration of the computeFM() function. */
 
     private:
         double sumT; /*!< Auxiliar value wich computes T1+T2+T3... Useful for generalizing the Eikonal solver. */
@@ -215,6 +256,9 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FMM : public
         std::array<double, grid_t::getNDims()> TTvalues;  /*!< Auxiliar array with values T0^2,T1^2...Tn-1^2 variables in the Discretized Eikonal Equation. */
 
         heap_t narrow_band_; /*!< Instance of the heap used. */
+
+        bool heuristics_;
+        std::vector<double> distances_;
 };
 
 #endif /* FMM_HPP_*/

@@ -61,9 +61,5 @@ int main(int argc, const char ** argv)
 
     // Preventing memory leaks.
     for (auto & s : solvers)
-    {
-        s->clear();
         delete s;
-    }
-    solvers.clear();
 }

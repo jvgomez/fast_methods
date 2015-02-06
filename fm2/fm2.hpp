@@ -4,11 +4,6 @@
     It uses as a main container the nDGridMap class. The nDGridMap type T
     has to be an FMCell or something inherited from it.
 
-    The leafsize of the grid map is ignored since it has to be >=1 and that
-    depends on the units employed.
-
-    The type of the heap are the same as for FMM class.
-    *
     @par External documentation:
         FM2:
           A. Valero, J.V. Gómez, S. Garrido and L. Moreno, The Path to Efficiency: Fast Marching Method for Safer, More Efficient Mobile Robot Trajectories, IEEE Robotics and Automation Magazine, Vol. 20, No. 4, 2013.
@@ -41,7 +36,6 @@
 #include "../fmm/fmm.hpp"
 #include "../gradientdescent/gradientdescent.hpp"
 
-//template < class grid_t, class heap_t = FMDaryHeap<FMCell>  >  class FM2 : public Solver<grid_t> {
 template < class grid_t, class solver_t = FMM<grid_t> > class FM2 : public Solver<grid_t> {
 
     public:
@@ -74,6 +68,11 @@ template < class grid_t, class solver_t = FMM<grid_t> > class FM2 : public Solve
         () {
             if (!setup_)
                  setup();
+
+            if(init_points_.size() > 1) {
+                console::error("FM2star only allows 1 initial point.");
+                exit(1);
+            }
 
             computeVelocitiesMap();
 

@@ -84,7 +84,7 @@ class Solver {
          *
          * @see init()
          */
-        void setInitialAndGoalPoints
+        virtual void setInitialAndGoalPoints
         (const std::vector<unsigned int> & init_points, unsigned int goal_idx) {
             init_points_ = init_points;
             goal_idx_ = goal_idx;

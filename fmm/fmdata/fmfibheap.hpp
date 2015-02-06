@@ -46,9 +46,9 @@ template <class cell_t = FMCell> class FMFibHeap {
     typedef typename fib_heap_t::handle_type handle_t;
 
     public:
-        FMFibHeap () {};
+        FMFibHeap () {}
         FMFibHeap (const int & n) {	handles_.resize(n);}
-        virtual ~ FMFibHeap() {};
+        virtual ~ FMFibHeap() {}
         
         /**
          * Set the maximum number of cells the heap will contain.
@@ -59,12 +59,12 @@ template <class cell_t = FMCell> class FMFibHeap {
         (const int & n) {
             handles_.resize(n);
         }
-        
-        void push 
+
+        void push
         (const cell_t * c) {
             handles_[c->getIndex()] = heap_.push(c);
         }
-        
+
         /**
          * pops index of the element with lowest value and removes it from the heap.
          * 
