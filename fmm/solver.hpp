@@ -66,7 +66,7 @@ class Solver {
           *
           * @param g input grid map.
           */
-        void setEnvironment
+        virtual void setEnvironment
         (grid_t * g) {
             grid_ = g;
             if (!grid_->isClean())
@@ -98,12 +98,7 @@ class Solver {
 
         virtual void setup
         () {
-            setup(false);
-        }
-
-        virtual void setup
-        (bool hasGoal) {
-            const int err = sanityChecks(hasGoal);
+            const int err = sanityChecks();
             if (err)
             {
                 console::error("Global sanity checks not successful: ");
@@ -144,10 +139,9 @@ class Solver {
         }
 
         virtual void reset
-        (bool cleanGrid = false) {
+        () {
             setup_ = false;
-            if (cleanGrid)
-                grid_->clean();
+            grid_->clean();
         }
 
         grid_t* getGrid() const
@@ -158,11 +152,10 @@ class Solver {
     protected:
 
         int sanityChecks
-        (bool hasGoal = 0) {
+        () {
             if (grid_ == NULL) return 1;
             if (!grid_->isClean()) return 2;
             if (init_points_.empty()) return 3;
-            if (hasGoal && int(goal_idx_) == -1) return 4;
             return 0;
         }
 

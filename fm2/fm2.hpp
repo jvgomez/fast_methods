@@ -47,12 +47,12 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell>  >  class FM2 : publi
         typedef std::vector< std::array<double, grid_t::getNDims()> > path_t;
 
         FM2
-        (double maxDistance = -1) : Solver<grid_t>("FM2"), requiresGoal_(true), maxDistance_(maxDistance),  {
+        (double maxDistance = -1) : Solver<grid_t>("FM2"), maxDistance_(maxDistance) {
             solver_ = new FMM<grid_t,heap_t>();
         }
 
         FM2
-        (const std::string& name, double maxDistance = -1) : Solver<grid_t>(name), requiresGoal_(true), maxDistance_(maxDistance) {
+        (const std::string& name, double maxDistance = -1) : Solver<grid_t>(name), maxDistance_(maxDistance) {
             solver_ = new FMM<grid_t,heap_t>();
         }
 
@@ -81,7 +81,6 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell>  >  class FM2 : publi
             wave_init.push_back(goal_idx_);
             unsigned int wave_goal = init_points_[0];
 
-            solver_->reset(false);
             solver_->setInitialAndGoalPoints(wave_init, wave_goal);
             solver_->compute();
         }
