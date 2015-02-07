@@ -40,12 +40,12 @@ int main(int argc, const char ** argv)
 
     console::info("Creating grid from image.");
     nDGridMap<FMCell, ndims> grid;
-/*    MapLoader::loadMapFromImg(filename1.c_str(), grid);
+    MapLoader::loadMapFromImg(filename1.c_str(), grid);
 
     console::info("Showing the grid and the mirror effect.");
     GridPlotter::plotMap(grid, 0); // It looks "inverted" because the CImg (0,0) coordinates and the Y orientation.
     GridPlotter::plotMap(grid);
-*/
+
     console::info("Testing Fast Marching Method.");
     MapLoader::loadMapFromImg(filename2.c_str(), grid);
 
@@ -67,8 +67,8 @@ int main(int argc, const char ** argv)
         time_elapsed = duration_cast<milliseconds>(end-start).count();
         cout << "\tElapsed FM time: " << time_elapsed << " ms" << endl;
     console::info("Plotting the results and saving into test_fm.txt");
-//    GridPlotter::plotArrivalTimes(grid);
-//    GridWriter::saveGridValues("test_fm.txt", grid);
+    GridPlotter::plotArrivalTimes(grid);
+    GridWriter::saveGridValues("test_fm.txt", grid);
 
     console::info("Computing gradient descent ");
     typedef typename std::vector< std::array<double, ndims> > Path; // A bit of short-hand.
@@ -84,7 +84,7 @@ int main(int argc, const char ** argv)
         cout << "\tElapsed gradient descent time: " << time_elapsed << " ms" << endl;
     GridWriter::savePath("test_path.txt", grid, path);
     GridWriter::savePathVelocity("path_velocity.txt", grid, path, path_velocity);
-//    GridPlotter::plotMapPath(grid,path);
+    GridPlotter::plotMapPath(grid,path);
 
     console::info("Testing Fast Marching Square Method.");
     path_velocity.clear();
@@ -101,10 +101,6 @@ int main(int argc, const char ** argv)
         end = system_clock::now();
         time_elapsed = duration_cast<milliseconds>(end-start).count();
         cout << "\tElapsed FM2 time: " << time_elapsed << " ms" << endl;
-
-        GridPlotter::plotVelocitiesMap(grid);
-        GridPlotter::plotArrivalTimes(grid);
-
         start = system_clock::now();
     fm2.computePath(&pathFM2, &path_velocity);
         end = system_clock::now();

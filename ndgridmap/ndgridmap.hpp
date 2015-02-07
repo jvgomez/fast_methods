@@ -60,7 +60,7 @@ template <class T, size_t ndims> class nDGridMap {
 
     public:
 
-      nDGridMap () : clean_(true) {}
+      nDGridMap () : leafsize_(1.0f), clean_(true) {}
 
       /**
        Constructor.
@@ -69,7 +69,7 @@ template <class T, size_t ndims> class nDGridMap {
        * @param leafsize real cell size (assumed to be cubic). 1 unit by default.
        */
         nDGridMap
-        (const std::array<unsigned int, ndims> & dimsize, const double leafsize = 1.0f) :
+        (const std::array<unsigned int, ndims> & dimsize, double leafsize = 1.0f) :
         leafsize_(leafsize),
         clean_(true) {
             resize(dimsize);
@@ -104,7 +104,7 @@ template <class T, size_t ndims> class nDGridMap {
 
         /**
          * Operator[] overload in order to access the elements of the grid map.
-         *  grid[i] equivalent to grid.cells_[i] to grid.getCell(i);
+         *  grid[i] equivalent to grid.cells_[i] or grid.getCell(i);
          *
          * @param idx index of the cell to be accessed.
          *
@@ -114,7 +114,7 @@ template <class T, size_t ndims> class nDGridMap {
          *
          * */
         T & operator[]
-        (const unsigned int idx) {
+        (unsigned int idx) {
             return cells_[idx];
         }
 
@@ -127,7 +127,7 @@ template <class T, size_t ndims> class nDGridMap {
          *
          * */
         T & getCell
-        (const unsigned int idx) {
+        (unsigned int idx) {
             return cells_[idx];
             }
 
@@ -142,7 +142,7 @@ template <class T, size_t ndims> class nDGridMap {
          * @return the corresponding minimum value.
          * */
         double getMinValueInDim
-        (const unsigned int idx, const unsigned int dim)   {
+        (unsigned int idx, unsigned int dim)   {
             n_neighs = 0; // How many neighbors obtained in that dimension.
             getNeighborsInDim(idx,n_,dim);
 
@@ -154,7 +154,7 @@ template <class T, size_t ndims> class nDGridMap {
         }
 
         unsigned int getNumberNeighborsInDim
-        (const int idx, std::array<unsigned int, ndims> &m, const unsigned int dim)   {
+        (int idx, std::array<unsigned int, ndims> &m, unsigned int dim)   {
             n_neighs = 0;
             getNeighborsInDim(idx,n_,dim);
             m = n_;
@@ -172,7 +172,7 @@ template <class T, size_t ndims> class nDGridMap {
          * @return the number of neighbors found.
          * */
         unsigned int getNeighbors
-        (const unsigned int idx, std::array<unsigned int, 2*ndims> & neighs) {
+        (unsigned int idx, std::array<unsigned int, 2*ndims> & neighs) {
             n_neighs = 0;
             for (unsigned int i = 0; i < ndims; ++i)
                 getNeighborsInDim(idx,neighs,i);
@@ -194,7 +194,7 @@ template <class T, size_t ndims> class nDGridMap {
          * @see getMinValueInDim()
          * */
         void getNeighborsInDim
-        (const unsigned int idx, std::array<unsigned int, 2*ndims>& neighs, const unsigned int dim) {
+        (unsigned int idx, std::array<unsigned int, 2*ndims>& neighs, unsigned int dim) {
             unsigned int c1,c2;
             if (dim == 0) {
                 c1 = idx-1;
@@ -232,7 +232,7 @@ template <class T, size_t ndims> class nDGridMap {
          * @see getMinValueInDim()
          * */
         void getNeighborsInDim
-        (const unsigned int idx, std::array<unsigned int, 2>& neighs, const unsigned int dim) {
+        (unsigned int idx, std::array<unsigned int, 2>& neighs, unsigned int dim) {
             unsigned int c1,c2;
             if (dim == 0) {
                 c1 = idx-1;
@@ -272,7 +272,7 @@ template <class T, size_t ndims> class nDGridMap {
          * @see coord2idx()
          * */
         unsigned int idx2coord
-        (const unsigned int idx, std::array<unsigned int, ndims> & coords) {
+        (unsigned int idx, std::array<unsigned int, ndims> & coords) {
             if (coords.size() != ndims)
                 return -1;
             else {
@@ -321,7 +321,7 @@ template <class T, size_t ndims> class nDGridMap {
          * @see coord2idx()
          * */
         void showCoords
-        (const unsigned int idx) {
+        (unsigned int idx) {
             std::array<unsigned int, ndims> coords;
             idx2coord(idx, coords);
             for (unsigned int i = 0; i < ndims; ++i)
@@ -369,7 +369,7 @@ template <class T, size_t ndims> class nDGridMap {
         }
 
         void setClean
-        (const bool c) {
+        (bool c) {
             clean_ = c;
         }
 

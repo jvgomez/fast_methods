@@ -51,7 +51,7 @@ class FMCell : public Cell{
 
         // NOTE: no checks are done (out of bounds, correct states, etc) no improve efficienty.
         // TODO: overload functions to add the option of input checking.
-        virtual void setVelocity (double v)            {velocity_ = v;}
+        virtual void setVelocity (double v)           {velocity_ = v;}
         virtual void setArrivalTime (double at)       {value_= at;}
         virtual void setState (FMState state)         {state_ = state;}
         virtual void setBucket(int b)                 {bucket_ = b;}
@@ -64,7 +64,7 @@ class FMCell : public Cell{
          */
         virtual void setOccupancy(const bool o) {
             occupancy_ = o;
-            if (o == false)
+            if (!occupancy_)
                 setVelocity(0);
         }
 

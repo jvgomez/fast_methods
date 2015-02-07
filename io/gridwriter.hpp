@@ -56,15 +56,15 @@ class GridWriter {
             std::ofstream ofs;
             ofs.open (filename,  std::ofstream::out | std::ofstream::trunc);
 
-            ofs << grid.getCell(0).type() << std::endl;
-            ofs << grid.getLeafSize() << std::endl << ndims;
+            ofs << grid.getCell(0).type() << '\n';
+            ofs << grid.getLeafSize() << '\n' << ndims;
 
             std::array<unsigned int, ndims> dimsize = grid.getDimSizes();
             for (unsigned int i = 0; i < ndims; ++i)
-                ofs << std::endl << dimsize[i] << "\t";
+                ofs << '\n' << dimsize[i] << "\t";
 
             for (unsigned int i = 0; i < grid.size(); ++i)
-                ofs << std::endl << grid.getCell(i).getValue();
+                ofs << '\n' << grid.getCell(i).getValue();
 
             ofs.close();
         }
@@ -95,15 +95,15 @@ class GridWriter {
             std::ofstream ofs;
             ofs.open (filename,  std::ofstream::out | std::ofstream::trunc);
 
-            ofs << grid.getCell(0).type() << std::endl;
-            ofs << grid.getLeafSize() << std::endl << ndims;
+            ofs << grid.getCell(0).type() << '\n';
+            ofs << grid.getLeafSize() << '\n' << ndims;
 
             std::array<unsigned int, ndims> dimsize = grid.getDimSizes();
             for (unsigned int i = 0; i < ndims; ++i)
-                ofs << std::endl << dimsize[i] << "\t";
+                ofs << '\n' << dimsize[i] << "\t";
 
             for (unsigned int i = 0; i < grid.size(); ++i)
-                ofs << std::endl << grid.getCell(i).getVelocity();
+                ofs << '\n' << grid.getCell(i).getVelocity();
 
             ofs.close();
         }
@@ -127,14 +127,14 @@ class GridWriter {
             std::ofstream ofs;
             ofs.open (filename,  std::ofstream::out | std::ofstream::trunc);
 
-            ofs << grid.getLeafSize() << std::endl << ndims;
+            ofs << grid.getLeafSize() << '\n' << ndims;
 
             std::array<unsigned int, ndims> dimsize = grid.getDimSizes();
             for (unsigned int i = 0; i < ndims; ++i)
-                ofs << std::endl << dimsize[i] << "\t";
+                ofs << '\n'<< dimsize[i] << "\t";
 
             for (unsigned int i = 0; i < path.size(); ++i) {
-                ofs << std::endl;
+                ofs << '\n';
                 for (unsigned int j = 0; j < ndims; ++j)
                     ofs << path[i][j] << "\t" ;
             }
@@ -161,17 +161,17 @@ class GridWriter {
             std::ofstream ofs;
             ofs.open (filename,  std::ofstream::out | std::ofstream::trunc);
 
-            ofs << grid.getLeafSize() << std::endl << ndims;
+            ofs << grid.getLeafSize() << '\n' << ndims;
 
             std::array<unsigned int, ndims> dimsize = grid.getDimSizes();
             for (unsigned int i = 0; i < ndims; ++i)
-                ofs << std::endl << dimsize[i] << "\t";
+                ofs << '\n' << dimsize[i];
 
             for (unsigned int i = 0; i < path.size(); ++i) {
-                ofs << std::endl;
+                ofs <<'\n';
                 for (unsigned int j = 0; j < ndims; ++j)
                     ofs << path[i][j] << "\t" ;
-                ofs << path_velocity[i] << "\t" ;
+                ofs << path_velocity[i];
             }
 
             ofs.close();

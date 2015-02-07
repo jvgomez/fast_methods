@@ -66,7 +66,6 @@ class GridPlotter {
             img.display("Grid map", false);
         }
 
-
        /**
          * Plots the value map included in a given grid. It is based on the
          * nDGridMap::getValue() which has to be float valued. This function has to be
@@ -81,14 +80,14 @@ class GridPlotter {
          * @param grid 2D nDGridmap
          * @param flipY true: flips the Y dimension. 0 does not flip.
          */
-        template<class T, size_t ndims = 2> 
+        template<class T, size_t ndims = 2>
         static void plotArrivalTimes
         (nDGridMap<T, ndims> & grid, const bool flipY = true) {
             std::array<unsigned int,2> d = grid.getDimSizes();
             double max_val = grid.getMaxValue();
             CImg<double> img(d[0],d[1],1,1,0);
 
-            if (flipY) 
+            if (flipY)
                 // Filling the image flipping Y dim. We want now top left to be the (0,0).
                 cimg_forXY(img,x,y) { img(x,y) = grid[img.width()*(img.height()-y-1)+x].getValue()/max_val*255; }
             else 
