@@ -14,7 +14,7 @@
 #include "../fmm/fmdata/fmfibheap.hpp"
 #include "../fmm/fmdata/fmpriorityqueue.hpp"
 #include "../fmm/fmdata/fmdaryheap.hpp"
-#include "../io/maploadertext.hpp"
+#include "../io/maploader.hpp"
 
 #include "../fmm/gmm.hpp"
 #include "../fmm/fim.hpp"
@@ -46,7 +46,7 @@ int main(int argc, const char ** argv)
 
     FMGrid2D grid_fm2;
 
-    if(!MapLoaderText::loadMapFromText(filename.c_str(), grid_fm2))
+    if(!MapLoader::loadMapFromText(filename.c_str(), grid_fm2))
         exit(1);
 
     Coord2D init_point = {377, 664};
@@ -58,8 +58,8 @@ int main(int argc, const char ** argv)
     grid_fm2.coord2idx(goal_point , goal_idx);
 
     std::vector<Solver<FMGrid2D>*> solvers;
-    solvers.push_back(new FM2Star<FMGrid2D>("FM2*_Dary"));
-    solvers.push_back(new FM2Star<FMGrid2D, FMFibHeap<FMCell> >("FM2*_Fib"));
+    //solvers.push_back(new FM2Star<FMGrid2D>("FM2*_Dary"));
+    //solvers.push_back(new FM2Star<FMGrid2D, FMFibHeap<FMCell> >("FM2*_Fib"));
     solvers.push_back(new FM2Star<FMGrid2D, FMPriorityQueue<FMCell> >("FM2*_SFMM"));
 
     for (Solver<FMGrid2D>* s :solvers)

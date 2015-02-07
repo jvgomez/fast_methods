@@ -25,11 +25,11 @@
 
 #include "../ndgridmap/ndgridmap.hpp"
 
-#include <CImg.h>
+#include "../thirdparty/CImg.h"
 
 using namespace cimg_library;
 
-typedef typename std::array<int, 2> Coord2D;
+typedef typename std::array<unsigned int, 2> Coord2D;
 typedef typename std::array<double, 2> Point2D;
 typedef typename std::vector <Point2D> Path2D;
 typedef typename std::vector <Path2D> Paths2D;
@@ -37,10 +37,6 @@ typedef typename std::vector <Path2D> Paths2D;
 // TODO: include checks which ensure that the grids are adecuate for the functions used.
 class GridPlotter {
     public:
-        GridPlotter() {};
-        virtual ~GridPlotter() {};
-
-
         /**
          * Plots the initial binary map included in a given grid. It is based on the
          * nDGridMap::getOccupancy() which has to be bool valued. This function has to be
@@ -59,13 +55,13 @@ class GridPlotter {
         static void plotMap
         (nDGridMap<T, ndims> & grid, const bool flipY = 1) {
             // TODO: image checking: B/W, correct reading, etc.
-            std::array<int,2> d = grid.getDimSizes();
+            std::array<unsigned int,2> d = grid.getDimSizes();
             CImg<bool> img(d[0],d[1],1,1,0);
             if (flipY)
                 // Filling the image flipping Y dim. We want now top left to be the (0,0).
-                cimg_forXY(img,x,y) { img(x,y) = grid[img.width()*(img.height()-y-1)+x].getOccupancy(); }	
+                cimg_forXY(img,x,y) { img(x,y) = grid[img.width()*(img.height()-y-1)+x].getOccupancy(); }
             else 
-                cimg_forXY(img,x,y) { img(x,y) = grid[img.width()*y+x].getOccupancy(); }	
+                cimg_forXY(img,x,y) { img(x,y) = grid[img.width()*y+x].getOccupancy(); }
                 
             img.display("Grid map", false);
         }
@@ -88,7 +84,7 @@ class GridPlotter {
         template<class T, size_t ndims = 2> 
         static void plotArrivalTimes
         (nDGridMap<T, ndims> & grid, const bool flipY = true) {
-            std::array<int,2> d = grid.getDimSizes();
+            std::array<unsigned int,2> d = grid.getDimSizes();
             double max_val = grid.getMaxValue();
             CImg<double> img(d[0],d[1],1,1,0);
 
@@ -96,10 +92,10 @@ class GridPlotter {
                 // Filling the image flipping Y dim. We want now top left to be the (0,0).
                 cimg_forXY(img,x,y) { img(x,y) = grid[img.width()*(img.height()-y-1)+x].getValue()/max_val*255; }
             else 
-                cimg_forXY(img,x,y) { img(x,y) = grid[img.width()*y+x].getValue()/max_val*255; }	
+                cimg_forXY(img,x,y) { img(x,y) = grid[img.width()*y+x].getValue()/max_val*255; }
                 
-            img.map( CImg<float>::jet_LUT256() );
-            img.display("Grid values", false);	
+            img.map( CImg<double>::jet_LUT256() );
+            img.display("Grid values", false);
         }
 
         /**
@@ -120,23 +116,23 @@ class GridPlotter {
         template<class T, size_t ndims = 2>
         static void plotMapPath
         (nDGridMap<T, ndims> & grid, const Path2D & path, const bool flipY = true) {
-            std::array<int,2> d = grid.getDimSizes();
+            std::array<unsigned int,2> d = grid.getDimSizes();
             CImg<double> img(d[0],d[1],1,3,0);
 
             if (flipY)  {
                 // Filling the image flipping Y dim. We want now top left to be the (0,0).
                 cimg_forXYZC(img,x,y,z,c) { img(x,y,z,c) = grid[img.width()*(img.height()-y-1)+x].getOccupancy()*255; }
 
-                for (int i = 0; i< path.size(); ++i)
+                for (unsigned int i = 0; i< path.size(); ++i)
                 {
-                    img(static_cast<int>(path[i][0]), (img.height()-static_cast<int>(path[i][1])-1), 0, 1) = 0;
-                    img(static_cast<int>(path[i][0]), (img.height()-static_cast<int>(path[i][1])-1), 0, 2) = 0;
+                    img(static_cast<unsigned int>(path[i][0]), (img.height()-static_cast<unsigned int>(path[i][1])-1), 0, 1) = 0;
+                    img(static_cast<unsigned int>(path[i][0]), (img.height()-static_cast<unsigned int>(path[i][1])-1), 0, 2) = 0;
                 }
             }
             else {
                 cimg_forXY(img,x,y) { img(x,y) = grid[img.width()*y+x].getOccupancy()*255; }
-                for (int i = 0; i< path.size(); ++i)
-                    img(static_cast<int>(path[i][0]), static_cast<int>(path[i][1])) = 255;
+                for (unsigned int i = 0; i< path.size(); ++i)
+                    img(static_cast<unsigned int>(path[i][0]), static_cast<unsigned int>(path[i][1])) = 255;
                 }
 
             img.display("Grid values", false);
@@ -161,7 +157,7 @@ class GridPlotter {
         template<class T, size_t ndims = 2>
         static void plotMapPath
         (nDGridMap<T, ndims> & grid, const Paths2D & paths, const bool flipY = true) {
-            std::array<int,2> d = grid.getDimSizes();
+            std::array<unsigned int,2> d = grid.getDimSizes();
             CImg<double> img(d[0],d[1],1,3,0);
 
             if (flipY)  {
@@ -169,13 +165,13 @@ class GridPlotter {
                 cimg_forXYZC(img,x,y,z,c) { img(x,y,z,c) = grid[img.width()*(img.height()-y-1)+x].getOccupancy()*255; }
 
                 // Draw the path using different colours
-                for (int j = 0; j < paths.size(); ++j)
+                for (unsigned int j = 0; j < paths.size(); ++j)
                 {
                     Path2D path = paths[j];
-                    for (int i = 0; i< path.size(); ++i)
+                    for (unsigned int i = 0; i< path.size(); ++i)
                     {
-                        img(static_cast<int>(path[i][0]), (img.height()-static_cast<int>(path[i][1])-1), 0, j) = 0;
-                        img(static_cast<int>(path[i][0]), (img.height()-static_cast<int>(path[i][1])-1), 0, j+1) = 0;
+                        img(static_cast<unsigned int>(path[i][0]), (img.height()-static_cast<unsigned int>(path[i][1])-1), 0, j) = 0;
+                        img(static_cast<unsigned int>(path[i][0]), (img.height()-static_cast<unsigned int>(path[i][1])-1), 0, j+1) = 0;
                     }
                 }
             }
@@ -183,17 +179,16 @@ class GridPlotter {
                 cimg_forXY(img,x,y) { img(x,y) = grid[img.width()*y+x].getOccupancy()*255; }
 
                 // Draw the path using different colours
-                for (int j = 0; j < paths.size(); ++j)
+                for (unsigned int j = 0; j < paths.size(); ++j)
                 {
                     Path2D path = paths[j];
 
-                    for (int i = 0; i< path.size(); ++i)
-                        img(static_cast<int>(path[i][0]), static_cast<int>(path[i][1])) = 255;
+                    for (unsigned int i = 0; i< path.size(); ++i)
+                        img(static_cast<unsigned int>(path[i][0]), static_cast<unsigned int>(path[i][1])) = 255;
                 }
             }
 
             img.display("Grid values", false);
-
         }
 
        /**
@@ -214,7 +209,7 @@ class GridPlotter {
       template<class T, size_t ndims = 2>
       static void plotArrivalTimesPath
       (nDGridMap<T, ndims> & grid, const Path2D & path, const bool flipY = true) {
-          std::array<int,2> d = grid.getDimSizes();
+          std::array<unsigned int,2> d = grid.getDimSizes();
           double max_val = grid.getMaxValue();
           CImg<double> img(d[0],d[1],1,1,0);
 
@@ -222,28 +217,18 @@ class GridPlotter {
               // Filling the image flipping Y dim. We want now top left to be the (0,0).
               cimg_forXY(img,x,y) { img(x,y) = grid[img.width()*(img.height()-y-1)+x].getValue()/max_val*255; }
 
-              for (int i = 0; i< path.size(); ++i)
-                  img(static_cast<int>(path[i][0]), (img.height()-static_cast<int>(path[i][1])-1)) = 255;
+              for (unsigned int i = 0; i< path.size(); ++i)
+                  img(static_cast<unsigned int>(path[i][0]), (img.height()-static_cast<unsigned int>(path[i][1])-1)) = 255;
           }
           else {
               cimg_forXY(img,x,y) { img(x,y) = grid[img.width()*y+x].getValue()/max_val*255; }
               for (int i = 0; i< path.size(); ++i)
-                  img(static_cast<int>(path[i][0]), static_cast<int>(path[i][1])) = 255;
+                  img(static_cast<unsigned int>(path[i][0]), static_cast<unsigned int>(path[i][1])) = 255;
               }
 
-
           img.map( CImg<double>::jet_LUT256() );
-
-
           img.display("Grid values", false);
-
-
       }
-
-    protected:
-
 };
-
-
 
 #endif /* GRIDPLOTTER_H_ */

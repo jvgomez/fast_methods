@@ -56,7 +56,28 @@ template < class grid_t, class solver_t = FMM<grid_t> > class FM2 : public Solve
         virtual void setEnvironment
         (grid_t * g) {
             Solver<grid_t>::setEnvironment(g);
-            grid_->getOccupiedCells(fmm2_sources_);
+            grid_->getOccupiedCells(fm2_sources_);
+        }
+
+        virtual void setup
+        () {
+            Solver<grid_t>::setup();
+
+            if(int(goal_idx_) == -1)
+            {
+                console::error("A goal point has to be set for FM2-based solvers.");
+                exit(1);
+            }
+
+            if(init_points_.size() > 1) {
+                console::error("FM2-based solvers currently allow only 1 initial point.");
+                exit(1);
+            }
+
+            if (fm2_sources_.empty()) {
+                console::error("Map has no obstacles. FM2-based solver is not running.");
+                exit(1);
+            }
         }
 
         /**
@@ -68,11 +89,6 @@ template < class grid_t, class solver_t = FMM<grid_t> > class FM2 : public Solve
         () {
             if (!setup_)
                  setup();
-
-            if(init_points_.size() > 1) {
-                console::error("FM2star only allows 1 initial point.");
-                exit(1);
-            }
 
             computeVelocitiesMap();
 
@@ -86,51 +102,32 @@ template < class grid_t, class solver_t = FMM<grid_t> > class FM2 : public Solve
         }
 
         /**
-         * Computes the path from the previous given goal index to the minimum
-         * of the times of arrival map. According to the theoretical basis the 
-         * wave is expanded from the goal point to the initial point. For these 
-         * reasons the gradient must to be applied from the initial point.
-         *
-         * No checks are done (points in the borders, points in obstacles...).
-         *
-         * The included scripts will parse the saved path.
-         *
-         * @param path the resulting path (output).
-         *
-         * @param velocity the resulting path (output).
-         */
-        virtual void computePath
-        (path_t * p, std::vector <double> * path_velocity) {
-            path_t* path_ = p;
-            GradientDescent< nDGridMap<FMCell, grid_t::getNDims()> > grad;
-            grad.apply(*grid_,init_points_[0],*path_, *path_velocity);
-        }
-
-        /**
          * Computes the path from the given goal index to the minimum
          * of the times of arrival map.
          *
          * No checks are done (points in the borders, points in obstacles...).
          *
-         * The included scripts will parse the saved path.
-         *
          * @param path the resulting path (output).
          *
          * @param velocity the resulting path (output).
          *
-         * @param goal_idx index of the goal point, where gradient descent will start.
+         * @param goal_idx index of the goal point, where gradient descent will start. If
+         *        no specified, the previously set goal point is used.
          */
         virtual void computePath
-        (path_t * p, std::vector <double> * path_velocity, unsigned int goal_idx) {
+        (path_t * p, std::vector <double> * path_velocity, unsigned int goal_idx = -1) {
             path_t* path_ = p;
             GradientDescent< nDGridMap<FMCell, grid_t::getNDims()> > grad;
-            grad.apply(*grid_,goal_idx,*path_, *path_velocity);
+            if (int(goal_idx) != -1)
+                grad.apply(*grid_,goal_idx,*path_, *path_velocity);
+            else
+                grad.apply(*grid_,init_points_[0],*path_, *path_velocity);
         }
 
         virtual void clear
         () {
             Solver<grid_t>::clear();
-            fmm2_sources_.clear();
+            fm2_sources_.clear();
             maxDistance_ = -1;
             delete solver_;
         }
@@ -138,7 +135,6 @@ template < class grid_t, class solver_t = FMM<grid_t> > class FM2 : public Solve
         virtual void reset
         () {
             Solver<grid_t>::reset();
-            maxDistance_ = -1;
             solver_->reset();
         }
 
@@ -149,7 +145,8 @@ template < class grid_t, class solver_t = FMM<grid_t> > class FM2 : public Solve
         void computeVelocitiesMap
         () {
             solver_->setEnvironment(grid_);
-            solver_->setInitialPoints(fmm2_sources_);
+            solver_->setInitialPoints(fm2_sources_);
+            grid_->setClean(true);
             solver_->compute();
 
             // Rescaling and saturating to relative velocities: [0,1]
@@ -180,10 +177,10 @@ template < class grid_t, class solver_t = FMM<grid_t> > class FM2 : public Solve
         using Solver<grid_t>::grid_;
         using Solver<grid_t>::init_points_;
         using Solver<grid_t>::goal_idx_;
-        using Solver<grid_t>::setup;
+        //using Solver<grid_t>::setup;
         using Solver<grid_t>::setup_;
 
-        std::vector<unsigned int> fmm2_sources_;  /*!< Wave propagation sources for the Fast Marching Square. */
+        std::vector<unsigned int> fm2_sources_;  /*!< Wave propagation sources for the Fast Marching Square. */
 
         solver_t* solver_;
 

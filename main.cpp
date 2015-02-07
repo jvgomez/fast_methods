@@ -6,15 +6,15 @@
 #include <array>
 #include <string>
 
-#include "fmdata/fmcell.h"
+#include "fmm/fmdata/fmcell.h"
 #include "ndgridmap/ndgridmap.hpp"
 #include "console/console.h"
-#include "fmm/fastmarching.hpp"
-#include "fm2/fastmarching2.hpp"
-#include "fmdata/fmfibheap.hpp"
-#include "fmdata/fmpriorityqueue.hpp"
-#include "fmdata/fmdaryheap.hpp"
-#include "fmdata/fmdaryheap.hpp"
+#include "fmm/fmm.hpp"
+#include "fm2/fm2.hpp"
+#include "fmm/fmdata/fmfibheap.hpp"
+#include "fmm/fmdata/fmpriorityqueue.hpp"
+#include "fmm/fmdata/fmdaryheap.hpp"
+#include "fmm/fmdata/fmdaryheap.hpp"
 #include "io/maploader.hpp"
 #include "io/gridplotter.hpp"
 #include "io/gridwriter.hpp"
@@ -26,8 +26,8 @@ using namespace std::chrono;
 
 int main(int argc, const char ** argv)
 {
-    constexpr int ndims = 2; // Setting two dimensions.
-    constexpr int ndims3 = 3; // Setting three dimensions.
+    constexpr unsigned int ndims = 2; // Setting two dimensions.
+    constexpr unsigned int ndims3 = 3; // Setting three dimensions.
 
     time_point<std::chrono::system_clock> start, end; // Time measuring.
     double time_elapsed;
@@ -40,29 +40,29 @@ int main(int argc, const char ** argv)
 
     console::info("Creating grid from image.");
     nDGridMap<FMCell, ndims> grid;
-    MapLoader::loadMapFromImg(filename1.c_str(), grid);
+/*    MapLoader::loadMapFromImg(filename1.c_str(), grid);
 
     console::info("Showing the grid and the mirror effect.");
     GridPlotter::plotMap(grid, 0); // It looks "inverted" because the CImg (0,0) coordinates and the Y orientation.
     GridPlotter::plotMap(grid);
-
+*/
     console::info("Testing Fast Marching Method.");
     MapLoader::loadMapFromImg(filename2.c_str(), grid);
 
-    std::array<int, ndims> coords_init, coords_goal;
+    std::array<unsigned int, ndims> coords_init, coords_goal;
     GridPoints::selectMapPoints(grid, coords_init, coords_goal);
 
-    vector<int> init_points;
-    int idx, goal;
+    vector<unsigned int> init_points;
+    unsigned int idx, goal;
     grid.coord2idx(coords_init, idx);
     init_points.push_back(idx);
     grid.coord2idx(coords_goal, goal);
 
-    FastMarching< nDGridMap<FMCell, ndims> > fmm;
+    FMM< nDGridMap<FMCell, ndims> > fmm;
     fmm.setEnvironment(&grid);
         start = system_clock::now();
     fmm.setInitialAndGoalPoints(init_points, goal);
-    fmm.computeFM();
+    fmm.compute();
         end = system_clock::now();
         time_elapsed = duration_cast<milliseconds>(end-start).count();
         cout << "\tElapsed FM time: " << time_elapsed << " ms" << endl;
@@ -87,18 +87,17 @@ int main(int argc, const char ** argv)
     GridPlotter::plotMapPath(grid,path);
 
     console::info("Testing Fast Marching Square Method.");
-    std::vector <int> fm2_sources;
     path_velocity.clear();
     grid.coord2idx(coords_goal, goal);
     Path pathFM2;
 
-    MapLoader::loadMapFromImg(filename2.c_str(), grid, fm2_sources);
+    MapLoader::loadMapFromImg(filename2.c_str(), grid);
 
-    FastMarching2<nDGridMap<FMCell, ndims>> fm2;
+    FM2<nDGridMap<FMCell, ndims>> fm2;
     fm2.setEnvironment(&grid);
         start = system_clock::now();
-    fm2.setInitialAndGoalPoints(init_points, fm2_sources, goal);
-    fm2.computeFM2();
+    fm2.setInitialAndGoalPoints(init_points, goal);
+    fm2.compute();
         end = system_clock::now();
         time_elapsed = duration_cast<milliseconds>(end-start).count();
         cout << "\tElapsed FM2 time: " << time_elapsed << " ms" << endl;
@@ -124,13 +123,13 @@ int main(int argc, const char ** argv)
     nDGridMap<FMCell, ndims> grid2;
     init_points.clear();
     // We now fill init_points will all black points of the image
-    MapLoader::loadMapFromImg(filename2.c_str(), grid2, init_points);
+    MapLoader::loadMapFromImg(filename2.c_str(), grid2);
 
-    FastMarching< nDGridMap<FMCell, ndims> > fmm2;
+    FMM< nDGridMap<FMCell, ndims> > fmm2;
     fmm2.setEnvironment(&grid2);
         start = system_clock::now();
     fmm2.setInitialPoints(init_points); // Do not set a goal point.
-    fmm2.computeFM();
+    fmm2.compute();
         end = system_clock::now();
         time_elapsed = duration_cast<milliseconds>(end-start).count();
         cout << "\tElapsed FM time: " << time_elapsed << " ms" << endl;
@@ -145,13 +144,13 @@ int main(int argc, const char ** argv)
     nDGridMap<FMCell, ndims> grid_vels;
     MapLoader::loadVelocitiesFromImg(filename_vels.c_str(), grid_vels);
 
-    FastMarching< nDGridMap<FMCell, ndims> , FMFibHeap<> > fmm_vels;
+    FMM< nDGridMap<FMCell, ndims> , FMFibHeap<> > fmm_vels;
     init_points.clear();
     init_points.push_back(80000); // Just an init point as any other.
     fmm_vels.setEnvironment(&grid_vels);
         start = system_clock::now();
     fmm_vels.setInitialPoints(init_points);
-    fmm_vels.computeFM();
+    fmm_vels.compute();
         end = system_clock::now();
         time_elapsed = duration_cast<milliseconds>(end-start).count();
         cout << "\tElapsed FM time: " << time_elapsed << " ms" << endl;
@@ -163,17 +162,17 @@ int main(int argc, const char ** argv)
     GridWriter::saveVelocities("test_vels.txt", grid_vels);
 
     console::info("Testing 3D!");
-    nDGridMap<FMCell, ndims3> grid3 (std::array<int,ndims3>{100,100,50});
+    nDGridMap<FMCell, ndims3> grid3 (std::array<unsigned int,ndims3>{100,100,50});
     init_points.clear();
-    grid3.coord2idx(std::array<int,ndims3>{50,50,25},idx); // Reusing the previous int.
+    grid3.coord2idx(std::array<unsigned int,ndims3>{50,50,25},idx); // Reusing the previous int.
     init_points.push_back(idx);
-    grid3.coord2idx(std::array<int, ndims3> {20, 10, 45}, goal);
+    grid3.coord2idx(std::array<unsigned int, ndims3> {20, 10, 45}, goal);
 
-    FastMarching< nDGridMap<FMCell, ndims3> > fmm3;
+    FMM< nDGridMap<FMCell, ndims3> > fmm3;
     fmm3.setEnvironment(&grid3);
         start = system_clock::now();
     fmm3.setInitialAndGoalPoints(init_points, goal);
-    fmm3.computeFM();
+    fmm3.compute();
         end = system_clock::now();
         time_elapsed = duration_cast<milliseconds>(end-start).count();
         cout << "\tElapsed FM time: " << time_elapsed << " ms" << endl;
@@ -184,7 +183,7 @@ int main(int argc, const char ** argv)
     console::info("Testing 3D gradient descent.");
     typedef typename std::vector< std::array<double, ndims3> > Path3D; // A bit of short-hand.
 
-    grid3.coord2idx(std::array<int, ndims3> {20, 10, 45}, goal);
+    grid3.coord2idx(std::array<unsigned int, ndims3> {20, 10, 45}, goal);
 
     Path3D path3D;
         start = system_clock::now();

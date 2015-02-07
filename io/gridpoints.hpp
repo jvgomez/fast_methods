@@ -25,22 +25,19 @@
 
 #include "../ndgridmap/ndgridmap.hpp"
 
-#include <CImg.h>
+#include "../thirdparty/CImg.h"
 
 using namespace cimg_library;
 
-typedef typename std::array<int, 2> Coord2D;
-typedef typename std::array<double, 2> Point2D;
-typedef typename std::vector <Point2D> Path2D;
-typedef typename std::vector <Path2D> Paths2D;
-
 // TODO: include checks which ensure that the grids are adecuate for the functions used.
 class GridPoints {
+
+    typedef typename std::array<unsigned int, 2> Coord2D;
+    typedef typename std::array<double, 2> Point2D;
+    typedef typename std::vector <Point2D> Path2D;
+    typedef typename std::vector <Path2D> Paths2D;
+
     public:
-        GridPoints() {};
-        virtual ~GridPoints() {};
-
-
         /**
          * Plots the initial binary map included in a given grid and extract coords of the
          * initial and goal point. It is based on the nDGridMap::getOccupancy() which has to
@@ -59,21 +56,21 @@ class GridPoints {
          */
         template<class T, size_t ndims> 
         static void selectMapPoints
-        (nDGridMap<T, ndims> & grid, std::array<int,ndims> & coords_init, std::array<int,ndims> & coords_goal, const bool flipY = 1) {
-            int y=0, x=0;
+        (nDGridMap<T, ndims> & grid, std::array<unsigned int,ndims> & coords_init, std::array<unsigned int,ndims> & coords_goal, const bool flipY = 1) {
+            unsigned int y = 0, x = 0;
             // TODO: image checking: B/W, correct reading, etc.
-            std::array<int,2> d = grid.getDimSizes();
+            std::array<unsigned int,2> d = grid.getDimSizes();
             CImg<bool> img(d[0],d[1],1,1,0);
             if (flipY)
                 // Filling the image flipping Y dim. We want now top left to be the (0,0).
-                cimg_forXY(img,x,y) { img(x,y) = grid[img.width()*(img.height()-y-1)+x].getOccupancy(); }	
+                cimg_forXY(img,x,y) { img(x,y) = grid[img.width()*(img.height()-y-1)+x].getOccupancy(); }
             else 
-                cimg_forXY(img,x,y) { img(x,y) = grid[img.width()*y+x].getOccupancy(); }	
+                cimg_forXY(img,x,y) { img(x,y) = grid[img.width()*y+x].getOccupancy(); }
                 
             CImgDisplay main_disp(img,"Click a point");
 
             // Detect click of the mouse
-            while (x==0) {
+            while (x == 0) {
                  main_disp.wait();
                  if (main_disp.button() && main_disp.mouse_y()>=0) {
                      if (flipY)
@@ -86,10 +83,9 @@ class GridPoints {
 
             coords_init = {x,y};
 
-            x=0;
-
-            // Detect click of the mouse
-            while (x==0) {
+            // Detect second click of the mouse
+                        x=0;
+            while (x == 0) {
                  main_disp.wait();
                  if (main_disp.button() && main_disp.mouse_y()>=0) {
                      if (flipY)
@@ -102,12 +98,6 @@ class GridPoints {
 
             coords_goal = {x,y};
         }
-
-
-    protected:
-
 };
-
-
 
 #endif /* GRIDPLOTTER_H_ */

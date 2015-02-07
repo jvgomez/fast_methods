@@ -44,32 +44,23 @@
 
 template < class grid_t, class heap_t = FMDaryHeap<FMCell> > class FM2Star : public FM2<grid_t, FMM<grid_t, heap_t> > {
 
+    typedef std::vector< std::array<double, grid_t::getNDims()> > path_t;
+    typedef FM2<grid_t, FMM<grid_t, heap_t> > FM2Base;
+
     public:
-        typedef std::vector< std::array<double, grid_t::getNDims()> > path_t;
-        typedef FM2<grid_t, FMM<grid_t, heap_t> > FM2Base;
+        FM2Star
+        (double maxDistance = -1) : FM2Base("FM2*", maxDistance) { }
 
         FM2Star
-        (double maxDistance = -1) : FM2Base("FM2*", maxDistance_) {
-            solver_ = new FMM<grid_t, heap_t>();
-        }
-
-        FM2Star
-        (const std::string& name, double maxDistance = -1) : FM2Base(name, maxDistance_) {
-            solver_ = new FMM<grid_t, heap_t>();
-        }
-
-        virtual ~FM2Star () { clear(); }
+        (const std::string& name, double maxDistance = -1) : FM2Base(name, maxDistance) { }
 
         virtual void setInitialAndGoalPoints
         (const std::vector<unsigned int> & init_points, unsigned int goal_idx) {
             FM2Base::setInitialAndGoalPoints(init_points, goal_idx);
             // Goal and initial points are inverted because the second wave is propagated from the goal
             // to the start, so that the heuristics have to be compared from the initial_point.
-            if(init_points_.size() > 1) {
-                console::error("FM2star only allows 1 initial point.");
-                exit(1);
-            }
             grid_->idx2coord(init_points_[0], heur_coord_);
+            solver_->setEnvironment(grid_);
             solver_->precomputeDistances();
         }
 
@@ -90,12 +81,9 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> > class FM2Star : pub
             wave_init.push_back(goal_idx_);
             unsigned int wave_goal = init_points_[0];
 
-            /*solver_->setEnvironment(grid_);
-            solver_->setInitialAndGoalPoints(wave_init, wave_goal);
-            solver_->compute();*/
             solver_->setInitialAndGoalPoints(wave_init, wave_goal);
             solver_->setHeuristics(true);
-            solver_->compute(); //set end point for heuristic.
+            solver_->compute();
         }
 
         /**
@@ -322,11 +310,6 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> > class FM2Star : pub
             grad.apply(*grid_, init_points_[0], *path_, *path_velocity);
         }
 
-        virtual void clear
-        () {
-            FM2Base::clear();
-        }
-
         virtual void reset
         () {
             FM2Base::reset();
@@ -341,7 +324,7 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> > class FM2Star : pub
         using FM2Base::setup_;
         using FM2Base::computeVelocitiesMap;
         using FM2Base::maxDistance_;
-        using FM2Base::fmm2_sources_;
+        using FM2Base::fm2_sources_;
 
         //using solver_::distances_;
 
