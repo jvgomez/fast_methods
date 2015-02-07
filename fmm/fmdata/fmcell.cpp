@@ -34,6 +34,7 @@ void FMCell::setDefault
 () {
     Cell::setDefault();
     value_ = std::numeric_limits<double>::infinity();
+    dir_time_ = std::numeric_limits<double>::infinity();
     if (!occupancy_) velocity_ = 0;
     else             velocity_ = 1;
     state_ = FMState::OPEN;

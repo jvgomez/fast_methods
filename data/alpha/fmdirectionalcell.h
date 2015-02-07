@@ -41,9 +41,9 @@ class FMDirectionalCell : public FMCell{
         /**
          * Default constructor which performs and implicit Fast Marching-like initialization of the grid,
          */
-        FMDirectionalCell() : FMCell() {};
+        FMDirectionalCell() : FMCell() {}
 
-        virtual ~FMDirectionalCell() {};
+        virtual ~FMDirectionalCell() {}
         
         // NOTE: no checks are done (out of bounds, correct states, etc) no improve efficienty.
         // TODO: overload functions to add the option of input checking.

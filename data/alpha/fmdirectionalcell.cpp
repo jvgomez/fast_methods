@@ -16,7 +16,7 @@ ostream& operator <<
 (ostream & os, const FMDirectionalCell & c) {
     os << console::str_info("Fast Marching cell information:");
     os << "\t" << "Index: " << c.index_ << endl;
-    os << "\t" << "Value: " 	<< c.value_ << endl;
+    os << "\t" << "Value: " << c.value_ << endl;
     os << "\t" << "Velocity: " << c.velocity_ << endl;
     os << "\t" << "State: " ;
 

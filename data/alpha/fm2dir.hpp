@@ -31,8 +31,8 @@
     You should have received a copy of the GNU General Public License
     along with this program. If not, see <http://www.gnu.org/licenses/>.*/
 
-#ifndef FM2Dir_H_
-#define FM2Dir_H_
+#ifndef FM2DIR_H_
+#define FM2DIR_H_
 
 #include <iostream>
 #include <cmath>
@@ -42,20 +42,25 @@
 #include <array>
 #include <limits>
 
-#include <fstream>
-
 #include <boost/math/constants/constants.hpp>
 
 #include "../fmm/fmdata/fmdirectionalcell.h"
-#include "../fmm/fmm.hpp"
+#include "../fm2/fm2.hpp"
 #include "../gradientdescent/gradientdescent.hpp"
 
 #define PI boost::math::constants::pi<double>()
 
-template < class grid_t, class heap_t = FMDaryHeap<FMDirectionalCell> >  class FM2Dir : public FMM <grid_t, heap_t> {
+// TODO: include suppoert to other solvers (GMM, FIM, UFMM). It requires a better way of setting parameters.
+
+template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FM2Dir : public FM2<grid_t, heap_t> {
+
+    typedef std::vector< std::array< double, grid_t::getNDims() > > path_t;
+    typedef FM2<grid_t, heap_t > FM2Base;
 
     public:
-        typedef std::vector< std::array< double, grid_t::getNDims() > > path_t;
+
+    FM2Dir
+    (const std::string& name = "FM2Dir") : FM2Base(name) { }
 
         /**
          * Sets the input grid in which operations will be performed.
@@ -458,4 +463,4 @@ template < class grid_t, class heap_t = FMDaryHeap<FMDirectionalCell> >  class F
         double diff_angle;
 };
 
-#endif /* FM2Dir_H_*/
+#endif /* FM2DIR_H_*/

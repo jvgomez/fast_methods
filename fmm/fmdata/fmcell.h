@@ -51,10 +51,10 @@ class FMCell : public Cell{
 
         // NOTE: no checks are done (out of bounds, correct states, etc) no improve efficienty.
         // TODO: overload functions to add the option of input checking.
-        virtual void setVelocity (const double v)            {velocity_ = v;}
-        virtual void setArrivalTime (const double at)       {value_= at;}
-        virtual void setState (const FMState state)         {state_ = state;}
-        virtual void setBucket(const int b)                 {bucket_ = b;}
+        virtual void setVelocity (double v)            {velocity_ = v;}
+        virtual void setArrivalTime (double at)       {value_= at;}
+        virtual void setState (FMState state)         {state_ = state;}
+        virtual void setBucket(int b)                 {bucket_ = b;}
         virtual void setDefault();
 
         /**
@@ -71,7 +71,7 @@ class FMCell : public Cell{
         std::string type () {return std::string("FMCell - Fast Marching cell");}
 
         virtual double getArrivalTime () const              {return value_;}
-        virtual double getVelocity () const                  {return velocity_;}
+        virtual double getVelocity () const                 {return velocity_;}
         virtual FMState getState () const                   {return state_;}
         virtual bool getBucket() const                      {return bucket_;}
         virtual bool isObstacle() const;

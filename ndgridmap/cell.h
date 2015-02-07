@@ -48,10 +48,10 @@ class Cell {
         // NOTE: no checks are done (out of bounds, correct states, etc) no improve efficienty.
         // TODO: overload functions to add the option of input checking.
 
-        virtual void setValue(const double v)            {value_ = v;}
-        virtual void setOccupancy(const bool o)          {occupancy_ = o;}
-        virtual std::string type()                       {return std::string("Cell - Basic cell");}
-        virtual void setIndex(const int i)               {index_ = i;}
+        virtual void setValue(double v)            {value_ = v;}
+        virtual void setOccupancy(bool o)          {occupancy_ = o;}
+        virtual std::string type()                 {return std::string("Cell - Basic cell");}
+        virtual void setIndex(int i)               {index_ = i;}
         virtual void setDefault();
 
         // This function gets no arguments in this case, but in the derivated classes it could. The ...
