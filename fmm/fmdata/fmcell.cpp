@@ -27,7 +27,7 @@ ostream& operator <<
 
 bool FMCell::isObstacle
 () const {
-    return occupancy_ == 0;
+    return !occupancy_;
 }
 
 void FMCell::setDefault

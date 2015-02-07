@@ -110,7 +110,7 @@ class Solver {
                         console::error("Initial points were not set.");
                         break;
                     case 4:
-                        console::error("Goal point was not set.");
+                        console::error("A init or goal point is in a obstacle.");
                         break;
                     default:
                         console::error("Uknown error.");
@@ -153,6 +153,10 @@ class Solver {
             if (grid_ == NULL) return 1;
             if (!grid_->isClean()) return 2;
             if (init_points_.empty()) return 3;
+
+            for (int i : init_points_)
+                if (grid_->getCell(i).isObstacle()) return 4;
+            if(int(goal_idx_) != -1 && grid_->getCell(goal_idx_).isObstacle()) return 4;
             return 0;
         }
 
