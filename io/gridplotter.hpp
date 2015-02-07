@@ -99,6 +99,35 @@ class GridPlotter {
         }
 
         /**
+          * Plots the velocities map in a given grid. It is based on the
+          * FMCell::getVelocity() which has to be double valued and with normalized
+          * values [0,1].
+          *
+          * Should be used only in 2D grids on FMCell-based grid maps.
+          *
+          * The Y dimension flipping is because nDGridMap works in X-Y coordinates, not in image indices as CImg.
+          *
+          * IMPORTANT NOTE: no type-checkings are done. T type has to be FMCell or any class with double getVelocity() method.
+          *
+          * @param grid 2D nDGridmap
+          * @param flipY true: flips the Y dimension. 0 does not flip.
+          */
+        template<class T, size_t ndims = 2>
+        static void plotVelocitiesMap
+        (nDGridMap<T, ndims> & grid, const bool flipY = true) {
+            std::array<unsigned int,2> d = grid.getDimSizes();
+            CImg<double> img(d[0],d[1],1,1,0);
+
+            if (flipY)
+                // Filling the image flipping Y dim. We want now top left to be the (0,0).
+                cimg_forXY(img,x,y) { img(x,y) = grid[img.width()*(img.height()-y-1)+x].getVelocity()*255; }
+            else
+                cimg_forXY(img,x,y) { img(x,y) = grid[img.width()*y+x].getVelocity()*255; }
+
+            img.display("Grid values", false);
+        }
+
+        /**
          * Plots the initial binary map included in a given grid and the given path. It is based on the
          * nDGridMap::getOccupancy() which has to be bool valued. This function has to be
          * overloaded in another occupancy type is being used.

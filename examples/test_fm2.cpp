@@ -11,14 +11,13 @@
 #include "../ndgridmap/ndgridmap.hpp"
 #include "../console/console.h"
 #include "../fm2/fm2.hpp"
+#include "../fm2/fm2star.hpp"
 #include "../fmm/fmdata/fmfibheap.hpp"
 #include "../fmm/fmdata/fmpriorityqueue.hpp"
 #include "../fmm/fmdata/fmdaryheap.hpp"
 #include "../io/maploader.hpp"
 
-#include "../fmm/gmm.hpp"
-#include "../fmm/fim.hpp"
-#include "../fmm/ufmm.hpp"
+#include "../io/gridplotter.hpp"
 
 using namespace std;
 using namespace std::chrono;
@@ -49,8 +48,8 @@ int main(int argc, const char ** argv)
     if(!MapLoader::loadMapFromText(filename.c_str(), grid_fm2))
         exit(1);
 
-    Coord2D init_point = {377, 664};
-    Coord2D goal_point = {379, 91};
+    Coord2D init_point = {232, 38};
+    Coord2D goal_point = {232, 680};
     vector<unsigned int> init_points;
     unsigned int start_idx, goal_idx;
     grid_fm2.coord2idx(init_point , start_idx);
@@ -59,11 +58,11 @@ int main(int argc, const char ** argv)
 
     std::vector<Solver<FMGrid2D>*> solvers;
     solvers.push_back(new FM2<FMGrid2D>("FM2_Dary"));
-    solvers.push_back(new FM2<FMGrid2D, FMM<FMGrid2D, FMFibHeap<FMCell> > >("FM2_Fib"));
-    solvers.push_back(new FM2<FMGrid2D, FMM<FMGrid2D, FMPriorityQueue<FMCell> > >("FM2_SFMM"));
-    solvers.push_back(new FM2<FMGrid2D, GMM<FMGrid2D> >("FM2_GMM"));
-    solvers.push_back(new FM2<FMGrid2D, FIM<FMGrid2D> >("FM2_FIM"));
-    solvers.push_back(new FM2<FMGrid2D, UFMM<FMGrid2D> >("FM2_UFMM"));
+    solvers.push_back(new FM2<FMGrid2D, FMFibHeap<FMCell> >("FM2_Fib"));
+    solvers.push_back(new FM2<FMGrid2D, FMPriorityQueue<FMCell> >("FM2_SFMM"));
+    solvers.push_back(new FM2Star<FMGrid2D>("FM2*_Dary"));
+    solvers.push_back(new FM2Star<FMGrid2D, FMFibHeap<FMCell> >("FM2*_Fib"));
+    solvers.push_back(new FM2Star<FMGrid2D, FMPriorityQueue<FMCell> >("FM2*_SFMM"));
 
     for (Solver<FMGrid2D>* s :solvers)
     {
@@ -74,6 +73,7 @@ int main(int argc, const char ** argv)
             end = system_clock::now();
             time_elapsed = duration_cast<milliseconds>(end-start).count();
             cout << "\tElapsed "<< s->getName() <<" time: " << time_elapsed << " ms" << '\n';
+        GridPlotter::plotArrivalTimes(grid_fm2);
     }
 
     // Preventing memory leaks.

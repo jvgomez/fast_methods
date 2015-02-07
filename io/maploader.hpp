@@ -56,7 +56,7 @@ class MapLoader {
         template<class T, size_t ndims>
         static void loadMapFromImg
         (const char * filename, nDGridMap<T, ndims> & grid) {
-             std::vector<unsigned int> obs;
+            std::vector<unsigned int> obs;
             CImg<bool> img(filename);
             std::array<unsigned int, ndims> dimsize;
             dimsize[0] = img.width();
@@ -101,6 +101,7 @@ class MapLoader {
             dimsize[0] = img.width();
             dimsize[1] = img.height();
             grid.resize(dimsize);
+
             // Filling the grid flipping Y dim. We want bottom left to be the (0,0).
             cimg_forXY(img,x,y) {
                 double vel = img(x,y); // First of the three channels of the image is taken.

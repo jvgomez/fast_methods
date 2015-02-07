@@ -16,18 +16,15 @@
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-
 #ifndef FMPRIORITYQUEUE_H_
 #define FMPRIORITYQUEUE_H_
-
 
 #include <boost/heap/priority_queue.hpp>
 
 #include "fmcell.h"
 
-
 /**
- * This struct is used a comparator for the heap. Since a minimum-heap
+ * This struct is used as comparator for the heap. Since a minimum-heap
  * is desired the operation checked is param1 > param2 as seen in this
  * [Stack Overflow post](http://stackoverflow.com/a/16706002/2283531)
  * */
@@ -87,7 +84,7 @@ template <class cell_t = FMCell> class FMPriorityQueue{
         () {
             const int idx = heap_.top()->getIndex();
             heap_.pop();
-            return idx;	
+            return idx;
         }
 
         size_t size
@@ -111,4 +108,3 @@ template <class cell_t = FMCell> class FMPriorityQueue{
 
 
 #endif /* FMPRIORITYQUEUE_H_ */
-

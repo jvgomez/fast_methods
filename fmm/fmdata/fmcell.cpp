@@ -28,16 +28,13 @@ ostream& operator <<
 bool FMCell::isObstacle
 () const {
     return occupancy_ == 0;
-    /*if (velocity_ == 0)
-        return true;
-    else
-        return false;*/
 }
 
 void FMCell::setDefault
 () {
     Cell::setDefault();
     value_ = std::numeric_limits<double>::infinity();
-    velocity_ = 1;
+    if (!occupancy_) velocity_ = 0;
+    else             velocity_ = 1;
     state_ = FMState::OPEN;
 }

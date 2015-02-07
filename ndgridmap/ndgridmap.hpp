@@ -69,7 +69,7 @@ template <class T, size_t ndims> class nDGridMap {
        * @param leafsize real cell size (assumed to be cubic). 1 unit by default.
        */
         nDGridMap
-        (const std::array<unsigned int, ndims> & dimsize, const float leafsize = 1.0f) :
+        (const std::array<unsigned int, ndims> & dimsize, const double leafsize = 1.0f) :
         leafsize_(leafsize),
         clean_(true) {
             resize(dimsize);
@@ -99,9 +99,8 @@ template <class T, size_t ndims> class nDGridMap {
             // Setting the index_ member of the cells, which a-priori is unknown.
             for (unsigned int i = 0; i < cells_.size(); ++i)
                 cells_[i].setIndex(i);
+            clean_ = true;
         }
-
-
 
         /**
          * Operator[] overload in order to access the elements of the grid map.
@@ -119,9 +118,9 @@ template <class T, size_t ndims> class nDGridMap {
             return cells_[idx];
         }
 
-        float getLeafSize() const { return leafsize_; }
+        double getLeafSize() const { return leafsize_; }
 
-        void setLeafSize(const float leafsize) { leafsize_=leafsize; }
+        void setLeafSize(const double leafsize) { leafsize_=leafsize; }
 
         /*
          * @see operator[]
@@ -376,8 +375,7 @@ template <class T, size_t ndims> class nDGridMap {
 
         void clean
         () {
-            if(!isClean())
-            {
+            if(!clean_) {
                 for (T & c:cells_)
                     c.setDefault();
                 clean_ = true;
@@ -386,9 +384,8 @@ template <class T, size_t ndims> class nDGridMap {
 
         void clear
         () {
-            for (T & c:cells_)
-                delete c;
             cells_.clear();
+            occupied_.clear();
         }
 
         std::string getDimSizesStr()
@@ -418,7 +415,7 @@ template <class T, size_t ndims> class nDGridMap {
 
         std::vector<T> cells_;  /*!< The main container for the class. */
         std::array<unsigned int, ndims> dimsize_;  /*!< Contains the size of each dimension. */
-        float leafsize_;  /*!< Real size of the cells. It is assumed that the cells in the grid are cubic. */
+        double leafsize_;  /*!< Real size of the cells. It is assumed that the cells in the grid are cubic. */
         unsigned int ncells_;  /*!< Number of cells in the grid (size) */
         bool clean_;  /*!< Flag to indicate if the grid is ready to use. */
 

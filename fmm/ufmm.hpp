@@ -32,10 +32,17 @@
 #include "fmm.hpp"
 #include "fmdata/fmuntidyqueue.hpp"
 
-template <class grid_t> class UFMM : public FMM <grid_t> {
+template <class grid_t, class cell_t = FMCell> class UFMM : public FMM <grid_t> {
 
     public:
-        UFMM (const std::string& name = "UFMM") : FMM<grid_t>(name) {}
+        UFMM
+        (unsigned s = 1000, double inc = 2) :  FMM<grid_t>("UFMM"), heap_s_(s), heap_inc_(inc) {
+            narrow_band_ = new FMUntidyQueue<cell_t> (heap_s_, heap_inc_);
+        }
+        UFMM
+        (const std::string& name, unsigned s = 1000, double inc = 2) : FMM<grid_t>(name), heap_s_(s), heap_inc_(inc) {
+            narrow_band_ = new FMUntidyQueue<cell_t> (heap_s_, heap_inc_);
+        }
 
         /**
          * Main Untidy Fast Marching Function. It requires to call first the setInitialPoints() function inherited from Fast Marching.
@@ -55,12 +62,12 @@ template <class grid_t> class UFMM : public FMM <grid_t> {
             for (unsigned int &i : init_points_) { // For each initial point
                 grid_->getCell(i).setArrivalTime(0);
                 grid_->getCell(i).setState(FMState::FROZEN);
-                narrow_band_.push( &(grid_->getCell(i)) );
+                narrow_band_->push( &(grid_->getCell(i)) );
             }
 
             // Main loop
-            while (!stopWavePropagation && !narrow_band_.empty()) {
-                unsigned int idxMin = narrow_band_.popMinIdx();
+            while (!stopWavePropagation && !narrow_band_->empty()) {
+                unsigned int idxMin = narrow_band_->popMinIdx();
                 n_neighs = grid_->getNeighbors(idxMin, neighbors);
                 grid_->getCell(idxMin).setState(FMState::FROZEN);
                 for (unsigned int s = 0; s < n_neighs; ++s) { // For each neighbor
@@ -72,13 +79,13 @@ template <class grid_t> class UFMM : public FMM <grid_t> {
                         if (grid_->getCell(j).getState() == FMState::NARROW) { // Updating narrow band if necessary.
                             if (new_arrival_time < grid_->getCell(j).getArrivalTime() ) {
                                 grid_->getCell(j).setArrivalTime(new_arrival_time);
-                                narrow_band_.increase( &(grid_->getCell(j)) );
+                                narrow_band_->increase( &(grid_->getCell(j)) );
                             }
                         }
                         else {
                             grid_->getCell(j).setState(FMState::NARROW);
                             grid_->getCell(j).setArrivalTime(new_arrival_time);
-                            narrow_band_.push( &(grid_->getCell(j)) );
+                            narrow_band_->push( &(grid_->getCell(j)) );
                         } // neighbors open.
                     } // neighbors not frozen.
                 } // For each neighbor.
@@ -90,13 +97,14 @@ template <class grid_t> class UFMM : public FMM <grid_t> {
         virtual void clear
         () {
             FMM<grid_t>::clear();
-            narrow_band_.clear();
+            narrow_band_->clear();
+            delete narrow_band_;
         }
 
         virtual void reset
         () {
             FMM<grid_t>::reset();
-            narrow_band_.clear();
+            narrow_band_->clear();
         }
 
     protected:
@@ -105,11 +113,13 @@ template <class grid_t> class UFMM : public FMM <grid_t> {
         using FMM<grid_t>::solveEikonal;
         using FMM<grid_t>::init_points_;
         using FMM<grid_t>::goal_idx_;
-        using FMM<grid_t>::setup;
+        using Solver<grid_t>::setup;
         using FMM<grid_t>::setup_;
 
     private:
-        FMUntidyQueue<> narrow_band_; /*!< Instance of the priority queue used. */
+        unsigned heap_s_;
+        double heap_inc_;
+        FMUntidyQueue<cell_t> * narrow_band_; /*!< Instance of the priority queue used. */
 };
 
 #endif /* UFMM_HPP_*/

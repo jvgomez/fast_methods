@@ -69,8 +69,7 @@ class Solver {
         virtual void setEnvironment
         (grid_t * g) {
             grid_ = g;
-            if (!grid_->isClean())
-                grid_->clean();
+            grid_->clean();
         }
 
         /**
@@ -81,8 +80,6 @@ class Solver {
          * @param init_points contains the indices of the init points.
          *
          * @param goal contains the index of the goal point. If -1 (default) no goal point is set.
-         *
-         * @see init()
          */
         virtual void setInitialAndGoalPoints
         (const std::vector<unsigned int> & init_points, unsigned int goal_idx) {

@@ -5,3 +5,4 @@ examples/build/
 #QtCreator temps
 .idea
 *.*user
+build*/

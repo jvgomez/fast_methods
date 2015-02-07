@@ -67,8 +67,8 @@ int main(int argc, const char ** argv)
         time_elapsed = duration_cast<milliseconds>(end-start).count();
         cout << "\tElapsed FM time: " << time_elapsed << " ms" << endl;
     console::info("Plotting the results and saving into test_fm.txt");
-    GridPlotter::plotArrivalTimes(grid);
-    GridWriter::saveGridValues("test_fm.txt", grid);
+//    GridPlotter::plotArrivalTimes(grid);
+//    GridWriter::saveGridValues("test_fm.txt", grid);
 
     console::info("Computing gradient descent ");
     typedef typename std::vector< std::array<double, ndims> > Path; // A bit of short-hand.
@@ -84,7 +84,7 @@ int main(int argc, const char ** argv)
         cout << "\tElapsed gradient descent time: " << time_elapsed << " ms" << endl;
     GridWriter::savePath("test_path.txt", grid, path);
     GridWriter::savePathVelocity("path_velocity.txt", grid, path, path_velocity);
-    GridPlotter::plotMapPath(grid,path);
+//    GridPlotter::plotMapPath(grid,path);
 
     console::info("Testing Fast Marching Square Method.");
     path_velocity.clear();
@@ -102,13 +102,14 @@ int main(int argc, const char ** argv)
         time_elapsed = duration_cast<milliseconds>(end-start).count();
         cout << "\tElapsed FM2 time: " << time_elapsed << " ms" << endl;
 
+        GridPlotter::plotVelocitiesMap(grid);
+        GridPlotter::plotArrivalTimes(grid);
+
         start = system_clock::now();
     fm2.computePath(&pathFM2, &path_velocity);
         end = system_clock::now();
         time_elapsed = duration_cast<milliseconds>(end-start).count();
         cout << "\tElapsed gradient descent time: " << time_elapsed << " ms" << endl;
-
-    GridPlotter::plotArrivalTimes(grid);
 
     GridPlotter::plotMapPath(grid,pathFM2);
 
@@ -119,30 +120,11 @@ int main(int argc, const char ** argv)
 
     GridPlotter::plotMapPath(grid,paths);
 
-    console::info("Now using all black points as wave sources");
-    nDGridMap<FMCell, ndims> grid2;
-    init_points.clear();
-    // We now fill init_points will all black points of the image
-    MapLoader::loadMapFromImg(filename2.c_str(), grid2);
-
-    FMM< nDGridMap<FMCell, ndims> > fmm2;
-    fmm2.setEnvironment(&grid2);
-        start = system_clock::now();
-    fmm2.setInitialPoints(init_points); // Do not set a goal point.
-    fmm2.compute();
-        end = system_clock::now();
-        time_elapsed = duration_cast<milliseconds>(end-start).count();
-        cout << "\tElapsed FM time: " << time_elapsed << " ms" << endl;
-
-    console::info("Plotting the results ");
-    GridPlotter::plotArrivalTimes(grid2);
-
-    console::info("Saving into file test2_fm.txt");
-    GridWriter::saveGridValues("test2_fm.txt", grid2);
-
     console::info("Now let's try different velocities.");
     nDGridMap<FMCell, ndims> grid_vels;
     MapLoader::loadVelocitiesFromImg(filename_vels.c_str(), grid_vels);
+
+    GridPlotter::plotVelocitiesMap(grid_vels);
 
     FMM< nDGridMap<FMCell, ndims> , FMFibHeap<> > fmm_vels;
     init_points.clear();
@@ -157,9 +139,6 @@ int main(int argc, const char ** argv)
 
     console::info("Plotting the results ");
     GridPlotter::plotArrivalTimes(grid_vels);
-
-    console::info("Saving velocities");
-    GridWriter::saveVelocities("test_vels.txt", grid_vels);
 
     console::info("Testing 3D!");
     nDGridMap<FMCell, ndims3> grid3 (std::array<unsigned int,ndims3>{100,100,50});

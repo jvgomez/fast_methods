@@ -38,12 +38,7 @@ class Cell {
           */
         Cell() : value_(-1), occupancy_(true) {}
 
-       /**
-         Constructor overload.
-         * @param v value_ initialization.
-         * @param o occupancy_ initialization, true by default.
-         */
-        Cell(float v, bool o = true) : value_(v), occupancy_(o) {}
+        Cell(double v, bool o = true) : value_(v), occupancy_(o) {}
 
         /**
           * Destructor not used.

@@ -36,19 +36,23 @@
 #include "../fmm/fmm.hpp"
 #include "../gradientdescent/gradientdescent.hpp"
 
-template < class grid_t, class solver_t = FMM<grid_t> > class FM2 : public Solver<grid_t> {
+#include "../io/gridplotter.hpp"
 
+// TODO: include suppoert to other solvers (GMM, FIM, UFMM). It requires a better way of setting parameters.
+//template < class grid_t, class solver_t = FMM<grid_t> > class FM2 : public Solver<grid_t> {
+
+template < class grid_t, class heap_t = FMDaryHeap<FMCell> > class FM2 : public Solver<grid_t> {
     public:
         typedef std::vector< std::array<double, grid_t::getNDims()> > path_t;
 
         FM2
         (double maxDistance = -1) : Solver<grid_t>("FM2"), maxDistance_(maxDistance) {
-            solver_ = new solver_t();
+            solver_ = new FMM<grid_t, heap_t> ();
         }
 
         FM2
         (const std::string& name, double maxDistance = -1) : Solver<grid_t>(name), maxDistance_(maxDistance) {
-            solver_ = new solver_t();
+            solver_ = new FMM<grid_t, heap_t> ();
         }
 
         virtual ~FM2 () { clear(); }
@@ -57,6 +61,7 @@ template < class grid_t, class solver_t = FMM<grid_t> > class FM2 : public Solve
         (grid_t * g) {
             Solver<grid_t>::setEnvironment(g);
             grid_->getOccupiedCells(fm2_sources_);
+            solver_->setEnvironment(grid_);
         }
 
         virtual void setup
@@ -99,6 +104,8 @@ template < class grid_t, class solver_t = FMM<grid_t> > class FM2 : public Solve
 
             solver_->setInitialAndGoalPoints(wave_init, wave_goal);
             solver_->compute();
+            // Restore the actual grid status.
+            grid_->setClean(false);
         }
 
         /**
@@ -139,14 +146,13 @@ template < class grid_t, class solver_t = FMM<grid_t> > class FM2 : public Solve
         }
 
     protected:
-
         // Computes the velocities map of the FM2 algorithm.If  maxDistance_ != -1 then the map is saturated
         // to the set value.
         void computeVelocitiesMap
         () {
-            solver_->setEnvironment(grid_);
-            solver_->setInitialPoints(fm2_sources_);
+            // Forces not to clean the grid.
             grid_->setClean(true);
+            solver_->setInitialPoints(fm2_sources_);
             solver_->compute();
 
             // Rescaling and saturating to relative velocities: [0,1]
@@ -156,7 +162,7 @@ template < class grid_t, class solver_t = FMM<grid_t> > class FM2 : public Solve
             if (maxDistance_ != -1)
                 maxVelocity = maxDistance_ / grid_->getLeafSize();
 
-            for (unsigned int i = 0; i < grid_->size(); i++) {
+            for (unsigned int i = 0; i < grid_->size(); ++i) {
                 double vel = grid_->getCell(i).getValue() / maxValue;
 
                 if (maxDistance_ != -1)
@@ -177,12 +183,11 @@ template < class grid_t, class solver_t = FMM<grid_t> > class FM2 : public Solve
         using Solver<grid_t>::grid_;
         using Solver<grid_t>::init_points_;
         using Solver<grid_t>::goal_idx_;
-        //using Solver<grid_t>::setup;
         using Solver<grid_t>::setup_;
 
         std::vector<unsigned int> fm2_sources_;  /*!< Wave propagation sources for the Fast Marching Square. */
 
-        solver_t* solver_;
+        FMM<grid_t, heap_t> * solver_;
 
         double maxDistance_; /*!< Distance value to saturate the first potential. */
 };

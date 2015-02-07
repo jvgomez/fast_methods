@@ -34,8 +34,7 @@
 template < class grid_t > class GMM : public FMM <grid_t> {
 
     public:
-        GMM() : FMM<grid_t>("GMM") {}
-        GMM(const std::string& name) : FMM<grid_t>(name) {}
+        GMM(const std::string& name = "GMM") : FMM<grid_t>(name) {}
 
         /**
          * Main Group Marching Function. It requires to call first the setInitialPoints() function.
@@ -53,7 +52,7 @@ template < class grid_t > class GMM : public FMM <grid_t> {
             bool stopWavePropagation = false;
 
             // Algorithm initialization
-            tm_= std::numeric_limits<float>::infinity();
+            tm_= std::numeric_limits<double>::infinity();
             for (unsigned int &i: init_points_) { // For each initial point
                 grid_->getCell(i).setArrivalTime(0);
                 grid_->getCell(i).setState(FMState::FROZEN);
@@ -158,7 +157,7 @@ template < class grid_t > class GMM : public FMM <grid_t> {
         using FMM<grid_t>::solveEikonal;
         using FMM<grid_t>::init_points_;
         using FMM<grid_t>::goal_idx_;
-        using FMM<grid_t>::setup;
+        using Solver<grid_t>::setup;
         using FMM<grid_t>::setup_;
 
     private:

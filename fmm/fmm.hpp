@@ -64,11 +64,7 @@
 template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FMM : public Solver<grid_t> {
 
     public:
-
-        FMM(bool heuristics = false) : Solver<grid_t>("FMM"), heuristics_(heuristics) {
-        }
-
-        FMM(const std::string& name, bool heuristics = false) : Solver<grid_t>(name), heuristics_(heuristics) {
+        FMM(const std::string& name = "FMM") : Solver<grid_t>(name), heuristics_(false), precomputed_(false) {
             // TODO: try to automate this.
             //if (static_cast<FMFibHeap>(heap_t))
              //   name_ = "FMMFib";
@@ -158,7 +154,6 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FMM : public
             // Algorithm initialization
             for (unsigned int &i: init_points_) { // For each initial point
                 grid_->getCell(i).setArrivalTime(0);
-                grid_->getCell(i).setState(FMState::FROZEN);
                 narrow_band_.push( &(grid_->getCell(i)) );
             }
 
@@ -197,6 +192,8 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FMM : public
         void setHeuristics
         (bool h) {
             heuristics_ = h;
+            if (heuristics_ && int(goal_idx_)!=-1 && !precomputed_)
+                precomputeDistances();
         }
 
         bool getHeuristics
@@ -238,6 +235,7 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FMM : public
 
                 distances_[i] = std::sqrt(dist);
             }
+            precomputed_ = true;
         }
 
     protected:
@@ -257,8 +255,9 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FMM : public
 
         heap_t narrow_band_; /*!< Instance of the heap used. */
 
-        bool heuristics_;
-        std::vector<double> distances_;
+        bool heuristics_; /*!< Flag to activate heuristics. */
+        std::vector<double> distances_;  /*!< Stores the precomputed heuristic distances. */
+        bool precomputed_;  /*!< Flag to indicate if distances_ is already computed. */
 };
 
 #endif /* FMM_HPP_*/

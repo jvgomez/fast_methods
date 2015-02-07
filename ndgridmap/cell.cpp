@@ -6,13 +6,13 @@ using namespace std;
 ostream& operator <<
 (ostream & os, Cell & c) {
     os << console::str_info("Basic cell information:");
-    os << "\t" << "Index: " 	<< c.index_ << endl;
-    os << "\t" << "Value: " 	<< c.value_ << endl;
+    os << "\t" << "Index: " << c.index_ << endl;
+    os << "\t" << "Value: " << c.value_ << endl;
     return os;
 }
 
 void Cell::setDefault
 () {
     value_ = -1;
-    occupancy_ = false;
+    //occupancy_ = true;
 }

@@ -16,30 +16,26 @@
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-
 #ifndef FMFIBHEAP_H_
 #define FMFIBHEAP_H_
-
 
 #include <boost/heap/fibonacci_heap.hpp>
 
 #include "fmcell.h"
 
-
 /** 
- * This struct is used a comparator for the heap. Since a minimum-heap
+ * This struct is used as comparator for the heap. Since a minimum-heap
  * is desired the operation checked is param1 > param2 as seen in this
  * [Stack Overflow post](http://stackoverflow.com/a/16706002/2283531)
  * */
 template <class cell_t> struct compare_cells {
     inline bool operator()
     (const cell_t * c1 , const cell_t * c2) const {
-
         return c1->getArrivalTime() > c2->getArrivalTime();
     }
 };
 
-// TODO: Template this class.
+// TODO: for memory efficiency, use map instead of vector for handles_.
 template <class cell_t = FMCell> class FMFibHeap {
 
     typedef boost::heap::fibonacci_heap<const cell_t *, boost::heap::compare<compare_cells<cell_t> > > fib_heap_t;
@@ -47,7 +43,7 @@ template <class cell_t = FMCell> class FMFibHeap {
 
     public:
         FMFibHeap () {}
-        FMFibHeap (const int & n) {	handles_.resize(n);}
+        FMFibHeap (const size_t & n) { handles_.resize(n);}
         virtual ~ FMFibHeap() {}
         
         /**
@@ -56,7 +52,7 @@ template <class cell_t = FMCell> class FMFibHeap {
          * @param maximum number of cells.
          */
         void setMaxSize
-        (const int & n) {
+        (const size_t & n) {
             handles_.resize(n);
         }
 
@@ -70,11 +66,11 @@ template <class cell_t = FMCell> class FMFibHeap {
          * 
          * @return index of the cell with lowest value.
          */ 
-        int popMinIdx
+        unsigned int popMinIdx
         () {
-            const int idx = heap_.top()->getIndex();
+            const unsigned int idx = heap_.top()->getIndex();
             heap_.pop();
-            return idx;	
+            return idx;
         }
 
         size_t size

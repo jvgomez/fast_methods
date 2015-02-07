@@ -11,8 +11,11 @@
 #include "../fmm/fmm.hpp"
 #include "../fmm/fmdata/fmfibheap.hpp"
 #include "../fmm/fmdata/fmpriorityqueue.hpp"
+#include "../fmm/fim.hpp"
+#include "../fmm/gmm.hpp"
+#include "../fmm/ufmm.hpp"
 
-#include "../io/gridwriter.hpp"
+#include "../io/gridplotter.hpp"
 
 using namespace std;
 using namespace std::chrono;
@@ -41,6 +44,9 @@ int main(int argc, const char ** argv)
     solvers.push_back(new FMM<FMGrid2D>);
     solvers.push_back(new FMM<FMGrid2D, FMFibHeap<FMCell> >("FMFib"));
     solvers.push_back(new FMM<FMGrid2D, FMPriorityQueue<FMCell> >("SFMM"));
+    solvers.push_back(new GMM<FMGrid2D>("GMM"));
+    solvers.push_back(new FIM<FMGrid2D>("FIM"));
+    solvers.push_back(new UFMM<FMGrid2D>("UFMM"));
 
     for (Solver<FMGrid2D>* s :solvers)
     {
@@ -53,10 +59,7 @@ int main(int argc, const char ** argv)
             time_elapsed = duration_cast<milliseconds>(end-start).count();
             cout << "\tElapsed "<< s->getName() <<" time: " << time_elapsed << " ms" << '\n';
 
-        std::string filename ("test_");
-        filename += s->getName();
-        filename += ".txt";
-        GridWriter::saveGridValues(filename.c_str(), grid_fmm);
+        GridPlotter::plotArrivalTimes(grid_fmm);
     }
 
     // Preventing memory leaks.

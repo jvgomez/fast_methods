@@ -16,10 +16,8 @@
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-
 #ifndef FMDARYHEAP_H_
 #define FMDARYHEAP_H_
-
 
 #include <boost/heap/d_ary_heap.hpp>
 
@@ -37,15 +35,15 @@ template <class cell_t> struct compare_cells_d_ary {
     }
 };
 
+// TODO: for memory efficiency, use map instead of vector for handles_.
 template <class cell_t = FMCell> class FMDaryHeap {
 
     typedef boost::heap::d_ary_heap<const cell_t *, boost::heap::mutable_<true>, boost::heap::arity<2>, boost::heap::compare<compare_cells_d_ary<cell_t> > > d_ary_heap_t;
-
     typedef typename d_ary_heap_t::handle_type handle_t;
 
     public:
         FMDaryHeap () {}
-        FMDaryHeap (const size_t & n) { handles_.resize(n); } // Memory-inefficient, but faster.
+        FMDaryHeap (const size_t & n) { handles_.resize(n); }
         virtual ~ FMDaryHeap() { clear(); }
         
         /**
@@ -97,7 +95,7 @@ template <class cell_t = FMCell> class FMDaryHeap {
          * It is more efficient than the update() function if it is ensured that the priority
          * will increase.
          * 
-         * @param c cell_t to be updated.
+         * @param c cell_t to be increased.
          * 
          * @see update()
          */
