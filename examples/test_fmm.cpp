@@ -1,14 +1,10 @@
 /* Runs different versions of FMM over an empty, generated grid. */
 
 #include <iostream>
-#include <cmath>
-#include <chrono>
 #include <array>
-#include <string>
 
 #include "../fmm/fmdata/fmcell.h"
 #include "../ndgridmap/ndgridmap.hpp"
-#include "../console/console.h"
 
 #include "../fmm/fmm.hpp"
 #include "../fmm/fmdata/fmfibheap.hpp"
@@ -27,10 +23,6 @@ int main(int argc, const char ** argv)
     // A bit of shorthand.
     typedef nDGridMap<FMCell, 2> FMGrid2D;
     typedef array<unsigned int, 2> Coord2D;
-
-    // Time measuring variables.
-    time_point<std::chrono::system_clock> start, end; // Time measuring.
-    double time_elapsed;
 
     // Grid, start and goal definition.
     Coord2D dimsize {300,300};
@@ -51,13 +43,10 @@ int main(int argc, const char ** argv)
     for (Solver<FMGrid2D>* s :solvers)
     {
         s->setEnvironment(&grid_fmm);
-            start = system_clock::now();
         //s->setInitialPoints(init_point); // If no goal_idx is set.
         s->setInitialAndGoalPoints(init_point, goal_point);
-        s->compute();
-            end = system_clock::now();
-            time_elapsed = duration_cast<milliseconds>(end-start).count();
-            cout << "\tElapsed "<< s->getName() <<" time: " << time_elapsed << " ms" << '\n';
+        double t = s->compute();
+        cout << "\tElapsed "<< s->getName() <<" time: " << t << " ms" << '\n';
         GridPlotter::plotArrivalTimes(grid_fmm);
     }
 

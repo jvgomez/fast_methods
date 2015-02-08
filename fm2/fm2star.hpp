@@ -67,7 +67,7 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> > class FM2Star : pub
             solver_->precomputeDistances();
         }
 
-        virtual void compute
+        virtual void computeInternal
         () {
             if (!setup_)
                  setup();
@@ -81,7 +81,11 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> > class FM2Star : pub
 
             solver_->setInitialAndGoalPoints(wave_init, wave_goal);
             solver_->setHeuristics(true);
+            start_ = std::chrono::system_clock::now();
             solver_->compute();
+            end_ = std::chrono::system_clock::now();
+            time_ = std::chrono::duration_cast<std::chrono::milliseconds>(end_-start_).count();
+            std::cout << "FM2* second: "<< time_ <<'\n';
             // Restore the actual grid status.
             grid_->setClean(false);
         }
@@ -99,6 +103,11 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> > class FM2Star : pub
         using FM2Base::computePath;
         using FM2Base::reset;
         using FM2Base::clear;
+        using FM2Base::time_;
+        using FM2Base::end_;
+
+        using FM2Base::start_;
+
 
         std::array <unsigned int, grid_t::getNDims()> heur_coord_; /*!< Goal coord, goal of the second wave propagation (actually the initial point of the path). */
 };

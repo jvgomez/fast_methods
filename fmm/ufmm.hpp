@@ -49,7 +49,7 @@ template <class grid_t, class cell_t = FMCell> class UFMM : public FMM <grid_t> 
          *
          * @see setInitialPoints()
          */
-        virtual void compute
+        virtual void computeInternal
         () {
             if (!setup_)
                 setup();

@@ -142,7 +142,7 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FMM : public
          *
          * @see setInitialAndGoalPoints()
          */
-        virtual void compute
+        virtual void computeInternal
         () {
             if (!setup_)
                 setup();

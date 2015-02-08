@@ -42,7 +42,7 @@ template < class grid_t > class FIM : public FMM <grid_t> {
          *
          * @see setInitialPoints()
          */
-        virtual void compute
+        virtual void computeInternal
         () {
             if (!setup_)
                 setup();

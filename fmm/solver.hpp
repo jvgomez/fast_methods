@@ -30,6 +30,7 @@
 #include <numeric>
 #include <fstream>
 #include <array>
+#include <chrono>
 
 template <class grid_t>
 class Solver {
@@ -114,7 +115,16 @@ class Solver {
         }
 
         /** Computes the distances map. Will call setup() if not done already. */
-        virtual void compute() = 0;
+        void compute() {
+            start_ = std::chrono::system_clock::now();
+            computeInternal();
+            end_ = std::chrono::system_clock::now();
+            time_ = std::chrono::duration_cast<std::chrono::milliseconds>(end_-start_).count();
+            std::cout << name_ << "  " <<time_ << std::endl;
+        }
+
+        /** Actual compute function to be implemented in each solver. */
+        virtual void computeInternal() = 0;
 
         /** @return name of the solver. */
         const std::string& getName() const
@@ -143,6 +153,11 @@ class Solver {
             return grid_;
         }
 
+        virtual double getTime
+        () const {
+            return time_;
+        }
+
     protected:
         /** Performs different check before a solver can proceed. */
         int sanityChecks
@@ -168,6 +183,10 @@ class Solver {
 
         std::vector<unsigned int> init_points_;  /*!< Initial index. */
         unsigned int goal_idx_; /*!< Goal index. */
+
+        std::chrono::time_point<std::chrono::system_clock> start_;
+        std::chrono::time_point<std::chrono::system_clock> end_;
+        double time_;
 };
 
 #endif /* SOLVER_H_*/

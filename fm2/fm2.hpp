@@ -89,7 +89,7 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> > class FM2 : public 
             }
         }
 
-        virtual void compute
+        virtual void computeInternal
         () {
             if (!setup_)
                  setup();
@@ -101,8 +101,12 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> > class FM2 : public 
             wave_init.push_back(goal_idx_);
             unsigned int wave_goal = init_points_[0];
 
+            start_ = std::chrono::system_clock::now();
             solver_->setInitialAndGoalPoints(wave_init, wave_goal);
             solver_->compute();
+            end_ = std::chrono::system_clock::now();
+            time_ = std::chrono::duration_cast<std::chrono::milliseconds>(end_-start_).count();
+            std::cout << "FM2 second: "<< time_ <<'\n';
             // Restore the actual grid status.
             grid_->setClean(false);
         }
@@ -115,7 +119,8 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> > class FM2 : public 
             grid_->setClean(true);
             solver_->setInitialPoints(fm2_sources_);
             solver_->compute();
-
+            time_vels_ = solver_->getTime();
+            start_ = std::chrono::system_clock::now();
             // Rescaling and saturating to relative velocities: [0,1]
             double maxValue = grid_->getMaxValue();
             double maxVelocity = 0;
@@ -139,6 +144,8 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> > class FM2 : public 
                 grid_->getCell(i).setState(FMState::OPEN);
                 grid_->setClean(true);
             }
+            end_ = std::chrono::system_clock::now();
+            time_vels_ += std::chrono::duration_cast<std::chrono::milliseconds>(end_-start_).count();
         }
 
         /** Computes the path from the given goal index to the minimum
@@ -171,15 +178,26 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> > class FM2 : public 
             solver_->reset();
         }
 
+        /** @return Velocities map computation time */
+        virtual double getTimeVelocities
+        () const {
+            return time_vels_;
+        }
+
     protected:
         using Solver<grid_t>::grid_;
         using Solver<grid_t>::init_points_;
         using Solver<grid_t>::goal_idx_;
         using Solver<grid_t>::setup_;
+        using Solver<grid_t>::time_;
+        using Solver<grid_t>::start_;
+        using Solver<grid_t>::end_;
 
         std::vector<unsigned int> fm2_sources_; /*!< Wave propagation sources for the Fast Marching Square. */
         FMM<grid_t, heap_t> * solver_; /*!< Underlying FMM-based solver. */
         double maxDistance_; /*!< Distance value to saturate the first potential. */
+
+        double time_vels_; /*!< Time elapsed in the velocities map computation. */
 };
 
 #endif /* FM2_H_*/
