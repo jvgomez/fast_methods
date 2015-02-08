@@ -72,29 +72,15 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FMM : public
 
         virtual ~FMM() { clear(); }
 
-        /**
-        * Internal function although it is set to public so it can be accessed if desired.
-        *
-        * Computes the Fast Marching Method initialization from the initial points given. Programmed following the paper:
-          A. Valero, J.V. Gómez, S. Garrido and L. Moreno, The Path to Efficiency: Fast Marching Method for Safer,
-          More Efficient Mobile Robot Trajectories, IEEE Robotics and Automation Magazine, Vol. 20, No. 4, 2013.
-        *
-        * @see setInitialAndGoalPoints()
-        */
+        /** Executes Solver setup and sets maximum size for the narrow band. */
         virtual void setup
         () {
             Solver<grid_t>::setup();
             narrow_band_.setMaxSize(grid_->size());
         }
 
-         /**
-         * Solves the Eikonal equation for a given cell. This function is generalized
-         * to any number of dimensions.
-         *
-         * @param idx index of the cell to be evaluated.
-         *
-         * @return the distance (or time of arrival) value.
-         */
+         /** Solves nD Eikonal equation for cell idx. If heuristics are activated, it will add
+             the estimated travel time to goal with current velocity. */
         virtual double solveEikonal
         (const int & idx) {
             // TODO: neighbors computed twice for every cell. We can save time here.
@@ -135,13 +121,6 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FMM : public
             return updatedT;
         }
 
-        /**
-         * Main Fast Marching Function. It requires to call first the setInitialAndGoalPoints() function.
-         * If a goal_idx_ was set through setInitialAndGoalPoints(), the wave will stop expanding once
-         * that cell is reached.
-         *
-         * @see setInitialAndGoalPoints()
-         */
         virtual void computeInternal
         () {
             if (!setup_)
@@ -189,6 +168,8 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FMM : public
             } // while narrow band not empty
         }
 
+        /** Set heuristics flag. True is activated. It will precompute distances
+            if not done already. */
         void setHeuristics
         (bool h) {
             heuristics_ = h;
@@ -196,6 +177,7 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FMM : public
                 precomputeDistances();
         }
 
+        /** @return heuristics flag. */
         bool getHeuristics
         () const {
             return heuristics_;
@@ -214,24 +196,20 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FMM : public
             narrow_band_.clear();
         }
 
-        /**
-         * Calculates the euclidean distance between every pixel filling an
-         * array with all of them. This method has been generalized to be used
-         * on n-dimensional grids.
-         */
+        /** Computes euclidean distance between goal and rest of cells. */
         virtual void precomputeDistances
         () {
             distances_.reserve(grid_->size());
             std::array <unsigned int, grid_t::getNDims()> coords;
             double dist = 0;
 
-            for (size_t i = 0; i  <  grid_->size(); ++i)
+            for (size_t i = 0; i < grid_->size(); ++i)
             {
                 dist = 0;
                 grid_->idx2coord(i, coords);
 
                 for (size_t j = 0; j  <  coords.size(); ++j)
-                    dist += pow(coords[j], 2);
+                    dist += std::pow(coords[j], 2);
 
                 distances_[i] = std::sqrt(dist);
             }

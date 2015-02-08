@@ -30,7 +30,6 @@
 using namespace cimg_library;
 
 // TODO: include checks which ensure that the grids are adecuate for the functions used.
-// TODO: Merge with MapLoaderText
 // TODO: when loading an empty grid, cells are not correctly initialized.
 //       Although it works properly, values are not set to Inf (that is why we have Nan values in obstacles.)
 

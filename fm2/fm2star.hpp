@@ -81,11 +81,7 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> > class FM2Star : pub
 
             solver_->setInitialAndGoalPoints(wave_init, wave_goal);
             solver_->setHeuristics(true);
-            start_ = std::chrono::system_clock::now();
             solver_->compute();
-            end_ = std::chrono::system_clock::now();
-            time_ = std::chrono::duration_cast<std::chrono::milliseconds>(end_-start_).count();
-            std::cout << "FM2* second: "<< time_ <<'\n';
             // Restore the actual grid status.
             grid_->setClean(false);
         }

@@ -120,7 +120,6 @@ class Solver {
             computeInternal();
             end_ = std::chrono::system_clock::now();
             time_ = std::chrono::duration_cast<std::chrono::milliseconds>(end_-start_).count();
-            std::cout << name_ << "  " <<time_ << std::endl;
         }
 
         /** Actual compute function to be implemented in each solver. */

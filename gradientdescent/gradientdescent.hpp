@@ -20,40 +20,22 @@ T sgn(T val) {
 
 template <class grid_t> class GradientDescent {
 
-    // Short-hand.
     static constexpr size_t ndims_ = grid_t::getNDims();
     typedef typename std::array<unsigned int, ndims_> Coord;
     typedef typename std::array<double, ndims_> Point;
     typedef typename std::vector <Point> Path;
 
     public:
+       /** Computes the path over grid from idx to a minimum and extracts the velocity in every point.
 
-       /**
-        * Computes the path from the given index to a minimum (the one
-        * gradient descent choses) and extract the velocity in every point.
-        * The T class chosen must be an nDGridMap or similar whose Cell
-        * element should be inherited from Cell class.
-        *
-        * Simple gradient approximation is used: dimension 0: gx = f((x-1,y)+f(x+1,y))/2
-        * dimension 1: gy = f((x,y-1)+f(x,y+1))/2
-        * and so on.
-        *
-        * No checks are done (points in the borders, points in obstacles...).
-        *
-        * Saves the velocities profile of the path extracting the velocity value of each cell.
-        *
-        * The included scripts will parse the saved path.
-        *
-        * IMPORTANT NOTE: both minimum and initial index cannot be in the
-        * border of the map. This situation is not checked. We recommend to set a 1 pixel
-        * black border around the map image.
-        *
-        * @param grid the grid to apply gradient descent on.
-        * @param idx index of the initial path point.
-        * @param path the resulting path (output).
-        * @param the velocities profile of the path (output).
-        * @param the step size to be applied.
-        */
+           Simple gradient approximation is used: dimension 0: gx = f((x-1,y)+f(x+1,y))/2
+           dimension 1: gy = f((x,y-1)+f(x,y+1))/2
+           and so on.
+
+           No checks are done (points in the borders, points in obstacles...).
+           IMPORTANT NOTE: both minimum and initial index cannot be in the
+           border of the map. This situation is not checked. We recommend to set a 1 pixel
+           black border around the map image. */
       static void apply
       (grid_t & grid, unsigned int &  idx, Path & path, std::vector <double> & path_velocity, double step = 1) {
 
@@ -108,8 +90,6 @@ template <class grid_t> class GradientDescent {
           path.push_back(current_point);
           path_velocity.push_back(grid[idx].getVelocity());
       }
-
 };
-
 
 #endif /* GRADIENTDESCENT_H_*/
