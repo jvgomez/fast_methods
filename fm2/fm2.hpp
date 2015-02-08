@@ -1,12 +1,14 @@
 /*! \file fm2.hpp
     \brief Templated class which computes the Fast Marching Square (FM2).
 
-    It uses as a main container the nDGridMap class. The nDGridMap type T
+    It uses as a main container the nDGridMap class. The nDGridMap template parameter
     has to be an FMCell or something inherited from it.
 
     @par External documentation:
         FM2:
-          A. Valero, J.V. Gómez, S. Garrido and L. Moreno, The Path to Efficiency: Fast Marching Method for Safer, More Efficient Mobile Robot Trajectories, IEEE Robotics and Automation Magazine, Vol. 20, No. 4, 2013.
+          A. Valero, J.V. Gómez, S. Garrido and L. Moreno,
+          The Path to Efficiency: Fast Marching Method for Safer, More Efficient Mobile Robot Trajectories,
+          IEEE Robotics and Automation Magazine, Vol. 20, No. 4, 2013.
 
     Copyright (C) 2014 Javier V. Gomez and Jose Pardeiro
     www.javiervgomez.com
@@ -20,7 +22,7 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
     GNU General Public License for more details.
     You should have received a copy of the GNU General Public License
-    along with this program. If not, see <http://www.gnu.org/licenses/>.*/
+    along with this program. If not, see <http://www.gnu.org/licenses/>. */
 
 #ifndef FM2_HPP_
 #define FM2_HPP_
@@ -45,11 +47,13 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> > class FM2 : public 
     public:
         typedef std::vector< std::array<double, grid_t::getNDims()> > path_t;
 
+        /** maxDistance sets the velocities map saturation distance in real units (before normalization). */
         FM2
         (double maxDistance = -1) : Solver<grid_t>("FM2"), maxDistance_(maxDistance) {
             solver_ = new FMM<grid_t, heap_t> ();
         }
 
+        /** maxDistance sets the velocities map saturation distance in real units (before normalization). */
         FM2
         (const std::string& name, double maxDistance = -1) : Solver<grid_t>(name), maxDistance_(maxDistance) {
             solver_ = new FMM<grid_t, heap_t> ();
@@ -85,11 +89,6 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> > class FM2 : public 
             }
         }
 
-        /**
-         * Main Fast Marching Square Function with velocity saturation. It requires to call first the setInitialAndGoalPoints() function.
-         *
-         * @see setInitialAndGoalPoints()
-         */
         virtual void compute
         () {
             if (!setup_)
@@ -108,46 +107,8 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> > class FM2 : public 
             grid_->setClean(false);
         }
 
-        /**
-         * Computes the path from the given goal index to the minimum
-         * of the times of arrival map.
-         *
-         * No checks are done (points in the borders, points in obstacles...).
-         *
-         * @param path the resulting path (output).
-         *
-         * @param velocity the resulting path (output).
-         *
-         * @param goal_idx index of the goal point, where gradient descent will start. If
-         *        no specified, the previously set goal point is used.
-         */
-        virtual void computePath
-        (path_t * p, std::vector <double> * path_velocity, unsigned int goal_idx = -1) {
-            path_t* path_ = p;
-            GradientDescent< nDGridMap<FMCell, grid_t::getNDims()> > grad;
-            if (int(goal_idx) != -1)
-                grad.apply(*grid_,goal_idx,*path_, *path_velocity);
-            else
-                grad.apply(*grid_,init_points_[0],*path_, *path_velocity);
-        }
-
-        virtual void clear
-        () {
-            Solver<grid_t>::clear();
-            fm2_sources_.clear();
-            maxDistance_ = -1;
-            delete solver_;
-        }
-
-        virtual void reset
-        () {
-            Solver<grid_t>::reset();
-            solver_->reset();
-        }
-
-    protected:
-        // Computes the velocities map of the FM2 algorithm.If  maxDistance_ != -1 then the map is saturated
-        // to the set value.
+        /** Computes the velocities map of the FM2 algorithm. If  maxDistance_ != -1 then the map is saturated
+            to the set value. It is then normalized: velolocities in [0,1]. */
         void computeVelocitiesMap
         () {
             // Forces not to clean the grid.
@@ -180,15 +141,44 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> > class FM2 : public 
             }
         }
 
+        /** Computes the path from the given goal index to the minimum
+            of the times of arrival map. No checks are done (points in the borders, points in obstacles...).
+            @param p path the resulting path (output).
+            @param path_velocity velocity the resulting path (output).
+            @param goal_idx index of the goal point, where gradient descent will start. If
+                   no specified, the previously set goal point is used. */
+        virtual void computePath
+        (path_t * p, std::vector <double> * path_velocity, unsigned int goal_idx = -1) {
+            path_t* path_ = p;
+            GradientDescent< nDGridMap<FMCell, grid_t::getNDims()> > grad;
+            if (int(goal_idx) != -1)
+                grad.apply(*grid_,goal_idx,*path_, *path_velocity);
+            else
+                grad.apply(*grid_,init_points_[0],*path_, *path_velocity);
+        }
+
+        virtual void clear
+        () {
+            Solver<grid_t>::clear();
+            fm2_sources_.clear();
+            maxDistance_ = -1;
+            delete solver_;
+        }
+
+        virtual void reset
+        () {
+            Solver<grid_t>::reset();
+            solver_->reset();
+        }
+
+    protected:
         using Solver<grid_t>::grid_;
         using Solver<grid_t>::init_points_;
         using Solver<grid_t>::goal_idx_;
         using Solver<grid_t>::setup_;
 
-        std::vector<unsigned int> fm2_sources_;  /*!< Wave propagation sources for the Fast Marching Square. */
-
-        FMM<grid_t, heap_t> * solver_;
-
+        std::vector<unsigned int> fm2_sources_; /*!< Wave propagation sources for the Fast Marching Square. */
+        FMM<grid_t, heap_t> * solver_; /*!< Underlying FMM-based solver. */
         double maxDistance_; /*!< Distance value to saturate the first potential. */
 };
 

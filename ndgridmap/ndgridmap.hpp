@@ -3,11 +3,11 @@
     
     Based on a flat array in which the generalized indexing operations are efficiently
     implemented, according to this document [nDGridMaps](http://www.javiervgomez.com/index.php/ND_grid_maps)
-    * It is important to read this document in order to understand the class.
-    * 
-    * It has 2 template parameters: the cells employed, should be Cell class or inherited.
-    * number of dimensions of the grid. Helps compiler to optimize.
-    * 
+    It is important to read this document in order to understand the class.
+
+    It has 2 template parameters: - the cells employed, should be Cell class or inherited.
+                                  - number of dimensions of the grid. Helps compiler to optimize.
+
     Copyright (C) 2014 Javier V. Gomez and Jose Pardeiro
     www.javiervgomez.com
 
@@ -20,8 +20,7 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
     GNU General Public License for more details.
     You should have received a copy of the GNU General Public License
-    along with this program. If not, see <http://www.gnu.org/licenses/>.
-*/
+    along with this program. If not, see <http://www.gnu.org/licenses/>. */
 
 #ifndef NDGRIDMAP_H_
 #define NDGRIDMAP_H_
@@ -36,14 +35,11 @@
 
 #include "../console/console.h"
 
-    // TODO: a neighbors precomputation could speed things up.
-    // TODO: improve coord2idx function in order to just pass n coordinates and not an array.
+// TODO: a neighbors precomputation could speed things up.
+// TODO: improve coord2idx function in order to just pass n coordinates and not an array.
 
 template <class T, size_t ndims> class nDGridMap {
 
-      /**
-       Ostream operator << overload for this class.
-       */
     friend std::ostream& operator <<
     (std::ostream & os, nDGridMap<T,ndims> & g) {
         os << console::str_info("Grid cell information");
@@ -62,12 +58,8 @@ template <class T, size_t ndims> class nDGridMap {
 
       nDGridMap () : leafsize_(1.0f), clean_(true) {}
 
-      /**
-       Constructor.
-       *
-       * @param dimsize constains the size of each dimension.
-       * @param leafsize real cell size (assumed to be cubic). 1 unit by default.
-       */
+      /** @param dimsize constains the size of each dimension.
+          @param leafsize real cell size (assumed to be cubic). 1 unit by default. */
         nDGridMap
         (const std::array<unsigned int, ndims> & dimsize, double leafsize = 1.0f) :
         leafsize_(leafsize),
@@ -75,12 +67,8 @@ template <class T, size_t ndims> class nDGridMap {
             resize(dimsize);
         }
 
-        /**
-         * Resizes the grid.
-         *
-         * @param dimsize contains the size of each dimension.
-         *
-         * */
+        /** Resizes the grid.
+            @param dimsize contains the new size of each dimension. */
         void resize
         (const std::array<unsigned int, ndims> & dimsize) {
             dimsize_ = dimsize;
@@ -102,17 +90,10 @@ template <class T, size_t ndims> class nDGridMap {
             clean_ = true;
         }
 
-        /**
-         * Operator[] overload in order to access the elements of the grid map.
-         *  grid[i] equivalent to grid.cells_[i] or grid.getCell(i);
-         *
+        /** Accesses the elements of the grid map.
          * @param idx index of the cell to be accessed.
-         *
          * @return the corresponding cell.
-         *
-         * @see getCell()
-         *
-         * */
+         * @see getCell() */
         T & operator[]
         (unsigned int idx) {
             return cells_[idx];
@@ -122,27 +103,18 @@ template <class T, size_t ndims> class nDGridMap {
 
         void setLeafSize(const double leafsize) { leafsize_=leafsize; }
 
-        /*
-         * @see operator[]
-         *
-         * */
+        /** @see operator[] */
         T & getCell
         (unsigned int idx) {
             return cells_[idx];
             }
 
-        std::array<unsigned int, ndims> getDimSizes() const     { return dimsize_;}
+        /** @return size of each dimension. */
+        std::array<unsigned int, ndims> getDimSizes() const { return dimsize_;}
 
-         /**
-         * For a cell with index idx, obtains the minimum value of the neigbours in dimension dim.
-         *
-         * @param idx index of the cell accessed.
-         * @param dim dimension in which the minimum is examinated (0: x, 1: y, 2: z, etc).
-         *
-         * @return the corresponding minimum value.
-         * */
+         /** @return minimum value of neighbors of cell idx in dimension dim. */
         double getMinValueInDim
-        (unsigned int idx, unsigned int dim)   {
+        (unsigned int idx, unsigned int dim) {
             n_neighs = 0; // How many neighbors obtained in that dimension.
             getNeighborsInDim(idx,n_,dim);
 
@@ -150,9 +122,9 @@ template <class T, size_t ndims> class nDGridMap {
                 return cells_[n_[0]].getValue();
             else
                 return (cells_[n_[0]].getValue()<cells_[n_[1]].getValue()) ? cells_[n_[0]].getValue() : cells_[n_[1]].getValue();
-
         }
 
+        /** @return number of valid neighbors for cell idx in dimension dim, stored in m. */
         unsigned int getNumberNeighborsInDim
         (int idx, std::array<unsigned int, ndims> &m, unsigned int dim)   {
             n_neighs = 0;
@@ -161,16 +133,9 @@ template <class T, size_t ndims> class nDGridMap {
             return n_neighs;
         }
 
-        /**
-         * Computes the indices of the 4-connectivity neighbors. As it is based
-         * on arrays (to improve performance) the number of neighbors found is
-         * returned since the neighs array will have always the same size.
-         *
-         * @param idx index of the cell the neighbors are desired.
-         * @param neighs constains the neigbour indices.
-         *
-         * @return the number of neighbors found.
-         * */
+        /** Computes the indices of the 4-connectivity neighbors. As it is based
+            on arrays (to improve performance) the number of neighbors found is
+            returned since the neighs array will have always the same size. */
         unsigned int getNeighbors
         (unsigned int idx, std::array<unsigned int, 2*ndims> & neighs) {
             n_neighs = 0;
@@ -180,19 +145,10 @@ template <class T, size_t ndims> class nDGridMap {
             return n_neighs;
         }
 
-        /**
-         * Computes the indices of the 4-connectivity neighbors in a specified direction.
-         * This function is designed to be used within getNeighbors() or getMinValueInDim()
-         * since it increments the private member n_neighs and it is only reset in
-         * those functions.
-         *
-         * @param idx index of the cell the neighbors are desired.
-         * @param neighs constains the neigbour indices.
-         * @param dim the direction (dimension) to be examined.
-         *
-         * @see getNeighbors()
-         * @see getMinValueInDim()
-         * */
+        /** Computes the indices of the 4-connectivity neighbors of cell idx in a specified direction dim.
+            This function is designed to be used within getNeighbors() or getMinValueInDim()
+            since it increments the private member n_neighs and it is only reset in
+            those functions. */
         void getNeighborsInDim
         (unsigned int idx, std::array<unsigned int, 2*ndims>& neighs, unsigned int dim) {
             unsigned int c1,c2;
@@ -221,16 +177,8 @@ template <class T, size_t ndims> class nDGridMap {
             }
         }
 
-        /**
-         * Special version of this function to be used with getMinValueInDim().
-         *
-         * @param idx index of the cell the neighbors are desired.
-         * @param neighs constains the neigbour indices.
-         * @param dim the direction (dimension) to be examined.
-         *
-         * @see getNeighborsInDim()
-         * @see getMinValueInDim()
-         * */
+        /** Special version of this function to be used with getMinValueInDim().
+            @see getMinValueInDim() */
         void getNeighborsInDim
         (unsigned int idx, std::array<unsigned int, 2>& neighs, unsigned int dim) {
             unsigned int c1,c2;
@@ -259,18 +207,7 @@ template <class T, size_t ndims> class nDGridMap {
             }
         }
 
-        /**
-         * Transforms from index coordinates to coordinates.
-         *
-         * @param idx the index to be transformed
-         * @param coords outputs the coordinate for each dimension.
-         *
-         * @return -1 if there were any problem. 1 if successful.
-         *
-         * @see showCoords()
-         * @see showIdx()
-         * @see coord2idx()
-         * */
+        /** Transforms from index to coordinates. */
         unsigned int idx2coord
         (unsigned int idx, std::array<unsigned int, ndims> & coords) {
             if (coords.size() != ndims)
@@ -287,18 +224,7 @@ template <class T, size_t ndims> class nDGridMap {
             return 1;
         }
 
-        /**
-         * Transforms from coordinates to index.
-         *
-         * @param coords contains the coordinate for each dimension.
-         * @param idx outputs the corresponding index in the flat array.
-         *
-         * @return -1 if there were any problem. 1 if successful.
-         *
-         * @see showCoords()
-         * @see showIdx()
-         * @see idx2coord()
-         * */
+        /** Transforms from coordinates to index. */
         unsigned int coord2idx
         (const std::array<unsigned int, ndims> & coords, unsigned int & idx) {
             if (coords.size() != ndims)
@@ -311,33 +237,25 @@ template <class T, size_t ndims> class nDGridMap {
             return 1;
         }
 
-       /**
-         * Shows the coordinates from an index.
-         *
-         * @param idx the index to be transformed into coordinated and shown.
-         *
-         * @see showIdx()
-         * @see idx2coord()
-         * @see coord2idx()
-         * */
+       /** Shows the coordinates from an index. */
         void showCoords
         (unsigned int idx) {
             std::array<unsigned int, ndims> coords;
             idx2coord(idx, coords);
             for (unsigned int i = 0; i < ndims; ++i)
                 std::cout << coords[i] << "\t";
-            std::cout << std::endl;
+            std::cout << '\n';
         }
 
-        /**
-         * Shows the index from the coordinates
-         *
-         * @param coords the coordinate for each dimension and to be transformed into index and shown.
-         *
-         * @see showCoords()
-         * @see idx2coord()
-         * @see coord2idx()
-         * */
+        /** Shows the coordinates from a set of coordinates. */
+         void showCoords
+         (std::array<unsigned int, ndims> coords) {
+             for (unsigned int i = 0; i < ndims; ++i)
+                 std::cout << coords[i] << "\t";
+             std::cout << '\n';
+         }
+
+        /** Shows the index from the coordinates. */
         void showIdx
         (const std::array<unsigned int, ndims> & coords) {
             unsigned int idx;
@@ -345,14 +263,13 @@ template <class T, size_t ndims> class nDGridMap {
             std::cout << idx << '\n';
         }
 
+         /** @return number of cells in the grid. */
         unsigned int size
         () const {
             return ncells_;
         }
 
-        /**
-           @return the maximum value of the cells within the grid.
-         * */
+        /** @return the maximum value of the cells in the grid. */
         double getMaxValue
         () const {
             double max = 0;
@@ -363,16 +280,19 @@ template <class T, size_t ndims> class nDGridMap {
             return max;
         }
 
+        /** @return if the grid is clean (ready to use) */
         bool isClean
         () const {
             return clean_;
         }
 
+        /** Set the state of the grid. True means clean. */
         void setClean
         (bool c) {
             clean_ = c;
         }
 
+        /** Cleans the grid if it is not clean already. Calls Cell::setDefault() */
         void clean
         () {
             if(!clean_) {
@@ -382,12 +302,14 @@ template <class T, size_t ndims> class nDGridMap {
             }
         }
 
+        /** Erases the content of the grid. Must be resized later. */
         void clear
         () {
             cells_.clear();
             occupied_.clear();
         }
 
+        /** @return size(dim(0)) \t size(dim(1)) \t... */
         std::string getDimSizesStr()
         {
             std::stringstream ss;
@@ -396,25 +318,24 @@ template <class T, size_t ndims> class nDGridMap {
             return ss.str();
         }
 
+        /** Sets the cells which are occupied. Usually called by grid loaders. */
         void setOccupiedCells
         (const std::vector<unsigned int> & obs) {
             occupied_ = obs;
         }
 
+        /** @return the indices of the occupied cells of the grid. */
         void getOccupiedCells
         (std::vector<unsigned int> & obs) const {
             obs = occupied_;
         }
 
-        /**  Makes the number of dimensions of the grid available at compilation time.
-             @return number of dimensions of the grid.
-         * */
+        /** Makes the number of dimensions of the grid available at compilation time. */
         static constexpr size_t getNDims() {return ndims;}
 
     private:
-
-        std::vector<T> cells_;  /*!< The main container for the class. */
-        std::array<unsigned int, ndims> dimsize_;  /*!< Contains the size of each dimension. */
+        std::vector<T> cells_;  /*!< Main container for the class. */
+        std::array<unsigned int, ndims> dimsize_;  /*!< Size of each dimension. */
         double leafsize_;  /*!< Real size of the cells. It is assumed that the cells in the grid are cubic. */
         unsigned int ncells_;  /*!< Number of cells in the grid (size) */
         bool clean_;  /*!< Flag to indicate if the grid is ready to use. */

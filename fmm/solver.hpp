@@ -1,30 +1,11 @@
 /*! \file solver.hpp
     \brief Templated class which computes the basic Fast Marching Method (FMM).
 
-    It uses as a main container the nDGridMap class. The nDGridMap type T
+    It uses as a main container the nDGridMap class. The nDGridMap template paramenter
     has to be an FMCell or something inherited from it.
-
-    The leafsize of the grid map is ignored since it has to be >=1 and that
-    depends on the units employed.
 
     The type of the heap introduced is very important for the behaviour of the
     algorithm. The following heaps are provided:
-
-    - FMDaryHeap wrap for the Boost D_ary heap (generalization of binary heaps).
-    * Set by default if no other heap is specified. The arity has been set to 2
-    * (binary heap) since it has been tested to be the more efficient in this algorithm.
-    - FMFibHeap wrap for the Boost Fibonacci heap.
-    - FMPriorityQueue wrap to the std::PriorityQueue class. This heap implies the implementation
-    * of the Simplified FMM (SFMM) method, done automatically because of the FMPriorityQueue::increase implementation.
-    *
-    @par External documentation:
-        FMM:
-          A. Valero, J.V. Gómez, S. Garrido and L. Moreno, The Path to Efficiency: Fast Marching Method for Safer, More Efficient Mobile Robot Trajectories, IEEE Robotics and Automation Magazine, Vol. 20, No. 4, 2013. DOI: <a href="http://dx.doi.org/10.1109/MRA.2013.2248309">10.1109/MRA.2013.2248309></a><br>
-           <a href="http://ieeexplore.ieee.org/xpl/articleDetails.jsp?arnumber=6582543">[PDF]</a>
-
-        SFMM:
-          M.W. Jones, J.A. Baerentzen, M. Sramek, 3D Distance Fields: A Survey of Techniques and Applications, IEEE Transactions on Visualization and Computer Graphics, Vol. 12, No. 4, 2006. DOI <a href=http://dx.doi.org/10.1109/TVCG.2006.56">110.1109/TVCG.2006.56</a><br>
-          <a href="http://ieeexplore.ieee.org/xpl/articleDetails.jsp?arnumber=1634323">[PDF]</a>
 
     Copyright (C) 2014 Javier V. Gomez
     www.javiervgomez.com
@@ -38,8 +19,7 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
     GNU General Public License for more details.
     You should have received a copy of the GNU General Public License
-    along with this program. If not, see <http://www.gnu.org/licenses/>.
-    */
+    along with this program. If not, see <http://www.gnu.org/licenses/>. */
 
 #ifndef SOLVER_H_
 #define SOLVER_H_
@@ -61,38 +41,50 @@ class Solver {
 
         virtual ~Solver() { clear(); }
 
-         /**
-          * Sets the input grid in which operations will be performed.
-          *
-          * @param g input grid map.
-          */
+         /** Sets and cleans the grid in which operations will be performed. */
         virtual void setEnvironment
         (grid_t * g) {
             grid_ = g;
             grid_->clean();
         }
 
-        /**
-         * Sets the initial points by the indices in the nDGridMap and
-         * computes the initialization of the Fast Marching Method calling
-         * the init() function.
-         *
-         * @param init_points contains the indices of the init points.
-         *
-         * @param goal contains the index of the goal point. If -1 (default) no goal point is set.
-         */
+        /** Sets the initial and goal points by the indices of the grid. */
         virtual void setInitialAndGoalPoints
         (const std::vector<unsigned int> & init_points, unsigned int goal_idx) {
             init_points_ = init_points;
             goal_idx_ = goal_idx;
         }
 
-        void setInitialPoints
+        /** Sets the initial points by the indices of the grid. */
+        virtual void setInitialPoints
         (const std::vector<unsigned int> & init_points)
         {
             setInitialAndGoalPoints(init_points, -1);
         }
 
+        /** Sets the initial and goal points by the coordinates of the grid. */
+        virtual void setInitialAndGoalPoints
+        (const std::array<unsigned int, grid_t::getNDims()> & init_coord, const std::array<unsigned int, grid_t::getNDims()> & goal_coord) {
+            std::vector<unsigned int> init_points;
+            unsigned int idx;
+            grid_->coord2idx(init_coord, idx);
+            init_points.push_back(idx);
+            grid_->coord2idx(goal_coord, idx);
+            setInitialAndGoalPoints(init_points, idx);
+        }
+
+        /** Sets the initial point by the coordinates of the grid. */
+        virtual void setInitialPoints
+        (const std::array<unsigned int, grid_t::getNDims()> & init_coord)
+        {
+            std::vector<unsigned int> init_points;
+            unsigned int idx;
+            grid_->coord2idx(init_coord, idx);
+            init_points.push_back(idx);
+            setInitialAndGoalPoints(init_points, -1);
+        }
+
+        /** Checks that the solver is ready to run. Sets the grid unclean. */
         virtual void setup
         () {
             const int err = sanityChecks();
@@ -121,13 +113,16 @@ class Solver {
             setup_ = true;
         }
 
+        /** Computes the distances map. Will call setup() if not done already. */
         virtual void compute() = 0;
 
+        /** @return name of the solver. */
         const std::string& getName() const
         {
             return name_;
         }
 
+        /** Clears the solver. It has to be configured before running again. */
         virtual void clear
         () {
             init_points_.clear();
@@ -135,38 +130,44 @@ class Solver {
             setup_ = false;
         }
 
+        /** Clears temporal data, so it is ready to run again. */
         virtual void reset
         () {
             setup_ = false;
             grid_->clean();
         }
 
+        /** Returns a pointer to the grid used. */
         grid_t* getGrid() const
         {
             return grid_;
         }
 
     protected:
-
+        /** Performs different check before a solver can proceed. */
         int sanityChecks
         () {
             if (grid_ == NULL) return 1;
             if (!grid_->isClean()) return 2;
             if (init_points_.empty()) return 3;
 
-            for (int i : init_points_)
-                if (grid_->getCell(i).isObstacle()) return 4;
+            // When more that 1 initial point is given, this check is ommitted
+            // since it could be FM2-like velocities map computation.
+            if (init_points_.size() == 1 &&
+                grid_->getCell(init_points_[0]).isObstacle()) return 4;
+
             if(int(goal_idx_) != -1 && grid_->getCell(goal_idx_).isObstacle()) return 4;
+
             return 0;
         }
 
-        grid_t* grid_; /*!< Main container. */
+        grid_t* grid_; /*!< Grid container. */
 
-        std::string name_;
-        bool setup_;
+        std::string name_; /*!< Solver name. */
+        bool setup_; /*!< Setup status. */
 
-        std::vector<unsigned int> init_points_;  /*!< Initial points. */
-        unsigned int goal_idx_;
+        std::vector<unsigned int> init_points_;  /*!< Initial index. */
+        unsigned int goal_idx_; /*!< Goal index. */
 };
 
 #endif /* SOLVER_H_*/

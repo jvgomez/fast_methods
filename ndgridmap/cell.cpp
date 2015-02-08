@@ -14,5 +14,4 @@ ostream& operator <<
 void Cell::setDefault
 () {
     value_ = -1;
-    //occupancy_ = true;
 }

@@ -1,15 +1,16 @@
 /*! \file fm2star.hpp
     \brief Templated class which computes the Fast Marching Square Star (FM2*).
 
-    It uses as a main container the nDGridMap class. The nDGridMap type T
-    has to be an FMStarCell or something inherited from it.
+    This class is the same as FM2 but uses heuristics in the second wave propagation.
 
     Only FMM is available as underlying planner since using heuristics is not that
     obvious in other planners.
 
     @par External documentation:
-        FM2 and old FM2*:
-          A. Valero, J.V. Gómez, S. Garrido and L. Moreno, Fast Marching Method for Safer, More Efficient Mobile Robot Trajectories.
+        FM2:
+          A. Valero, J.V. Gómez, S. Garrido and L. Moreno,
+          The Path to Efficiency: Fast Marching Method for Safer, More Efficient Mobile Robot Trajectories,
+          IEEE Robotics and Automation Magazine, Vol. 20, No. 4, 2013.
 
     Copyright (C) 2014 Javier V. Gomez and Jose Pardeiro
     www.javiervgomez.com
@@ -23,8 +24,7 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
     GNU General Public License for more details.
     You should have received a copy of the GNU General Public License
-    along with this program. If not, see  < http://www.gnu.org/licenses/>.
-*/
+    along with this program. If not, see  < http://www.gnu.org/licenses/>. */
 
 #ifndef FM2STAR_HPP_
 #define FM2STAR_HPP_
@@ -49,12 +49,15 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> > class FM2Star : pub
     typedef FM2<grid_t, heap_t > FM2Base;
 
     public:
+        /** maxDistance sets the velocities map saturation distance in real units (before normalization). */
         FM2Star
         (double maxDistance = -1) : FM2Base("FM2*", maxDistance) { }
 
+        /** maxDistance sets the velocities map saturation distance in real units (before normalization). */
         FM2Star
         (const std::string& name, double maxDistance = -1) : FM2Base(name, maxDistance) { }
 
+        /** Overloaded from FM2. In this case the precomputeDistances() method is called. */
         virtual void setInitialAndGoalPoints
         (const std::vector<unsigned int> & init_points, unsigned int goal_idx) {
             FM2Base::setInitialAndGoalPoints(init_points, goal_idx);
@@ -64,11 +67,6 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> > class FM2Star : pub
             solver_->precomputeDistances();
         }
 
-        /**
-         * Main Fast Marching Square Function with velocity saturation. It requires to call first the setInitialAndGoalPoints() function.
-         *
-         * @see setInitialAndGoalPoints()
-         */
         virtual void compute
         () {
             if (!setup_)
@@ -102,7 +100,7 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> > class FM2Star : pub
         using FM2Base::reset;
         using FM2Base::clear;
 
-        std::array <unsigned int, grid_t::getNDims()> heur_coord_; /*! <  'Goal' coord, goal of the second wave propagation (actually the initial point of the path). */
+        std::array <unsigned int, grid_t::getNDims()> heur_coord_; /*!< Goal coord, goal of the second wave propagation (actually the initial point of the path). */
 };
 
 #endif /* FM2STAR_HPP_*/

@@ -162,7 +162,7 @@ class MapLoader {
 
                     grid[i].setOccupancy(occupancy);
 
-                    if (occupancy == 0)
+                    if (!occupancy)
                         obs.push_back(i);
                 }
                 grid.setOccupiedCells(obs);
