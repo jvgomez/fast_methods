@@ -42,22 +42,19 @@ int main(int argc, const char ** argv)
     // Solvers declaration.
     std::vector<Solver<FMGrid2D>*> solvers;
     solvers.push_back(new FM2<FMGrid2D>("FM2_Dary"));
-    solvers.push_back(new FM2<FMGrid2D, FMFibHeap<FMCell> >("FM2_Fib"));
-    solvers.push_back(new FM2<FMGrid2D, FMPriorityQueue<FMCell> >("FM2_SFMM"));
+    //solvers.push_back(new FM2<FMGrid2D, FMFibHeap<FMCell> >("FM2_Fib"));
+    //solvers.push_back(new FM2<FMGrid2D, FMPriorityQueue<FMCell> >("FM2_SFMM"));
     solvers.push_back(new FM2Star<FMGrid2D>("FM2*_Dary"));
-    solvers.push_back(new FM2Star<FMGrid2D, FMFibHeap<FMCell> >("FM2*_Fib"));
-    solvers.push_back(new FM2Star<FMGrid2D, FMPriorityQueue<FMCell> >("FM2*_SFMM"));
+    //solvers.push_back(new FM2Star<FMGrid2D, FMFibHeap<FMCell> >("FM2*_Fib"));
+    //solvers.push_back(new FM2Star<FMGrid2D, FMPriorityQueue<FMCell> >("FM2*_SFMM"));
 
     for (int i = 0; i < 10; ++i) {
     // Executing every solver individually over the same grid.
         for (Solver<FMGrid2D>* s :solvers)
         {
             s->setEnvironment(&grid_fm2);
-            //    start = system_clock::now();
             s->setInitialAndGoalPoints({20, 20}, {375, 280}); // Init and goal points directly set.
             s->compute();
-            //    end = system_clock::now();
-            //    time_elapsed = duration_cast<milliseconds>(end-start).count();
                 cout << "\tElapsed "<< s->getName() <<" time: " << s->getTime() << " ms" << '\n';
             GridPlotter::plotArrivalTimes(grid_fm2);
         }

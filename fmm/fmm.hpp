@@ -61,6 +61,11 @@
 // TODO: check initial and goal points are not the same, not on obstacles, etc.
 // IMPORTANT TODO: substitute grid_->getCell(j).isOccupied() by grid_->getCell(j).getVelocity() == 0 (conceptually is not the same).
 
+unsigned int absUI
+(int a) {
+    return (a>0) ? (a) : (-a);
+}
+
 template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FMM : public Solver<grid_t> {
 
     public:
@@ -79,8 +84,8 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FMM : public
             narrow_band_.setMaxSize(grid_->size());
         }
 
-         /** Solves nD Eikonal equation for cell idx. If heuristics are activated, it will add
-             the estimated travel time to goal with current velocity. */
+        /** Solves nD Eikonal equation for cell idx. If heuristics are activated, it will add
+            the estimated travel time to goal with current velocity. */
         virtual double solveEikonal
         (const int & idx) {
             // TODO: neighbors computed twice for every cell. We can save time here.
@@ -115,8 +120,9 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FMM : public
             else
                 updatedT = (-b + sqrt(quad_term))/(2*a);
 
-            if (heuristics_)
-                updatedT +=  distances_[idx]/grid_->getCell(idx).getVelocity();
+            if (heuristics_) {
+                updatedT +=  getPrecomputedDistance(idx)/grid_->getCell(idx).getVelocity();
+            }
 
             return updatedT;
         }
@@ -173,8 +179,11 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FMM : public
         void setHeuristics
         (bool h) {
             heuristics_ = h;
-            if (heuristics_ && int(goal_idx_)!=-1 && !precomputed_)
-                precomputeDistances();
+            if (int(goal_idx_)!=-1) {
+                grid_->idx2coord(goal_idx_, heur_coord_);
+                if (heuristics_ && !precomputed_)
+                    precomputeDistances();
+            }
         }
 
         /** @return heuristics flag. */
@@ -208,12 +217,29 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FMM : public
                 dist = 0;
                 grid_->idx2coord(i, coords);
 
-                for (size_t j = 0; j  <  coords.size(); ++j)
+                for (size_t j = 0; j < coords.size(); ++j)
                     dist += std::pow(coords[j], 2);
 
                 distances_[i] = std::sqrt(dist);
             }
             precomputed_ = true;
+        }
+
+        /** Extract the euclidean distance calculated from precomputeDistances
+            function distance between two positions. */
+        virtual double getPrecomputedDistance
+        (const unsigned int idx) {
+            std::array <unsigned int, grid_t::getNDims()> position, distance;
+            grid_->idx2coord(idx, position);
+
+            for (unsigned int i = 0; i < grid_t::getNDims(); ++i)
+                distance[i] = absUI(position[i] - heur_coord_[i]);
+               //distance[i] = std::abs(position[i] - heur_coord_[i]);
+
+            unsigned int idx_dist;
+            grid_->coord2idx(distance, idx_dist);
+
+            return distances_[idx_dist];
         }
 
     protected:
@@ -236,6 +262,7 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FMM : public
         bool heuristics_; /*!< Flag to activate heuristics. */
         std::vector<double> distances_;  /*!< Stores the precomputed heuristic distances. */
         bool precomputed_;  /*!< Flag to indicate if distances_ is already computed. */
+        std::array <unsigned int, grid_t::getNDims()> heur_coord_; /*!< Goal coord, goal of the second wave propagation (actually the initial point of the path). */
 };
 
 #endif /* FMM_HPP_*/
