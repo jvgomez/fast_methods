@@ -102,6 +102,10 @@ Although there are a lot of folders, they are quite simple. It is organized this
 + scripts: matlab scripts to parse outputs.
 + thirdparty: others' software included.
 
+## KNOWN ISSUES
+
+- FM2* seems not to properly clear the grid since test_FM2Star.cpp gives different results among runs.
+
 ## TODO
 
 At the top of each file there are specific TODO comments.
