@@ -45,8 +45,8 @@ int main(int argc, const char ** argv)
         s->setEnvironment(&grid_fmm);
         //s->setInitialPoints(init_point); // If no goal_idx is set.
         s->setInitialAndGoalPoints(init_point, goal_point);
-        double t = s->compute();
-        cout << "\tElapsed "<< s->getName() <<" time: " << t << " ms" << '\n';
+        s->compute();
+        cout << "\tElapsed "<< s->getName() <<" time: " << s->getTime() << " ms" << '\n';
         GridPlotter::plotArrivalTimes(grid_fmm);
     }
 

@@ -35,9 +35,6 @@ int main(int argc, const char ** argv)
 
     // Loading grid.
     FMGrid2D grid_fm2;
-    //if(!MapLoader::loadMapFromText(filename.c_str(), grid_fm2))
-    MapLoader::loadMapFromImg(filename.c_str(), grid_fm2);
-        //exit(1);
 
     // Solvers declaration.
     std::vector<Solver<FMGrid2D>*> solvers;
@@ -53,12 +50,13 @@ int main(int argc, const char ** argv)
         for (Solver<FMGrid2D>* s :solvers)
         {
             // For FM2 and its variations, it is better to completely reinitialize the grid.
+            //if(!MapLoader::loadMapFromText(filename.c_str(), grid_fm2)) // Loading from text file.
+                //exit(1);
             MapLoader::loadMapFromImg(filename.c_str(), grid_fm2);
             s->setEnvironment(&grid_fm2);
             s->setInitialAndGoalPoints({20, 20}, {375, 280}); // Init and goal points directly set.
             s->compute();
             cout << "\tElapsed "<< s->getName() <<" time: " << s->getTime() << " ms" << '\n';
-            GridPlotter::plotMap(grid_fm2);
             GridPlotter::plotArrivalTimes(grid_fm2);
         }
     }

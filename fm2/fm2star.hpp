@@ -66,7 +66,8 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> > class FM2Star : pub
             FM2Base::setInitialAndGoalPoints(init_points, goal_idx);
             // Goal and initial points are inverted because the second wave is propagated from the goal
             // to the start, so that the heuristics have to be compared from the initial_point.
-            grid_->idx2coord(init_points_[0], heur_coord_);
+            //grid_->idx2coord(init_points_[0], heur_coord_);
+            //solver_->
             solver_->precomputeDistances();
         }
 
@@ -102,13 +103,10 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> > class FM2Star : pub
         using FM2Base::computePath;
         using FM2Base::reset;
         using FM2Base::clear;
-        using FM2Base::time_;
-        using FM2Base::end_;
 
-        using FM2Base::start_;
-
-
-        std::array <unsigned int, grid_t::getNDims()> heur_coord_; /*!< Goal coord, goal of the second wave propagation (actually the initial point of the path). */
+        //using FM2Base::time_;
+        //using FM2Base::end_;
+        //using FM2Base::start_;
 };
 
 #endif /* FM2STAR_HPP_*/
