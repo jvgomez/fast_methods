@@ -61,7 +61,7 @@ template < class grid_t > class FIM : public FMM <grid_t> {
                 n_neighs = grid_->getNeighbors(i, neighbors);
                 for (unsigned int s = 0; s < n_neighs; ++s) {// For each neighbor
                     j = neighbors[s];
-                    if ( (grid_->getCell(j).getState() == FMState::OPEN) && !grid_->getCell(j).isObstacle()) {
+                    if ( (grid_->getCell(j).getState() == FMState::OPEN) && !grid_->getCell(j).isOccupied()) {
                         active_list_.push_back(j);
                         grid_->getCell(j).setState(FMState::NARROW);
                     }

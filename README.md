@@ -106,9 +106,10 @@ Although there are a lot of folders, they are quite simple. It is organized this
 
 At the top of each file there are specific TODO comments.
 
+- The new occupancy-based model (instead of velocities) might cause problems for FM2 versions.
 - Reimplement FM2Dir from scratch. Currently in data/alpha folder.
 - Restructure the folder and the CMake files in order to properly have examples and that stuff.
 - Substitute arg parsing with boost_options.
 - Remove relative file dependencies (#include "../../fmm", filename = "../../data", CMakeLists.txt deps, etc).
-- Implement a grid copy constructor and operator, clear, etc.
+- Implement a grid copy constructor and assignment operator, etc.
 - Most of the unsigned int should be replaced by size_t to be type-correct.

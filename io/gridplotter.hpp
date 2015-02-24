@@ -56,12 +56,12 @@ class GridPlotter {
         (nDGridMap<T, ndims> & grid, const bool flipY = 1) {
             // TODO: image checking: B/W, correct reading, etc.
             std::array<unsigned int,2> d = grid.getDimSizes();
-            CImg<bool> img(d[0],d[1],1,1,0);
+            CImg<double> img(d[0],d[1],1,1,0);
             if (flipY)
                 // Filling the image flipping Y dim. We want now top left to be the (0,0).
-                cimg_forXY(img,x,y) { img(x,y) = grid[img.width()*(img.height()-y-1)+x].getOccupancy(); }
+                cimg_forXY(img,x,y) { img(x,y) = grid[img.width()*(img.height()-y-1)+x].getOccupancy()*255; }
             else 
-                cimg_forXY(img,x,y) { img(x,y) = grid[img.width()*y+x].getOccupancy(); }
+                cimg_forXY(img,x,y) { img(x,y) = grid[img.width()*y+x].getOccupancy()*255; }
                 
             img.display("Grid map", false);
         }
@@ -111,7 +111,7 @@ class GridPlotter {
           * @param grid 2D nDGridmap
           * @param flipY true: flips the Y dimension. 0 does not flip.
           */
-        template<class T, size_t ndims = 2>
+        /*template<class T, size_t ndims = 2>
         static void plotVelocitiesMap
         (nDGridMap<T, ndims> & grid, const bool flipY = true) {
             std::array<unsigned int,2> d = grid.getDimSizes();
@@ -124,7 +124,7 @@ class GridPlotter {
                 cimg_forXY(img,x,y) { img(x,y) = grid[img.width()*y+x].getVelocity()*255; }
 
             img.display("Grid values", false);
-        }
+        }*/
 
         /**
          * Plots the initial binary map included in a given grid and the given path. It is based on the

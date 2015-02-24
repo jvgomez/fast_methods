@@ -168,9 +168,9 @@ class Solver {
             // When more that 1 initial point is given, this check is ommitted
             // since it could be FM2-like velocities map computation.
             if (init_points_.size() == 1 &&
-                grid_->getCell(init_points_[0]).isObstacle()) return 4;
+                grid_->getCell(init_points_[0]).isOccupied()) return 4;
 
-            if(int(goal_idx_) != -1 && grid_->getCell(goal_idx_).isObstacle()) return 4;
+            if(int(goal_idx_) != -1 && grid_->getCell(goal_idx_).isOccupied()) return 4;
 
             return 0;
         }

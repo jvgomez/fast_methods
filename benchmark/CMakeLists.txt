@@ -27,4 +27,4 @@ add_executable (fmm_benchmark fmm_benchmark.cpp
                         ../ndgridmap/cell.cpp
                         ../fmm/fmdata/fmcell.cpp
                         )  
-target_link_libraries ( fmm_benchmark boost_system boost_filesystem boost_program_options)
+target_link_libraries ( fmm_benchmark boost_system boost_filesystem boost_program_options X11 pthread)

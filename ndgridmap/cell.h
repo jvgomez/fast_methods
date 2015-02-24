@@ -33,12 +33,12 @@ class Cell {
 
     public:
         /** Default constructor: sets value_ to -1 and occupancy_ to true (clear cell, not occupied). */
-        Cell() : value_(-1), occupancy_(true) {}
+        Cell() : value_(-1), occupancy_(1) {}
 
-        Cell(double v, bool o = true) : value_(v), occupancy_(o) {}
+        Cell(double v, double o = 1) : value_(v), occupancy_(o) {}
 
         virtual void setValue(double v)            {value_ = v;}
-        virtual void setOccupancy(bool o)          {occupancy_ = o;}
+        virtual void setOccupancy(double o)        {occupancy_ = o;}
         virtual std::string type()                 {return std::string("Cell - Basic cell");}
         virtual void setIndex(int i)               {index_ = i;}
 
@@ -46,17 +46,16 @@ class Cell {
             occupancy_ is not modified. */
         virtual void setDefault();
 
-
         virtual double getValue() const             {return value_;}
-        virtual bool getOccupancy() const           {return occupancy_;}
+        virtual double getOccupancy() const           {return occupancy_;}
         virtual unsigned int getIndex() const       {return index_;}
 
-        virtual bool isOccupied() const             {return !occupancy_;}
+        virtual bool isOccupied() const;
 
     protected:
         double value_; /*!< Value of the cell. */
-        bool occupancy_; /*!< Binary occupancy, true means clear, false occupied. */
-        unsigned int index_; /*!< Index within the heap. Useful when used in heaps. */
+        double occupancy_; /*!< Binary occupancy, true means clear, false occupied. */
+        unsigned int index_; /*!< Index within the grid. Useful when used in heaps. */
 };
 
 #endif /* CELL_H_*/

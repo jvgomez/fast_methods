@@ -56,7 +56,7 @@ class MapLoader {
         static void loadMapFromImg
         (const char * filename, nDGridMap<T, ndims> & grid) {
             std::vector<unsigned int> obs;
-            CImg<bool> img(filename);
+            CImg<double> img(filename);
             std::array<unsigned int, ndims> dimsize;
             dimsize[0] = img.width();
             dimsize[1] = img.height();
@@ -64,10 +64,10 @@ class MapLoader {
 
             // Filling the grid flipping Y dim. We want bottom left to be the (0,0).
             cimg_forXY(img,x,y) {
-                bool occupancy = img(x,y);
+                double occupancy = img(x,y);
                 unsigned int idx = img.width()*(img.height()-y-1)+x;
                 grid[idx].setOccupancy(occupancy);
-                if (occupancy == 0)
+                if (grid[idx].isOccupied())
                     obs.push_back(idx);
                 }
             grid.setOccupiedCells(obs);
@@ -92,7 +92,7 @@ class MapLoader {
          * @param grid 2D nDGridmap
          *
          */
-        template<class T, size_t ndims>
+        /*template<class T, size_t ndims>
         static void loadVelocitiesFromImg
         (const char * filename, nDGridMap<T, ndims> & grid) {
             CImg<double> img(filename);
@@ -107,7 +107,7 @@ class MapLoader {
                 unsigned int idx = img.width()*(img.height()-y-1)+x;
                 grid[idx].setVelocity(vel/255);
             }
-        }
+        }*/
 
         /**
          * Loads the initial binary map for a given grid. It is based on the
@@ -161,7 +161,7 @@ class MapLoader {
 
                     grid[i].setOccupancy(occupancy);
 
-                    if (!occupancy)
+                    if (grid[i].isOccupied())
                         obs.push_back(i);
                 }
                 grid.setOccupiedCells(obs);

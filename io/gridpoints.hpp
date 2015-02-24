@@ -60,10 +60,10 @@ class GridPoints {
             unsigned int y = 0, x = 0;
             // TODO: image checking: B/W, correct reading, etc.
             std::array<unsigned int,2> d = grid.getDimSizes();
-            CImg<bool> img(d[0],d[1],1,1,0);
+            CImg<double> img(d[0],d[1],1,1,0);
             if (flipY)
                 // Filling the image flipping Y dim. We want now top left to be the (0,0).
-                cimg_forXY(img,x,y) { img(x,y) = grid[img.width()*(img.height()-y-1)+x].getOccupancy(); }
+                cimg_forXY(img,x,y) { img(x,y) = grid[img.width()*(img.height()-y-1)+x].getOccupancy()*255; }
             else 
                 cimg_forXY(img,x,y) { img(x,y) = grid[img.width()*y+x].getOccupancy(); }
                 

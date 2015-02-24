@@ -6,35 +6,29 @@ using namespace std;
 ostream& operator << 
 (ostream & os, const FMCell & c) {
     os << console::str_info("Fast Marching cell information:");
-    os << "\t" << "Index: " << c.index_ << endl;
-    os << "\t" << "Value: " << c.value_ << endl;
-    os << "\t" << "Velocity: " << c.velocity_ << endl;
-    os << "\t" << "State: " ;
+    os << "\t" << "Index: " << c.index_ << '\n'
+       << "\t" << "Value: " << c.value_ << '\n'
+       << "\t" << "Velocity: " << c.occupancy_ << '\n'
+       << "\t" << "State: " ;
 
     switch (c.state_) {
         case FMState::OPEN:
-            os << "OPEN" << endl;
+            os << "OPEN";
             break;
         case FMState::NARROW:
-            os << "NARROW" << endl;
+            os << "NARROW";
             break;
         case FMState::FROZEN:
-            os << "FROZEN" << endl;
+            os << "FROZEN";
             break;
         }
+    os << '\n';
     return os;
-}
-
-bool FMCell::isObstacle
-() const {
-    return !occupancy_;
 }
 
 void FMCell::setDefault
 () {
     Cell::setDefault();
     value_ = std::numeric_limits<double>::infinity();
-    if (!occupancy_) velocity_ = 0;
-    else             velocity_ = 1;
     state_ = FMState::OPEN;
 }

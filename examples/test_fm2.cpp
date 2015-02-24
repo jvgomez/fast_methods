@@ -52,13 +52,13 @@ int main(int argc, const char ** argv)
     // Executing every solver individually over the same grid.
         for (Solver<FMGrid2D>* s :solvers)
         {
+            // For FM2 and its variations, it is better to completely reinitialize the grid.
+            MapLoader::loadMapFromImg(filename.c_str(), grid_fm2);
             s->setEnvironment(&grid_fm2);
-            //    start = system_clock::now();
             s->setInitialAndGoalPoints({20, 20}, {375, 280}); // Init and goal points directly set.
             s->compute();
-            //    end = system_clock::now();
-            //    time_elapsed = duration_cast<milliseconds>(end-start).count();
-                cout << "\tElapsed "<< s->getName() <<" time: " << s->getTime() << " ms" << '\n';
+            cout << "\tElapsed "<< s->getName() <<" time: " << s->getTime() << " ms" << '\n';
+            GridPlotter::plotMap(grid_fm2);
             GridPlotter::plotArrivalTimes(grid_fm2);
         }
     }

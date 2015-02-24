@@ -26,6 +26,7 @@
 #include <boost/algorithm/string/case_conv.hpp>
 
 #include "benchmark.hpp"
+#include "../io/maploader.hpp"
 
 #include "../fmm/fmm.hpp"
 #include "../fmm/fim.hpp"
@@ -70,14 +71,15 @@ class BenchmarkCFG {
 
             boost::program_options::options_description desc;
             desc.add_options()
-               ("grid.ndims",         boost::program_options::value<std::string>()->default_value("2"),         "Number of dimensions.")
-               ("grid.cell",          boost::program_options::value<std::string>()->default_value("FMCell"),    "Type of cell. FMCell by default.")
-               ("grid.dimsize",       boost::program_options::value<std::string>()->required(),                 "Size of dimensions: N,M,O...")
-               ("problem.start",      boost::program_options::value<std::string>()->required(),                 "Start point: s1,s2,s3...")
-               ("problem.goal",       boost::program_options::value<std::string>()->default_value("nan"),        "Goal point: g1,g2,g3... By default no goal point.")
-               ("benchmark.name",     boost::program_options::value<std::string>()->default_value(name.string()), "Name of the benchmark.")
-               ("benchmark.runs",     boost::program_options::value<std::string>()->default_value("10"),        "Number of runs per solver.")
-               ("benchmark.savegrid", boost::program_options::value<std::string>()->default_value("0"),         "Save grid values of each run.");
+                ("grid.file",          boost::program_options::value<std::string>(),                             "Path to load a velocities map from image.")
+                ("grid.ndims",         boost::program_options::value<std::string>()->default_value("2"),         "Number of dimensions.")
+                ("grid.cell",          boost::program_options::value<std::string>()->default_value("FMCell"),    "Type of cell. FMCell by default.")
+                ("grid.dimsize",       boost::program_options::value<std::string>()->default_value("200,200"),   "Size of dimensions: N,M,O...")
+                ("problem.start",      boost::program_options::value<std::string>()->required(),                 "Start point: s1,s2,s3...")
+                ("problem.goal",       boost::program_options::value<std::string>()->default_value("nan"),        "Goal point: g1,g2,g3... By default no goal point.")
+                ("benchmark.name",     boost::program_options::value<std::string>()->default_value(name.string()), "Name of the benchmark.")
+                ("benchmark.runs",     boost::program_options::value<std::string>()->default_value("10"),        "Number of runs per solver.")
+                ("benchmark.savegrid", boost::program_options::value<std::string>()->default_value("0"),         "Save grid values of each run.");
 
             boost::program_options::variables_map vm;
             boost::program_options::parsed_options po = boost::program_options::parse_config_file(cfg, desc, true);
@@ -143,9 +145,15 @@ class BenchmarkCFG {
             }
 
             constexpr size_t N = grid_t::getNDims();
-            const std::string & strToSplit = options_.find("grid.dimsize")->second;
-            std::array<unsigned int, N> dimSize = splitAndCast<unsigned int, N>(strToSplit);
-            grid_t * grid = new grid_t(dimSize);
+            grid_t * grid = new grid_t();
+            if (options_.find("grid.file") != options_.end()) {
+                MapLoader::loadVelocitiesFromImg(options_.find("grid.file")->second.c_str(), *grid);
+            }
+            else {
+                const std::string & strToSplit = options_.find("grid.dimsize")->second;
+                std::array<unsigned int, N> dimSize = splitAndCast<unsigned int, N>(strToSplit);
+                grid->resize(dimSize);
+            }
 
             const std::string & strToSplit2 = options_.find("problem.start")->second;
             std::array<unsigned int, N> startCoords = splitAndCast<unsigned int, N>(strToSplit2);

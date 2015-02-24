@@ -4,6 +4,9 @@
     It uses as a main container the nDGridMap class. The nDGridMap template parameter
     has to be an FMCell or something inherited from it.
 
+    IMPORTANT NOTE: When running FM2 many times on the same grid it is recommended
+    to completely restart the grid (erase and create or resize). See test_fm2.cpp.
+
     @par External documentation:
         FM2:
           A. Valero, J.V. Gómez, S. Garrido and L. Moreno,
