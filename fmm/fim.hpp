@@ -98,10 +98,7 @@ template < class grid_t > class FIM : public FMM <grid_t> {
 
         virtual void clear
         () {
-            //FMM<grid_t>::clear();
             active_list_.clear();
-            std::cout << "clear FIM" << '\n';
-
         }
 
         virtual void reset
