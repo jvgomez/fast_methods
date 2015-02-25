@@ -122,9 +122,9 @@ class Solver {
 
         /** Computes the distances map. Will call setup() if not done already. */
         void compute() {
-            start_ = std::chrono::system_clock::now();
+            start_ = std::chrono::steady_clock::now();
             computeInternal();
-            end_ = std::chrono::system_clock::now();
+            end_ = std::chrono::steady_clock::now();
             time_ = std::chrono::duration_cast<std::chrono::milliseconds>(end_-start_).count();
         }
 
@@ -192,8 +192,8 @@ class Solver {
         std::vector<unsigned int> init_points_;  /*!< Initial index. */
         unsigned int goal_idx_; /*!< Goal index. */
 
-        std::chrono::time_point<std::chrono::system_clock> start_;
-        std::chrono::time_point<std::chrono::system_clock> end_;
+        std::chrono::time_point<std::chrono::steady_clock> start_;
+        std::chrono::time_point<std::chrono::steady_clock> end_;
         double time_;
 };
 

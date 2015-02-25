@@ -96,7 +96,7 @@ class Benchmark {
 
             boost::progress_display showProgress (solvers_.size()*nruns_);
 
-            setupSolvers();
+            configSolvers();
 
             logConfig();
 
@@ -180,13 +180,12 @@ class Benchmark {
                 log_ << goal_idx_;
         }
 
-        void setupSolvers
+        void configSolvers
         () {
             for (Solver<grid_t>* s :solvers_)
             {
                 s->setEnvironment(grid_);
                 s->setInitialAndGoalPoints(init_points_, goal_idx_);
-                s->setup();
             }
         }
 
