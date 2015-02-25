@@ -30,6 +30,8 @@ template<class cell_t = FMCell> class FMUntidyQueue {
             queue_ = new levelset::PriorityQueue<const cell_t * >(s, inc);
         }
 
+        virtual ~FMUntidyQueue() { delete queue_; }
+
         void push
         (cell_t * c) {
             unsigned int i = queue_->push(c, c->getArrivalTime());
@@ -74,7 +76,6 @@ template<class cell_t = FMCell> class FMUntidyQueue {
         void clear
         () {
             queue_->clear();
-            delete queue_;
         }
 
     protected:

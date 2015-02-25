@@ -104,16 +104,19 @@ Although there are a lot of folders, they are quite simple. It is organized this
 
 ## KNOWN ISSUES
 
-- FM2* seems not to properly clear the grid since test_FM2Star.cpp gives different results among runs.
+- The new occupancy-based model (instead of velocities) might cause problems for FM2 versions.
+- MapLoader::LoadMapFromImg has a memory leak because of CImg bug, related with: http://sourceforge.net/p/cimg/bugs/42/
 
 ## TODO
 
 At the top of each file there are specific TODO comments.
 
-- The new occupancy-based model (instead of velocities) might cause problems for FM2 versions.
+- Improve the way FM2 and its versions deal with the grid when running multiple times on the same grid. Concretely, avoid recomputation of velocities map.
 - Reimplement FM2Dir from scratch. Currently in data/alpha folder.
 - Restructure the folder and the CMake files in order to properly have examples and that stuff.
 - Substitute arg parsing with boost_options.
 - Remove relative file dependencies (#include "../../fmm", filename = "../../data", CMakeLists.txt deps, etc).
 - Implement a grid copy constructor and assignment operator, etc.
 - Most of the unsigned int should be replaced by size_t to be type-correct.
+- Use smart pointers (specially for grid).
+- Create a testing framework.

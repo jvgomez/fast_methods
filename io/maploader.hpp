@@ -74,42 +74,6 @@ class MapLoader {
         }
 
         /**
-         * Loads the velocities map for a given grid. It is based on the
-         * nDGridMap::seVelocity() which has to be float valued. This function has to be
-         * overloaded in another occupancy type is being used.
-         *
-         * The image should be gray scale! It will be load as a single-channel, float values for pixels.
-         *
-         * In also stores all the false values to as initial points for a later computeFM function.
-         *
-         * Should be used only in 2D grids.
-         *
-         * The Y dimension flipping is because nDGridMap works in X-Y coordinates, not in image indices as CImg.
-         *
-         * IMPORTANT NOTE: no type-checkings are done. T type has to be Cell or any class with float setVelocity() method.
-         *
-         * @param filename file to be open
-         * @param grid 2D nDGridmap
-         *
-         */
-        /*template<class T, size_t ndims>
-        static void loadVelocitiesFromImg
-        (const char * filename, nDGridMap<T, ndims> & grid) {
-            CImg<double> img(filename);
-            std::array<unsigned int, ndims> dimsize;
-            dimsize[0] = img.width();
-            dimsize[1] = img.height();
-            grid.resize(dimsize);
-
-            // Filling the grid flipping Y dim. We want bottom left to be the (0,0).
-            cimg_forXY(img,x,y) {
-                double vel = img(x,y); // First of the three channels of the image is taken.
-                unsigned int idx = img.width()*(img.height()-y-1)+x;
-                grid[idx].setVelocity(vel/255);
-            }
-        }*/
-
-        /**
          * Loads the initial binary map for a given grid. It is based on the
          * nDGridMap::setOccupancy() which has to be bool valued. This function has to be
          * overloaded in another occupancy type is being used.

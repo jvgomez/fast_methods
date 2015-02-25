@@ -147,7 +147,7 @@ class BenchmarkCFG {
             constexpr size_t N = grid_t::getNDims();
             grid_t * grid = new grid_t();
             if (options_.find("grid.file") != options_.end()) {
-                MapLoader::loadVelocitiesFromImg(options_.find("grid.file")->second.c_str(), *grid);
+                MapLoader::loadMapFromImg(options_.find("grid.file")->second.c_str(), *grid);
             }
             else {
                 const std::string & strToSplit = options_.find("grid.dimsize")->second;
@@ -163,9 +163,9 @@ class BenchmarkCFG {
             startIndices.push_back(startIdx);
 
             const std::string & strToSplit3 = options_.find("problem.goal")->second;
-            unsigned int goalIdx;
             if (strToSplit3 != "nan")
             {
+                unsigned int goalIdx;
                 std::array<unsigned int, N> goalCoords = splitAndCast<unsigned int, N>(strToSplit3);
                 grid->coord2idx(goalCoords, goalIdx);
                 b.setInitialAndGoalPoints(startIndices, goalIdx);

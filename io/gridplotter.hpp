@@ -54,15 +54,30 @@ class GridPlotter {
         template<class T, size_t ndims> 
         static void plotMap
         (nDGridMap<T, ndims> & grid, const bool flipY = 1) {
-            // TODO: image checking: B/W, correct reading, etc.
+            std::array<unsigned int,2> d = grid.getDimSizes();
+            CImg<bool> img(d[0],d[1],1,1,0);
+            if (flipY)
+                // Filling the image flipping Y dim. We want now top left to be the (0,0).
+                cimg_forXY(img,x,y) { if (grid[img.width()*(img.height()-y-1)+x].getOccupancy()>0.5) img(x,y) = true;
+                                      else img(x,y) = false; }
+            else 
+                cimg_forXY(img,x,y) { if(grid[img.width()*y+x].getOccupancy() > 0.5) img(x,y) = true;
+                                      else img(x,y) = false; }
+                
+            img.display("Grid map", false);
+        }
+
+        template<class T, size_t ndims>
+        static void plotOccupancyMap
+        (nDGridMap<T, ndims> & grid, const bool flipY = 1) {
             std::array<unsigned int,2> d = grid.getDimSizes();
             CImg<double> img(d[0],d[1],1,1,0);
             if (flipY)
                 // Filling the image flipping Y dim. We want now top left to be the (0,0).
                 cimg_forXY(img,x,y) { img(x,y) = grid[img.width()*(img.height()-y-1)+x].getOccupancy()*255; }
-            else 
+            else
                 cimg_forXY(img,x,y) { img(x,y) = grid[img.width()*y+x].getOccupancy()*255; }
-                
+
             img.display("Grid map", false);
         }
 

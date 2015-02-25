@@ -36,6 +36,8 @@ template < class grid_t > class GMM : public FMM <grid_t> {
     public:
         GMM(const std::string& name = "GMM") : FMM<grid_t>(name) {}
 
+        virtual ~GMM() { clear(); }
+
         /**
          * Main Group Marching Function. It requires to call first the setInitialPoints() function.
          *
@@ -137,7 +139,6 @@ template < class grid_t > class GMM : public FMM <grid_t> {
 
         virtual void clear
         () {
-            FMM<grid_t>::clear();
             gamma_.clear();
             tm_ = 0;
             deltau_ = 0;

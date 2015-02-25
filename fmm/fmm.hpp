@@ -58,9 +58,6 @@
 #include "../ndgridmap/ndgridmap.hpp"
 #include "../console/console.h"
 
-// TODO: check initial and goal points are not the same, not on obstacles, etc.
-// IMPORTANT TODO: substitute grid_->getCell(j).isOccupied() by grid_->getCell(j).getVelocity() == 0 (conceptually is not the same).
-
 unsigned int absUI
 (int a) {
     return (a>0) ? (a) : (-a);
@@ -194,7 +191,6 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FMM : public
 
         virtual void clear
         () {
-            Solver<grid_t>::clear();
             narrow_band_.clear();
             distances_.clear();
         }
@@ -234,7 +230,6 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FMM : public
 
             for (unsigned int i = 0; i < grid_t::getNDims(); ++i)
                 distance[i] = absUI(position[i] - heur_coord_[i]);
-               //distance[i] = std::abs(position[i] - heur_coord_[i]);
 
             unsigned int idx_dist;
             grid_->coord2idx(distance, idx_dist);

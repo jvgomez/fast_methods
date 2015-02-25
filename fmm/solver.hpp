@@ -103,7 +103,13 @@ class Solver {
                         console::error("Initial points were not set.");
                         break;
                     case 4:
-                        console::error("A init or goal point is in a obstacle.");
+                        console::error("A init point is in a obstacle.");
+                        break;
+                    case 5:
+                        console::error("A goal point is in a obstacle.");
+                        break;
+                    case 6:
+                        console::error("A start is equal to a goal point.");
                         break;
                     default:
                         console::error("Uknown error.");
@@ -131,7 +137,7 @@ class Solver {
             return name_;
         }
 
-        /** Clears the solver. It has to be configured before running again. */
+        /** Clears the solver, it is not recommended to be used out of the destructor. */
         virtual void clear
         () {
             init_points_.clear();
@@ -170,7 +176,10 @@ class Solver {
             if (init_points_.size() == 1 &&
                 grid_->getCell(init_points_[0]).isOccupied()) return 4;
 
-            if(int(goal_idx_) != -1 && grid_->getCell(goal_idx_).isOccupied()) return 4;
+            if(int(goal_idx_) != -1 && grid_->getCell(goal_idx_).isOccupied()) return 5;
+
+            for (int ip : init_points_)
+                if(int(goal_idx_) == ip) return 6;
 
             return 0;
         }

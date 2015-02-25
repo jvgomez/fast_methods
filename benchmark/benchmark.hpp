@@ -105,18 +105,13 @@ class Benchmark {
                 for (unsigned int i = 0; i < nruns_; ++i)
                 {
                     ++runID_;
-                    //start_ = std::chrono::system_clock::now();
                     s->compute();
-                    //end_ = std::chrono::system_clock::now();
-                    //const double time_elapsed = getMilliSeconds(start_, end_);
-
-                    //logRun(s, time_elapsed);
                     logRun(s, s->getTime());
 
                     if (saveGrid_)
                         saveGrid(s);
 
-                    grid_->clean();
+                    s->reset();
                     ++showProgress;
                 }
             }
@@ -163,10 +158,8 @@ class Benchmark {
         void clear
         () {
             for (auto & s : solvers_)
-            {
-                s->clear();
                 delete s;
-            }
+
             solvers_.clear();
             delete grid_;
         }

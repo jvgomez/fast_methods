@@ -37,6 +37,7 @@ template < class grid_t > class FIM : public FMM <grid_t> {
         FIM(double error = 0) : FMM<grid_t>("FIM"), E_(error) {}
         FIM(const std::string& name, double error = 0) : FMM<grid_t>(name), E_(error) {}
 
+        virtual ~FIM() { clear(); }
         /**
          * Main Fast Iterative Method Function.
          *
@@ -97,8 +98,10 @@ template < class grid_t > class FIM : public FMM <grid_t> {
 
         virtual void clear
         () {
-            FMM<grid_t>::clear();
+            //FMM<grid_t>::clear();
             active_list_.clear();
+            std::cout << "clear FIM" << '\n';
+
         }
 
         virtual void reset

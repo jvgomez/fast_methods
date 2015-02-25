@@ -44,6 +44,8 @@ template <class grid_t, class cell_t = FMCell> class UFMM : public FMM <grid_t> 
             narrow_band_ = new FMUntidyQueue<cell_t> (heap_s_, heap_inc_);
         }
 
+        virtual ~UFMM() { clear(); }
+
         /**
          * Main Untidy Fast Marching Function. It requires to call first the setInitialPoints() function inherited from Fast Marching.
          *
@@ -96,8 +98,6 @@ template <class grid_t, class cell_t = FMCell> class UFMM : public FMM <grid_t> 
 
         virtual void clear
         () {
-            FMM<grid_t>::clear();
-            narrow_band_->clear();
             delete narrow_band_;
         }
 
