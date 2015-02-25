@@ -50,6 +50,25 @@ int main(int argc, const char ** argv)
         GridPlotter::plotArrivalTimes(grid_fmm);
     }
 
+    // Showing different type conversions methodologies
+    // Direct cast
+    FMM<FMGrid2D>* FMMtest = dynamic_cast< FMM<FMGrid2D>* >(solvers[2]);
+    if (FMMtest)
+        std::cout << "Solver type SFMM" <<'\n';
+    else
+        std::cout << "Solver NOT type SFMM" <<'\n';
+
+    FMM<FMGrid2D, FMPriorityQueue<FMCell>>* FMMtest2 = dynamic_cast< FMM<FMGrid2D, FMPriorityQueue<FMCell>>* >(solvers[2]);
+    if (FMMtest2)
+        std::cout << "Solver type SFMM" <<'\n';
+    else
+        std::cout << "Solver NOT type SFMM" <<'\n';
+
+    // Solver::as member function.
+    // solvers[2]->setHeuristics(true) would not compile.
+    solvers[2]->as< FMM<FMGrid2D, FMPriorityQueue<FMCell>> >()->setHeuristics(true);
+    std::cout << solvers[2]->as< FMM<FMGrid2D, FMPriorityQueue<FMCell>> >()->getHeuristics() << '\n';
+
     // Preventing memory leaks.
     for (auto & s : solvers)
         delete s;

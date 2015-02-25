@@ -32,6 +32,8 @@
 #include <array>
 #include <chrono>
 
+#include <boost/concept_check.hpp>
+
 template <class grid_t>
 class Solver {
 
@@ -42,28 +44,28 @@ class Solver {
 
         virtual ~Solver() { clear(); }
 
-         /** Sets and cleans the grid in which operations will be performed. */
+         /** \brief Sets and cleans the grid in which operations will be performed. */
         virtual void setEnvironment
         (grid_t * g) {
             grid_ = g;
             grid_->clean();
         }
 
-        /** Sets the initial and goal points by the indices of the grid. */
+        /** \brief Sets the initial and goal points by the indices of the grid. */
         virtual void setInitialAndGoalPoints
         (const std::vector<unsigned int> & init_points, unsigned int goal_idx) {
             init_points_ = init_points;
             goal_idx_ = goal_idx;
         }
 
-        /** Sets the initial points by the indices of the grid. */
+        /** \brief Sets the initial points by the indices of the grid. */
         virtual void setInitialPoints
         (const std::vector<unsigned int> & init_points)
         {
             setInitialAndGoalPoints(init_points, -1);
         }
 
-        /** Sets the initial and goal points by the coordinates of the grid. */
+        /** \brief Sets the initial and goal points by the coordinates of the grid. */
         virtual void setInitialAndGoalPoints
         (const std::array<unsigned int, grid_t::getNDims()> & init_coord, const std::array<unsigned int, grid_t::getNDims()> & goal_coord) {
             std::vector<unsigned int> init_points;
@@ -74,7 +76,7 @@ class Solver {
             setInitialAndGoalPoints(init_points, idx);
         }
 
-        /** Sets the initial point by the coordinates of the grid. */
+        /** \brief Sets the initial point by the coordinates of the grid. */
         virtual void setInitialPoints
         (const std::array<unsigned int, grid_t::getNDims()> & init_coord)
         {
@@ -85,7 +87,7 @@ class Solver {
             setInitialAndGoalPoints(init_points, -1);
         }
 
-        /** Checks that the solver is ready to run. Sets the grid unclean. */
+        /** \brief Checks that the solver is ready to run. Sets the grid unclean. */
         virtual void setup
         () {
             const int err = sanityChecks();
@@ -120,24 +122,36 @@ class Solver {
             setup_ = true;
         }
 
-        /** Computes the distances map. Will call setup() if not done already. */
-        void compute() {
+        /** \brief Computes the distances map. Will call setup() if not done already. */
+        void compute
+        () {
             start_ = std::chrono::steady_clock::now();
             computeInternal();
             end_ = std::chrono::steady_clock::now();
             time_ = std::chrono::duration_cast<std::chrono::milliseconds>(end_-start_).count();
         }
 
-        /** Actual compute function to be implemented in each solver. */
+        /** \brief Actual compute function to be implemented in each solver. */
         virtual void computeInternal() = 0;
 
-        /** @return name of the solver. */
+        /** \brief Cast this instance to a desired type. */
+        template<class T>
+        T* as
+        () {
+            // OMPL-inspired function.
+            /** \brief Make sure the type we are casting to is indeed a planner */
+            BOOST_CONCEPT_ASSERT((boost::Convertible<T*, Solver*>));
+            return static_cast<T*>(this);
+        }
+
+
+        /** \brief Returns name of the solver. */
         const std::string& getName() const
         {
             return name_;
         }
 
-        /** Clears the solver, it is not recommended to be used out of the destructor. */
+        /** \brief Clears the solver, it is not recommended to be used out of the destructor. */
         virtual void clear
         () {
             init_points_.clear();
@@ -145,14 +159,14 @@ class Solver {
             setup_ = false;
         }
 
-        /** Clears temporal data, so it is ready to run again. */
+        /** \brief Clears temporal data, so it is ready to run again. */
         virtual void reset
         () {
             setup_ = false;
             grid_->clean();
         }
 
-        /** Returns a pointer to the grid used. */
+        /** \brief Returns a pointer to the grid used. */
         grid_t* getGrid() const
         {
             return grid_;
@@ -164,7 +178,7 @@ class Solver {
         }
 
     protected:
-        /** Performs different check before a solver can proceed. */
+        /** \brief Performs different check before a solver can proceed. */
         int sanityChecks
         () {
             if (grid_ == NULL) return 1;
