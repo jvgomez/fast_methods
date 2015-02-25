@@ -120,3 +120,4 @@ At the top of each file there are specific TODO comments.
 - Most of the unsigned int should be replaced by size_t to be type-correct.
 - Use smart pointers (specially for grid).
 - Create a testing framework.
+- BenchmarkCFG::configure, parse ctorParams_ with a variadic templated function, something like: parseParams<int, bool>(param1, param2), parseParams<string,double,bool>(p1,p2,p3).

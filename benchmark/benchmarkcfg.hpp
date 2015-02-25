@@ -35,7 +35,7 @@
 
 // TODO: the getter functions do not check if the types are admissible.
 // TODO: does not have support for multiple starts.
-// TODO: does not have support to change solvers name or parameters.
+// TODO: the way ctor parameters are given could be improved (as declareParams in OMPL - command pattern).
 
 class BenchmarkCFG {
 
@@ -76,7 +76,7 @@ class BenchmarkCFG {
                 ("grid.cell",          boost::program_options::value<std::string>()->default_value("FMCell"),    "Type of cell. FMCell by default.")
                 ("grid.dimsize",       boost::program_options::value<std::string>()->default_value("200,200"),   "Size of dimensions: N,M,O...")
                 ("problem.start",      boost::program_options::value<std::string>()->required(),                 "Start point: s1,s2,s3...")
-                ("problem.goal",       boost::program_options::value<std::string>()->default_value("nan"),        "Goal point: g1,g2,g3... By default no goal point.")
+                ("problem.goal",       boost::program_options::value<std::string>()->default_value("nan"),       "Goal point: g1,g2,g3... By default no goal point.")
                 ("benchmark.name",     boost::program_options::value<std::string>()->default_value(name.string()), "Name of the benchmark.")
                 ("benchmark.runs",     boost::program_options::value<std::string>()->default_value("10"),        "Number of runs per solver.")
                 ("benchmark.savegrid", boost::program_options::value<std::string>()->default_value("0"),         "Save grid values of each run.");
@@ -96,25 +96,25 @@ class BenchmarkCFG {
             for (std::size_t i = 0 ; i < unr.size()/2 ; ++i)
             {
                 std::string key = boost::to_lower_copy(unr[i*2]);
-                // std::string val = unr[i*2 + 1]; // Values not used.
+                std::string val = unr[i*2 + 1];
 
                 if (key.substr(0,8) == "solvers.")
                 {
                     std::string solver = key.substr(8);
-
+                    // If it is a known solver, save it together with its constructor
+                    // parameters (if given).
                     for (std::size_t i = 0; i < knownSolvers.size(); ++i)
-                        if (solver == knownSolvers[i])
+                        if (solver == knownSolvers[i]) {
                             solverNames_.push_back(knownSolvers[i]);
-
+                            ctorParams_.push_back(val);
+                        }
                 }
-                else
-                    continue;
             }
 
             return 1;
        }
 
-        template <class grid_t>
+        template <class grid_t, class cell_t>
         void configure
         (Benchmark<grid_t> & b) {
             b.setSaveLog(true);
@@ -123,23 +123,60 @@ class BenchmarkCFG {
             b.setNRuns(getValue<unsigned int>("benchmark.runs"));
             b.setPath(boost::filesystem::path("results"));
 
-            for(const auto & name : solverNames_)
+            for (size_t i = 0; i < solverNames_.size(); ++i)
             {
+                const std::string & name = solverNames_[i];
+
+                bool defaultCtor = true;
+                if (!ctorParams_[i].empty())
+                    defaultCtor = false;
+
                 Solver<grid_t> * solver;
-                if (name == "fmm")
-                    solver = new FMM<grid_t>();
-                else if (name == "fmmfib")
-                    solver = new FMM<grid_t, FMFibHeap<FMCell> >("FMMFib");
-                else if (name == "sfmm")
-                    solver = new FMM<grid_t, FMPriorityQueue<FMCell> >("SFMM");
-                else if (name == "gmm")
-                    solver = new GMM<grid_t>();
-                else if (name == "fim")
-                    solver = new FIM<grid_t>();
-                else if (name == "ufmm")
-                    solver = new UFMM<grid_t>();
-                else
-                    continue;
+
+                if (defaultCtor) {
+                    if (name == "fmm")
+                        solver = new FMM<grid_t>();
+                    else if (name == "fmmfib")
+                        solver = new FMM<grid_t, FMFibHeap<cell_t> >("FMMFib");
+                    else if (name == "sfmm")
+                        solver = new FMM<grid_t, FMPriorityQueue<cell_t> >("SFMM");
+                    else if (name == "gmm")
+                        solver = new GMM<grid_t>();
+                    else if (name == "fim")
+                        solver = new FIM<grid_t>();
+                    else if (name == "ufmm")
+                        solver = new UFMM<grid_t>();
+                    else
+                        continue;
+                }
+                else {
+                    if (name == "fmm")
+                        solver = new FMM<grid_t>(ctorParams_[i]);
+                    else if (name == "fmmfib")
+                        solver = new FMM<grid_t, FMFibHeap<cell_t> >(ctorParams_[i]);
+                    else if (name == "sfmm")
+                        solver = new FMM<grid_t, FMPriorityQueue<cell_t> >(ctorParams_[i]);
+                    else if (name == "gmm")
+                        solver = new GMM<grid_t>(ctorParams_[i]);
+                    else if (name == "fim") {
+                        std::vector<std::string> p(split(ctorParams_[i]));
+                        if (p.size() == 1)
+                            solver = new FIM<grid_t>(p[0]);
+                        else if (p.size() == 2)
+                            solver = new FIM<grid_t>(p[0], boost::lexical_cast<double>(p[1]));
+                    }
+                    else if (name == "ufmm") {
+                        std::vector<std::string> p(split(ctorParams_[i]));
+                        if (p.size() == 1)
+                            solver = new UFMM<grid_t>(p[0]);
+                        else if (p.size() == 2)
+                            solver = new UFMM<grid_t>(p[0], boost::lexical_cast<unsigned>(p[1]));
+                        else if (p.size() == 3)
+                            solver = new UFMM<grid_t>(p[0], boost::lexical_cast<unsigned>(p[1]), boost::lexical_cast<double>(p[2]));
+                    }
+                    else
+                        continue;
+                }
 
                 b.addSolver(solver);
             }
@@ -203,11 +240,25 @@ class BenchmarkCFG {
             return elems;
         }
 
+        std::vector<std::string> split
+        (const std::string & s) {
+            std::vector<std::string> elems;
+            std::stringstream ss(s);
+            std::string item;
+            size_t pos = 1, str_size = s.length()-1;
+            while (pos < str_size) {
+                std::getline(ss, item, ',');
+                elems.push_back(item);
+                pos += item.length();
+            }
+            return elems;
+        }
+
        std::vector<std::string> solverNames_;
+       std::vector<std::string> ctorParams_;
        std::unordered_map<std::string, std::string> options_;
 
        boost::filesystem::path path_;
-
 };
 
 #endif /* BENCHMARKCFG_HPP_*/

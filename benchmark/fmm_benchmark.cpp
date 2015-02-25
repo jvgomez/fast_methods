@@ -40,7 +40,7 @@ int main(int argc, const char ** argv)
                 case 2:
                 {
                     Benchmark<nDGridMap<FMCell,2> > b;
-                    bcfg.configure(b);
+                    bcfg.configure<nDGridMap<FMCell,2>, FMCell>(b);
                     b.run();
                     break;
                 }

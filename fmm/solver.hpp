@@ -139,9 +139,19 @@ class Solver {
         T* as
         () {
             // OMPL-inspired function.
-            /** \brief Make sure the type we are casting to is indeed a planner */
+            /** \brief Make sure the type we are casting to is a solver */
             BOOST_CONCEPT_ASSERT((boost::Convertible<T*, Solver*>));
             return static_cast<T*>(this);
+        }
+
+        /** \brief Cast this instance to a desired type. */
+        template<class T>
+        const T* as
+        () const {
+            // OMPL-inspired function.
+            /** \brief Make sure the type we are casting to is a solver */
+            BOOST_CONCEPT_ASSERT((boost::Convertible<T*, Solver*>));
+            return static_cast<const T*>(this);
         }
 
 
