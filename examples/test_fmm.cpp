@@ -7,6 +7,7 @@
 #include "../ndgridmap/ndgridmap.hpp"
 
 #include "../fmm/fmm.hpp"
+#include "../fmm/fmmstar.hpp"
 #include "../fmm/fmdata/fmfibheap.hpp"
 #include "../fmm/fmdata/fmpriorityqueue.hpp"
 #include "../fmm/fim.hpp"
@@ -32,19 +33,25 @@ int main()
 
     // Solvers declaration.
     std::vector<Solver<FMGrid2D>*> solvers;
-    //solvers.push_back(new FMM<FMGrid2D>);
-    solvers.push_back(new FMM<FMGrid2D>("FMMstar", true));
-    /*solvers.push_back(new FMM<FMGrid2D, FMFibHeap<FMCell> >("FMFib"));
+    solvers.push_back(new FMM<FMGrid2D>);
+    solvers.push_back(new FMMStar<FMGrid2D>);
+    solvers.push_back(new FMMStar<FMGrid2D>("FMM*_Dist", DISTANCE));
+    solvers.push_back(new FMM<FMGrid2D, FMFibHeap<FMCell> >("FMFib"));
+    solvers.push_back(new FMMStar<FMGrid2D, FMFibHeap<FMCell> >("FMM*Fib"));
+    solvers.push_back(new FMMStar<FMGrid2D, FMFibHeap<FMCell> >("FMM*Fib_Dist", DISTANCE));
     solvers.push_back(new FMM<FMGrid2D, FMPriorityQueue<FMCell> >("SFMM"));
-    solvers.push_back(new GMM<FMGrid2D>());
+    solvers.push_back(new FMMStar<FMGrid2D, FMPriorityQueue<FMCell> >("SFMM*"));
+    solvers.push_back(new FMMStar<FMGrid2D, FMPriorityQueue<FMCell> >("SFMM*_Dist", DISTANCE));
+    solvers.push_back(new GMM<FMGrid2D>);
     solvers.push_back(new FIM<FMGrid2D>("FIM"));
-    solvers.push_back(new UFMM<FMGrid2D>("UFMM"));*/
+    solvers.push_back(new UFMM<FMGrid2D>("UFMM"));
+    // GMM, FIM and UFMM have some parameters, can be set by overloaded constructors.
 
     // Executing every solver individually over the same grid.
     for (Solver<FMGrid2D>* s :solvers)
     {
         s->setEnvironment(&grid_fmm);
-        //s->setInitialPoints(init_point); // If no goal_idx is set.
+        //s->setInitialPoints(init_point); // If no goal_idx is set. Comment next line if this one is uncommented.
         s->setInitialAndGoalPoints(init_point, goal_point);
         s->setup(); // Not mandatory, but in FMMstar we want to precompute distances
                     // out of compute().
@@ -56,23 +63,22 @@ int main()
     // Showing different type conversions methodologies. Solver names could be compared
     // but it is less reliable since they are user-defined.
     // Direct cast
-    /*FMM<FMGrid2D>* FMMtest = dynamic_cast< FMM<FMGrid2D>* >(solvers[2]);
+    FMM<FMGrid2D>* FMMtest = dynamic_cast< FMM<FMGrid2D>* >(solvers[6]);
     if (FMMtest)
         std::cout << "Solver type SFMM" <<'\n';
     else
         std::cout << "Solver NOT type SFMM" <<'\n';
 
-    FMM<FMGrid2D, FMPriorityQueue<FMCell>>* FMMtest2 = dynamic_cast< FMM<FMGrid2D, FMPriorityQueue<FMCell>>* >(solvers[2]);
+    FMM<FMGrid2D, FMPriorityQueue<FMCell>>* FMMtest2 = dynamic_cast< FMM<FMGrid2D, FMPriorityQueue<FMCell>>* >(solvers[6]);
     if (FMMtest2)
         std::cout << "Solver type SFMM" <<'\n';
     else
         std::cout << "Solver NOT type SFMM" <<'\n';
 
     // Solver::as member function.
-    // solvers[2]->setHeuristics(true) would not compile.
-    solvers[2]->as< FMM<FMGrid2D, FMPriorityQueue<FMCell>> >()->setHeuristics(true);
-    std::cout << solvers[2]->as< FMM<FMGrid2D, FMPriorityQueue<FMCell>> >()->getHeuristics() << '\n';
-    */
+    // solvers[6]->setHeuristics(true) would not compile.
+    solvers[6]->as< FMM<FMGrid2D, FMPriorityQueue<FMCell>> >()->setHeuristics(HeurStrategy::DISTANCE);
+    std::cout << solvers[6]->as< FMM<FMGrid2D, FMPriorityQueue<FMCell>> >()->getHeuristics() << '\n';
 
     // Preventing memory leaks.
     for (auto & s : solvers)

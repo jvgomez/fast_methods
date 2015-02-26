@@ -54,20 +54,16 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> > class FM2Star : pub
     public:
         /** maxDistance sets the velocities map saturation distance in real units (before normalization). */
         FM2Star
-        (double maxDistance = -1) : FM2Base("FM2*", maxDistance) { }
+        (HeurStrategy heurStrategy = TIME, double maxDistance = -1) : FM2Base("FM2*", maxDistance), heurStrategy_(heurStrategy) { }
 
         /** maxDistance sets the velocities map saturation distance in real units (before normalization). */
         FM2Star
-        (const std::string& name, double maxDistance = -1) : FM2Base(name, maxDistance) { }
+        (const char * name, HeurStrategy heurStrategy = TIME, double maxDistance = -1) : FM2Base(name, maxDistance), heurStrategy_(heurStrategy) { }
 
         /** Overloaded from FM2. In this case the precomputeDistances() method is called. */
         virtual void setInitialAndGoalPoints
         (const std::vector<unsigned int> & init_points, unsigned int goal_idx) {
             FM2Base::setInitialAndGoalPoints(init_points, goal_idx);
-            // Goal and initial points are inverted because the second wave is propagated from the goal
-            // to the start, so that the heuristics have to be compared from the initial_point.
-            //grid_->idx2coord(init_points_[0], heur_coord_);
-            //solver_->
             solver_->precomputeDistances();
         }
 
@@ -84,7 +80,7 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> > class FM2Star : pub
             unsigned int wave_goal = init_points_[0];
 
             solver_->setInitialAndGoalPoints(wave_init, wave_goal);
-            solver_->setHeuristics(true);
+            solver_->setHeuristics(heurStrategy_);
             solver_->compute();
             // Restore the actual grid status.
             grid_->setClean(false);
@@ -99,14 +95,8 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> > class FM2Star : pub
         using FM2Base::setup_;
         using FM2Base::computeVelocitiesMap;
         using FM2Base::maxDistance_;
-        using FM2Base::fm2_sources_;
-        using FM2Base::computePath;
-        using FM2Base::reset;
-        using FM2Base::clear;
 
-        //using FM2Base::time_;
-        //using FM2Base::end_;
-        //using FM2Base::start_;
+        HeurStrategy heurStrategy_;
 };
 
 #endif /* FM2STAR_HPP_*/

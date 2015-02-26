@@ -32,7 +32,6 @@ template <class cell_t> struct compare_cells_d_ary {
     inline bool operator()
     (const cell_t * c1 , const cell_t * c2) const {
         return c1->getTotalValue() > c2->getTotalValue();
-        //return c1->getArrivalTime() > c2->getArrivalTime();
     }
 };
 

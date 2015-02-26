@@ -35,7 +35,7 @@ template < class grid_t > class FIM : public FMM <grid_t> {
 
     public:
         FIM(double error = 0) : FMM<grid_t>("FIM"), E_(error) {}
-        FIM(const std::string& name, double error = 0) : FMM<grid_t>(name), E_(error) {}
+        FIM(const char * name, double error = 0) : FMM<grid_t>(name), E_(error) {}
 
         virtual ~FIM() { clear(); }
 

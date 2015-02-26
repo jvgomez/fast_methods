@@ -41,11 +41,14 @@ int main(int argc, const char ** argv)
     solvers.push_back(new FM2<FMGrid2D>("FM2_Dary"));
     solvers.push_back(new FM2<FMGrid2D, FMFibHeap<FMCell> >("FM2_Fib"));
     solvers.push_back(new FM2<FMGrid2D, FMPriorityQueue<FMCell> >("FM2_SFMM"));
-    solvers.push_back(new FM2Star<FMGrid2D>("FM2*_Dary"));
-    solvers.push_back(new FM2Star<FMGrid2D, FMFibHeap<FMCell> >("FM2*_Fib"));
-    solvers.push_back(new FM2Star<FMGrid2D, FMPriorityQueue<FMCell> >("FM2*_SFMM"));
+    solvers.push_back(new FM2Star<FMGrid2D>("FM2*_Dary_Time"));
+    solvers.push_back(new FM2Star<FMGrid2D>("FM2*_Dary_Dist", DISTANCE));
+    solvers.push_back(new FM2Star<FMGrid2D, FMFibHeap<FMCell> >("FM2*_Fib_Time"));
+    solvers.push_back(new FM2Star<FMGrid2D, FMFibHeap<FMCell> >("FM2*_Fib_Dist", DISTANCE));
+    solvers.push_back(new FM2Star<FMGrid2D, FMPriorityQueue<FMCell> >("FM2*_SFMM_Time"));
+    solvers.push_back(new FM2Star<FMGrid2D, FMPriorityQueue<FMCell> >("FM2*_SFMM_Dist", DISTANCE));
 
-    for (int i = 0; i < 10; ++i) {
+    for (int i = 0; i < 1; ++i) {
     // Executing every solver individually over the same grid.
         for (Solver<FMGrid2D>* s :solvers)
         {

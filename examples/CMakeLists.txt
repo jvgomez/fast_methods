@@ -14,15 +14,15 @@ SET(CMAKE_CXX_FLAGS_RELEASE "-Ofast -fno-finite-math-only")
 SET(CMAKE_CXX_FLAGS_DEBUG  "-Wall -Wno-unused-local-typedefs -g")
 
 # Self-made includes
-include_directories (${EXAMPLES_SOURCE_DIR}/../console) 
-include_directories (${EXAMPLES_SOURCE_DIR}/../ndgridmap) 
-include_directories (${EXAMPLES_SOURCE_DIR}/../fmm) 
+include_directories (${EXAMPLES_SOURCE_DIR}/../console)
+include_directories (${EXAMPLES_SOURCE_DIR}/../ndgridmap)
+include_directories (${EXAMPLES_SOURCE_DIR}/../fmm)
 include_directories (${EXAMPLES_SOURCE_DIR}/../fm2)
-include_directories (${EXAMPLES_SOURCE_DIR}/../io) 
-include_directories (${EXAMPLES_SOURCE_DIR}/../gradientdescent) 
+include_directories (${EXAMPLES_SOURCE_DIR}/../io)
+include_directories (${EXAMPLES_SOURCE_DIR}/../gradientdescent)
 
 # Third party internal includes
-include_directories (${EXAMPLES_SOURCE_DIR}/../thirdparty) 
+include_directories (${EXAMPLES_SOURCE_DIR}/../thirdparty)
 
 add_executable (test_fmm test_fmm.cpp
                         ../console/console.cpp

@@ -35,7 +35,7 @@ template < class grid_t > class GMM : public FMM <grid_t> {
 
     public:
         GMM(double dt = 1) : FMM<grid_t>("GMM"), deltau_(dt) {}
-        GMM(const std::string& name, double dt = 1) : FMM<grid_t>(name), deltau_(dt) {}
+        GMM(const char * name, double dt = 1) : FMM<grid_t>(name), deltau_(dt) {}
 
         virtual ~GMM() { clear(); }
 

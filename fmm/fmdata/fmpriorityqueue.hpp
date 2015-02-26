@@ -31,8 +31,7 @@
 template <class cell_t>struct compare_cells_pq {
     inline bool operator()
     (const cell_t * c1 , const cell_t * c2) const {
-
-        return c1->getArrivalTime() > c2->getArrivalTime();
+        return c1->getTotalValue() > c2->getTotalValue();
     }
 };
 

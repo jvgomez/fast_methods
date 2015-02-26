@@ -41,9 +41,7 @@
 #include "../fmm/fmm.hpp"
 #include "../gradientdescent/gradientdescent.hpp"
 
-#include "../io/gridplotter.hpp"
-
-// TODO: include suppoert to other solvers (GMM, FIM, UFMM). It requires a better way of setting parameters.
+// TODO: include support to other solvers (GMM, FIM, UFMM). It requires a better way of setting parameters.
 //template < class grid_t, class solver_t = FMM<grid_t> > class FM2 : public Solver<grid_t> {
 
 template < class grid_t, class heap_t = FMDaryHeap<FMCell> > class FM2 : public Solver<grid_t> {
@@ -58,7 +56,7 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> > class FM2 : public 
 
         /** maxDistance sets the velocities map saturation distance in real units (before normalization). */
         FM2
-        (const std::string& name, double maxDistance = -1) : Solver<grid_t>(name), maxDistance_(maxDistance) {
+        (const char * name, double maxDistance = -1) : Solver<grid_t>(name), maxDistance_(maxDistance) {
             solver_ = new FMM<grid_t, heap_t> ();
         }
 
@@ -119,7 +117,7 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> > class FM2 : public 
             solver_->setInitialPoints(fm2_sources_);
             solver_->compute();
             time_vels_ = solver_->getTime();
-            start_ = std::chrono::system_clock::now();
+            start_ = std::chrono::steady_clock::now();
             // Rescaling and saturating to relative velocities: [0,1]
             double maxValue = grid_->getMaxValue();
             double maxVelocity = 0;
@@ -143,7 +141,7 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> > class FM2 : public 
                 grid_->getCell(i).setState(FMState::OPEN);
                 grid_->setClean(true);
             }
-            end_ = std::chrono::system_clock::now();
+            end_ = std::chrono::steady_clock::now();
             time_vels_ += std::chrono::duration_cast<std::chrono::milliseconds>(end_-start_).count();
         }
 

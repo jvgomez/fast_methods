@@ -63,16 +63,18 @@ unsigned int absUI
     return (a>0) ? (a) : (-a);
 }
 
+enum HeurStrategy {NOHEUR = 0, TIME, DISTANCE};
+
 template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FMM : public Solver<grid_t> {
 
     public:
-        FMM(bool h = false) : Solver<grid_t>("FMM"), heuristics_(h), precomputed_(false) {
+        FMM(HeurStrategy h = NOHEUR) : Solver<grid_t>("FMM"), heurStrategy_(h), precomputed_(false) {
             // TODO: try to automate this.
             //if (static_cast<FMFibHeap>(heap_t))
              //   name_ = "FMMFib";
         }
 
-        FMM(const std::string& name, bool h = false) : Solver<grid_t>(name), heuristics_(h), precomputed_(false) {}
+        FMM(const char * name, HeurStrategy h = NOHEUR) : Solver<grid_t>(name), heurStrategy_(h), precomputed_(false) {}
 
         virtual ~FMM() { clear(); }
 
@@ -81,16 +83,13 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FMM : public
         () {
             Solver<grid_t>::setup();
             narrow_band_.setMaxSize(grid_->size());
-            setHeuristics(heuristics_); // Redundant, but safe.
-            //if(heuristics_ && !precomputed_)
-            //    precomputeDistances();
+            setHeuristics(heurStrategy_); // Redundant, but safe.
         }
 
         /** \brief Solves nD Eikonal equation for cell idx. If heuristics are activated, it will add
             the estimated travel time to goal with current velocity. */
         virtual double solveEikonal
         (const int & idx) {
-            // TODO: neighbors computed twice for every cell. We can save time here.
             unsigned int a = grid_t::getNDims(); // a parameter of the Eikonal equation.
 
             double updatedT;
@@ -122,11 +121,10 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FMM : public
             else
                 updatedT = (-b + sqrt(quad_term))/(2*a);
 
-            if (heuristics_) {
+            if (heurStrategy_ == TIME)
+                grid_->getCell(idx).setHeuristicTime( getPrecomputedDistance(idx)/grid_->getCell(idx).getVelocity() );
+            else if (heurStrategy_ == DISTANCE)
                 grid_->getCell(idx).setHeuristicTime( getPrecomputedDistance(idx) );
-                //grid_->getCell(idx).setHeuristicTime( getPrecomputedDistance(idx)/grid_->getCell(idx).getVelocity() );
-                //updatedT +=  getPrecomputedDistance(idx)/grid_->getCell(idx).getVelocity();
-            }
 
             return updatedT;
         }
@@ -181,10 +179,9 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FMM : public
         /** Set heuristics flag. True is activated. It will precompute distances
             if not done already. */
         void setHeuristics
-        (bool h) {
-            heuristics_ = false;
+        (HeurStrategy h) {
             if (h && int(goal_idx_)!=-1) {
-                heuristics_ = h;
+                heurStrategy_ = h;
                 grid_->idx2coord(goal_idx_, heur_coord_);
                 if (!precomputed_)
                     precomputeDistances();
@@ -192,9 +189,9 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FMM : public
         }
 
         /** \brief Returns heuristics flag. */
-        bool getHeuristics
+        HeurStrategy getHeuristics
         () const {
-            return heuristics_;
+            return heurStrategy_;
         }
 
         virtual void clear
@@ -251,6 +248,7 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FMM : public
         using Solver<grid_t>::init_points_;
         using Solver<grid_t>::goal_idx_;
         using Solver<grid_t>::setup_;
+        using Solver<grid_t>::name_;
 
         std::array <unsigned int, 2*grid_t::getNDims()> neighbors; /*!< Auxiliar array which stores the neighbor of each iteration of the computeFM() function. */
 
@@ -263,7 +261,7 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FMM : public
 
         heap_t narrow_band_; /*!< Instance of the heap used. */
 
-        bool heuristics_; /*!< Flag to activate heuristics. */
+        HeurStrategy heurStrategy_;/*!< Flag to activate heuristics and corresponding strategy. */
         std::vector<double> distances_;  /*!< Stores the precomputed heuristic distances. */
         bool precomputed_;  /*!< Flag to indicate if distances_ is already computed. */
         std::array <unsigned int, grid_t::getNDims()> heur_coord_; /*!< Goal coord, goal of the second wave propagation (actually the initial point of the path). */

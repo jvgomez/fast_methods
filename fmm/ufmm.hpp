@@ -40,7 +40,7 @@ template <class grid_t, class cell_t = FMCell> class UFMM : public FMM <grid_t> 
             narrow_band_ = new FMUntidyQueue<cell_t> (heap_s_, heap_inc_);
         }
         UFMM
-        (const std::string& name, unsigned s = 1000, double inc = 2) : FMM<grid_t>(name), heap_s_(s), heap_inc_(inc) {
+        (const char * name, unsigned s = 1000, double inc = 2) : FMM<grid_t>(name), heap_s_(s), heap_inc_(inc) {
             narrow_band_ = new FMUntidyQueue<cell_t> (heap_s_, heap_inc_);
         }
 
