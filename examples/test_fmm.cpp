@@ -35,7 +35,7 @@ int main(int argc, const char ** argv)
     solvers.push_back(new FMM<FMGrid2D>);
     solvers.push_back(new FMM<FMGrid2D, FMFibHeap<FMCell> >("FMFib"));
     solvers.push_back(new FMM<FMGrid2D, FMPriorityQueue<FMCell> >("SFMM"));
-    solvers.push_back(new GMM<FMGrid2D>("GMM"));
+    solvers.push_back(new GMM<FMGrid2D>());
     solvers.push_back(new FIM<FMGrid2D>("FIM"));
     solvers.push_back(new UFMM<FMGrid2D>("UFMM"));
 
@@ -50,7 +50,8 @@ int main(int argc, const char ** argv)
         GridPlotter::plotArrivalTimes(grid_fmm);
     }
 
-    // Showing different type conversions methodologies
+    // Showing different type conversions methodologies. Solver names could be compared
+    // but it is less reliable since they are user-defined.
     // Direct cast
     FMM<FMGrid2D>* FMMtest = dynamic_cast< FMM<FMGrid2D>* >(solvers[2]);
     if (FMMtest)

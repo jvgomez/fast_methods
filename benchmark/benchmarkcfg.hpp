@@ -150,23 +150,27 @@ class BenchmarkCFG {
                         continue;
                 }
                 else {
+                    std::vector<std::string> p(split(ctorParams_[i]));
+
                     if (name == "fmm")
                         solver = new FMM<grid_t>(ctorParams_[i]);
                     else if (name == "fmmfib")
                         solver = new FMM<grid_t, FMFibHeap<cell_t> >(ctorParams_[i]);
                     else if (name == "sfmm")
                         solver = new FMM<grid_t, FMPriorityQueue<cell_t> >(ctorParams_[i]);
-                    else if (name == "gmm")
-                        solver = new GMM<grid_t>(ctorParams_[i]);
+                    else if (name == "gmm") {
+                        if (p.size() == 1)
+                            solver = new GMM<grid_t>(p[0]);
+                        else if (p.size() == 2)
+                            solver = new GMM<grid_t>(p[0], boost::lexical_cast<double>(p[1]));
+                    }
                     else if (name == "fim") {
-                        std::vector<std::string> p(split(ctorParams_[i]));
                         if (p.size() == 1)
                             solver = new FIM<grid_t>(p[0]);
                         else if (p.size() == 2)
                             solver = new FIM<grid_t>(p[0], boost::lexical_cast<double>(p[1]));
                     }
                     else if (name == "ufmm") {
-                        std::vector<std::string> p(split(ctorParams_[i]));
                         if (p.size() == 1)
                             solver = new UFMM<grid_t>(p[0]);
                         else if (p.size() == 2)

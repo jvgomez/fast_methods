@@ -34,7 +34,8 @@
 template < class grid_t > class GMM : public FMM <grid_t> {
 
     public:
-        GMM(const std::string& name = "GMM") : FMM<grid_t>(name) {}
+        GMM(double dt = 1) : FMM<grid_t>("GMM"), deltau_(dt) {}
+        GMM(const std::string& name, double dt = 1) : FMM<grid_t>(name), deltau_(dt) {}
 
         virtual ~GMM() { clear(); }
 
@@ -50,7 +51,6 @@ template < class grid_t > class GMM : public FMM <grid_t> {
 
             unsigned int n_neighs;
             unsigned int j = 0;
-            deltau_ = 1;
             bool stopWavePropagation = false;
 
             // Algorithm initialization
@@ -140,8 +140,6 @@ template < class grid_t > class GMM : public FMM <grid_t> {
         virtual void clear
         () {
             gamma_.clear();
-            tm_ = 0;
-            deltau_ = 0;
         }
 
         virtual void reset
@@ -149,7 +147,6 @@ template < class grid_t > class GMM : public FMM <grid_t> {
             FMM<grid_t>::reset();
             gamma_.clear();
             tm_ = 0;
-            deltau_ = 0;
         }
 
     protected:
