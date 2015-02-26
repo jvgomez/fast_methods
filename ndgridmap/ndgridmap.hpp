@@ -94,14 +94,14 @@ template <class T, size_t ndims> class nDGridMap {
          * @param idx index of the cell to be accessed.
          * @return the corresponding cell.
          * @see getCell() */
-        T & operator[]
+        inline T & operator[]
         (unsigned int idx) {
             return cells_[idx];
         }
 
         inline double getLeafSize() const { return leafsize_; }
 
-        inline void setLeafSize(const double leafsize) { leafsize_=leafsize; }
+        inline void setLeafSize(const double leafsize) { leafsize_ = leafsize; }
 
         /** @see operator[] */
         inline T & getCell
