@@ -99,18 +99,18 @@ template <class T, size_t ndims> class nDGridMap {
             return cells_[idx];
         }
 
-        double getLeafSize() const { return leafsize_; }
+        inline double getLeafSize() const { return leafsize_; }
 
-        void setLeafSize(const double leafsize) { leafsize_=leafsize; }
+        inline void setLeafSize(const double leafsize) { leafsize_=leafsize; }
 
         /** @see operator[] */
-        T & getCell
+        inline T & getCell
         (unsigned int idx) {
             return cells_[idx];
             }
 
         /** @return size of each dimension. */
-        std::array<unsigned int, ndims> getDimSizes() const { return dimsize_;}
+        inline std::array<unsigned int, ndims> getDimSizes() const { return dimsize_;}
 
          /** @return minimum value of neighbors of cell idx in dimension dim. */
         double getMinValueInDim
@@ -264,13 +264,13 @@ template <class T, size_t ndims> class nDGridMap {
         }
 
          /** @return number of cells in the grid. */
-        unsigned int size
+        inline unsigned int size
         () const {
             return ncells_;
         }
 
         /** @return the maximum value of the cells in the grid. */
-        double getMaxValue
+        inline double getMaxValue
         () const {
             double max = 0;
             for (const T & c:cells_) {
@@ -281,13 +281,13 @@ template <class T, size_t ndims> class nDGridMap {
         }
 
         /** @return if the grid is clean (ready to use) */
-        bool isClean
+        inline bool isClean
         () const {
             return clean_;
         }
 
         /** Set the state of the grid. True means clean. */
-        void setClean
+        inline void setClean
         (bool c) {
             clean_ = c;
         }
@@ -319,13 +319,13 @@ template <class T, size_t ndims> class nDGridMap {
         }
 
         /** Sets the cells which are occupied. Usually called by grid loaders. */
-        void setOccupiedCells
+        inline void setOccupiedCells
         (const std::vector<unsigned int> & obs) {
             occupied_ = obs;
         }
 
         /** @return the indices of the occupied cells of the grid. */
-        void getOccupiedCells
+        inline void getOccupiedCells
         (std::vector<unsigned int> & obs) const {
             obs = occupied_;
         }

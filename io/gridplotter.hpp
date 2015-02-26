@@ -244,6 +244,9 @@ class GridPlotter {
           name += " Values and Path";
           img.display(name.c_str(), false);
       }
+
+    protected:
+
 };
 
 #endif /* GRIDPLOTTER_H_ */

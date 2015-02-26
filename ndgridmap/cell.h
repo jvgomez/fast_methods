@@ -24,6 +24,7 @@
 
 #include <iostream>
 #include <string>
+#include <limits>
 
 // NOTE: no checks are done (out of bounds, correct states, etc) no improve efficienty.
 // TODO: overload functions to add optional input checking.
@@ -37,20 +38,24 @@ class Cell {
 
         Cell(double v, double o = 1) : value_(v), occupancy_(o) {}
 
-        virtual void setValue(double v)            {value_ = v;}
-        virtual void setOccupancy(double o)        {occupancy_ = o;}
-        virtual std::string type()                 {return std::string("Cell - Basic cell");}
-        virtual void setIndex(int i)               {index_ = i;}
+        virtual inline void setValue(double v)            {value_ = v;}
+        virtual inline void setOccupancy(double o)        {occupancy_ = o;}
+        virtual std::string type()                        {return std::string("Cell - Basic cell");}
+        virtual inline void setIndex(int i)               {index_ = i;}
 
         /** Sets default values for the cell. Concretely, restarts value_ = -1 but
             occupancy_ is not modified. */
         virtual void setDefault();
 
-        virtual double getValue() const             {return value_;}
-        virtual double getOccupancy() const           {return occupancy_;}
-        virtual unsigned int getIndex() const       {return index_;}
+        virtual inline double getValue() const             {return value_;}
+        virtual inline double getOccupancy() const         {return occupancy_;}
+        virtual inline unsigned int getIndex() const       {return index_;}
 
-        virtual bool isOccupied() const;
+        virtual inline bool isOccupied() const {
+            if (occupancy_ < std::numeric_limits<double>::epsilon() * 1e3)
+                return true;
+            return false;
+        }
 
     protected:
         double value_; /*!< Value of the cell. */

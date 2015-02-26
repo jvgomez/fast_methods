@@ -122,3 +122,4 @@ At the top of each file there are specific TODO comments.
 - Create a testing framework.
 - BenchmarkCFG::configure, parse ctorParams_ with a variadic templated function, something like: parseParams<int, bool>(param1, param2), parseParams<string,double,bool>(p1,p2,p3).
 - For most methods, neighbors for same cell are computed many times. Store them like FMT to save some computation time.
+- GridPlotter code can be refactorired so that the same code is not repeated many times.

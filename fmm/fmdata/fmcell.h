@@ -45,21 +45,21 @@ class FMCell : public Cell{
 
         // NOTE: no checks are done (out of bounds, correct states, etc) no improve efficienty.
         // TODO: overload functions to add the option of input checking.
-        virtual void setVelocity(double v)           {occupancy_ = v;}
-        virtual void setArrivalTime(double at)       {value_= at;}
-        virtual void setHeuristicTime(double hv)     {hValue_ = hv;}
-        virtual void setState(FMState state)         {state_ = state;}
-        virtual void setBucket(int b)                {bucket_ = b;}
+        virtual inline void setVelocity(double v)           {occupancy_ = v;}
+        virtual inline void setArrivalTime(double at)       {value_= at;}
+        virtual inline void setHeuristicTime(double hv)     {hValue_ = hv;}
+        virtual inline void setState(FMState state)         {state_ = state;}
+        virtual inline void setBucket(int b)                {bucket_ = b;}
         virtual void setDefault();
 
-        std::string type () {return std::string("FMCell - Fast Marching cell");}
+        std::string type() {return std::string("FMCell - Fast Marching cell");}
 
-        virtual double getArrivalTime() const              {return value_;}
-        virtual double getHeuristicValue() const           {return hValue_;}
-        virtual double getTotalValue() const               {return value_ + hValue_;}
-        virtual double getVelocity() const                 {return occupancy_;}
-        virtual FMState getState() const                   {return state_;}
-        virtual bool getBucket() const                     {return bucket_;}
+        virtual inline double getArrivalTime() const              {return value_;}
+        virtual inline double getHeuristicValue() const           {return hValue_;}
+        virtual inline double getTotalValue() const               {return value_ + hValue_;}
+        virtual inline double getVelocity() const                 {return occupancy_;}
+        virtual inline FMState getState() const                   {return state_;}
+        virtual inline bool getBucket() const                     {return bucket_;}
 
     protected:
         FMState state_; /*!< State of the cell */

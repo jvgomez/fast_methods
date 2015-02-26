@@ -1,8 +1,6 @@
 #include "cell.h"
 #include "../console/console.h"
 
-#include <limits>
-
 using namespace std;
 
 ostream& operator <<
@@ -17,11 +15,4 @@ ostream& operator <<
 void Cell::setDefault
 () {
     value_ = -1;
-}
-
-bool Cell::isOccupied
-() const {
-    if (occupancy_ < std::numeric_limits<double>::epsilon() * 1e3)
-        return true;
-    return false;
 }

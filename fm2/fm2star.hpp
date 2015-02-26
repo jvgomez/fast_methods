@@ -45,7 +45,7 @@
 #include "fm2.hpp"
 #include "../gradientdescent/gradientdescent.hpp"
 
-// TODO: include suppoert to other solvers (GMM, FIM, UFMM). It requires a better way of setting parameters.
+// TODO: include support to other solvers (GMM, FIM, UFMM). It requires a better way of setting parameters.
 template < class grid_t, class heap_t = FMDaryHeap<FMCell> > class FM2Star : public FM2<grid_t, heap_t> {
 
     typedef std::vector< std::array<double, grid_t::getNDims()> > path_t;
