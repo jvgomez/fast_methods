@@ -23,7 +23,7 @@ int main(int argc, const char ** argv)
     console::info("Parsing input arguments.");
     string filename;
     if (argc > 2)
-        console::parseArguments(argc,argv, "-map", filename);
+        console::parseArguments(argc, argv, "-map", filename);
     else {
         console::info("No enough arguments given. Use as ./test_fm2 -map path_to_file.txt");
         exit(1);
@@ -64,4 +64,6 @@ int main(int argc, const char ** argv)
     // Preventing memory leaks.
     for (auto & s : solvers)
         delete s;
+
+    return 0;
 }

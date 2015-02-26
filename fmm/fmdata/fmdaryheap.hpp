@@ -31,14 +31,15 @@
 template <class cell_t> struct compare_cells_d_ary {
     inline bool operator()
     (const cell_t * c1 , const cell_t * c2) const {
-        return c1->getArrivalTime() > c2->getArrivalTime();
+        return c1->getTotalValue() > c2->getTotalValue();
+        //return c1->getArrivalTime() > c2->getArrivalTime();
     }
 };
 
-// TODO: for memory efficiency, use map instead of vector for handles_.
+// ALTERNATIVE TODO: for memory efficiency, use map instead of vector for handles_.
 template <class cell_t = FMCell> class FMDaryHeap {
 
-    typedef boost::heap::d_ary_heap<const cell_t *, boost::heap::mutable_<true>, boost::heap::arity<2>, boost::heap::compare<compare_cells_d_ary<cell_t> > > d_ary_heap_t;
+    typedef boost::heap::d_ary_heap<const cell_t *, boost::heap::mutable_<true>, boost::heap::arity<2>, boost::heap::compare<compare_cells_d_ary<cell_t>> > d_ary_heap_t;
     typedef typename d_ary_heap_t::handle_type handle_t;
 
     public:

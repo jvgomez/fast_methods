@@ -18,7 +18,7 @@
 using namespace std;
 using namespace std::chrono;
 
-int main(int argc, const char ** argv)
+int main()
 {
     // A bit of shorthand.
     typedef nDGridMap<FMCell, 2> FMGrid2D;
@@ -32,12 +32,13 @@ int main(int argc, const char ** argv)
 
     // Solvers declaration.
     std::vector<Solver<FMGrid2D>*> solvers;
-    solvers.push_back(new FMM<FMGrid2D>);
-    solvers.push_back(new FMM<FMGrid2D, FMFibHeap<FMCell> >("FMFib"));
+    //solvers.push_back(new FMM<FMGrid2D>);
+    solvers.push_back(new FMM<FMGrid2D>("FMMstar", true));
+    /*solvers.push_back(new FMM<FMGrid2D, FMFibHeap<FMCell> >("FMFib"));
     solvers.push_back(new FMM<FMGrid2D, FMPriorityQueue<FMCell> >("SFMM"));
     solvers.push_back(new GMM<FMGrid2D>());
     solvers.push_back(new FIM<FMGrid2D>("FIM"));
-    solvers.push_back(new UFMM<FMGrid2D>("UFMM"));
+    solvers.push_back(new UFMM<FMGrid2D>("UFMM"));*/
 
     // Executing every solver individually over the same grid.
     for (Solver<FMGrid2D>* s :solvers)
@@ -45,15 +46,17 @@ int main(int argc, const char ** argv)
         s->setEnvironment(&grid_fmm);
         //s->setInitialPoints(init_point); // If no goal_idx is set.
         s->setInitialAndGoalPoints(init_point, goal_point);
+        s->setup(); // Not mandatory, but in FMMstar we want to precompute distances
+                    // out of compute().
         s->compute();
         cout << "\tElapsed "<< s->getName() <<" time: " << s->getTime() << " ms" << '\n';
-        GridPlotter::plotArrivalTimes(grid_fmm);
+        GridPlotter::plotArrivalTimes(grid_fmm, s->getName());
     }
 
     // Showing different type conversions methodologies. Solver names could be compared
     // but it is less reliable since they are user-defined.
     // Direct cast
-    FMM<FMGrid2D>* FMMtest = dynamic_cast< FMM<FMGrid2D>* >(solvers[2]);
+    /*FMM<FMGrid2D>* FMMtest = dynamic_cast< FMM<FMGrid2D>* >(solvers[2]);
     if (FMMtest)
         std::cout << "Solver type SFMM" <<'\n';
     else
@@ -69,8 +72,11 @@ int main(int argc, const char ** argv)
     // solvers[2]->setHeuristics(true) would not compile.
     solvers[2]->as< FMM<FMGrid2D, FMPriorityQueue<FMCell>> >()->setHeuristics(true);
     std::cout << solvers[2]->as< FMM<FMGrid2D, FMPriorityQueue<FMCell>> >()->getHeuristics() << '\n';
+    */
 
     // Preventing memory leaks.
     for (auto & s : solvers)
         delete s;
+
+    return 0;
 }

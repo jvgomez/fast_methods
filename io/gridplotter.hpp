@@ -53,7 +53,7 @@ class GridPlotter {
          */
         template<class T, size_t ndims> 
         static void plotMap
-        (nDGridMap<T, ndims> & grid, const bool flipY = 1) {
+        (nDGridMap<T, ndims> & grid, std::string name = "", const bool flipY = 1) {
             std::array<unsigned int,2> d = grid.getDimSizes();
             CImg<bool> img(d[0],d[1],1,1,0);
             if (flipY)
@@ -63,13 +63,13 @@ class GridPlotter {
             else 
                 cimg_forXY(img,x,y) { if(grid[img.width()*y+x].getOccupancy() > 0.5) img(x,y) = true;
                                       else img(x,y) = false; }
-                
-            img.display("Grid map", false);
+            name += " Map";
+            img.display(name.c_str(), false);
         }
 
         template<class T, size_t ndims>
         static void plotOccupancyMap
-        (nDGridMap<T, ndims> & grid, const bool flipY = 1) {
+        (nDGridMap<T, ndims> & grid, std::string name = "", const bool flipY = 1) {
             std::array<unsigned int,2> d = grid.getDimSizes();
             CImg<double> img(d[0],d[1],1,1,0);
             if (flipY)
@@ -78,7 +78,8 @@ class GridPlotter {
             else
                 cimg_forXY(img,x,y) { img(x,y) = grid[img.width()*y+x].getOccupancy()*255; }
 
-            img.display("Grid map", false);
+            name += " Occupancy Map";
+            img.display(name.c_str(), false);
         }
 
        /**
@@ -97,7 +98,7 @@ class GridPlotter {
          */
         template<class T, size_t ndims = 2>
         static void plotArrivalTimes
-        (nDGridMap<T, ndims> & grid, const bool flipY = true) {
+        (nDGridMap<T, ndims> & grid, std::string name = "", const bool flipY = true) {
             std::array<unsigned int,2> d = grid.getDimSizes();
             double max_val = grid.getMaxValue();
             CImg<double> img(d[0],d[1],1,1,0);
@@ -109,37 +110,9 @@ class GridPlotter {
                 cimg_forXY(img,x,y) { img(x,y) = grid[img.width()*y+x].getValue()/max_val*255; }
                 
             img.map( CImg<double>::jet_LUT256() );
-            img.display("Grid values", false);
+            name += " Grid values";
+            img.display(name.c_str(), false);
         }
-
-        /**
-          * Plots the velocities map in a given grid. It is based on the
-          * FMCell::getVelocity() which has to be double valued and with normalized
-          * values [0,1].
-          *
-          * Should be used only in 2D grids on FMCell-based grid maps.
-          *
-          * The Y dimension flipping is because nDGridMap works in X-Y coordinates, not in image indices as CImg.
-          *
-          * IMPORTANT NOTE: no type-checkings are done. T type has to be FMCell or any class with double getVelocity() method.
-          *
-          * @param grid 2D nDGridmap
-          * @param flipY true: flips the Y dimension. 0 does not flip.
-          */
-        /*template<class T, size_t ndims = 2>
-        static void plotVelocitiesMap
-        (nDGridMap<T, ndims> & grid, const bool flipY = true) {
-            std::array<unsigned int,2> d = grid.getDimSizes();
-            CImg<double> img(d[0],d[1],1,1,0);
-
-            if (flipY)
-                // Filling the image flipping Y dim. We want now top left to be the (0,0).
-                cimg_forXY(img,x,y) { img(x,y) = grid[img.width()*(img.height()-y-1)+x].getVelocity()*255; }
-            else
-                cimg_forXY(img,x,y) { img(x,y) = grid[img.width()*y+x].getVelocity()*255; }
-
-            img.display("Grid values", false);
-        }*/
 
         /**
          * Plots the initial binary map included in a given grid and the given path. It is based on the
@@ -158,7 +131,7 @@ class GridPlotter {
          */
         template<class T, size_t ndims = 2>
         static void plotMapPath
-        (nDGridMap<T, ndims> & grid, const Path2D & path, const bool flipY = true) {
+        (nDGridMap<T, ndims> & grid, const Path2D & path, std::string name = "", const bool flipY = true) {
             std::array<unsigned int,2> d = grid.getDimSizes();
             CImg<double> img(d[0],d[1],1,3,0);
 
@@ -177,9 +150,8 @@ class GridPlotter {
                 for (unsigned int i = 0; i< path.size(); ++i)
                     img(static_cast<unsigned int>(path[i][0]), static_cast<unsigned int>(path[i][1])) = 255;
                 }
-
-            img.display("Grid values", false);
-
+            name += " Map and Path";
+            img.display(name.c_str(), false);
         }
 
         /**
@@ -199,7 +171,7 @@ class GridPlotter {
          */
         template<class T, size_t ndims = 2>
         static void plotMapPath
-        (nDGridMap<T, ndims> & grid, const Paths2D & paths, const bool flipY = true) {
+        (nDGridMap<T, ndims> & grid, const Paths2D & paths, std::string name = "", const bool flipY = true) {
             std::array<unsigned int,2> d = grid.getDimSizes();
             CImg<double> img(d[0],d[1],1,3,0);
 
@@ -225,13 +197,12 @@ class GridPlotter {
                 for (unsigned int j = 0; j < paths.size(); ++j)
                 {
                     Path2D path = paths[j];
-
                     for (unsigned int i = 0; i< path.size(); ++i)
                         img(static_cast<unsigned int>(path[i][0]), static_cast<unsigned int>(path[i][1])) = 255;
                 }
             }
-
-            img.display("Grid values", false);
+            name += " Map and Paths";
+            img.display(name.c_str(), false);
         }
 
        /**
@@ -251,7 +222,7 @@ class GridPlotter {
        */
       template<class T, size_t ndims = 2>
       static void plotArrivalTimesPath
-      (nDGridMap<T, ndims> & grid, const Path2D & path, const bool flipY = true) {
+      (nDGridMap<T, ndims> & grid, const Path2D & path, std::string name = "", const bool flipY = true) {
           std::array<unsigned int,2> d = grid.getDimSizes();
           double max_val = grid.getMaxValue();
           CImg<double> img(d[0],d[1],1,1,0);
@@ -270,7 +241,8 @@ class GridPlotter {
               }
 
           img.map( CImg<double>::jet_LUT256() );
-          img.display("Grid values", false);
+          name += " Values and Path";
+          img.display(name.c_str(), false);
       }
 };
 
