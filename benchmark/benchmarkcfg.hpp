@@ -29,6 +29,7 @@
 #include "../io/maploader.hpp"
 
 #include "../fmm/fmm.hpp"
+#include "../fmm/fmmstar.hpp"
 #include "../fmm/fim.hpp"
 #include "../fmm/gmm.hpp"
 #include "../fmm/ufmm.hpp"
@@ -52,7 +53,7 @@ class BenchmarkCFG {
         bool readOptions(const char * filename)
         {
             static const std::vector<std::string> knownSolvers = {
-                "fmm", "fmmfib", "sfmm",
+                "fmm", "fmmstar", "fmmfib", "fmmfibstar", "sfmm", "sfmmstar",
                 "gmm", "fim", "ufmm"
             };
 
@@ -136,10 +137,16 @@ class BenchmarkCFG {
                 if (defaultCtor) {
                     if (name == "fmm")
                         solver = new FMM<grid_t>();
+                    else if (name == "fmmstar")
+                        solver = new FMMStar<grid_t>();
                     else if (name == "fmmfib")
                         solver = new FMM<grid_t, FMFibHeap<cell_t> >("FMMFib");
+                    else if (name == "fmmfibstar")
+                        solver = new FMMStar<grid_t,  FMFibHeap<cell_t> >("FMMFib*");
                     else if (name == "sfmm")
                         solver = new FMM<grid_t, FMPriorityQueue<cell_t> >("SFMM");
+                    else if (name == "sfmmstar")
+                        solver = new FMMStar<grid_t, FMPriorityQueue<cell_t>>("SFMM*");
                     else if (name == "gmm")
                         solver = new GMM<grid_t>();
                     else if (name == "fim")
@@ -149,34 +156,70 @@ class BenchmarkCFG {
                     else
                         continue;
                 }
-                else {
+                else { // Create solvers with specified constructor parameters.
                     std::vector<std::string> p(split(ctorParams_[i]));
 
+                    // FMM and FMM*
                     if (name == "fmm")
-                        solver = new FMM<grid_t>(ctorParams_[i]);
+                        solver = new FMM<grid_t>(ctorParams_[i].c_str());
+                    else if (name == "fmmstar") {
+                        if (p.size() == 1)
+                            solver = new FMMStar<grid_t>(p[0].c_str());
+                        else if (p.size() == 2) {
+                            if (p[1] == "TIME")
+                                solver = new FMMStar<grid_t>(p[0].c_str(), TIME);
+                            else if (p[1] == "DISTANCE")
+                                solver = new FMMStar<grid_t>(p[0].c_str(), DISTANCE);
+                        }
+                    }
+                    // FMMFib and FMMFib*
                     else if (name == "fmmfib")
-                        solver = new FMM<grid_t, FMFibHeap<cell_t> >(ctorParams_[i]);
+                        solver = new FMM<grid_t, FMFibHeap<cell_t> >(ctorParams_[i].c_str());
+                    else if (name == "fmmfibstar") {
+                        if (p.size() == 1)
+                            solver = new FMMStar<grid_t, FMFibHeap<cell_t>>(p[0].c_str());
+                        else if (p.size() == 2) {
+                            if (p[1] == "TIME")
+                                solver = new FMMStar<grid_t, FMFibHeap<cell_t>>(p[0].c_str(), TIME);
+                            else if (p[1] == "DISTANCE")
+                                solver = new FMMStar<grid_t, FMFibHeap<cell_t>>(p[0].c_str(), DISTANCE);
+                        }
+                    }
+                    // SFMM and SFMM*
                     else if (name == "sfmm")
-                        solver = new FMM<grid_t, FMPriorityQueue<cell_t> >(ctorParams_[i]);
+                        solver = new FMM<grid_t, FMPriorityQueue<cell_t> >(ctorParams_[i].c_str());
+                    else if (name == "sfmmstar") {
+                        if (p.size() == 1)
+                            solver = new FMMStar<grid_t, FMPriorityQueue<cell_t>>(p[0].c_str());
+                        else if (p.size() == 2) {
+                            if (p[1] == "TIME")
+                                solver = new FMMStar<grid_t, FMPriorityQueue<cell_t>>(p[0].c_str(), TIME);
+                            else if (p[1] == "DISTANCE")
+                                solver = new FMMStar<grid_t, FMPriorityQueue<cell_t>>(p[0].c_str(), DISTANCE);
+                        }
+                    }
+                    // GMM
                     else if (name == "gmm") {
                         if (p.size() == 1)
-                            solver = new GMM<grid_t>(p[0]);
+                            solver = new GMM<grid_t>(p[0].c_str());
                         else if (p.size() == 2)
-                            solver = new GMM<grid_t>(p[0], boost::lexical_cast<double>(p[1]));
+                            solver = new GMM<grid_t>(p[0].c_str(), boost::lexical_cast<double>(p[1]));
                     }
+                    // FIM
                     else if (name == "fim") {
                         if (p.size() == 1)
-                            solver = new FIM<grid_t>(p[0]);
+                            solver = new FIM<grid_t>(p[0].c_str());
                         else if (p.size() == 2)
-                            solver = new FIM<grid_t>(p[0], boost::lexical_cast<double>(p[1]));
+                            solver = new FIM<grid_t>(p[0].c_str(), boost::lexical_cast<double>(p[1]));
                     }
+                    // UFMM
                     else if (name == "ufmm") {
                         if (p.size() == 1)
-                            solver = new UFMM<grid_t>(p[0]);
+                            solver = new UFMM<grid_t>(p[0].c_str());
                         else if (p.size() == 2)
-                            solver = new UFMM<grid_t>(p[0], boost::lexical_cast<unsigned>(p[1]));
+                            solver = new UFMM<grid_t>(p[0].c_str(), boost::lexical_cast<unsigned>(p[1]));
                         else if (p.size() == 3)
-                            solver = new UFMM<grid_t>(p[0], boost::lexical_cast<unsigned>(p[1]), boost::lexical_cast<double>(p[2]));
+                            solver = new UFMM<grid_t>(p[0].c_str(), boost::lexical_cast<unsigned>(p[1]), boost::lexical_cast<double>(p[2]));
                     }
                     else
                         continue;
