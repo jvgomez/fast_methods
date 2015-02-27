@@ -45,7 +45,7 @@
 #include "fm2.hpp"
 #include "../gradientdescent/gradientdescent.hpp"
 
-// TODO: include support to other solvers (GMM, FIM, UFMM). It requires a better way of setting parameters.
+// TODO: include support to other solvers (GMM, FIM, UFMM). Requires theoretical work on heuristics on these methods.
 template < class grid_t, class heap_t = FMDaryHeap<FMCell> > class FM2Star : public FM2<grid_t, heap_t> {
 
     typedef std::vector< std::array<double, grid_t::getNDims()> > path_t;
@@ -67,12 +67,25 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> > class FM2Star : pub
             solver_->precomputeDistances();
         }
 
+        virtual void setup
+        () {
+            FM2Base::setup();
+            if(int(goal_idx_) == -1)
+            {
+                console::error("A goal point has to be set for FM2-based solvers.");
+                exit(1);
+            }
+        }
+
         virtual void computeInternal
         () {
             if (!setup_)
                  setup();
 
             computeVelocitiesMap();
+
+            // Reset time counter so that time_ returns the time of the second wave.
+            start_ = std::chrono::steady_clock::now();
 
             // According to the theoretical basis the wave is expanded from the goal point to the initial point.
             std::vector <unsigned int> wave_init;
@@ -93,6 +106,7 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> > class FM2Star : pub
         using FM2Base::solver_;
         using FM2Base::setup;
         using FM2Base::setup_;
+        using FM2Base::start_;
         using FM2Base::computeVelocitiesMap;
         using FM2Base::maxDistance_;
 

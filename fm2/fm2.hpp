@@ -73,12 +73,6 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> > class FM2 : public 
         () {
             Solver<grid_t>::setup();
 
-            if(int(goal_idx_) == -1)
-            {
-                console::error("A goal point has to be set for FM2-based solvers.");
-                exit(1);
-            }
-
             if(init_points_.size() > 1) {
                 console::error("FM2-based solvers currently allow only 1 initial point.");
                 exit(1);
@@ -96,6 +90,9 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> > class FM2 : public 
                  setup();
 
             computeVelocitiesMap();
+
+            // Reset time counter so that time_ returns the time of the second wave.
+            start_ = std::chrono::steady_clock::now();
 
             // According to the theoretical basis the wave is expanded from the goal point to the initial point.
             std::vector <unsigned int> wave_init;
