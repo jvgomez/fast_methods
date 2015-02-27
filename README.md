@@ -104,7 +104,7 @@ Although there are a lot of folders, they are quite simple. It is organized this
 
 ## KNOWN ISSUES
 
-- The new occupancy-based model (instead of velocities) might cause problems for FM2 versions.
+- Gradient Descent for FM2* could fail if very narrow passages are in the way of the path.
 - MapLoader::LoadMapFromImg has a memory leak because of CImg bug, related with: http://sourceforge.net/p/cimg/bugs/42/
 
 ## TODO
@@ -122,4 +122,4 @@ At the top of each file there are specific TODO comments.
 - Create a testing framework.
 - BenchmarkCFG::configure, parse ctorParams_ with a variadic templated function, something like: parseParams<int, bool>(param1, param2), parseParams<string,double,bool>(p1,p2,p3).
 - For most methods, neighbors for same cell are computed many times. Store them like FMT to save some computation time.
-- GridPlotter code can be refactorired so that the same code is not repeated many times.
+- GridPlotter code can be refactorized so that the same code is not repeated many times.

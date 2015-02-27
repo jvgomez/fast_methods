@@ -37,7 +37,7 @@ template <class grid_t> class GradientDescent {
            border of the map. This situation is not checked. We recommend to set a 1 pixel
            black border around the map image. */
       static void apply
-      (grid_t & grid, unsigned int &  idx, Path & path, std::vector <double> & path_velocity, double step = 1) {
+      (grid_t & grid, unsigned int & idx, Path & path, std::vector <double> & path_velocity, double step = 1) {
 
           Coord current_coord;
           Point current_point;
@@ -78,7 +78,7 @@ template <class grid_t> class GradientDescent {
               for (size_t i = 0; i < ndims_; ++i) {
                   // Moving the point in dim i.
                   current_point[i] = current_point[i] - step*grads[i]/std::abs(max_grad);
-                  current_coord[i] = current_point[i];
+                  current_coord[i] = int(current_point[i]+0.5);
               }
               path.push_back(current_point);
               path_velocity.push_back(grid[idx].getVelocity());
