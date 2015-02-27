@@ -91,6 +91,7 @@ Although there are a lot of folders, they are quite simple. It is organized this
 + build: where the code should be compiled.
 + console: the console class.
 + data: additional files and maps to test.
+  + alpha: contains code the be refactorized and included in the library in the future.
 + doc: doxygen documentation.
 + examples: easy examples to understand how to use the code.
 + fm2: Fast Marching Square (FM2) algorithms.
