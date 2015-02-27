@@ -105,11 +105,10 @@ Although there are a lot of folders, they are quite simple. It is organized this
 ## KNOWN ISSUES
 
 - Gradient Descent for FM2* could fail if very narrow passages are in the way of the path.
-- MapLoader::LoadMapFromImg has a memory leak because of CImg bug, related with: http://sourceforge.net/p/cimg/bugs/42/
 
 ## TODO
 
-At the top of each file there are specific TODO comments.
+At the top of each file there are specific TODO comments. Here are some others:
 
 - Improve the way FM2 and its versions deal with the grid when running multiple times on the same grid. Concretely, avoid recomputation of velocities map.
 - Reimplement FM2Dir from scratch. Currently in data/alpha folder.
