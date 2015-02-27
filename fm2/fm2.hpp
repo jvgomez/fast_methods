@@ -152,7 +152,6 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> > class FM2 : public 
             @param goal_idx index of the goal point, where gradient descent will start. If
                    no specified, the previously set goal point is used. */
         virtual void computePath
-        //(path_t * p, std::vector <double> * path_velocity, unsigned int goal_idx = -1) {
         (path_t * p, std::vector <double> * path_velocity, double step = 1) {
             path_t* path_ = p;
             GradientDescent< nDGridMap<FMCell, grid_t::getNDims()> > grad;

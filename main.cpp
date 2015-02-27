@@ -111,9 +111,8 @@ int main(int argc, const char ** argv)
         time_elapsed = duration_cast<milliseconds>(end-start).count();
         cout << "\tElapsed gradient descent time: " << time_elapsed << " ms" << endl;
 
-    console::info("Comparing FMM, FM2, FM2* paths.");
+    console::info("Comparing FM2, FM2* paths.");
     std::vector <Path> paths;
-    paths.push_back(path);
     paths.push_back(pathFM2);
     paths.push_back(pathFM2star);
 

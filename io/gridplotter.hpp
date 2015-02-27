@@ -35,6 +35,7 @@ typedef typename std::vector <Point2D> Path2D;
 typedef typename std::vector <Path2D> Paths2D;
 
 // TODO: include checks which ensure that the grids are adecuate for the functions used.
+// TODO: generalize plotMapPaths to work with multiple paths.
 class GridPlotter {
     public:
         /**
@@ -159,7 +160,7 @@ class GridPlotter {
          * It is based on the nDGridMap::getOccupancy() which has to be bool valued. This function
          * has to be overloaded in another occupancy type is being used.
          *
-         * Should be used only in 2D grids.
+         * Should be used only in 2D grids. Only 2 paths are accepted.
          *
          *  The Y dimension flipping is because nDGridMap works in X-Y coordinates, not in image indices as CImg.
          *
