@@ -123,6 +123,7 @@ class BenchmarkCFG {
             b.setSaveGrid(getValue<bool>("benchmark.savegrid"));
             b.setNRuns(getValue<unsigned int>("benchmark.runs"));
             b.setPath(boost::filesystem::path("results"));
+            b.fromCFG(true);
 
             for (size_t i = 0; i < solverNames_.size(); ++i)
             {
@@ -301,11 +302,11 @@ class BenchmarkCFG {
             return elems;
         }
 
-       std::vector<std::string> solverNames_;
-       std::vector<std::string> ctorParams_;
-       std::unordered_map<std::string, std::string> options_;
+        std::vector<std::string> solverNames_;
+        std::vector<std::string> ctorParams_;
+        std::unordered_map<std::string, std::string> options_;
 
-       boost::filesystem::path path_;
+        boost::filesystem::path path_;
 };
 
 #endif /* BENCHMARKCFG_HPP_*/

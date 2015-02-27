@@ -46,9 +46,9 @@ int main(int argc, const char ** argv)
                 }
                 case 3:
                 {
-                    //Benchmark<nDGridMap<FMCell,3> > b;
-                    //bcfg.configure(b);
-                    //b.run();
+                    Benchmark<nDGridMap<FMCell,3> > b;
+                    bcfg.configure(b);
+                    b.run();
                     break;
                 }
                 // Include here new dimensions.

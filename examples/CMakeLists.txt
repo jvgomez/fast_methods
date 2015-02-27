@@ -37,3 +37,10 @@ add_executable (test_fm2 test_fm2.cpp
                         ../fmm/fmdata/fmcell.cpp
                         )
 target_link_libraries (test_fm2 X11 pthread)
+
+add_executable (test_fmm_benchmark test_fmm_benchmark.cpp
+                        ../console/console.cpp
+                        ../ndgridmap/cell.cpp
+                        ../fmm/fmdata/fmcell.cpp
+                        )
+target_link_libraries (test_fmm_benchmark boost_system boost_filesystem boost_program_options)

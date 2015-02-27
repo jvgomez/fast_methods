@@ -36,11 +36,17 @@ class Benchmark {
         runID_(0),
         nruns_(10),
         path_("results"),
-        name_("benchmark"){}
+        name_("benchmark"),
+        fromCFG_(false){}
 
         virtual ~Benchmark()
         {
             clear();
+        }
+
+        void fromCFG
+        (bool cfg) {
+            fromCFG_ = cfg;
         }
 
         void addSolver
@@ -118,8 +124,12 @@ class Benchmark {
 
             if (saveLog_)
                 saveLog();
-            else
-                std::cout << log_.str();
+            else {
+                console::info("Benchmark log format:");
+                std::cout << "Name\t#Runs\t#Dims\tDim1...DimN\t#Starts\tStartIdx\tGoalIdx"<<'\n';
+                std::cout << "RunID\tName\tTime (ms)" << '\n';
+                std::cout << log_.str() << '\n';
+            }
         }
 
         void logRun
@@ -161,7 +171,9 @@ class Benchmark {
                 delete s;
 
             solvers_.clear();
-            delete grid_;
+
+            if(fromCFG_)
+                delete grid_;
         }
 
     private:
@@ -223,6 +235,8 @@ class Benchmark {
 
         boost::filesystem::path path_;
         std::string name_;
+
+        bool fromCFG_; /*!< Benchmark configured from CFG file, used to selectively free memory. */
 };
 
 #endif /* BENCHMARK_HPP_*/
