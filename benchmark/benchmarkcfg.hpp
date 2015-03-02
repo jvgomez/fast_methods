@@ -1,6 +1,5 @@
-/*! \file benchmarkcfg.hpp
-    \brief
-
+/*! \class BenchmarkCFG
+    \brief Configures a Benchmark class from a CFG file. 
     Inspired in the OMPLapp benchmarking software: http://ompl.kavrakilab.org
 
     This program is free software: you can redistribute it and/or modify
@@ -34,22 +33,25 @@
 #include "../fmm/gmm.hpp"
 #include "../fmm/ufmm.hpp"
 
-// TODO: the getter functions do not check if the types are admissible.
-// TODO: does not have support for multiple starts.
-// TODO: the way ctor parameters are given could be improved (as declareParams in OMPL - command pattern).
+/// \todo the getter functions do not check if the types are admissible.
+/// \todo does not have support for multiple starts or goals.
+/// \todo the way ctor parameters are given could be improved (as declareParams in OMPL - command pattern).
 
 class BenchmarkCFG {
 
     public:
 
+        /** \brief Requires readOptions to be manually called after this constructor. */
         BenchmarkCFG
         () {}
 
+        /** \brief Creates an object from a CFG file. Automatically calls readOptions. */
         BenchmarkCFG
         (const char * filename) {
             readOptions(filename);
         }
 
+        /** \brief Parses the CFG file given. */
         bool readOptions(const char * filename)
         {
             static const std::vector<std::string> knownSolvers = {
@@ -261,6 +263,7 @@ class BenchmarkCFG {
             b.setEnvironment(grid);
         }
 
+        /** \brief Get the value for a given key (option). */
         template<typename T>
         T getValue
         (const std::string & key) const {
@@ -273,6 +276,7 @@ class BenchmarkCFG {
 
     private:
         // Based on http://stackoverflow.com/a/236803/2283531
+        /** \brief From a string of format XXX,YY,ZZZ,... splis the N elements and cast as type T (comma-separated) as an array. */
         template <typename T, size_t N>
         std::array<T,N> splitAndCast
         (const std::string & s)
@@ -288,6 +292,7 @@ class BenchmarkCFG {
             return elems;
         }
 
+        /** \brief From a string of format XXX,YY,ZZZ,... splis the elements (comma-separated) as a vector of strings. */
         std::vector<std::string> split
         (const std::string & s) {
             std::vector<std::string> elems;
@@ -302,10 +307,16 @@ class BenchmarkCFG {
             return elems;
         }
 
+        /** \brief Stores the names of the parsed solvers. */
         std::vector<std::string> solverNames_;
+        
+        /** \brief Stores the constructor parameters for the parsed solvers. */
         std::vector<std::string> ctorParams_;
+        
+        /** \brief Option-value map.*/
         std::unordered_map<std::string, std::string> options_;
 
+        /** \brief Stores the absolute path to the CFG file. */
         boost::filesystem::path path_;
 };
 

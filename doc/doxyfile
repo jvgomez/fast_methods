@@ -25,13 +25,13 @@ DOXYFILE_ENCODING = UTF-8
 # The PROJECT_NAME tag is a single word (or a sequence of words surrounded
 # by quotes) that should identify the project.
 
-PROJECT_NAME = n-Dimensional Fast Marching
+PROJECT_NAME = "n-Dimensional Fast Marching"
 
 # The PROJECT_NUMBER tag can be used to enter a project or revision number.
 # This could be handy for archiving the generated documentation or
 # if some version control system is used.
 
-PROJECT_NUMBER = 1.0
+PROJECT_NUMBER = 0.5
 
 # The OUTPUT_DIRECTORY tag is used to specify the (relative or absolute)
 # base path where the generated documentation will be put.
@@ -74,7 +74,7 @@ BRIEF_MEMBER_DESC = YES
 # Note: if both HIDE_UNDOC_MEMBERS and BRIEF_MEMBER_DESC are set to NO, the
 # brief descriptions will be completely suppressed.
 
-REPEAT_BRIEF = YES
+REPEAT_BRIEF = NO
 
 # This tag implements a quasi-intelligent brief description abbreviator
 # that is used to form the text in various listings. Each string
@@ -297,7 +297,7 @@ SYMBOL_CACHE_SIZE = 0
 # Private class members and static file members will be hidden unless
 # the EXTRACT_PRIVATE and EXTRACT_STATIC tags are set to YES
 
-EXTRACT_ALL = YES
+EXTRACT_ALL = NO
 
 # If the EXTRACT_PRIVATE tag is set to YES all private members of a class
 # will be included in the documentation.
@@ -307,7 +307,7 @@ EXTRACT_PRIVATE = YES
 # If the EXTRACT_STATIC tag is set to YES all static members of a file
 # will be included in the documentation.
 
-EXTRACT_STATIC = NO
+EXTRACT_STATIC = YES
 
 # If the EXTRACT_LOCAL_CLASSES tag is set to YES classes (and structs)
 # defined locally in source files will be included in the documentation.
@@ -320,7 +320,7 @@ EXTRACT_LOCAL_CLASSES = YES
 # the interface are included in the documentation.
 # If set to NO (the default) only methods in the interface are included.
 
-EXTRACT_LOCAL_METHODS = NO
+EXTRACT_LOCAL_METHODS = YES
 
 # If this flag is set to YES, the members of anonymous namespaces will be
 # extracted and appear in the documentation as a namespace called
@@ -486,7 +486,7 @@ SHOW_DIRECTORIES = NO
 # This will remove the Files entry from the Quick Index and from the
 # Folder Tree View (if specified). The default is YES.
 
-SHOW_FILES = YES
+SHOW_FILES = NO
 
 # Set the SHOW_NAMESPACES tag to NO to disable the generation of the
 # Namespaces page.
@@ -574,7 +574,7 @@ WARN_LOGFILE =
 # directories like "/usr/src/myproject". Separate the files or directories
 # with spaces.
 
-INPUT = ../console/ ../ndgridmap/ ../fmdata/ ../fmm/ ../io/
+INPUT = ../benchmark/ ../console/ ../examples/ ../fm2/ ../fmm/ ../gradientdescent/ ../io/ ../ndgridmap/
 
 # This tag can be used to specify the character encoding of the source files
 # that doxygen parses. Internally doxygen uses the UTF-8 encoding, which is
@@ -631,7 +631,7 @@ EXCLUDE_SYMBOLS =
 # directories that contain example code fragments that are included (see
 # the \include command).
 
-EXAMPLE_PATH = 
+EXAMPLE_PATH = ../examples/
 
 # If the value of the EXAMPLE_PATH tag contains directories, you can use the
 # EXAMPLE_PATTERNS tag to specify one or more wildcard pattern (like *.cpp
@@ -961,7 +961,7 @@ ECLIPSE_DOC_ID = org.doxygen.Project
 # top of each HTML page. The value NO (the default) enables the index and
 # the value YES disables it.
 
-DISABLE_INDEX = NO
+DISABLE_INDEX = YES
 
 # This tag can be used to set the number of enum values (range [1..20])
 # that doxygen will group on one line in the generated HTML documentation.
@@ -976,7 +976,7 @@ ENUM_VALUES_PER_LINE = 4
 # JavaScript, DHTML, CSS and frames is required (i.e. any modern browser).
 # Windows users are probably better off using the HTML help feature.
 
-GENERATE_TREEVIEW = NO
+GENERATE_TREEVIEW = YES
 
 # By enabling USE_INLINE_TREES, doxygen will generate the Groups, Directories,
 # and Class Hierarchy pages using a tree view instead of an ordered list.
@@ -1437,7 +1437,7 @@ GROUP_GRAPHS = YES
 # collaboration diagrams in a style similar to the OMG's Unified Modeling
 # Language.
 
-UML_LOOK = YES
+UML_LOOK = NO
 
 # If set to YES, the inheritance and collaboration graphs will show the
 # relations between templates and their instances.
@@ -1464,7 +1464,7 @@ INCLUDED_BY_GRAPH = YES
 # the time of a run. So in most cases it will be better to enable call graphs
 # for selected functions only using the \callgraph command.
 
-CALL_GRAPH = YES
+CALL_GRAPH = no
 
 # If the CALLER_GRAPH and HAVE_DOT tags are set to YES then
 # doxygen will generate a caller dependency graph for every global function
@@ -1472,7 +1472,7 @@ CALL_GRAPH = YES
 # the time of a run. So in most cases it will be better to enable caller
 # graphs for selected functions only using the \callergraph command.
 
-CALLER_GRAPH = YES
+CALLER_GRAPH = no
 
 # If the GRAPHICAL_HIERARCHY and HAVE_DOT tags are set to YES then doxygen
 # will graphical hierarchy of all classes instead of a textual one.

@@ -1,5 +1,10 @@
-/*! \file benchmark.hpp
-    \brief
+/*! \class Benchmark
+    \brief This class provides the utilities to benchmark Fast Marching Solvers (configuration, running and logging).
+    It works for FMM (any heap and SFMM), FIM and UFMM. It has not been tested
+    with FM2 solvers.
+    
+    By default, it will save a log file in a generated folder called results.
+    
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
@@ -44,52 +49,62 @@ class Benchmark {
             clear();
         }
 
+        /** \brief Set true if the benchmark is configured from a cfg file. */
         void fromCFG
         (bool cfg) {
             fromCFG_ = cfg;
         }
 
+        /** \brief Adds a new solver to be benchmarked. */
         void addSolver
         (Solver<grid_t>* solver) {
             solvers_.push_back(solver);
         }
 
+        /** \brief Sets the saveGrid_ flag. */
         void setSaveGrid
         (bool s) {
             saveGrid_ = s;
         }
 
+        /** \brief  Sets the environment (grid map) the benchmark will be run on. */
         void setEnvironment
         (grid_t* grid) {
             grid_ = grid;
         }
 
+        /** \brief  Set number of runs for each solver. */
         void setNRuns
         (unsigned int n) {
             nruns_ = n;
         }
 
+        /** \brief  Set the path where results will be saved. */
         void setPath
         (const boost::filesystem::path & path) {
             path_ = path;
         }
 
+        /** \brief Sets the flag to save the log to a file (true) or output in terminal (false). */
         void setSaveLog
         (bool s) {
             saveLog_ = s;
         }
 
+        /** \brief Sets the initial and goal points (indices) for the solvers. */
         void setInitialAndGoalPoints
         (const std::vector<unsigned int> & init_points, unsigned int goal_idx) {
             init_points_ = init_points;
             goal_idx_ = goal_idx;
         }
 
+        /** \brief Sets the initial points (indices for the solvers). */
         void setInitialPoints(const std::vector<unsigned int> & init_points)
         {
             setInitialAndGoalPoints(init_points, -1);
         }
 
+        /** \brief Automatically runs all the solvers. */
         void run
         () {
             if (saveGrid_)
@@ -112,7 +127,7 @@ class Benchmark {
                 {
                     ++runID_;
                     s->compute();
-                    logRun(s, s->getTime());
+                    logRun(s);
 
                     if (saveGrid_)
                         saveGrid(s);
@@ -132,8 +147,9 @@ class Benchmark {
             }
         }
 
+        /** \brief  Logs the last run of solver s. */
         void logRun
-        (const Solver<grid_t>* s, const double& time)
+        (const Solver<grid_t>* s)
         {
             std::ios init(NULL);
             init.copyfmt(std::cout);
@@ -141,9 +157,10 @@ class Benchmark {
             log_ << '\n' << fmtID_;
 
             std::cout.copyfmt(init);
-            log_ << '\t' << s->getName() << "\t" << time;
+            log_ << '\t' << s->getName() << "\t" << s->getTime();
         }
 
+        /** \brief Saves the grid values result of the last run of solver s. */
         void saveGrid
         (Solver<grid_t>* s) const {
             thread_local boost::filesystem::path filename;
@@ -152,6 +169,7 @@ class Benchmark {
             GridWriter::saveGridValues(filename.string().c_str(), *(s->getGrid()));
         }
 
+        /** \brief Saves the log to a file: benchmark_name.log */
         void saveLog
         () const {
             std::ofstream ofs (path_.string() + "/" + name_ + ".log");
@@ -159,12 +177,14 @@ class Benchmark {
             ofs.close();
         }
 
+        /** \brief Sets the name of the benchmark. */
         void setName
         (const std::string & n)
         {
             name_ = n;
         }
 
+        /** \brief Clears and free memory allocated by the benchmark. */
         void clear
         () {
             for (auto & s : solvers_)
@@ -177,6 +197,7 @@ class Benchmark {
         }
 
     private:
+        /** \brief Logs the benchmark configuration. */
         void logConfig
         () {
             log_ << name_ << '\t' << nruns_ << '\t' << grid_->getNDims()
@@ -192,6 +213,7 @@ class Benchmark {
                 log_ << goal_idx_;
         }
 
+        /** \brief Configures each solver so they are ready to be run. */
         void configSolvers
         () {
             for (Solver<grid_t>* s :solvers_)
@@ -201,6 +223,7 @@ class Benchmark {
             }
         }
 
+        /** \brief Formats as a string the run ID. */
         void formatID
         () {
             thread_local std::ostringstream oss; // To optimize a bit.
@@ -210,33 +233,47 @@ class Benchmark {
             fmtID_ = oss.str();
         }
 
-        double getMilliSeconds
-        (const std::chrono::time_point<std::chrono::system_clock>& s,
-         const std::chrono::time_point<std::chrono::system_clock>& e) const {
-            return std::chrono::duration_cast<std::chrono::milliseconds>(e-s).count();
-        }
+        /** \brief Stores the solvers to be run in the benchmark. */
+        std::vector<Solver<grid_t>*>                        solvers_;
+        
+        /** \brief Grid the benchmark will be run on. */
+        grid_t *                                            grid_;
 
-        std::vector<Solver<grid_t>*> solvers_;
-        grid_t * grid_;
+        /** \brief Indices of the initial points. */
+        std::vector<unsigned int>                           init_points_;
+        
+        /** \brief Index of the goal point. */
+        unsigned int                                        goal_idx_;
 
-        std::vector<unsigned int> init_points_;  /*!< Initial points. */
-        unsigned int goal_idx_;   /*!< Index of goal point. */
+        /** \brief Time measurement variables. */        
+        std::chrono::time_point<std::chrono::system_clock>  start_, end_;
 
-        std::chrono::time_point<std::chrono::system_clock> start_, end_; /*!< Time measuring variables. */
+        /** \brief Log stream. */
+        std::stringstream                                   log_;
 
-        std::stringstream log_;
+        /** \brief If true, the grids are saved to files. */
+        bool                                                saveGrid_;
+        
+        /** \brief  If true, the log is saved to file. Output on terminal otherwise. */
+        bool                                                saveLog_;
 
-        bool saveGrid_;
-        bool saveLog_;
+        /** \brief ID of the current run. */
+        unsigned int                                        runID_;
+        
+        /** \brief Formatted run ID: */
+        std::string                                         fmtID_;
+        
+        /** \brief Number of runs for each solver. */
+        unsigned int                                        nruns_;
 
-        unsigned int runID_;
-        std::string fmtID_;
-        unsigned int nruns_;
+        /** \brief Path were the results will be saved. */
+        boost::filesystem::path                             path_;
+        
+        /** \brief Benchmark name. */
+        std::string                                         name_;
 
-        boost::filesystem::path path_;
-        std::string name_;
-
-        bool fromCFG_; /*!< Benchmark configured from CFG file, used to selectively free memory. */
+        /** \brief If true, benchmark configured from CFG file, used to selectively free memory. */
+        bool                                                fromCFG_;
 };
 
 #endif /* BENCHMARK_HPP_*/
