@@ -1,4 +1,4 @@
-/* Benchmarks FMM methods. Compare this code with test_fmm.cpp */
+/* Configure a FMM Benchmark from code. Compare this code with test_fmm.cpp */
 
 #include <iostream>
 #include <array>
@@ -54,7 +54,7 @@ int main()
 
     // Adding solvers.
     benchmark.addSolver(new FMM<FMGrid2D>);
-    /*benchmark.addSolver(new FMMStar<FMGrid2D>);
+    benchmark.addSolver(new FMMStar<FMGrid2D>);
     benchmark.addSolver(new FMMStar<FMGrid2D>("FMM*_Dist", DISTANCE));
     benchmark.addSolver(new FMM<FMGrid2D, FMFibHeap<FMCell> >("FMFib"));
     benchmark.addSolver(new FMMStar<FMGrid2D, FMFibHeap<FMCell> >("FMM*Fib"));
@@ -65,7 +65,7 @@ int main()
     benchmark.addSolver(new GMM<FMGrid2D>);
     benchmark.addSolver(new FIM<FMGrid2D>("FIM"));
     benchmark.addSolver(new UFMM<FMGrid2D>("UFMM"));
-*/
+
     // Run benchmark
     benchmark.run();
 

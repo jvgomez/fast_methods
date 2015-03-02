@@ -1,11 +1,9 @@
-/*! \file solver.hpp
-    \brief Templated class which computes the basic Fast Marching Method (FMM).
+/*! \class Solver
+    \brief Abstract class that serves as interface for the actual solvers implemented.
+    It requires (at least) the computeInternal method to be implemented,
 
     It uses as a main container the nDGridMap class. The nDGridMap template paramenter
     has to be an FMCell or something inherited from it.
-
-    The type of the heap introduced is very important for the behaviour of the
-    algorithm. The following heaps are provided:
 
     Copyright (C) 2014 Javier V. Gomez
     www.javiervgomez.com
@@ -19,7 +17,8 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
     GNU General Public License for more details.
     You should have received a copy of the GNU General Public License
-    along with this program. If not, see <http://www.gnu.org/licenses/>. */
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+*/
 
 #ifndef SOLVER_H_
 #define SOLVER_H_
@@ -139,7 +138,7 @@ class Solver {
         T* as
         () {
             // OMPL-inspired function.
-            /** \brief Make sure the type we are casting to is a solver */
+            /* Make sure the type we are casting to is a solver */
             BOOST_CONCEPT_ASSERT((boost::Convertible<T*, Solver*>));
             return static_cast<T*>(this);
         }
@@ -149,7 +148,7 @@ class Solver {
         const T* as
         () const {
             // OMPL-inspired function.
-            /** \brief Make sure the type we are casting to is a solver */
+            /* Make sure the type we are casting to is a solver */
             BOOST_CONCEPT_ASSERT((boost::Convertible<T*, Solver*>));
             return static_cast<const T*>(this);
         }
@@ -208,17 +207,26 @@ class Solver {
             return 0;
         }
 
-        grid_t* grid_; /*!< Grid container. */
+        /** \brief Grid container. */
+        grid_t*                     grid_;
 
-        std::string name_; /*!< Solver name. */
-        bool setup_; /*!< Setup status. */
+        /** \brief Solver name. */
+        std::string                 name_;
 
-        std::vector<unsigned int> init_points_;  /*!< Initial index. */
-        unsigned int goal_idx_; /*!< Goal index. */
+        /** \brief Setup status. */
+        bool                        setup_;
 
-        std::chrono::time_point<std::chrono::steady_clock> start_;
-        std::chrono::time_point<std::chrono::steady_clock> end_;
-        double time_;
+        /** \brief Initial index. */
+        std::vector<unsigned int>   init_points_;
+
+        /** \brief Goal index. */
+        unsigned int                goal_idx_;
+
+        /** \brief Time measurement variables. */
+        std::chrono::time_point<std::chrono::steady_clock> start_, end_;
+
+        /** \brief Time elapsed by the compute method. */
+        double                      time_;
 };
 
 #endif /* SOLVER_H_*/

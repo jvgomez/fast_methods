@@ -1,27 +1,24 @@
-/*! \file maploader.hpp
-    \brief Auxiliar class which helps to load maps into nDGridMap
+/*! \class MapLoader
+    \brief Auxiliar static class which helps to load maps into nDGridMap.
     
     It is based on the CImg library, therefore it has to be accessible.
     Copyright (C) 2014 Javier V. Gomez
     www.javiervgomez.com
 
-	This program is free software: you can redistribute it and/or modify
-	it under the terms of the GNU General Public License as published by
-	the Free Software Foundation, either version 3 of the License, or
-	(at your option) any later version.
-	This program is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-	GNU General Public License for more details.
-	You should have received a copy of the GNU General Public License
-	along with this program. If not, see <http://www.gnu.org/licenses/>.
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+    GNU General Public License for more details.
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
-
-
 
 #ifndef MAPLOADER_H_
 #define MAPLOADER_H_
-
 
 #include "../ndgridmap/ndgridmap.hpp"
 
@@ -29,29 +26,25 @@
 
 using namespace cimg_library;
 
-// TODO: include checks which ensure that the grids are adecuate for the functions used.
-// TODO: when loading an empty grid, cells are not correctly initialized.
-//       Although it works properly, values are not set to Inf (that is why we have Nan values in obstacles.)
+/// \todo Include checks which ensure that the grids are adequate for the functions used.
+/// \todo When loading an empty grid, cells are not correctly initialized. Although it works properly, values are not set to Inf (that is why we have Nan values in obstacles.)
 
 class MapLoader {
     public:
-        /**
-         * Loads the initial binary map for a given grid. It is based on the
-         * nDGridMap::setOccupancy() which has to be bool valued.
-         *
-         * The image should be monochromatic and only 2D grids!
-         *
-         * In also stores all the false values to as initial points for a later compute() function.
-         *
-         * The Y dimension flipping is because nDGridMap works in X-Y coordinates, not in image indices as CImg.
-         *
-         * IMPORTANT NOTE: no type-checkings are done. T type has to be Cell or any class with bool setOccupancy() method.
-         *
-         * @param filename file to be open
-         * @param grid 2D nDGridmap
-         * @param init_points stores the indices of all the values which are false.
-         *
-         */
+        /** \brief Loads the initial binary map for a given grid. It is based on the
+            nDGridMap::setOccupancy() which has to be bool valued.
+
+            The image should be monochromatic and only 2D grids should be passed.
+
+            It also stores all the false values as initial points for a later compute() function in FM2.
+
+            The Y dimension flipping is because nDGridMap works in X-Y coordinates, not in image indices as CImg.
+
+            IMPORTANT NOTE: no type-checkings are done. T type has to be Cell or any class with bool setOccupancy() method.
+
+            @param filename file to be open
+            @param grid 2D nDGridmap
+            @param init_points stores the indices of all the values which are false. */
         template<class T, size_t ndims>
         static void loadMapFromImg
         (const char * filename, nDGridMap<T, ndims> & grid) {
@@ -73,26 +66,23 @@ class MapLoader {
             grid.setOccupiedCells(obs);
         }
 
-        /**
-         * Loads the initial binary map for a given grid. It is based on the
-         * nDGridMap::setOccupancy() which has to be bool valued. This function has to be
-         * overloaded in another occupancy type is being used.
-         *
-         * The image should be monochromatic!
-         *
-         * In also stores all the false values to as initial points for a later computeFM function.
-         *
-         * Should be used only in 2D grids.
-         *
-         * The Y dimension flipping is because nDGridMap works in X-Y coordinates, not in image indices as CImg.
-         *
-         * IMPORTANT NOTE: no type-checkings are done. T type has to be Cell or any class with bool setOccupancy() method.
-         *
-         * @param filename text file to be open
-         * @param grid 2D nDGridmap
-         * @param init_points stores the indices of all the values which are false.
-         *
-         */
+        /** \brief Loads the initial binary map for a given grid. It is based on the
+            nDGridMap::setOccupancy() which has to be bool valued. This function has to be
+            overloaded in another occupancy type is being used.
+
+            The image should be monochromatic!
+
+            In also stores all the false values to as initial points for a later computeFM function in FM2.
+
+            Should be used only in 2D grids.
+
+            The Y dimension flipping is because nDGridMap works in X-Y coordinates, not in image indices as CImg.
+
+            IMPORTANT NOTE: no type-checkings are done. T type has to be Cell or any class with bool setOccupancy() method.
+
+            @param filename text file to be open
+            @param grid 2D nDGridmap
+            @param init_points stores the indices of all the values which are false. */
         template<class T, size_t ndims>
         static int loadMapFromText
         (const char * filename, nDGridMap<T, ndims> & grid) {

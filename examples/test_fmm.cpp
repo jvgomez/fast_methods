@@ -76,7 +76,7 @@ int main()
         std::cout << "Solver NOT type SFMM" <<'\n';
 
     // Solver::as member function.
-    // solvers[6]->setHeuristics(true) would not compile.
+    // solvers[6]->setHeuristics(true) would not compile since there is not a Solver::setHeuristics
     solvers[6]->as< FMM<FMGrid2D, FMPriorityQueue<FMCell>> >()->setHeuristics(HeurStrategy::DISTANCE);
     std::cout << solvers[6]->as< FMM<FMGrid2D, FMPriorityQueue<FMCell>> >()->getHeuristics() << '\n';
 

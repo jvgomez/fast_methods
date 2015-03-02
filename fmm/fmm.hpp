@@ -1,5 +1,5 @@
-/*! \file FMM.hpp
-    \brief Templated class which computes the basic Fast Marching Method (FMM).
+/*! \class FMM
+    \brief Implements the Fast Marching Method (FMM).
 
     It uses as a main container the nDGridMap class. The nDGridMap type T
     has to be an FMCell or something inherited from it.
@@ -15,7 +15,7 @@
     - FMFibHeap wrap for the Boost Fibonacci heap.
     - FMPriorityQueue wrap to the std::PriorityQueue class. This heap implies the implementation
     * of the Simplified FMM (SFMM) method, done automatically because of the FMPriorityQueue::increase implementation.
-    *
+
     @par External documentation:
         FMM:
           A. Valero, J.V. Gómez, S. Garrido and L. Moreno, The Path to Efficiency: Fast Marching Method for Safer, More Efficient Mobile Robot Trajectories, IEEE Robotics and Automation Magazine, Vol. 20, No. 4, 2013. DOI: <a href="http://dx.doi.org/10.1109/MRA.2013.2248309">10.1109/MRA.2013.2248309></a><br>
@@ -38,7 +38,7 @@
     GNU General Public License for more details.
     You should have received a copy of the GNU General Public License
     along with this program. If not, see <http://www.gnu.org/licenses/>.
-    */
+*/
 
 #ifndef FMM_HPP_
 #define FMM_HPP_
@@ -58,18 +58,20 @@
 #include "../ndgridmap/ndgridmap.hpp"
 #include "../console/console.h"
 
+/** \brief An user-implements abs for integer values. */
 unsigned int absUI
 (int a) {
     return (a>0) ? (a) : (-a);
 }
 
+/** \brief HEuristic strategy to be used. TIME = DISTANCE/local velocity. */
 enum HeurStrategy {NOHEUR = 0, TIME, DISTANCE};
 
 template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FMM : public Solver<grid_t> {
 
     public:
         FMM(HeurStrategy h = NOHEUR) : Solver<grid_t>("FMM"), heurStrategy_(h), precomputed_(false) {
-            // TODO: try to automate this.
+            /// \todo automate the naming depending on the heap.
             //if (static_cast<FMFibHeap>(heap_t))
              //   name_ = "FMMFib";
         }
@@ -78,7 +80,7 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FMM : public
 
         virtual ~FMM() { clear(); }
 
-        /** Executes Solver setup and sets maximum size for the narrow band. */
+        /** \brief Executes Solver setup and sets maximum size for the narrow band. */
         virtual void setup
         () {
             Solver<grid_t>::setup();
@@ -129,6 +131,7 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FMM : public
             return updatedT;
         }
 
+        /** \brief Actual method that implements FMM. */
         virtual void computeInternal
         () {
             if (!setup_)
@@ -176,7 +179,7 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FMM : public
             } // while narrow band not empty
         }
 
-        /** Set heuristics flag. True is activated. It will precompute distances
+        /** \brief Set heuristics flag. True is activated. It will precompute distances
             if not done already. */
         void setHeuristics
         (HeurStrategy h) {
@@ -207,7 +210,7 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FMM : public
             narrow_band_.clear();
         }
 
-        /** Computes euclidean distance between goal and rest of cells. */
+        /** \brief Computes euclidean distance between goal and rest of cells. */
         virtual void precomputeDistances
         () {
             distances_.reserve(grid_->size());
@@ -227,7 +230,7 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FMM : public
             precomputed_ = true;
         }
 
-        /** Extract the euclidean distance calculated from precomputeDistances
+        /** \brief Extracts the euclidean distance calculated from precomputeDistances
             function distance between two positions. */
         virtual double getPrecomputedDistance
         (const unsigned int idx) {
@@ -243,6 +246,7 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FMM : public
             return distances_[idx_dist];
         }
 
+    /// \todo These accessing levels may need to be modified (and other solvers).
     protected:
         using Solver<grid_t>::grid_;
         using Solver<grid_t>::init_points_;
@@ -250,21 +254,36 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FMM : public
         using Solver<grid_t>::setup_;
         using Solver<grid_t>::name_;
 
-        std::array <unsigned int, 2*grid_t::getNDims()> neighbors; /*!< Auxiliar array which stores the neighbor of each iteration of the computeFM() function. */
+        /** \brief Auxiliar array which stores the neighbor of each iteration of the computeFM() function. */
+        std::array <unsigned int, 2*grid_t::getNDims()> neighbors;
 
     private:
-        double sumT; /*!< Auxiliar value wich computes T1+T2+T3... Useful for generalizing the Eikonal solver. */
-        double sumTT; /*!< Auxiliar value wich computes T1^2+T2^2+T3^2... Useful for generalizing the Eikonal solver. */
+        /** \brief Auxiliar value wich computes T1+T2+T3... Useful for generalizing the Eikonal solver. */
+        double                                          sumT;
 
-        std::array<double, grid_t::getNDims()> Tvalues;  /*!< Auxiliar array with values T0,T1...Tn-1 variables in the Discretized Eikonal Equation. */
-        std::array<double, grid_t::getNDims()> TTvalues;  /*!< Auxiliar array with values T0^2,T1^2...Tn-1^2 variables in the Discretized Eikonal Equation. */
+        /** \brief Auxiliar value wich computes T1^2+T2^2+T3^2... Useful for generalizing the Eikonal solver. */
+        double                                          sumTT;
 
-        heap_t narrow_band_; /*!< Instance of the heap used. */
+        /** \brief Auxiliar array with values T0,T1...Tn-1 variables in the Discretized Eikonal Equation. */
+        std::array<double, grid_t::getNDims()>          Tvalues;
 
-        HeurStrategy heurStrategy_;/*!< Flag to activate heuristics and corresponding strategy. */
-        std::vector<double> distances_;  /*!< Stores the precomputed heuristic distances. */
-        bool precomputed_;  /*!< Flag to indicate if distances_ is already computed. */
-        std::array <unsigned int, grid_t::getNDims()> heur_coord_; /*!< Goal coord, goal of the second wave propagation (actually the initial point of the path). */
+        /** \brief Auxiliar array with values T0^2,T1^2...Tn-1^2 variables in the Discretized Eikonal Equation. */
+        std::array<double, grid_t::getNDims()>          TTvalues;
+
+        /** \brief Instance of the heap used. */
+        heap_t                                          narrow_band_;
+
+        /** \brief Flag to activate heuristics and corresponding strategy. */
+        HeurStrategy                                    heurStrategy_;
+
+        /** \brief Stores the precomputed heuristic distances. */
+        std::vector<double>                             distances_;
+        
+        /** \brief Flag to indicate if distances_ is already computed. */
+        bool                                            precomputed_;
+
+        /** \brief Goal coord, goal of the second wave propagation (actually the initial point of the path). */
+        std::array <unsigned int, grid_t::getNDims()>   heur_coord_;
 };
 
 #endif /* FMM_HPP_*/

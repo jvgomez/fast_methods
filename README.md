@@ -37,15 +37,14 @@ endher/fm2
 
 ## DISCLAIMER and IMPORTANT NOTES
 
-License GNU/GPL V3: http://www.gnu.org/copyleft/gpl.html
+- The code is not deeply tested. I've just tested it works for the cases I need. If you find any problem, have any question (or whatever), please write to: javvgomez _at_ gmail.com
 
-When using in 2D it works really fine. However, some problems appear for higher dimensions. I am working on that already.
+- The compilation time is highly increased due to CImg library. Please, omit it when possible.
 
-This is a source code intended for my research. Although I want it to be useful for other people it is not intended to act as a library (there are many many points to improve). However, if you show interest or have feature request do not hesitate to contact me and I will try my best to improve the code for whoever needs it. I am also open to contributions and to create a formal library if necessary.
+- License GNU/GPL V3: http://www.gnu.org/copyleft/gpl.html
 
-Because of this, the code is not deeply tested. I've just tested it works for the cases I need.
+- This is a source code intended for my research. Although I want it to be useful for other people it is not intended to act as a library (there are many many points to improve). However, if you show interest or have feature request do not hesitate to contact me and I will try my best to improve the code for whoever needs it. I am also open to contributions and to create a formal library if necessary.
 
-The compilation time is highly increased due to CImg library. Please, omit it when possible.
 
 ## Dependencies:
 
@@ -100,7 +99,7 @@ Although there are a lot of folders, they are quite simple. It is organized this
 + gradientdescent: under development.
 + io: input/output helper classes.
 + ndgridmap: main container.
-+ scripts: matlab scripts to parse outputs.
++ scripts: matlab scripts to parse outputs and automatic benchmarking bash script.
 + thirdparty: others' software included.
 
 ## KNOWN ISSUES

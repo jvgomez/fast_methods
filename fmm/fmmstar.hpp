@@ -1,5 +1,5 @@
-/*! \file FMMSTAR.hpp
-    \brief Templated class which computes the basic Fast Marching Method (FMMStar).
+/*! \class FMMStar
+    \brief Encapsulates the calls to FMM with heuristics enabled.
 
     It uses as a main container the nDGridMap class. The nDGridMap type T
     has to be an FMCell or something inherited from it.
@@ -38,7 +38,7 @@
     GNU General Public License for more details.
     You should have received a copy of the GNU General Public License
     along with this program. If not, see <http://www.gnu.org/licenses/>.
-    */
+*/
 
 #ifndef FMMStar_HPP_
 #define FMMStar_HPP_
@@ -58,15 +58,14 @@
 #include "../ndgridmap/ndgridmap.hpp"
 #include "../console/console.h"
 
-
-
 template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FMMStar : public FMM<grid_t, heap_t> {
 
+    /** \brief Shorthand for base solver. */
     typedef FMM<grid_t, heap_t> FMMBase;
 
     public:
         FMMStar(HeurStrategy h = TIME) : FMMBase("FMM*", h) {
-            // TODO: try to automate this.
+            /// \todo automate the naming depending on the heap.
             //if (static_cast<FMFibHeap>(heap_t))
              //   name_ = "FMMStarFib";
         }

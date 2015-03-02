@@ -56,7 +56,7 @@ int main(int argc, const char ** argv)
         // For FM2 and its variations, it is better to completely reinitialize the grid.
         //if(!MapLoader::loadMapFromText(filename.c_str(), grid_fm2)) // Loading from text file.
             //exit(1);
-        MapLoader::loadMapFromImg(filename.c_str(), grid_fm2);
+        MapLoader::loadMapFromImg(filename.c_str(), grid_fm2); // Loading from image.
         s->setEnvironment(&grid_fm2);
         s->setInitialAndGoalPoints({30, 20}, {375, 280}); // Init and goal points directly set.
         s->compute();

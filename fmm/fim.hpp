@@ -1,16 +1,15 @@
-/*! \file fim.hpp
-    \brief Templated class which computes the basic Fast Iterative Method.
+/*! \class FIM
+    \brief Implements Fast Iterative Method.
     
     It uses as a main container the nDGridMap class. The nDGridMap type T
-    has to be an FMCell or something inherited from it.
-    
-    The leafsize of the grid map is ignored since it has to be >=1 and that 
-    depends on the units employed.
-    
+    has to use an FMCell or derived
+
+    The grid is assumed to be squared, that is Delta(x) = Delta(y) = leafsize_
+
     @par External documentation:
         W. Jeong and R. Whitaker, A Fast Iterative Method for Eiknal Equations, SIAM J. Sci. Comput., 30(5), 2512–2534.
         <a href="http://epubs.siam.org/doi/abs/10.1137/060670298">[PDF]</a>
-    
+
     Copyright (C) 2014 Javier V. Gomez
     www.javiervgomez.com
 
@@ -39,11 +38,7 @@ template < class grid_t > class FIM : public FMM <grid_t> {
 
         virtual ~FIM() { clear(); }
 
-        /**
-         * Main Fast Iterative Method Function.
-         *
-         * @see setInitialPoints()
-         */
+        /** \brief Actual method that implements FIM. */
         virtual void computeInternal
         () {
             if (!setup_)
@@ -118,8 +113,11 @@ template < class grid_t > class FIM : public FMM <grid_t> {
         using FMM<grid_t>::setup_;
 
     private:
-        std::list<unsigned int> active_list_; /*!< List wich stores the narrow band of each iteration. */
-        double E_; /*!< Error threshold value that reveals if a cell has converged. */
+        /** \brief List wich stores the narrow band of each iteration. */
+        std::list<unsigned int> active_list_;
+        
+        /** \brief Error threshold value that reveals if a cell has converged. */
+        double E_;
 };
 
 #endif /* FIM_HPP_*/

@@ -1,5 +1,5 @@
-/*! \file gridpoints.hpp
-    \brief Auxiliar class which helps to select initial and goal points in a 2d grid.
+/*! \class GridPoints
+    \brief Auxiliar class which helps to select initial and goal points in a 2D grid.
     
     It is based on the CImg library, therefore it has to be accessible.
     Copyright (C) 2014 Javier V. Gomez and Jose Pardeiro
@@ -38,22 +38,17 @@ class GridPoints {
     typedef typename std::vector <Path2D> Paths2D;
 
     public:
-        /**
-         * Plots the initial binary map included in a given grid and extract coords of the
-         * initial and goal point. It is based on the nDGridMap::getOccupancy() which has to
-         * be bool valued. This function has to be overloaded in another occupancy type is being used.
-         * 
-         * Should be used only in 2D grids.
-         * 
-         *  The Y dimension flipping is because nDGridMap works in X-Y coordinates, not in image indices as CImg.
-         * 
-         * IMPORTANT NOTE: no type-checkings are done. T type has to be Cell or any class with bool getOccupancy() method.
-         * 
-         * @param grid 2D nDGridmap
-         * @param coords of the initial point.
-         * @param coords of the goal point.
-         * @param flipY true: flips the Y dimension. 0 does not flip.
-         */
+        /** \brief Plots the binary map of a given grid and allows the user to
+            select a couple of points (start and goal coordinates).
+
+            It is based on the nDGridMap::getOccupancy(). This function has to be overloaded 
+            in another occupancy type is being used.
+
+            Should be used only in 2D grids.
+
+            The Y dimension flipping is because nDGridMap works in X-Y coordinates, not in image indices as CImg.
+
+           IMPORTANT NOTE: no type-checkings are done. T type has to be Cell or any class with bool getOccupancy() method. */
         template<class T, size_t ndims> 
         static void selectMapPoints
         (nDGridMap<T, ndims> & grid, std::array<unsigned int,ndims> & coords_init, std::array<unsigned int,ndims> & coords_goal, const bool flipY = 1) {
@@ -84,7 +79,7 @@ class GridPoints {
             coords_init = {x,y};
 
             // Detect second click of the mouse
-                        x=0;
+            x=0;
             while (x == 0) {
                  main_disp.wait();
                  if (main_disp.button() && main_disp.mouse_y()>=0) {

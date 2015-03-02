@@ -1,8 +1,9 @@
-/*! \file fm2.hpp
-    \brief Templated class which computes the Fast Marching Square (FM2).
+/*! \class FM2
+    \brief Implements the Fast Marching Square (FM2) planning algorithm.
 
     It uses as a main container the nDGridMap class. The nDGridMap template parameter
-    has to be an FMCell or something inherited from it.
+    has to be an FMCell or something inherited from it. It also uses a heap type in order
+    to specify the underlying FMM.
 
     IMPORTANT NOTE: When running FM2 many times on the same grid it is recommended
     to completely restart the grid (erase and create or resize). See test_fm2.cpp.
@@ -25,7 +26,8 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
     GNU General Public License for more details.
     You should have received a copy of the GNU General Public License
-    along with this program. If not, see <http://www.gnu.org/licenses/>. */
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+*/
 
 #ifndef FM2_HPP_
 #define FM2_HPP_
@@ -41,20 +43,22 @@
 #include "../fmm/fmm.hpp"
 #include "../gradientdescent/gradientdescent.hpp"
 
-// TODO: include support to other solvers (GMM, FIM, UFMM). It requires a better way of setting parameters.
+/// \todo Include support to other solvers (GMM, FIM, UFMM). It requires a better way of setting parameters.
 //template < class grid_t, class solver_t = FMM<grid_t> > class FM2 : public Solver<grid_t> {
 
 template < class grid_t, class heap_t = FMDaryHeap<FMCell> > class FM2 : public Solver<grid_t> {
     public:
+    
+        /** \brief Path type encapsulation. */
         typedef std::vector< std::array<double, grid_t::getNDims()> > path_t;
 
-        /** maxDistance sets the velocities map saturation distance in real units (before normalization). */
+        /** \brief maxDistance sets the velocities map saturation distance in real units (before normalization). */
         FM2
         (double maxDistance = -1) : Solver<grid_t>("FM2"), maxDistance_(maxDistance) {
             solver_ = new FMM<grid_t, heap_t> ();
         }
 
-        /** maxDistance sets the velocities map saturation distance in real units (before normalization). */
+        /** \brief maxDistance sets the velocities map saturation distance in real units (before normalization). */
         FM2
         (const char * name, double maxDistance = -1) : Solver<grid_t>(name), maxDistance_(maxDistance) {
             solver_ = new FMM<grid_t, heap_t> ();
@@ -62,6 +66,7 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> > class FM2 : public 
 
         virtual ~FM2 () { clear(); }
 
+        /** \brief Sets the environment to run the solver and sets the sources for the velocities map computation. */
         virtual void setEnvironment
         (grid_t * g) {
             Solver<grid_t>::setEnvironment(g);
@@ -69,6 +74,7 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> > class FM2 : public 
             solver_->setEnvironment(grid_);
         }
 
+        /** \brief Sets up the solver to check whether is ready to run. */
         virtual void setup
         () {
             Solver<grid_t>::setup();
@@ -84,6 +90,7 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> > class FM2 : public 
             }
         }
 
+        /** \brief Implements the actual FM2 method. */
         virtual void computeInternal
         () {
             if (!setup_)
@@ -105,8 +112,8 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> > class FM2 : public 
             grid_->setClean(false);
         }
 
-        /** Computes the velocities map of the FM2 algorithm. If  maxDistance_ != -1 then the map is saturated
-            to the set value. It is then normalized: velolocities in [0,1]. */
+        /** \brief Computes the velocities map of the FM2 algorithm. If  maxDistance_ != -1 then the map is saturated
+            to the set value. It is then normalized: velocities in [0,1]. */
         void computeVelocitiesMap
         () {
             // Forces not to clean the grid.
@@ -142,7 +149,9 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> > class FM2 : public 
             time_vels_ += std::chrono::duration_cast<std::chrono::milliseconds>(end_-start_).count();
         }
 
-        /** Computes the path from the given goal index to the minimum
+        /** \brief Encapsulates the path extraction.
+
+            Computes the path from the given goal index to the minimum
             of the times of arrival map. No checks are done (points in the borders, points in obstacles...).
             @param p path the resulting path (output).
             @param path_velocity velocity the resulting path (output).
@@ -169,7 +178,7 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> > class FM2 : public 
             solver_->reset();
         }
 
-        /** @return Velocities map computation time */
+        /** \brief Returns velocities map computation time. */
         virtual double getTimeVelocities
         () const {
             return time_vels_;
@@ -184,11 +193,17 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> > class FM2 : public 
         using Solver<grid_t>::start_;
         using Solver<grid_t>::end_;
 
-        std::vector<unsigned int> fm2_sources_; /*!< Wave propagation sources for the Fast Marching Square. */
-        FMM<grid_t, heap_t> * solver_; /*!< Underlying FMM-based solver. */
-        double maxDistance_; /*!< Distance value to saturate the first potential. */
+        /** \brief Wave propagation sources for the Fast Marching Square velocities map computation.*/
+        std::vector<unsigned int>   fm2_sources_;
+        
+        /** \brief Underlying FMM-based solver. */
+        FMM<grid_t, heap_t> *       solver_;
+        
+        /** \brief Distance value to saturate the first potential. */
+        double                      maxDistance_;
 
-        double time_vels_; /*!< Time elapsed in the velocities map computation. */
+        /** \brief Time elapsed in the velocities map computation. */
+        double                      time_vels_;
 };
 
 #endif /* FM2_H_*/

@@ -1,12 +1,11 @@
-/*! \file UFMM.hpp
+/*! \class UFMM
     \brief Fast Marching Method using a untidy priority queue (UFMM).
     
     It uses as a main container the nDGridMap class. The nDGridMap type T
     has to be an FMUntidyCell or something inherited from it.
-    
-    The leafsize of the grid map is ignored since it has to be >=1 and that 
-    depends on the units employed.
-    
+
+    The grid is assumed to be squared, that is Delta(x) = Delta(y) = leafsize_
+
     @par External documentation:
         L. Yatziv, A.Bartesaghi and G. Sapiro, O(n) implementation of the fast marching algorithm, Journal of Computational Physics 
         <a href="http://www.sciencedirect.com/science/article/pii/S0021999105003736">[PDF]</a>
@@ -14,16 +13,16 @@
     Copyright (C) 2014 Javier V. Gomez
     www.javiervgomez.com
 
-	This program is free software: you can redistribute it and/or modify
-	it under the terms of the GNU General Public License as published by
-	the Free Software Foundation, either version 3 of the License, or
-	(at your option) any later version.
-	This program is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-	GNU General Public License for more details.
-	You should have received a copy of the GNU General Public License
-	along with this program. If not, see <http://www.gnu.org/licenses/>.
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+    GNU General Public License for more details.
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
 #ifndef UFMM_HPP_
@@ -46,11 +45,7 @@ template <class grid_t, class cell_t = FMCell> class UFMM : public FMM <grid_t> 
 
         virtual ~UFMM() { clear(); }
 
-        /**
-         * Main Untidy Fast Marching Function. It requires to call first the setInitialPoints() function inherited from Fast Marching.
-         *
-         * @see setInitialPoints()
-         */
+        /** \brief Actual method that implements UFMM. */
         virtual void computeInternal
         () {
             if (!setup_)
@@ -117,9 +112,14 @@ template <class grid_t, class cell_t = FMCell> class UFMM : public FMM <grid_t> 
         using FMM<grid_t>::setup_;
 
     private:
-        unsigned heap_s_;
-        double heap_inc_;
-        FMUntidyQueue<cell_t> * narrow_band_; /*!< Instance of the priority queue used. */
+        /** \brief Number of buckets in the heap. */
+        unsigned                heap_s_;
+
+        /** \brief Size (maximum increment) of each bucket. */
+        double                  heap_inc_;
+
+        /** \brief Heap Instance of the priority queue used. */
+        FMUntidyQueue<cell_t> * narrow_band_;
 };
 
 #endif /* UFMM_HPP_*/

@@ -1,3 +1,22 @@
+/*! \class GradientDescent
+    \brief Implements gradient descent to be used together with nDGridMap
+    and FMCell or derived types.
+   
+    Copyright (C) 2014 Javier V. Gomez
+    www.javiervgomez.com
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+    GNU General Public License for more details.
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+*/
+
 #ifndef GRADIENTDESCENT_H_
 #define GRADIENTDESCENT_H_
 
@@ -11,8 +30,9 @@
 #include "../ndgridmap/ndgridmap.hpp"
 #include "../fmm/fmdata/fmcell.h"
 
-// TODO: check if points fall in obstacles, points in the borders, etc.
+/// \todo Check if points fall in obstacles, points in the borders, etc.
 
+/** \brief User-implemented and templated sign function. */
 template <typename T>
 T sgn(T val) {
     return (T(0) < val) - (val < T(0));
@@ -20,13 +40,20 @@ T sgn(T val) {
 
 template <class grid_t> class GradientDescent {
 
+    /** \brief Shorthand for number of dimensions. */
     static constexpr size_t ndims_ = grid_t::getNDims();
+
+    /** \brief Shorthand for coordinates. */
     typedef typename std::array<unsigned int, ndims_> Coord;
+
+    /** \brief Shorhand for real points. */
     typedef typename std::array<double, ndims_> Point;
+
+    /** \brief Shorthand for path type of real points. */
     typedef typename std::vector <Point> Path;
 
     public:
-       /** Computes the path over grid from idx to a minimum and extracts the velocity in every point.
+       /** \brief Computes the path over grid from idx to a minimum and extracts the velocity in every point.
 
            Simple gradient approximation is used: dimension 0: gx = f((x-1,y)+f(x+1,y))/2
            dimension 1: gy = f((x,y-1)+f(x,y+1))/2

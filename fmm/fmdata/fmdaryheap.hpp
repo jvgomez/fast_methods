@@ -1,5 +1,6 @@
-/*! \file fmfibheap.hpp
-    \brief Wrap for the Boost D-ary Heap class.
+/*! \class FMDaryHeap
+    \brief Wrap for the Boost D-ary Heap class to be used as a binary heap
+    in the FM algorithms. Ready to be used with FMCell and derived types.
     
     Copyright (C) 2014 Javier V. Gomez and Jose Pardeiro
     www.javiervgomez.com
@@ -21,51 +22,38 @@
 
 #include <boost/heap/d_ary_heap.hpp>
 
-#include "fmcell.h"
+#include "fmcompare.hpp"
 
-/**
- * This struct is used a comparator for the heap. Since a minimum-heap
- * is desired the operation checked is param1 > param2 as seen in this
- * [Stack Overflow post](http://stackoverflow.com/a/16706002/2283531)
- * */
-template <class cell_t> struct compare_cells_d_ary {
-    inline bool operator()
-    (const cell_t * c1 , const cell_t * c2) const {
-        return c1->getTotalValue() > c2->getTotalValue();
-    }
-};
-
-// ALTERNATIVE TODO: for memory efficiency, use map instead of vector for handles_.
+/// \note for memory efficiency, use map instead of vector for handles_.
 template <class cell_t = FMCell> class FMDaryHeap {
 
-    typedef boost::heap::d_ary_heap<const cell_t *, boost::heap::mutable_<true>, boost::heap::arity<2>, boost::heap::compare<compare_cells_d_ary<cell_t>> > d_ary_heap_t;
+    /** \brief Shorthand for heap type. */
+    typedef boost::heap::d_ary_heap<const cell_t *, boost::heap::mutable_<true>, boost::heap::arity<2>, boost::heap::compare<FMCompare<cell_t>> > d_ary_heap_t;
+    
+    /** \brief Shorthand for heap element handle type. */
     typedef typename d_ary_heap_t::handle_type handle_t;
 
     public:
         FMDaryHeap () {}
+        
+        /** \brief Creates a heap with n maximum elements. */
         FMDaryHeap (const size_t & n) { handles_.resize(n); }
+        
         virtual ~ FMDaryHeap() { clear(); }
         
-        /**
-         * Set the maximum number of cells the heap will contain.
-         * 
-         * @param maximum number of cells.
-         */
+        /** \brief Sets the maximum number of cells the heap will contain. */
         void setMaxSize
         (const size_t & n) {
             handles_.resize(n);
         }
         
+        /** \brief Pushes a new element into the heap. */
         void push
         (const cell_t * c) {
             handles_[c->getIndex()] = heap_.push(c);
         }
         
-        /**
-         * pops index of the element with lowest value and removes it from the heap.
-         * 
-         * @return index of the cell with lowest value.
-         */ 
+        /** \brief Pops index of the element with lowest value and removes it from the heap. */ 
         unsigned int popMinIdx
         () {
             const unsigned int idx = heap_.top()->getIndex();
@@ -73,52 +61,46 @@ template <class cell_t = FMCell> class FMDaryHeap {
             return idx;
         }
         
+        /** \brief Returns current size of the heap. */
         size_t size
         () const {
             return heap_.size();
         }
         
-        /**
-         * Updates the position of the cell in the heap. Its priority can increase or decrease.
-         * 
-         * @param c cell_t to be updated.
-         * 
-         * @see increase()
-         */
+        /** \brief Updates the position of the cell in the heap. Its priority can increase or decrease. */
         void update
         (const cell_t * c) {
             heap_.update(handles_[c->getIndex()], c);
         }
         
-        /**
-         * Updates the position of the cell in the heap. Its priority can only increase.
-         * It is more efficient than the update() function if it is ensured that the priority
-         * will increase.
-         * 
-         * @param c cell_t to be increased.
-         * 
-         * @see update()
-         */
+        /** \brief Updates the position of the cell in the heap. Its priority can only increase.
+            It is more efficient than the update() function if it is ensured that the priority
+            will increase. */
         void increase
         (const cell_t * c) {
-            heap_.increase(handles_[c->getIndex()],c);
+            heap_.increase(handles_[c->getIndex()], c);
         }
-            
+
+        /** \brief Deallocates heap memory. */
         void clear
         () {
             heap_.clear();
             handles_.clear();
         }
 
+        /** \brief Returns true if the heap is empty. */
         bool empty
         () const {
             return heap_.empty();
         }
 
     protected:
+        /** \brief The actual heap for cell_t. */
         d_ary_heap_t heap_;  /*!< The actual heap for cell_t. */
-        std::vector<handle_t> handles_;  /*!< Stores the handles of each cell by keeping the indices: handles_(0) is the handle for
-                                            the cell with index 0 in the grid. Makes possible to update the heap.*/
+        
+        /** \brief Stores the handles of each cell by keeping the indices: handles_(0) is the handle for
+             the cell with index 0 in the grid. Makes possible to update the heap.*/
+        std::vector<handle_t> handles_;
 };
 
 

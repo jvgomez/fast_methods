@@ -1,9 +1,8 @@
-/*! \file fmcell.h
-    \brief Header of the FMCell class
-
-    A stand-alone, standard C++ class which represents each one of the cells
-    of a gridmap and its typical members. Inherited from Cell class, in this
-    case the value_ member represents the distance value (or time of arrival).
+/*! \class FMCell
+    \brief A stand-alone, standard C++ class which represents each one of the cells
+    of a gridmap and its typical members when used together with Fast Marching Methods.
+    Inherited from Cell class, in this case the value_ member represents the distance value (or time of arrival)
+    and occupancy_ represents the propagation velocity. 
    
     IMPORTANT NOTE: no checks are done in the set functions.
     Copyright (C) 2014 Javier V. Gomez and Jose Pardeiro
@@ -33,23 +32,24 @@
 /** \brief Possible states of the FMCells*/
 enum class FMState {OPEN, NARROW, FROZEN};
 
+/// \todo Overload functions to add the option of input checking. No checks are faster.
 class FMCell : public Cell{
     friend std::ostream& operator << (std::ostream & os, const FMCell & c);
 
     public:
-        /** \brief Default constructor which performs and implicit Fast Marching-like initialization of the grid,
-          */
+        /** \brief Default constructor which performs and implicit Fast Marching-like initialization of the grid. */
         FMCell() : Cell(std::numeric_limits<double>::infinity(), 1), state_(FMState::OPEN), hValue_(0) {}
 
         virtual ~FMCell() {}
 
-        // NOTE: no checks are done (out of bounds, correct states, etc) no improve efficienty.
-        // TODO: overload functions to add the option of input checking.
         virtual inline void setVelocity(double v)           {occupancy_ = v;}
         virtual inline void setArrivalTime(double at)       {value_= at;}
         virtual inline void setHeuristicTime(double hv)     {hValue_ = hv;}
         virtual inline void setState(FMState state)         {state_ = state;}
         virtual inline void setBucket(int b)                {bucket_ = b;}
+        
+        /** \brief Sets default values for the cell. Concretely, restarts value_ = Inf, state_ = OPEN and
+            hValue_ = 0 but occupancy_ is not modified. */
         virtual void setDefault();
 
         std::string type() {return std::string("FMCell - Fast Marching cell");}
@@ -62,9 +62,14 @@ class FMCell : public Cell{
         virtual inline bool getBucket() const                     {return bucket_;}
 
     protected:
-        FMState state_; /*!< State of the cell */
-        int bucket_;    /*!< Used when sorted with FMUntidyQueue */
-        double hValue_; /*!< Heuristic value. */
+        /** \brief State of the cell. */
+        FMState state_;
+        
+        /** \brief Used when sorted with FMUntidyQueue. */
+        int bucket_;
+        
+        /** \brief Heuristic value. */
+        double hValue_;
 };
 
 #endif /* FMCELL_H_*/

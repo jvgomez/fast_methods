@@ -1,5 +1,6 @@
-/*! \file fmuntidyqueue.hpp
-    \brief Wrap for untidyqueue priority queue class.
+/*! \class FMUntidyQueue
+    \brief Wraps the UntidyQueue implementation by 
+    [Jerome Piovano](ftp://ftp-sop.inria.fr/athena/Team/Jerome.Piovano/Doxygen/classlevelset_1_1PriorityQueue.html)
     
     Copyright (C) 2014 Javier V. Gomez
     www.javiervgomez.com
@@ -25,6 +26,7 @@
 template<class cell_t = FMCell> class FMUntidyQueue {
 
     public:
+        /** \brief Creates an object with s buckets of size s. */
         FMUntidyQueue
         (unsigned s = 1000, double inc = 2) {
             queue_ = new levelset::PriorityQueue<const cell_t * >(s, inc);
@@ -32,34 +34,28 @@ template<class cell_t = FMCell> class FMUntidyQueue {
 
         virtual ~FMUntidyQueue() { delete queue_; }
 
+        /** \brief Pushes a new element into the heap. */
         void push
         (cell_t * c) {
             unsigned int i = queue_->push(c, c->getArrivalTime());
             c->setBucket(i);
         }
 
+        /** \brief Returns current size of the heap. */
         size_t size
         () const {
             return queue_->size();
         }
 
-        /**
-         * Updates the position of the cell in the priority queue. Its priority can only increase.
-         * Also updates the bucket of the cell.
-         *
-         * @param c cell_t to be updated.
-         *
-         */
+        /** \brief Updates the position of the cell in the priority queue. Its priority can only increase.
+             Also updates the bucket of the cell. *//
         void increase
         (cell_t * c) {
             unsigned int i = queue_->increase_priority(c, c->getBucket(), c->getArrivalTime());
             c->setBucket(i);
         }
 
-        /**
-         * pops and returns index of the element with lowest value of the priority queue.
-         *
-         */
+        /** \brief Pops index of the element with lowest value and removes it from the heap. */
         unsigned int popMinIdx
         (){
             const cell_t * c = queue_->top();
@@ -68,18 +64,21 @@ template<class cell_t = FMCell> class FMUntidyQueue {
             return index_pop;
         }
 
-        bool empty
-        () const {
-            return queue_->empty();
-        }
-
+        /** \brief Deallocates heap memory. */
         void clear
         () {
             queue_->clear();
         }
 
+        /** \brief Returns true if the heap is empty. */
+        bool empty
+        () const {
+            return queue_->empty();
+        }
+
     protected:
-        levelset::PriorityQueue<const cell_t * > * queue_; /*!< Priority queue that stores cells of the narrow band. */
+        /** \brief The actual Unitidy queue for cell_t. */
+        levelset::PriorityQueue<const cell_t * > * queue_;
 };
 
 #endif /* FMUNTIDYQUEUE_H_ */

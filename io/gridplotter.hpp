@@ -1,20 +1,20 @@
-/*! \file gridplotter.hpp
+/*! \class GridPlotter
     \brief Auxiliar class which helps to visualise Fast Marching steps and results.
     
     It is based on the CImg library, therefore it has to be accessible.
     Copyright (C) 2014 Javier V. Gomez and Jose Pardeiro
     www.javiervgomez.com
 
-	This program is free software: you can redistribute it and/or modify
-	it under the terms of the GNU General Public License as published by
-	the Free Software Foundation, either version 3 of the License, or
-	(at your option) any later version.
-	This program is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-	GNU General Public License for more details.
-	You should have received a copy of the GNU General Public License
-	along with this program. If not, see <http://www.gnu.org/licenses/>.
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+    GNU General Public License for more details.
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
 #ifndef GRIDPLOTTER_H_
@@ -29,29 +29,31 @@
 
 using namespace cimg_library;
 
-typedef typename std::array<unsigned int, 2> Coord2D;
-typedef typename std::array<double, 2> Point2D;
-typedef typename std::vector <Point2D> Path2D;
-typedef typename std::vector <Path2D> Paths2D;
-
-// TODO: include checks which ensure that the grids are adecuate for the functions used.
-// TODO: generalize plotMapPaths to work with multiple paths.
+/// \todo include checks which ensure that the grids are adecuate for the functions used.
+/// \todo generalize plotMapPaths to work with multiple (n>2) paths.
 class GridPlotter {
+    /** \brief Shorthand for 2D coordinates. */
+    typedef typename std::array<unsigned int, 2> Coord2D;
+    
+    /** \brief Shorthand for 2D real points. */
+    typedef typename std::array<double, 2> Point2D;
+    
+    /** \brief Shorthand for 2D paths of real points. */
+    typedef typename std::vector <Point2D> Path2D;
+    
+    /** \brief Shorthand for vector of 2D paths of real points. */
+    typedef typename std::vector <Path2D> Paths2D;
+
     public:
-        /**
-         * Plots the initial binary map included in a given grid. It is based on the
-         * nDGridMap::getOccupancy() which has to be bool valued. This function has to be
-         * overloaded in another occupancy type is being used.
-         * 
-         * Should be used only in 2D grids.
-         * 
-         *  The Y dimension flipping is because nDGridMap works in X-Y coordinates, not in image indices as CImg.
-         * 
-         * IMPORTANT NOTE: no type-checkings are done. T type has to be Cell or any class with bool getOccupancy() method.
-         * 
-         * @param grid 2D nDGridmap
-         * @param flipY true: flips the Y dimension. 0 does not flip.
-         */
+        /** \brief Plots the binary map of a given grid. It is based on the
+            nDGridMap::getOccupancy(). This function has to be overloaded 
+            in another occupancy type is being used.
+
+            Should be used only in 2D grids.
+
+            The Y dimension flipping is because nDGridMap works in X-Y coordinates, not in image indices as CImg.
+
+            IMPORTANT NOTE: no type-checkings are done. T type has to be Cell or any class with bool getOccupancy() method. */
         template<class T, size_t ndims> 
         static void plotMap
         (nDGridMap<T, ndims> & grid, std::string name = "") {
@@ -66,6 +68,15 @@ class GridPlotter {
             img.display(name.c_str(), false);
         }
 
+        /** \brief Plots the occupancy map of a given grid. It is based on the
+            nDGridMap::getOccupancy(), This function has to be overloaded if 
+            another occupancy type is being used.
+
+            Should be used only in 2D grids.
+
+            The Y dimension flipping is because nDGridMap works in X-Y coordinates, not in image indices as CImg.
+
+            IMPORTANT NOTE: no type-checkings are done. T type has to be Cell or any class with bool getOccupancy() method. */
         template<class T, size_t ndims>
         static void plotOccupancyMap
         (nDGridMap<T, ndims> & grid, std::string name = "") {
@@ -77,20 +88,15 @@ class GridPlotter {
             img.display(name.c_str(), false);
         }
 
-       /**
-         * Plots the value map included in a given grid. It is based on the
-         * nDGridMap::getValue() which has to be float valued. This function has to be
-         * overloaded in another value type is being used.
-         * 
-         * Should be used only in 2D grids.
-         * 
-         * The Y dimension flipping is because nDGridMap works in X-Y coordinates, not in image indices as CImg.
-         * 
-         * IMPORTANT NOTE: no type-checkings are done. T type has to be Cell or any class with bool getValue() method.
-         * 
-         * @param grid 2D nDGridmap
-         * @param flipY true: flips the Y dimension. 0 does not flip.
-         */
+       /** \brief Plots the values map of a given grid. It is based on the
+           nDGridMap::getValue(). This function has to be overloaded in 
+           another value type is being used.
+
+            Should be used only in 2D grids.
+
+            The Y dimension flipping is because nDGridMap works in X-Y coordinates, not in image indices as CImg.
+
+           IMPORTANT NOTE: no type-checkings are done. T type has to be Cell or any class with bool getValue() method. */
         template<class T, size_t ndims = 2>
         static void plotArrivalTimes
         (nDGridMap<T, ndims> & grid, std::string name = "") {
@@ -104,6 +110,15 @@ class GridPlotter {
             img.display(name.c_str(), false);
         }
 
+       /** \brief Plots the values map of a given grid. It is based on the
+            nDGridMap::getValue(). This function has to be overloaded in 
+            another value type is being used. Also plots a given path.
+
+            Should be used only in 2D grids.
+
+            The Y dimension flipping is because nDGridMap works in X-Y coordinates, not in image indices as CImg.
+
+            IMPORTANT NOTE: no type-checkings are done. T type has to be Cell or any class with bool getOccupancy() method. */
         template<class T, size_t ndims = 2>
         static void plotMapPath
         (nDGridMap<T, ndims> & grid, const Path2D & path, std::string name = "") {
@@ -123,21 +138,15 @@ class GridPlotter {
             img.display(name.c_str(), false);
         }
 
-        /**
-         * Plots the initial binary map included in a given grid and the given path. It is based on the
-         * nDGridMap::getOccupancy() which has to be bool valued. This function has to be
-         * overloaded in another occupancy type is being used.
-         *
-         * Should be used only in 2D grids.
-         *
-         *  The Y dimension flipping is because nDGridMap works in X-Y coordinates, not in image indices as CImg.
-         *
-         * IMPORTANT NOTE: no type-checkings are done. T type has to be Cell or any class with bool getOccupancy() method.
-         *
-         * @param grid 2D nDGridmap
-         * @param path 2D path to plot.
-         * @param flipY true: flips the Y dimension. 0 does not flip.
-         */
+       /** \brief Plots the values map of a given grid. It is based on the
+            nDGridMap::getValue(). This function has to be overloaded in 
+            another value type is being used.
+
+            Should be used only in 2D grids.
+
+            The Y dimension flipping is because nDGridMap works in X-Y coordinates, not in image indices as CImg.
+
+            IMPORTANT NOTE: no type-checkings are done. T type has to be Cell or any class with bool getOccupancy() method. */
         template<class T, size_t ndims = 2>
         static void plotOccupancyPath
         (nDGridMap<T, ndims> & grid, const Path2D & path, std::string name = "") {
@@ -155,21 +164,15 @@ class GridPlotter {
             img.display(name.c_str(), false);
         }
 
-        /**
-         * Plots the initial binary map included in a given grid and the given paths vector.
-         * It is based on the nDGridMap::getOccupancy() which has to be bool valued. This function
-         * has to be overloaded in another occupancy type is being used.
-         *
-         * Should be used only in 2D grids. Only 2 paths are accepted.
-         *
-         *  The Y dimension flipping is because nDGridMap works in X-Y coordinates, not in image indices as CImg.
-         *
-         * IMPORTANT NOTE: no type-checkings are done. T type has to be Cell or any class with bool getOccupancy() method.
-         *
-         * @param grid 2D nDGridmap
-         * @param vector of path 2D path to plot.
-         * @param flipY true: flips the Y dimension. 0 does not flip.
-         */
+       /** \brief Plots the values map of a given grid. It is based on the
+            nDGridMap::getValue(). This function has to be overloaded in 
+            another value type is being used. Also plots 2 given paths.
+
+            Should be used only in 2D grids.
+
+            The Y dimension flipping is because nDGridMap works in X-Y coordinates, not in image indices as CImg.
+
+            IMPORTANT NOTE: no type-checkings are done. T type has to be Cell or any class with bool getOccupancy() method. */
         template<class T, size_t ndims = 2>
         static void plotMapPaths
         (nDGridMap<T, ndims> & grid, const Paths2D & paths, std::string name = "") {
@@ -193,21 +196,15 @@ class GridPlotter {
             img.display(name.c_str(), false);
         }
 
-       /**
-       * Plots the value map included in a given grid and the given path. It is based on the
-       * nDGridMap::getValue() which has to be float valued. This function has to be
-       * overloaded in another value type is being used.
-       *
-       * Should be used only in 2D grids.
-       *
-       * The Y dimension flipping is because nDGridMap works in X-Y coordinates, not in image indices as CImg.
-       *
-       * IMPORTANT NOTE: no type-checkings are done. T type has to be Cell or any class with bool getValue() method.
-       *
-       * @param grid 2D nDGridmap
-       * @param path 2D path to plot.
-       * @param flipY true: flips the Y dimension. 0 does not flip.
-       */
+       /** \brief Plots the values map of a given grid. It is based on the
+            nDGridMap::getValue(). This function has to be overloaded in 
+            another value type is being used. It also plots a given path.
+
+            Should be used only in 2D grids.
+
+            The Y dimension flipping is because nDGridMap works in X-Y coordinates, not in image indices as CImg.
+
+            IMPORTANT NOTE: no type-checkings are done. T type has to be Cell or any class with bool getOccupancy() method. */
       template<class T, size_t ndims = 2>
       static void plotArrivalTimesPath
       (nDGridMap<T, ndims> & grid, const Path2D & path, std::string name = "") {

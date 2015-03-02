@@ -1,29 +1,28 @@
-/*! \file GMM.hpp
+/*! \class GMM
     \brief Templated class which computes Group Marching Method (GMM).
     
     It uses as a main container the nDGridMap class. The nDGridMap type T
     has to be an FMCell or something inherited from it.
-    
-    The leafsize of the grid map is ignored since it has to be >=1 and that 
-    depends on the units employed.
-    
+
+    The grid is assumed to be squared, that is Delta(x) = Delta(y) = leafsize_
+
     @par External documentation:
         S. Kim, An O(N) Level Set Method for Eikonal Equations, SIAM J. Sci. Comput., 22(6), 2178–2193.
         <a href="http://epubs.siam.org/doi/abs/10.1137/S1064827500367130">[PDF]</a>
-    
+
     Copyright (C) 2014 Javier V. Gomez
     www.javiervgomez.com
 
-	This program is free software: you can redistribute it and/or modify
-	it under the terms of the GNU General Public License as published by
-	the Free Software Foundation, either version 3 of the License, or
-	(at your option) any later version.
-	This program is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-	GNU General Public License for more details.
-	You should have received a copy of the GNU General Public License
-	along with this program. If not, see <http://www.gnu.org/licenses/>.
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+    GNU General Public License for more details.
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
 #ifndef GMM_HPP_
@@ -39,11 +38,7 @@ template < class grid_t > class GMM : public FMM <grid_t> {
 
         virtual ~GMM() { clear(); }
 
-        /**
-         * Main Group Marching Function. It requires to call first the setInitialPoints() function.
-         *
-         * @see setInitialPoints()
-         */
+        /** \brief Actual method that implements GMM. */
         virtual void computeInternal
         () {
             if (!setup_)
@@ -159,9 +154,14 @@ template < class grid_t > class GMM : public FMM <grid_t> {
         using FMM<grid_t>::setup_;
 
     private:
-        double tm_; /*!< Global bound that determines the group of cells of gamma that will be updated in each step. */
-        double deltau_; /*!< For each updating step, tm_ is increased by this value. */
-        std::list<unsigned int> gamma_; /*!< List wich stores the narrow band of each iteration. */
+        /** \brief Global bound that determines the group of cells of gamma that will be updated in each step. */
+        double                  tm_;
+
+        /** \brief For each updating step, tm_ is increased by this value. */
+        double                  deltau_;
+        
+        /** \brief List wich stores the narrow band of each iteration. */
+        std::list<unsigned int> gamma_;
 };
 
 #endif /* GMM_H_*/

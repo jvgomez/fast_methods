@@ -1,5 +1,5 @@
-/*! \file cell.h
-    \brief Header of the Cell class
+/*! \class Class
+    \brief Represents a generic Cell to be used in gridmaps.
 
     A stand-alone, standard C++ class which represents each one of the cells
     of a gridmap and its typical members.
@@ -17,7 +17,8 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
     GNU General Public License for more details.
     You should have received a copy of the GNU General Public License
-    along with this program. If not, see <http://www.gnu.org/licenses/>. */
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+*/
 
 #ifndef CELL_H_
 #define CELL_H_
@@ -26,14 +27,13 @@
 #include <string>
 #include <limits>
 
-// NOTE: no checks are done (out of bounds, correct states, etc) no improve efficienty.
-// TODO: overload functions to add optional input checking.
+/// \todo No checks are done (out of bounds, etc) to improve efficienty. Overload functions to add optional input checking.
 class Cell {
 
     friend std::ostream& operator << (std::ostream & os, Cell & c);
 
     public:
-        /** Default constructor: sets value_ to -1 and occupancy_ to true (clear cell, not occupied). */
+        /** \brief Default constructor: sets value_ to -1 and occupancy_ to true (clear cell, not occupied). */
         Cell() : value_(-1), occupancy_(1) {}
 
         Cell(double v, double o = 1) : value_(v), occupancy_(o) {}
@@ -43,7 +43,7 @@ class Cell {
         virtual std::string type()                        {return std::string("Cell - Basic cell");}
         virtual inline void setIndex(int i)               {index_ = i;}
 
-        /** Sets default values for the cell. Concretely, restarts value_ = -1 but
+        /** \brief Sets default values for the cell. Concretely, restarts value_ = -1 but
             occupancy_ is not modified. */
         virtual void setDefault();
 
@@ -58,9 +58,14 @@ class Cell {
         }
 
     protected:
-        double value_; /*!< Value of the cell. */
-        double occupancy_; /*!< Binary occupancy, true means clear, false occupied. */
-        unsigned int index_; /*!< Index within the grid. Useful when used in heaps. */
+        /** \brief Value of the cell. */
+        double value_;
+
+        /** \brief Binary occupancy, true means clear, false occupied. */
+        double occupancy_;
+
+        /** \briefbIndex within the grid. Useful when used in heaps. */
+        unsigned int index_;
 };
 
 #endif /* CELL_H_*/

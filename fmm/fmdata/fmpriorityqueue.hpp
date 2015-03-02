@@ -1,7 +1,8 @@
-/*! \file fmpriorityqueue.hpp
-    \brief Wrap for the Boost Priority Queue class.
+/*! \class FMPriorityQueue
+    \brief Wrap for the Boost Priority Queue class to be used in the FM 
+    algorithms. Ready to be used with FMCell and derived types.
     
-    Copyright (C) 2014 Javier V. Gomez
+    Copyright (C) 2014 Javier V. Gomez and Jose Pardeiro
     www.javiervgomez.com
 
     This program is free software: you can redistribute it and/or modify
@@ -21,64 +22,38 @@
 
 #include <boost/heap/priority_queue.hpp>
 
-#include "fmcell.h"
+#include "fmcompare.hpp"
 
-/**
- * This struct is used as comparator for the heap. Since a minimum-heap
- * is desired the operation checked is param1 > param2 as seen in this
- * [Stack Overflow post](http://stackoverflow.com/a/16706002/2283531)
- * */
-template <class cell_t>struct compare_cells_pq {
-    inline bool operator()
-    (const cell_t * c1 , const cell_t * c2) const {
-        return c1->getTotalValue() > c2->getTotalValue();
-    }
-};
-
-// TODO: Template this class.
 template <class cell_t = FMCell> class FMPriorityQueue{
 
     public:
         FMPriorityQueue () {}
+
+        /** \brief Shorthand for heap element handle type. */
         FMPriorityQueue (const int & n) { heap_.reserve(n); }
+
         virtual ~ FMPriorityQueue() {}
 
-        /**
-         * Set the maximum number of cells the heap will contain.
-         * 
-         * @param maximum number of cells.
-         */
+        /** \brief Sets the maximum number of cells the heap will contain. */
         void setMaxSize
         (const int & n) {
             heap_.reserve(n);
         }
 
-        /**
-         * Adds an element to the heap.
-         * 
-         * @param cell to add.
-         */
+        /** \brief Pushes a new element into the heap. */
         void push 
         (const cell_t * c) {
             heap_.push(c);
         }
 
-        /**
-         * Priority queues do not allow key increasing. Therefore, it pushes the element again.
-         * This is done for FMM-SFMM compatibility.
-         * 
-         * @param cell to add.
-         */
+        /** \brief Priority queues do not allow key increasing. Therefore, it pushes the element again.
+             This is done so that SFMM is implemented as FMM with this heap. */
         void increase
         (const cell_t * c) {
             heap_.push(c);
         }
 
-        /**
-         * pops index of the element with lowest value and removes it from the heap.
-         * 
-         * @return index of the cell with lowest value.
-         */ 
+        /** \brief Pops index of the element with lowest value and removes it from the heap. */ 
         int popMinIdx
         () {
             const int idx = heap_.top()->getIndex();
@@ -86,23 +61,27 @@ template <class cell_t = FMCell> class FMPriorityQueue{
             return idx;
         }
 
+        /** \brief Returns current size of the heap. */
         size_t size
         () const {
             return heap_.size();
         }
 
-        bool empty
-        () const {
-            return heap_.empty();
-        }
-
+        /** \brief Deallocates heap memory. */
         void clear
         () {
             heap_.clear();
         }
 
+        /** \brief Returns true if the heap is empty. */
+        bool empty
+        () const {
+            return heap_.empty();
+        }
+
     protected:
-        boost::heap::priority_queue<const cell_t *, boost::heap::compare<compare_cells_pq<cell_t> > > heap_;  /*!< The actual heap for FMCells. */
+        /** \brief The actual queue for FMCells. */
+        boost::heap::priority_queue<const cell_t *, boost::heap::compare<FMCompare<cell_t> > > heap_;
 };
 
 
