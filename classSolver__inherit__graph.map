@@ -1,0 +1,6 @@
+<map id="Solver&lt; grid_t &gt;" name="Solver&lt; grid_t &gt;">
+<area shape="rect" id="node2" href="$classFM2.html" title="Implements the Fast Marching Square (FM2) planning algorithm. " alt="" coords="57,83,159,109"/>
+<area shape="rect" id="node4" href="$classFMM.html" title="Implements the Fast Marching Method (FMM). " alt="" coords="219,83,325,109"/>
+<area shape="rect" id="node3" href="$classFM2Star.html" title="Implements the Fast Marching Square Star (FM2*) planning algorithm. " alt="" coords="5,160,176,187"/>
+<area shape="rect" id="node5" href="$classFMMStar.html" title="Encapsulates the calls to FMM with heuristics enabled. " alt="" coords="201,160,377,187"/>
+</map>

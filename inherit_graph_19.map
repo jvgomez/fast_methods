@@ -1,0 +1,11 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="node1" href="$classSolver.html" title="Abstract class that serves as interface for the actual solvers implemented. It requires (at least) th..." alt="" coords="6,56,119,83"/>
+<area shape="rect" id="node2" href="$classFM2.html" title="Implements the Fast Marching Square (FM2) planning algorithm. " alt="" coords="170,5,318,32"/>
+<area shape="rect" id="node4" href="$classFMM.html" title="Implements the Fast Marching Method (FMM). " alt="" coords="168,56,320,83"/>
+<area shape="rect" id="node6" href="$classFMM.html" title="FMM\&lt; grid_t \&gt;" alt="" coords="191,132,297,159"/>
+<area shape="rect" id="node3" href="$classFM2Star.html" title="Implements the Fast Marching Square Star (FM2*) planning algorithm. " alt="" coords="370,5,542,32"/>
+<area shape="rect" id="node5" href="$classFMMStar.html" title="Encapsulates the calls to FMM with heuristics enabled. " alt="" coords="368,56,544,83"/>
+<area shape="rect" id="node7" href="$classFIM.html" title="Implements Fast Iterative Method. " alt="" coords="407,107,505,133"/>
+<area shape="rect" id="node8" href="$classGMM.html" title="Templated class which computes Group Marching Method (GMM). " alt="" coords="402,157,510,184"/>
+<area shape="rect" id="node9" href="$classUFMM.html" title="Fast Marching Method using a untidy priority queue (UFMM). " alt="" coords="379,208,533,235"/>
+</map>

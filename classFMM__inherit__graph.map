@@ -1,0 +1,8 @@
+<map id="FMM&lt; grid_t, heap_t &gt;" name="FMM&lt; grid_t, heap_t &gt;">
+<area shape="rect" id="node3" href="$classFMMStar.html" title="Encapsulates the calls to FMM with heuristics enabled. " alt="" coords="5,173,181,200"/>
+<area shape="rect" id="node4" href="$classFMM.html" title="FMM\&lt; grid_t \&gt;" alt="" coords="205,173,312,200"/>
+<area shape="rect" id="node2" href="$classSolver.html" title="Abstract class that serves as interface for the actual solvers implemented. It requires (at least) th..." alt="" coords="58,5,171,32"/>
+<area shape="rect" id="node5" href="$classFIM.html" title="Implements Fast Iterative Method. " alt="" coords="81,251,180,277"/>
+<area shape="rect" id="node6" href="$classGMM.html" title="Templated class which computes Group Marching Method (GMM). " alt="" coords="205,251,312,277"/>
+<area shape="rect" id="node7" href="$classUFMM.html" title="Fast Marching Method using a untidy priority queue (UFMM). " alt="" coords="337,251,491,277"/>
+</map>

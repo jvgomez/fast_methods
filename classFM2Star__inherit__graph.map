@@ -1,0 +1,4 @@
+<map id="FM2Star&lt; grid_t, heap_t &gt;" name="FM2Star&lt; grid_t, heap_t &gt;">
+<area shape="rect" id="node2" href="$classFM2.html" title="Implements the Fast Marching Square (FM2) planning algorithm. " alt="" coords="17,80,164,107"/>
+<area shape="rect" id="node3" href="$classSolver.html" title="Abstract class that serves as interface for the actual solvers implemented. It requires (at least) th..." alt="" coords="34,5,147,32"/>
+</map>
