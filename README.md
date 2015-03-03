@@ -46,6 +46,20 @@ endher/fm2
 - This is a source code intended for my research. Although I want it to be useful for other people it is not intended to act as a library (there are many many points to improve). However, if you show interest or have feature request do not hesitate to contact me and I will try my best to improve the code for whoever needs it. I am also open to contributions and to create a formal library if necessary.
 
 
+## Documentation
+
+- [API Reference](http://javiervgomez.com/fastmarching/)
+- This README is important as well.
+
+
+To build latest the documentation:
+
+    $ cd doc
+    $ doxygen
+
+Go into the HTML folder and open index.html
+
+
 ## Dependencies:
 
 This code uses C\++11 so a compiler g++ 4.8 or equivalent is required. With GCC 4.7 some runtime problems can occur.
@@ -63,17 +77,6 @@ The example code uses png, therefore examples of libraries to be installed are l
 When using Ubuntu, you should install Boost libraries (tested with 1.55+):
 
     sudo apt-get install libboost-all-dev
-
-## Documentation
-
-To build latest the documentation:
-
-    $ cd doc
-    $ doxygen
-
-Go into the HTML folder and open index.html
-
-You will find more documentation in [our wiki](https://github.com/jvgomez/fastmarching/wiki)
 
 ## Building the code
 To build the code:
