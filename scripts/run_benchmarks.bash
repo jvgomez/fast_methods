@@ -7,8 +7,6 @@
 # 3. The results folder with logs (and grids) will be stored in the current terminal folder.
 
 BASEDIR=$(dirname $0)
-echo $BASEDIR
-
 
 bold=`tput bold`
 normal=`tput sgr0`

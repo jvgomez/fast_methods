@@ -1,4 +1,4 @@
-function grid = parsegrid(filename)
+function grid = parseGrid(filename)
 
     fid = fopen(filename);
     celltype = fgetl(fid);
