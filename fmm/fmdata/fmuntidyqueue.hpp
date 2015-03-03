@@ -48,7 +48,7 @@ template<class cell_t = FMCell> class FMUntidyQueue {
         }
 
         /** \brief Updates the position of the cell in the priority queue. Its priority can only increase.
-             Also updates the bucket of the cell. *//
+             Also updates the bucket of the cell. */
         void increase
         (cell_t * c) {
             unsigned int i = queue_->increase_priority(c, c->getBucket(), c->getArrivalTime());

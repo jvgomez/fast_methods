@@ -66,18 +66,20 @@ When using Ubuntu, you should install Boost libraries (tested with 1.55+):
 
 ## Documentation
 
-To build the documentation:
+To build latest the documentation:
 
     $ cd doc
     $ doxygen
 
-Go into the HTML folder and open index.html.
+Go into the HTML folder and open index.html
+
+You will find more documentation in [our wiki](https://github.com/jvgomez/fastmarching/wiki)
 
 ## Building the code
 To build the code:
 
     $ cd build
-    $ cmake .. -DCMAKE_BUILD_TYPE=Release (Release, RelWithDebInf or Debug, Debug by default)
+    $ cmake .. -DCMAKE_BUILD_TYPE=Release (Release, RelWithDebInf or Debug, Release by default)
     $ make
     $ ./fmm -map1 ../data/testimg.png -map2 ../data/map.png -vel ../data/velocities.png
 
@@ -110,6 +112,7 @@ Although there are a lot of folders, they are quite simple. It is organized this
 
 At the top of each file there are specific TODO comments. Here are some others:
 
+- Convert all scripts to python (or similar) so that they keep completely open source.
 - Improve the way FM2 and its versions deal with the grid when running multiple times on the same grid. Concretely, avoid recomputation of velocities map.
 - Reimplement FM2Dir from scratch. Currently in data/alpha folder.
 - Restructure the folder and the CMake files in order to properly have examples and that stuff.
@@ -119,6 +122,7 @@ At the top of each file there are specific TODO comments. Here are some others:
 - Most of the unsigned int should be replaced by size_t to be type-correct.
 - Use smart pointers (specially for grid).
 - Create a testing framework.
-- BenchmarkCFG::configure, parse ctorParams_ with a variadic templated function, something like: parseParams<int, bool>(param1, param2), parseParams<string,double,bool>(p1,p2,p3).
+- BenchmarkCFG::configure, parse ctorParams_ with a variadic templated function, something like:` parseParams<int, bool>(param1, param2)`, `parseParams<string,double,bool>(p1,p2,p3)`.
 - For most methods, neighbors for same cell are computed many times. Store them like FMT to save some computation time.
 - GridPlotter code can be refactorized so that the same code is not repeated many times.
+- Review template template parameters, perhaps it can be simplified (specially for benchmark): `template <grid_t>` to `template <nDGridMap <cell_t, ndims>>` so we can use cell_t without doing `template <grid_t, cell_t>` (redundant).

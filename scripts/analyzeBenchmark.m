@@ -5,7 +5,8 @@ close all;
 % the same algorithms in the same order.
 
 %% Opening file.
-path_to_benchmarks = '../benchmark/build/results/';
+%path_to_benchmarks = '../benchmark/build/results/';
+path_to_benchmarks = 'results/';
 
 files = dir(path_to_benchmarks);
 files = files(3:end); 
