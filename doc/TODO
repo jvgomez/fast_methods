@@ -1,1 +1,3 @@
 Create a CMakeLists.txt here so that the files folder is automatically copied into html/ once doxygen is run.
+
+Properly set overview as \mainpage
