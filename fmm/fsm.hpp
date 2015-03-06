@@ -39,11 +39,16 @@
 template < class grid_t > class FSM : public FMM <grid_t> {
 
     public:
-        unsigned maxSweeps;
-
-        FSM(const char * name = "FMS") : FMM<grid_t>(name), sweeps_(0) {
+        FSM(unsigned maxSweeps = std::numeric_limits<unsigned>::max()) : FMM <grid_t>("FSM"),
+            sweeps_(0),
+            maxSweeps_(maxSweeps) {
             incs_[0] = -1;
-            maxSweeps = std::numeric_limits<unsigned>::max();
+        }
+
+        FSM(const char * name, unsigned maxSweeps = std::numeric_limits<unsigned>::max()) : FMM<grid_t>(name),
+            sweeps_(0),
+            maxSweeps_(maxSweeps) {
+            incs_[0] = -1;
         }
 
         virtual ~FSM() { clear(); }
@@ -72,7 +77,7 @@ template < class grid_t > class FSM : public FMM <grid_t> {
             bool keepSweeping = true;
             unsigned idx = 0;
 
-            while (keepSweeping && sweeps_ < maxSweeps)
+            while (keepSweeping && sweeps_ < maxSweeps_)
             {
                 keepSweeping = false;
                 setSweep();
@@ -92,13 +97,52 @@ template < class grid_t > class FSM : public FMM <grid_t> {
                 ++sweeps_;
             }
 
-            std::cout << sweeps_ << "  " << std::numeric_limits<double>::epsilon() << '\n';
+            std::cout << sweeps_ << '\n';
+        }
+
+        /** \brief FSM-specific solver. Solves nD Eikonal equation for cell idx.
+             If the neighbor value is higher than the current value is treated as
+             an infinite. */
+        virtual double solveEikonal
+        (const int & idx) {
+            unsigned int a = grid_t::getNDims(); // a parameter of the Eikonal equation.
+
+            double updatedT;
+            sumT = 0;
+            sumTT = 0;
+
+            for (unsigned int dim = 0; dim < grid_t::getNDims(); ++dim) {
+                double minTInDim = grid_->getMinValueInDim(idx, dim);
+
+                if (!isinf(minTInDim) && minTInDim < grid_->getCell(idx).getArrivalTime()) {
+                    Tvalues[dim] = minTInDim;
+                    sumT += Tvalues[dim];
+                    TTvalues[dim] = Tvalues[dim]*Tvalues[dim];
+                    sumTT += TTvalues[dim];
+                }
+                else {
+                    Tvalues[dim] = 0;
+                    TTvalues[dim] = 0;
+                    a -=1 ;
+                }
+            }
+
+            double b = -2*sumT;
+            double c = sumTT - grid_->getLeafSize() * grid_->getLeafSize()/(grid_->getCell(idx).getVelocity()*grid_->getCell(idx).getVelocity());
+            double quad_term = b*b - 4*a*c;
+            if (quad_term < 0) {
+                double minT = *(std::min_element(Tvalues.begin(), Tvalues.end()));
+                updatedT = grid_->getLeafSize() * grid_->getLeafSize()/(grid_->getCell(idx).getVelocity()*grid_->getCell(idx).getVelocity()) + minT;
+            }
+            else
+                updatedT = (-b + sqrt(quad_term))/(2*a);
+
+            return updatedT;
         }
 
         virtual void clear
         () {
             incs_[0] = -1;
-            maxSweeps = std::numeric_limits<unsigned>::max();
         }
 
         virtual void reset
@@ -108,11 +152,21 @@ template < class grid_t > class FSM : public FMM <grid_t> {
             incs_[0] = -1;
         }
 
+        virtual void printRunInfo
+        () const {
+            console::info("Fast Sweeping Method");
+            std::cout << '\t' << name_ << '\n'
+                      << '\t' << "Maximum sweeps: " << maxSweeps_ << '\n'
+                      << '\t' << "Sweeps performed: " << sweeps_ << '\n'
+                      << '\t' << "Elapsed time: " << time_ << " ms\n";
+        }
+
     protected:
         /** \brief Set the sweep variables: initial and final indices for iterations,
              and the increment of each iteration in every dimension.
 
-             Generates the pattern (111, -111, 1-11, -1,-1,1, 11-1, -11-1,...). */
+             Generates a periodical pattern for incs_ (example for 3D): [111, -111, 1-11, -1,-1,1, 11-1, -11-1,..., -1,-1,-1].
+             Stablishes inits_ and ends_ accordingly. */
         void setSweep
         (){
             // Dimension 0 changes sweep direction every time.
@@ -151,14 +205,29 @@ template < class grid_t > class FSM : public FMM <grid_t> {
 
         using FMM<grid_t>::grid_;
         using FMM<grid_t>::neighbors;
-        using FMM<grid_t>::solveEikonal;
         using FMM<grid_t>::init_points_;
         using FMM<grid_t>::goal_idx_;
         using Solver<grid_t>::setup;
         using FMM<grid_t>::setup_;
+        using FMM<grid_t>::name_;
+        using FMM<grid_t>::time_;
 
     private:
+        /** \brief Auxiliar value wich computes T1+T2+T3... Useful for generalizing the Eikonal solver. */
+        double                                          sumT;
+
+        /** \brief Auxiliar value wich computes T1^2+T2^2+T3^2... Useful for generalizing the Eikonal solver. */
+        double                                          sumTT;
+
+        /** \brief Auxiliar array with values T0,T1...Tn-1 variables in the Discretized Eikonal Equation. */
+        std::array<double, grid_t::getNDims()>          Tvalues;
+
+        /** \brief Auxiliar array with values T0^2,T1^2...Tn-1^2 variables in the Discretized Eikonal Equation. */
+        std::array<double, grid_t::getNDims()>          TTvalues;
+
         unsigned int sweeps_;
+        unsigned maxSweeps_;
+
         std::array<int, MAXDIMS> incs_;
         std::array<int, MAXDIMS> inits_;
         std::array<int, MAXDIMS> ends_;

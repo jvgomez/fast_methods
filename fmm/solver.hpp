@@ -33,6 +33,8 @@
 
 #include <boost/concept_check.hpp>
 
+#include "../console/console.h"
+
 template <class grid_t>
 class Solver {
 
@@ -184,6 +186,11 @@ class Solver {
         virtual double getTime
         () const {
             return time_;
+        }
+
+        virtual void printRunInfo
+        () const {
+            console::warning("No run info available.");
         }
 
     protected:

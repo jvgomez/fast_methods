@@ -240,13 +240,23 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FMM : public
             return distances_[idx_dist];
         }
 
-    /// \todo These accessing levels may need to be modified (and other solvers).
+        virtual void printRunInfo
+        () const {
+            console::info("Fast Marching Method");
+            std::cout << '\t' << name_ << '\n'
+                      << '\t' << "Heuristic type: " << heurStrategy_ << '\n'
+                      << '\t' << "Elapsed time: " << time_ << " ms\n";
+        }
+
+
+    /// \note These accessing levels may need to be modified (and other solvers).
     protected:
         using Solver<grid_t>::grid_;
         using Solver<grid_t>::init_points_;
         using Solver<grid_t>::goal_idx_;
         using Solver<grid_t>::setup_;
         using Solver<grid_t>::name_;
+        using Solver<grid_t>::time_;
 
         /** \brief Auxiliar array which stores the neighbor of each iteration of the computeFM() function. */
         std::array <unsigned int, 2*grid_t::getNDims()> neighbors;
