@@ -1,8 +1,12 @@
 /*! \class FSM
-    \brief Implements Fast Sweeping Method.
-    
+    \brief Implements Fast Sweeping Method up to 3D.
+
+    IMPORTANT NOTE: A maximum number of dimensions is set because of the sweeps implementation
+    which require nested loops. The alternative is to do it recursively, but that would make the
+    algorithm slower and FSM is rarely used above 3D.
+
     It uses as a main container the nDGridMap class. The nDGridMap type T
-    has to use an FMCell or derived
+    has to use an FMCell or derived.
 
     The grid is assumed to be squared, that is Delta(x) = Delta(y) = leafsize_
 
@@ -34,8 +38,6 @@
 
 #define MAXDIMS 3
 
-// \TODO: Implement exponentiation by squaring: http://stackoverflow.com/questions/101439/the-most-efficient-way-to-implement-an-integer-based-power-function-powint-int
-// \TODO: support for a goal point.
 template < class grid_t > class FSM : public FMM <grid_t> {
 
     public:
@@ -53,6 +55,8 @@ template < class grid_t > class FSM : public FMM <grid_t> {
 
         virtual ~FSM() { clear(); }
 
+        /** \brief Sets and cleans the grid in which operations will be performed.
+             Since a maximum number of dimensions is assumed, fills the rest with size 1. */
         virtual void setEnvironment
         (grid_t * g) {
             FMM<grid_t>::setEnvironment(g);
@@ -96,8 +100,6 @@ template < class grid_t > class FSM : public FMM <grid_t> {
                         }
                 ++sweeps_;
             }
-
-            std::cout << sweeps_ << '\n';
         }
 
         /** \brief FSM-specific solver. Solves nD Eikonal equation for cell idx.
@@ -225,15 +227,23 @@ template < class grid_t > class FSM : public FMM <grid_t> {
         /** \brief Auxiliar array with values T0^2,T1^2...Tn-1^2 variables in the Discretized Eikonal Equation. */
         std::array<double, grid_t::getNDims()>          TTvalues;
 
+        /** \brief Number of sweeps performed. */
         unsigned int sweeps_;
+
+        /** \brief Number of maximum sweeps to perform. */
         unsigned maxSweeps_;
 
+        /** \brief Sweep directions {-1,1} for each dimension. Extended dimensions always 1. */
         std::array<int, MAXDIMS> incs_;
+
+        /** \brief Initial indices for each dimension. Extended dimensions always 0. */
         std::array<int, MAXDIMS> inits_;
+
+        /** \brief Final indices for each dimension. Extended dimensions always 1. */
         std::array<int, MAXDIMS> ends_;
+
+        /** \brief Size of each dimension, extended to the maximum size. Extended dimensions always 1. */
         std::array<int, MAXDIMS> dimsize_;
-
-
 };
 
 #endif /* FSM_HPP_*/
