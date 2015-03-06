@@ -32,22 +32,20 @@
 #ifndef FSM_HPP_
 #define FSM_HPP_
 
-#include "fmm.hpp"
-
-#include <array>
+#include "solver.hpp"
 
 #define MAXDIMS 3
 
-template < class grid_t > class FSM : public FMM <grid_t> {
+template < class grid_t > class FSM : public Solver<grid_t> {
 
     public:
-        FSM(unsigned maxSweeps = std::numeric_limits<unsigned>::max()) : FMM <grid_t>("FSM"),
+        FSM(unsigned maxSweeps = std::numeric_limits<unsigned>::max()) : Solver<grid_t>("FSM"),
             sweeps_(0),
             maxSweeps_(maxSweeps) {
             incs_[0] = -1;
         }
 
-        FSM(const char * name, unsigned maxSweeps = std::numeric_limits<unsigned>::max()) : FMM<grid_t>(name),
+        FSM(const char * name, unsigned maxSweeps = std::numeric_limits<unsigned>::max()) : Solver<grid_t>(name),
             sweeps_(0),
             maxSweeps_(maxSweeps) {
             incs_[0] = -1;
@@ -59,7 +57,7 @@ template < class grid_t > class FSM : public FMM <grid_t> {
              Since a maximum number of dimensions is assumed, fills the rest with size 1. */
         virtual void setEnvironment
         (grid_t * g) {
-            FMM<grid_t>::setEnvironment(g);
+            Solver<grid_t>::setEnvironment(g);
             std::array<unsigned, grid_t::getNDims()> dimsize = g->getDimSizes();
             for (size_t i = 0; i < grid_t::getNDims(); ++i)
                 dimsize_[i] = dimsize[i];
@@ -149,7 +147,7 @@ template < class grid_t > class FSM : public FMM <grid_t> {
 
         virtual void reset
         () {
-            FMM<grid_t>::reset();
+            Solver<grid_t>::reset();
             sweeps_ = 0;
             incs_[0] = -1;
         }
@@ -173,6 +171,8 @@ template < class grid_t > class FSM : public FMM <grid_t> {
         (){
             // Dimension 0 changes sweep direction every time.
             incs_[0] *= -1;
+
+            // \todo: check this implementation: http://stackoverflow.com/a/17758788/2283531
             for (size_t i = 1; i < grid_t::getNDims(); ++i)
             {
                 unsigned it = sweeps_ % unsigned(pow(2,i+1));
@@ -205,16 +205,19 @@ template < class grid_t > class FSM : public FMM <grid_t> {
             }
         }
 
-        using FMM<grid_t>::grid_;
-        using FMM<grid_t>::neighbors;
-        using FMM<grid_t>::init_points_;
-        using FMM<grid_t>::goal_idx_;
+        using Solver<grid_t>::grid_;
+        //using FMM<grid_t>::neighbors;
+        using Solver<grid_t>::init_points_;
+        using Solver<grid_t>::goal_idx_;
         using Solver<grid_t>::setup;
-        using FMM<grid_t>::setup_;
-        using FMM<grid_t>::name_;
-        using FMM<grid_t>::time_;
+        using Solver<grid_t>::setup_;
+        using Solver<grid_t>::name_;
+        using Solver<grid_t>::time_;
 
     private:
+        /** \brief Auxiliar array which stores the neighbor of each iteration of the computeFM() function. */
+        std::array <unsigned int, 2*grid_t::getNDims()> neighbors;
+
         /** \brief Auxiliar value wich computes T1+T2+T3... Useful for generalizing the Eikonal solver. */
         double                                          sumT;
 
