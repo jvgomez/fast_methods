@@ -58,13 +58,7 @@
 #include "../ndgridmap/ndgridmap.hpp"
 #include "../console/console.h"
 
-/** \brief An user-implements abs for integer values. */
-unsigned int absUI
-(int a) {
-    return (a>0) ? (a) : (-a);
-}
-
-/** \brief HEuristic strategy to be used. TIME = DISTANCE/local velocity. */
+/** \brief Heuristic strategy to be used. TIME = DISTANCE/local velocity. */
 enum HeurStrategy {NOHEUR = 0, TIME, DISTANCE};
 
 template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FMM : public Solver<grid_t> {
@@ -238,7 +232,7 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FMM : public
             grid_->idx2coord(idx, position);
 
             for (unsigned int i = 0; i < grid_t::getNDims(); ++i)
-                distance[i] = absUI(position[i] - heur_coord_[i]);
+                distance[i] = utils::absUI(position[i] - heur_coord_[i]);
 
             unsigned int idx_dist;
             grid_->coord2idx(distance, idx_dist);

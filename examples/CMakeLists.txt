@@ -47,5 +47,7 @@ include_directories (${EXAMPLES_SOURCE_DIR}/../thirdparty)
 
 add_executable (test_fsm test_fsm.cpp
                         ../console/console.cpp
-                        ../ndgridmap/cell.cpp)
-#target_link_libraries (test_fmm_benchmark boost_system boost_filesystem boost_program_options)
+                        ../ndgridmap/cell.cpp
+                        ../fmm/fmdata/fmcell.cpp
+                        )
+target_link_libraries (test_fsm X11 pthread)
