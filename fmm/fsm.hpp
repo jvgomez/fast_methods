@@ -5,6 +5,8 @@
     which require nested loops. The alternative is to do it recursively, but that would make the
     algorithm slower and FSM is rarely used above 3D.
 
+    The FSM code contains information about how to set the maximum number of dimensions.
+
     It uses as a main container the nDGridMap class. The nDGridMap type T
     has to use an FMCell or derived.
 
@@ -14,7 +16,9 @@
         H. Zhao, A fast sweeping method for Eikonal equations, Math. Comp. 74 (2005), 603-627.
         <a href="http://www.ams.org/journals/mcom/2005-74-250/S0025-5718-04-01678-3/S0025-5718-04-01678-3.pdf">[PDF]</a>
 
-    Copyright (C) 2014 Javier V. Gomez
+    NOTE: The sweeping directions are inverted with respect to the paper to make implementation easier.
+
+    Copyright (C) 2015 Javier V. Gomez
     www.javiervgomez.com
 
     This program is free software: you can redistribute it and/or modify
@@ -34,6 +38,7 @@
 
 #include "solver.hpp"
 
+// Dimension: change this value to the number of dimensions required.
 #define MAXDIMS 3
 
 template < class grid_t > class FSM : public Solver<grid_t> {
@@ -42,25 +47,25 @@ template < class grid_t > class FSM : public Solver<grid_t> {
         FSM(unsigned maxSweeps = std::numeric_limits<unsigned>::max()) : Solver<grid_t>("FSM"),
             sweeps_(0),
             maxSweeps_(maxSweeps) {
-            incs_[0] = -1;
+            initializeSweepArrays();
         }
 
         FSM(const char * name, unsigned maxSweeps = std::numeric_limits<unsigned>::max()) : Solver<grid_t>(name),
             sweeps_(0),
             maxSweeps_(maxSweeps) {
-            incs_[0] = -1;
+            initializeSweepArrays();
         }
-
-        virtual ~FSM() { clear(); }
 
         /** \brief Sets and cleans the grid in which operations will be performed.
              Since a maximum number of dimensions is assumed, fills the rest with size 1. */
         virtual void setEnvironment
         (grid_t * g) {
             Solver<grid_t>::setEnvironment(g);
+            // Filling the size of the dimensions...
             std::array<unsigned, grid_t::getNDims()> dimsize = g->getDimSizes();
             for (size_t i = 0; i < grid_t::getNDims(); ++i)
                 dimsize_[i] = dimsize[i];
+            // ... and the extended dimensions.
             for (size_t i = grid_t::getNDims(); i < MAXDIMS; ++i)
                 dimsize_[i] = 1;
         }
@@ -77,17 +82,23 @@ template < class grid_t > class FSM : public Solver<grid_t> {
 
             // Getting dimsizes and filling the other dimensions.
             bool keepSweeping = true;
+            bool stopPropagation = false;
             unsigned idx = 0;
 
-            while (keepSweeping && sweeps_ < maxSweeps_)
+            while (keepSweeping && !stopPropagation && sweeps_ < maxSweeps_)
             {
                 keepSweeping = false;
                 setSweep();
+                ++sweeps_;
 
+                // Dimension: nest as many for loops as MAXDIMS.
                 for (int k = inits_[2]; k != ends_[2]; k+=incs_[2])
                     for (int j = inits_[1]; j != ends_[1]; j+=incs_[1])
                         for (int i = inits_[0]; i != ends_[0]; i+=incs_[0])
                         {
+                            // Dimension: update the index computation (for 4D it is
+                            // l*dimsize_[0]*dimsize_[1]*dimsize_[2] + k*...
+                            // and so on.
                             idx = k*dimsize_[0]*dimsize_[1] + j *dimsize_[0] + i;
                             const double prevTime = grid_->getCell(idx).getArrivalTime();
                             const double newTime = solveEikonal(idx);
@@ -95,8 +106,11 @@ template < class grid_t > class FSM : public Solver<grid_t> {
                                 grid_->getCell(idx).setArrivalTime(newTime);
                                 keepSweeping = true;
                             }
+                            // Value not updated, it has converged
+                            else if(idx == goal_idx_)
+                                stopPropagation = true;
                         }
-                ++sweeps_;
+
             }
         }
 
@@ -140,16 +154,11 @@ template < class grid_t > class FSM : public Solver<grid_t> {
             return updatedT;
         }
 
-        virtual void clear
-        () {
-            incs_[0] = -1;
-        }
-
         virtual void reset
         () {
             Solver<grid_t>::reset();
             sweeps_ = 0;
-            incs_[0] = -1;
+            initializeSweepArrays();
         }
 
         virtual void printRunInfo
@@ -165,22 +174,24 @@ template < class grid_t > class FSM : public Solver<grid_t> {
         /** \brief Set the sweep variables: initial and final indices for iterations,
              and the increment of each iteration in every dimension.
 
-             Generates a periodical pattern for incs_ (example for 3D): [111, -111, 1-11, -1,-1,1, 11-1, -11-1,..., -1,-1,-1].
-             Stablishes inits_ and ends_ accordingly. */
-        void setSweep
-        (){
-            // Dimension 0 changes sweep direction every time.
-            incs_[0] *= -1;
+             Generates a periodical pattern for incs_ (example for 3D):
+            [-1-1-1, 1-1-1, -11-1, 11-1, -1-11, 1-11, -111, 111]
 
-            // \todo: check this implementation: http://stackoverflow.com/a/17758788/2283531
-            for (size_t i = 1; i < grid_t::getNDims(); ++i)
+             Stablishes inits_ and ends_ accordingly. */
+        virtual void setSweep
+        () {
+            // Inspired in http://stackoverflow.com/a/17758788/2283531
+            for (size_t i = 0; i < grid_t::getNDims(); ++i)
             {
-                unsigned it = sweeps_ % unsigned(pow(2,i+1));
-                if (it > pow(2,i)-1)
-                    incs_[i] = -1;
+                if((incs_[i] += 2) <=1)
+                    break;
                 else
-                    incs_[i] = 1;
+                    incs_[i] = -1;
             }
+
+            /*for (size_t i = 0; i < grid_t::getNDims(); ++i)
+                std::cout << incs_[i] << "  ";
+            std::cout << '\n';*/
 
             // Setting inits and ends.
             for (size_t i = 0; i < grid_t::getNDims(); ++i)
@@ -196,9 +207,11 @@ template < class grid_t > class FSM : public Solver<grid_t> {
                     ends_[i] = -1;
                 }
             }
+        }
 
-            // Setting extra dimensions
-            for (size_t i = grid_t::getNDims(); i < MAXDIMS; ++i) {
+        virtual void initializeSweepArrays
+        () {
+            for (size_t i = 0; i < MAXDIMS; ++i) {
                 incs_[i] = 1;
                 inits_[i] = 0;
                 ends_[i] = 1;
@@ -206,7 +219,6 @@ template < class grid_t > class FSM : public Solver<grid_t> {
         }
 
         using Solver<grid_t>::grid_;
-        //using FMM<grid_t>::neighbors;
         using Solver<grid_t>::init_points_;
         using Solver<grid_t>::goal_idx_;
         using Solver<grid_t>::setup;
@@ -215,9 +227,6 @@ template < class grid_t > class FSM : public Solver<grid_t> {
         using Solver<grid_t>::time_;
 
     private:
-        /** \brief Auxiliar array which stores the neighbor of each iteration of the computeFM() function. */
-        std::array <unsigned int, 2*grid_t::getNDims()> neighbors;
-
         /** \brief Auxiliar value wich computes T1+T2+T3... Useful for generalizing the Eikonal solver. */
         double                                          sumT;
 

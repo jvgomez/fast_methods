@@ -45,7 +45,7 @@ class Solver {
 
         virtual ~Solver() { clear(); }
 
-         /** \brief Sets and cleans the grid in which operations will be performed. */
+        /** \brief Sets and cleans the grid in which operations will be performed. */
         virtual void setEnvironment
         (grid_t * g) {
             grid_ = g;

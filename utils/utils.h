@@ -33,5 +33,4 @@ class utils {
         }
 };
 
-
 #endif /* UTILS_H_ */
