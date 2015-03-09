@@ -34,7 +34,7 @@ class MapLoader {
         /** \brief Loads the initial binary map for a given grid. It is based on the
             nDGridMap::setOccupancy() which has to be bool valued.
 
-            The image should be monochromatic and only 2D grids should be passed.
+            The image should be 256bits grayscale and only 2D grids should be passed.
 
             It also stores all the false values as initial points for a later compute() function in FM2.
 
@@ -53,24 +53,24 @@ class MapLoader {
             std::array<unsigned int, ndims> dimsize;
             dimsize[0] = img.width();
             dimsize[1] = img.height();
-            grid.resize(dimsize);
+            grid.resize(std::move(dimsize));
 
             // Filling the grid flipping Y dim. We want bottom left to be the (0,0).
             cimg_forXY(img,x,y) {
-                double occupancy = img(x,y);
+                double occupancy = img(x,y)/255;
                 unsigned int idx = img.width()*(img.height()-y-1)+x;
                 grid[idx].setOccupancy(occupancy);
                 if (grid[idx].isOccupied())
                     obs.push_back(idx);
                 }
-            grid.setOccupiedCells(obs);
+            grid.setOccupiedCells(std::move(obs));
         }
 
         /** \brief Loads the initial binary map for a given grid. It is based on the
             nDGridMap::setOccupancy() which has to be bool valued. This function has to be
             overloaded in another occupancy type is being used.
 
-            The image should be monochromatic!
+            Occupancy values should be between 0 and 1.
 
             In also stores all the false values to as initial points for a later computeFM function in FM2.
 
@@ -105,7 +105,7 @@ class MapLoader {
                 file >> height;
 
                 std::array<unsigned int, ndims> dimsize = {width, height};
-                grid.resize(dimsize);
+                grid.resize(std::move(dimsize));
                 grid.setLeafSize(leafsize);
 
                 for (unsigned int i = 0; i < width*height; ++i)
@@ -118,7 +118,7 @@ class MapLoader {
                     if (grid[i].isOccupied())
                         obs.push_back(i);
                 }
-                grid.setOccupiedCells(obs);
+                grid.setOccupiedCells(std::move(obs));
                 return 1;
             }
             else

@@ -36,6 +36,8 @@
 #include <array>
 #include <sstream>
 
+#include <utility>
+
 #include "../console/console.h"
 
 /// \todo Neighbors precomputation could speed things up.
@@ -72,7 +74,7 @@ template <class T, size_t ndims> class nDGridMap {
 
         /** \brief Resizes each dimension of the grid according dimsize. */
         void resize
-        (const std::array<unsigned int, ndims> & dimsize) {
+        (std::array<unsigned int, ndims> && dimsize) {
             dimsize_ = dimsize;
             ncells_= 1;
 
@@ -321,6 +323,12 @@ template <class T, size_t ndims> class nDGridMap {
         inline void setOccupiedCells
         (const std::vector<unsigned int> & obs) {
             occupied_ = obs;
+        }
+
+        /** \brief Sets (by move semantics) the cells which are occupied. Usually called by grid loaders. */
+        inline void setOccupiedCells
+        (std::vector<unsigned int>&& obs) {
+            occupied_ = std::move(obs);
         }
 
         /** \brief Returns the indices of the occupied cells of the grid. */

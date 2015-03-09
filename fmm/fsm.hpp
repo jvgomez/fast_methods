@@ -107,8 +107,10 @@ template < class grid_t > class FSM : public Solver<grid_t> {
                                 keepSweeping = true;
                             }
                             // Value not updated, it has converged
-                            else if(idx == goal_idx_)
+                            else if(!isnan(newTime) && (idx == goal_idx_)) {
+                                std::cout << newTime << '\n';
                                 stopPropagation = true;
+                            }
                         }
 
             }

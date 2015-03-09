@@ -11,8 +11,9 @@
 
 #include "../io/gridplotter.hpp"
 #include "../io/gridwriter.hpp"
+#include "../io/maploader.hpp"
 
-//#define TRES
+#define FROMIMG
 
 using namespace std;
 
@@ -23,17 +24,24 @@ typedef array<unsigned int, ndims> Coord2D;
 
 int main(int argc, const char** argv)
 {
+
+#ifndef FROMIMG
     unsigned dim = atoi(argv[1]);
-    //Coord2D dimsize_ = {300,300};
     Coord2D dimsize_ = {dim,dim};
     Grid2D grid (dimsize_);
-    //Coord2D init_point = {150, 150};
-    //Coord2D goal_point = {250, 250};
     Coord2D init_point = {dim/2, dim/2};
-    Coord2D goal_point = {dim-50, dim-50};
+#else
+    Grid2D grid;
+    MapLoader::loadMapFromImg(argv[1], grid);
+    Coord2D init_point = {50, 50};
+#endif
+    Coord2D goal_point = {333, 227};
+
+
+    //Coord2D goal_point = {dim-50, dim-50};
     //Coord2D goal_point = {3, 3};
 
-    FSM<Grid2D> fsm(4);
+    FSM<Grid2D> fsm(atoi(argv[2]));
     fsm.setEnvironment(&grid);
     fsm.setInitialAndGoalPoints(init_point, goal_point);
     //fsm.setInitialPoints(init_point);
