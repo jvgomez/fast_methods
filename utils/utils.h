@@ -26,6 +26,13 @@ class utils {
             double precission issues. */
         static constexpr double COMP_MARGIN = std::numeric_limits<double>::epsilon() * 1e5;
 
+         /** \brief Returns true if t1 is at least epsilon-lower than t2, provides robust comparions
+             for doubles. */
+        static bool isTimeBetterThan
+        (double t1, double t2) {
+            return t1 + COMP_MARGIN < t2;
+        }
+
         /** \brief An user-implemented absolute value function for integer values. */
         static unsigned int absUI
         (int a) {

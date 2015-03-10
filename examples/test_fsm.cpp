@@ -35,7 +35,7 @@ int main(int argc, const char** argv)
     MapLoader::loadMapFromImg(argv[1], grid);
     Coord2D init_point = {50, 50};
 #endif
-    Coord2D goal_point = {333, 227};
+    //Coord2D goal_point = {333, 227};
 
 
     //Coord2D goal_point = {dim-50, dim-50};
@@ -43,8 +43,8 @@ int main(int argc, const char** argv)
 
     FSM<Grid2D> fsm(atoi(argv[2]));
     fsm.setEnvironment(&grid);
-    fsm.setInitialAndGoalPoints(init_point, goal_point);
-    //fsm.setInitialPoints(init_point);
+    //fsm.setInitialAndGoalPoints(init_point, goal_point);
+    fsm.setInitialPoints(init_point);
     fsm.compute();
     fsm.printRunInfo();
     //cout << "\tElapsed "<< fsm.getName() <<" time: " << fsm.getTime() << " ms" << '\n';
@@ -53,8 +53,8 @@ int main(int argc, const char** argv)
 
     FMM<Grid2D> fmm;
     fmm.setEnvironment(&grid);
-    fmm.setInitialAndGoalPoints(init_point, goal_point);
-    //fmm.setInitialPoints(init_point);
+    //fmm.setInitialAndGoalPoints(init_point, goal_point);
+    fmm.setInitialPoints(init_point);
     fmm.compute();
     fmm.printRunInfo();
     //GridPlotter::plotArrivalTimes(grid, fsm.getName());

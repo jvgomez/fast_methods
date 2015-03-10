@@ -37,6 +37,7 @@
 #define FSM_HPP_
 
 #include "solver.hpp"
+#include "../utils/utils.h"
 
 // Dimension: change this value to the number of dimensions required.
 #define MAXDIMS 3
@@ -48,12 +49,16 @@ template < class grid_t > class FSM : public Solver<grid_t> {
             sweeps_(0),
             maxSweeps_(maxSweeps) {
             initializeSweepArrays();
+            Tvalues_.reserve(grid_t::getNDims());
+            TTvalues_.reserve(grid_t::getNDims());
         }
 
         FSM(const char * name, unsigned maxSweeps = std::numeric_limits<unsigned>::max()) : Solver<grid_t>(name),
             sweeps_(0),
             maxSweeps_(maxSweeps) {
             initializeSweepArrays();
+            Tvalues_.reserve(grid_t::getNDims());
+            TTvalues_.reserve(grid_t::getNDims());
         }
 
         /** \brief Sets and cleans the grid in which operations will be performed.
@@ -102,18 +107,20 @@ template < class grid_t > class FSM : public Solver<grid_t> {
                             idx = k*dimsize_[0]*dimsize_[1] + j *dimsize_[0] + i;
                             const double prevTime = grid_->getCell(idx).getArrivalTime();
                             const double newTime = solveEikonal(idx);
-                            if(newTime + utils::COMP_MARGIN < prevTime) {
+                            if(utils::isTimeBetterThan(newTime, prevTime)) {
                                 grid_->getCell(idx).setArrivalTime(newTime);
                                 keepSweeping = true;
+                                if (sweeps_ > 6 )
+                                    std::cout << "First mod: " << idx << "  " << newTime <<'\n';
                             }
-                            // Value not updated, it has converged
+                            // EXPERIMENTAL - Value not updated, it has converged
                             else if(!isnan(newTime) && (idx == goal_idx_)) {
-                                std::cout << newTime << '\n';
                                 stopPropagation = true;
                             }
                         }
-
             }
+
+
         }
 
         /** \brief FSM-specific solver. Solves nD Eikonal equation for cell idx.
@@ -123,35 +130,54 @@ template < class grid_t > class FSM : public Solver<grid_t> {
         (const int & idx) {
             unsigned int a = grid_t::getNDims(); // a parameter of the Eikonal equation.
 
+            Tvalues_.clear();
+            TTvalues_.clear();
+            sumT_ = 0;
+            sumTT_ = 0;
+
             double updatedT;
-            sumT = 0;
-            sumTT = 0;
 
             for (unsigned int dim = 0; dim < grid_t::getNDims(); ++dim) {
                 double minTInDim = grid_->getMinValueInDim(idx, dim);
-
+                if (idx==8101)
+                    std::cout << minTInDim << "  ";
                 if (!isinf(minTInDim) && minTInDim < grid_->getCell(idx).getArrivalTime()) {
-                    Tvalues[dim] = minTInDim;
-                    sumT += Tvalues[dim];
-                    TTvalues[dim] = Tvalues[dim]*Tvalues[dim];
-                    sumTT += TTvalues[dim];
+                    Tvalues_.push_back(minTInDim);
+                    sumT_ += Tvalues_.back();
+                    TTvalues_.push_back(minTInDim*minTInDim);
+                    sumTT_ += TTvalues_.back();
                 }
                 else {
-                    Tvalues[dim] = 0;
-                    TTvalues[dim] = 0;
-                    a -=1 ;
+                    //Tvalues_.push_back(std::numeric_limits<double>::infinity());
+                    //TTvalues_.push_back(std::numeric_limits<double>::infinity());
+                    a -=1;
                 }
             }
+            //std::cout << '\n';
+            if (a == 0)
+                return std::numeric_limits<double>::infinity();
 
-            double b = -2*sumT;
-            double c = sumTT - grid_->getLeafSize() * grid_->getLeafSize()/(grid_->getCell(idx).getVelocity()*grid_->getCell(idx).getVelocity());
-            double quad_term = b*b - 4*a*c;
-            if (quad_term < 0) {
-                double minT = *(std::min_element(Tvalues.begin(), Tvalues.end()));
-                updatedT = grid_->getLeafSize() * grid_->getLeafSize()/(grid_->getCell(idx).getVelocity()*grid_->getCell(idx).getVelocity()) + minT;
+            //if (idx==87)
+                //std::cout << a << "  ";
+            // Solve in lower dimensions.
+            if (a < grid_t::getNDims())
+                updatedT = solveEikonalRecursive(idx, a, false);
+            else {
+                //if (idx==56)
+                //    //std::cout << '\n';
+                double b = -2*sumT_;
+                double c = sumTT_ - grid_->getLeafSize() * grid_->getLeafSize()/(grid_->getCell(idx).getVelocity()*grid_->getCell(idx).getVelocity());
+                double quad_term = b*b - 4*a*c;
+                //std::cout << "Solving " << a << ":  " << b << "  " << c << "  " << quad_term << '\n';
+
+                if (quad_term < 0)
+                    updatedT = solveEikonalRecursive(idx, a-1, true);
+                else
+                    updatedT = (-b + sqrt(quad_term))/(2*a);
+
+                //if (idx==56)
+                //    //std::cout << a << "  " << b << "  " << c <<  "  " << quad_term << "  " << updatedT << '\n';
             }
-            else
-                updatedT = (-b + sqrt(quad_term))/(2*a);
 
             return updatedT;
         }
@@ -173,6 +199,40 @@ template < class grid_t > class FSM : public Solver<grid_t> {
         }
 
     protected:
+        virtual double solveEikonalRecursive
+        (unsigned int idx, unsigned int depth, bool removeMax) {
+            unsigned int a = depth;
+            //if (idx==87)
+                //std::cout << "SER: " << removeMax << "  ";
+            if (removeMax) {
+                //std::cout << "This is NOT called!" << '\n';
+                //for (unsigned int i = depth; i < grid_t::getNDims(); ++i) {
+                    std::vector<double>::iterator maxTit = std::max_element(Tvalues_.begin(), Tvalues_.end());
+                    sumT_ -= *maxTit;
+                    sumTT_ -= *maxTit * *maxTit;
+                    Tvalues_.erase(maxTit);
+                    //if(!isinf(*maxTit)) {
+                    //}
+                //}
+            }
+            if (depth == 1) {
+                //std::cout << "Depth 1 : " << Tvalues_[0] + grid_->getLeafSize()*grid_->getLeafSize() / (grid_->getCell(idx).getVelocity()*grid_->getCell(idx).getVelocity())<< '\n';
+                return Tvalues_[0] + grid_->getLeafSize()*grid_->getLeafSize() / (grid_->getCell(idx).getVelocity()*grid_->getCell(idx).getVelocity());
+            }
+            else {
+                double b = -2*sumT_;
+                double c = sumTT_ - grid_->getLeafSize() * grid_->getLeafSize()/(grid_->getCell(idx).getVelocity()*grid_->getCell(idx).getVelocity());
+                 //std::cout << "Regular " << depth << ":  " << sumTT_ << "  " << grid_->getLeafSize() * grid_->getLeafSize()/(grid_->getCell(idx).getVelocity()*grid_->getCell(idx).getVelocity()) << '\n';
+                double quad_term = b*b - 4*a*c;
+                //if (idx==87)
+                    //std::cout << "Regular " << depth << ":  " << b << "  " << c << "  " << quad_term << '\n';
+                if (quad_term < 0)
+                    return solveEikonalRecursive(idx, depth-1, true);
+                else
+                    return (-b + sqrt(quad_term))/(2*a);
+            }
+        }
+
         /** \brief Set the sweep variables: initial and final indices for iterations,
              and the increment of each iteration in every dimension.
 
@@ -192,8 +252,8 @@ template < class grid_t > class FSM : public Solver<grid_t> {
             }
 
             /*for (size_t i = 0; i < grid_t::getNDims(); ++i)
-                std::cout << incs_[i] << "  ";
-            std::cout << '\n';*/
+                //std::cout << incs_[i] << "  ";
+            //std::cout << '\n';*/
 
             // Setting inits and ends.
             for (size_t i = 0; i < grid_t::getNDims(); ++i)
@@ -230,16 +290,16 @@ template < class grid_t > class FSM : public Solver<grid_t> {
 
     private:
         /** \brief Auxiliar value wich computes T1+T2+T3... Useful for generalizing the Eikonal solver. */
-        double                                          sumT;
+        double                                          sumT_;
 
         /** \brief Auxiliar value wich computes T1^2+T2^2+T3^2... Useful for generalizing the Eikonal solver. */
-        double                                          sumTT;
+        double                                          sumTT_;
 
         /** \brief Auxiliar array with values T0,T1...Tn-1 variables in the Discretized Eikonal Equation. */
-        std::array<double, grid_t::getNDims()>          Tvalues;
+        std::vector<double>          Tvalues_;
 
         /** \brief Auxiliar array with values T0^2,T1^2...Tn-1^2 variables in the Discretized Eikonal Equation. */
-        std::array<double, grid_t::getNDims()>          TTvalues;
+        std::vector<double>          TTvalues_;
 
         /** \brief Number of sweeps performed. */
         unsigned int sweeps_;

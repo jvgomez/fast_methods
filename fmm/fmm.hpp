@@ -88,34 +88,51 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FMM : public
         (const int & idx) {
             unsigned int a = grid_t::getNDims(); // a parameter of the Eikonal equation.
 
+            Tvalues_.clear();
+            TTvalues_.clear();
+            sumT_ = 0;
+            sumTT_ = 0;
+
             double updatedT;
-            sumT = 0;
-            sumTT = 0;
 
             for (unsigned int dim = 0; dim < grid_t::getNDims(); ++dim) {
                 double minTInDim = grid_->getMinValueInDim(idx, dim);
-                if (!isinf(minTInDim)) {
-                    Tvalues[dim] = minTInDim;
-                    sumT += Tvalues[dim];
-                    TTvalues[dim] = Tvalues[dim]*Tvalues[dim];
-                    sumTT += TTvalues[dim];
+                if (idx==8101)
+                    std::cout << minTInDim << "  ";
+                if (!isinf(minTInDim) && minTInDim < grid_->getCell(idx).getArrivalTime()) {
+                    Tvalues_.push_back(minTInDim);
+                    sumT_ += Tvalues_.back();
+                    TTvalues_.push_back(minTInDim*minTInDim);
+                    sumTT_ += TTvalues_.back();
                 }
                 else {
-                    Tvalues[dim] = 0;
-                    TTvalues[dim] = 0;
-                    a -=1 ;
+                    //Tvalues_.push_back(std::numeric_limits<double>::infinity());
+                    //TTvalues_.push_back(std::numeric_limits<double>::infinity());
+                    a -=1;
                 }
             }
+            //std::cout << '\n';
+            if (a == 0)
+                return std::numeric_limits<double>::infinity();
 
-            double b = -2*sumT;
-            double c = sumTT - grid_->getLeafSize() * grid_->getLeafSize()/(grid_->getCell(idx).getVelocity()*grid_->getCell(idx).getVelocity());
-            double quad_term = b*b - 4*a*c;
-            if (quad_term < 0) {
-                double minT = *(std::min_element(Tvalues.begin(), Tvalues.end()));
-                updatedT = grid_->getLeafSize() * grid_->getLeafSize()/(grid_->getCell(idx).getVelocity()*grid_->getCell(idx).getVelocity()) + minT;
+            //if (idx==87)
+                //std::cout << a << "  ";
+            // Solve in lower dimensions.
+            if (a < grid_t::getNDims())
+                updatedT = solveEikonalRecursive(idx, a, false);
+            else {
+                //if (idx==56)
+                //    //std::cout << '\n';
+                double b = -2*sumT_;
+                double c = sumTT_ - grid_->getLeafSize() * grid_->getLeafSize()/(grid_->getCell(idx).getVelocity()*grid_->getCell(idx).getVelocity());
+                double quad_term = b*b - 4*a*c;
+                //std::cout << "Solving " << a << ":  " << b << "  " << c << "  " << quad_term << '\n';
+
+                if (quad_term < 0)
+                    updatedT = solveEikonalRecursive(idx, a-1, true);
+                else
+                    updatedT = (-b + sqrt(quad_term))/(2*a);
             }
-            else
-                updatedT = (-b + sqrt(quad_term))/(2*a);
 
             if (heurStrategy_ == TIME)
                 grid_->getCell(idx).setHeuristicTime( getPrecomputedDistance(idx)/grid_->getCell(idx).getVelocity() );
@@ -251,6 +268,40 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FMM : public
 
     /// \note These accessing levels may need to be modified (and other solvers).
     protected:
+        virtual double solveEikonalRecursive
+        (unsigned int idx, unsigned int depth, bool removeMax) {
+            unsigned int a = depth;
+            //if (idx==87)
+                //std::cout << "SER: " << removeMax << "  ";
+            if (removeMax) {
+                //std::cout << "This is NOT called!" << '\n';
+                //for (unsigned int i = depth; i < grid_t::getNDims(); ++i) {
+                    std::vector<double>::iterator maxTit = std::max_element(Tvalues_.begin(), Tvalues_.end());
+                    sumT_ -= *maxTit;
+                    sumTT_ -= *maxTit * *maxTit;
+                    Tvalues_.erase(maxTit);
+                    //if(!isinf(*maxTit)) {
+                    //}
+                //}
+            }
+            if (depth == 1) {
+                //std::cout << "Depth 1 : " << Tvalues_[0] + grid_->getLeafSize()*grid_->getLeafSize() / (grid_->getCell(idx).getVelocity()*grid_->getCell(idx).getVelocity())<< '\n';
+                return Tvalues_[0] + grid_->getLeafSize()*grid_->getLeafSize() / (grid_->getCell(idx).getVelocity()*grid_->getCell(idx).getVelocity());
+            }
+            else {
+                double b = -2*sumT_;
+                double c = sumTT_ - grid_->getLeafSize() * grid_->getLeafSize()/(grid_->getCell(idx).getVelocity()*grid_->getCell(idx).getVelocity());
+                 //std::cout << "Regular " << depth << ":  " << sumTT_ << "  " << grid_->getLeafSize() * grid_->getLeafSize()/(grid_->getCell(idx).getVelocity()*grid_->getCell(idx).getVelocity()) << '\n';
+                double quad_term = b*b - 4*a*c;
+                //if (idx==87)
+                    //std::cout << "Regular " << depth << ":  " << b << "  " << c << "  " << quad_term << '\n';
+                if (quad_term < 0)
+                    return solveEikonalRecursive(idx, depth-1, true);
+                else
+                    return (-b + sqrt(quad_term))/(2*a);
+            }
+        }
+
         using Solver<grid_t>::grid_;
         using Solver<grid_t>::init_points_;
         using Solver<grid_t>::goal_idx_;
@@ -263,16 +314,16 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FMM : public
 
     private:
         /** \brief Auxiliar value wich computes T1+T2+T3... Useful for generalizing the Eikonal solver. */
-        double                                          sumT;
+        double                                          sumT_;
 
         /** \brief Auxiliar value wich computes T1^2+T2^2+T3^2... Useful for generalizing the Eikonal solver. */
-        double                                          sumTT;
+        double                                          sumTT_;
 
-        /** \brief Auxiliar array with values T0,T1...Tn-1 variables in the Discretized Eikonal Equation. */
-        std::array<double, grid_t::getNDims()>          Tvalues;
+        /** \brief Auxiliar vector with values T0,T1...Tn-1 variables in the Discretized Eikonal Equation. */
+        std::vector<double>          Tvalues_;
 
-        /** \brief Auxiliar array with values T0^2,T1^2...Tn-1^2 variables in the Discretized Eikonal Equation. */
-        std::array<double, grid_t::getNDims()>          TTvalues;
+        /** \brief Auxiliar vector with values T0^2,T1^2...Tn-1^2 variables in the Discretized Eikonal Equation. */
+        std::vector<double>          TTvalues_;
 
         /** \brief Instance of the heap used. */
         heap_t                                          narrow_band_;
