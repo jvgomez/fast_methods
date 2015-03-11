@@ -13,8 +13,8 @@ for j = 1:size(path,1)
     coords(j,ndims) = floor(idx/d(ndims-1));
     aux = idx - coords(j,ndims)*d(ndims-1);
     for i = ndims-1:-1:2
-        coords(j,i) = floor(aux/d(i));
-        aux = aux - coords(j,i)*d(i);
+        coords(j,i) = floor(aux/d(i-1));
+        aux = aux - coords(j,i)*d(i-1);
     end
     coords(j,1) = aux;
 end

@@ -13,12 +13,12 @@
 #include "../io/gridwriter.hpp"
 #include "../io/maploader.hpp"
 
-#define FROMIMG
+//#define FROMIMG
 
 using namespace std;
 
 // A bit of shorthand.
-constexpr unsigned int ndims = 2;
+constexpr unsigned int ndims = 3;
 typedef nDGridMap<FMCell, ndims> Grid2D;
 typedef array<unsigned int, ndims> Coord2D;
 
@@ -27,9 +27,9 @@ int main(int argc, const char** argv)
 
 #ifndef FROMIMG
     unsigned dim = atoi(argv[1]);
-    Coord2D dimsize_ = {dim,dim};
+    Coord2D dimsize_ = {dim,dim,dim};
     Grid2D grid (dimsize_);
-    Coord2D init_point = {dim/2, dim/2};
+    Coord2D init_point = {dim/2, dim/2, dim/2};
 #else
     Grid2D grid;
     MapLoader::loadMapFromImg(argv[1], grid);
