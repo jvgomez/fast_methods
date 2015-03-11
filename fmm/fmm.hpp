@@ -89,7 +89,6 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FMM : public
             unsigned int a = grid_t::getNDims(); // a parameter of the Eikonal equation.
 
             Tvalues_.clear();
-            TTvalues_.clear();
             sumT_ = 0;
             sumTT_ = 0;
 
@@ -97,36 +96,25 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FMM : public
 
             for (unsigned int dim = 0; dim < grid_t::getNDims(); ++dim) {
                 double minTInDim = grid_->getMinValueInDim(idx, dim);
-                if (idx==8101)
-                    std::cout << minTInDim << "  ";
                 if (!isinf(minTInDim) && minTInDim < grid_->getCell(idx).getArrivalTime()) {
                     Tvalues_.push_back(minTInDim);
                     sumT_ += Tvalues_.back();
-                    TTvalues_.push_back(minTInDim*minTInDim);
-                    sumTT_ += TTvalues_.back();
+                    sumTT_ += minTInDim*minTInDim;
                 }
-                else {
-                    //Tvalues_.push_back(std::numeric_limits<double>::infinity());
-                    //TTvalues_.push_back(std::numeric_limits<double>::infinity());
+                else
                     a -=1;
-                }
             }
-            //std::cout << '\n';
+
             if (a == 0)
                 return std::numeric_limits<double>::infinity();
 
-            //if (idx==87)
-                //std::cout << a << "  ";
             // Solve in lower dimensions.
             if (a < grid_t::getNDims())
                 updatedT = solveEikonalRecursive(idx, a, false);
             else {
-                //if (idx==56)
-                //    //std::cout << '\n';
                 double b = -2*sumT_;
                 double c = sumTT_ - grid_->getLeafSize() * grid_->getLeafSize()/(grid_->getCell(idx).getVelocity()*grid_->getCell(idx).getVelocity());
                 double quad_term = b*b - 4*a*c;
-                //std::cout << "Solving " << a << ":  " << b << "  " << c << "  " << quad_term << '\n';
 
                 if (quad_term < 0)
                     updatedT = solveEikonalRecursive(idx, a-1, true);
@@ -271,30 +259,19 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FMM : public
         virtual double solveEikonalRecursive
         (unsigned int idx, unsigned int depth, bool removeMax) {
             unsigned int a = depth;
-            //if (idx==87)
-                //std::cout << "SER: " << removeMax << "  ";
             if (removeMax) {
-                //std::cout << "This is NOT called!" << '\n';
-                //for (unsigned int i = depth; i < grid_t::getNDims(); ++i) {
-                    std::vector<double>::iterator maxTit = std::max_element(Tvalues_.begin(), Tvalues_.end());
-                    sumT_ -= *maxTit;
-                    sumTT_ -= *maxTit * *maxTit;
-                    Tvalues_.erase(maxTit);
-                    //if(!isinf(*maxTit)) {
-                    //}
-                //}
+                std::vector<double>::iterator maxTit = std::max_element(Tvalues_.begin(), Tvalues_.end());
+                sumT_ -= *maxTit;
+                sumTT_ -= *maxTit * *maxTit;
+                Tvalues_.erase(maxTit);
             }
-            if (depth == 1) {
-                //std::cout << "Depth 1 : " << Tvalues_[0] + grid_->getLeafSize()*grid_->getLeafSize() / (grid_->getCell(idx).getVelocity()*grid_->getCell(idx).getVelocity())<< '\n';
+            if (depth == 1)
                 return Tvalues_[0] + grid_->getLeafSize()*grid_->getLeafSize() / (grid_->getCell(idx).getVelocity()*grid_->getCell(idx).getVelocity());
-            }
             else {
                 double b = -2*sumT_;
                 double c = sumTT_ - grid_->getLeafSize() * grid_->getLeafSize()/(grid_->getCell(idx).getVelocity()*grid_->getCell(idx).getVelocity());
-                 //std::cout << "Regular " << depth << ":  " << sumTT_ << "  " << grid_->getLeafSize() * grid_->getLeafSize()/(grid_->getCell(idx).getVelocity()*grid_->getCell(idx).getVelocity()) << '\n';
                 double quad_term = b*b - 4*a*c;
-                //if (idx==87)
-                    //std::cout << "Regular " << depth << ":  " << b << "  " << c << "  " << quad_term << '\n';
+
                 if (quad_term < 0)
                     return solveEikonalRecursive(idx, depth-1, true);
                 else
