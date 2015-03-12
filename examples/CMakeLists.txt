@@ -24,12 +24,12 @@ include_directories (${EXAMPLES_SOURCE_DIR}/../gradientdescent)
 # Third party internal includes
 include_directories (${EXAMPLES_SOURCE_DIR}/../thirdparty)
 
-add_executable (test_fmm test_fmm.cpp
-                        ../console/console.cpp
-                        ../ndgridmap/cell.cpp
-                        ../fmm/fmdata/fmcell.cpp
-                        )
-target_link_libraries (test_fmm X11 pthread)
+#add_executable (test_fmm test_fmm.cpp
+#                        ../console/console.cpp
+#                        ../ndgridmap/cell.cpp
+#                        ../fmm/fmdata/fmcell.cpp
+#                        )
+#target_link_libraries (test_fmm X11 pthread)
 
 #add_executable (test_fm2 test_fm2.cpp
 #                        ../console/console.cpp

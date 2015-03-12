@@ -141,24 +141,28 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FMM : public
         (const int & idx) {
             unsigned int a = grid_t::getNDims(); // a parameter of the Eikonal equation.
             Tvalues_.clear();
-            double updatedT;
-
-            if (idx == 3242)
-                std::cout << idx << "  " << grid_->getCell(idx).getVelocity() << "  ";
 
             for (unsigned int dim = 0; dim < grid_t::getNDims(); ++dim) {
                 double minTInDim = grid_->getMinValueInDim(idx, dim);
-                if (idx == 3242)
-                    std::cout << minTInDim << "  ";
                 if (!isinf(minTInDim) && minTInDim < grid_->getCell(idx).getArrivalTime())
                     Tvalues_.push_back(minTInDim);
                 else
                     a -=1;
             }
 
+            if (a == 0)
+                return std::numeric_limits<double>::infinity();
+
             // Sort the neighbor values to make easy the following code.
+            /// \todo given that this sorts a small vector, a n^2 methods could be better. Test it.
             std::sort(Tvalues_.begin(), Tvalues_.end());
-            updatedT = solveForNDims(idx, a);
+            double updatedT;
+            for (unsigned i = 1; i <= a; ++i) {
+                updatedT = solveEikonalNDims(idx, i);
+                // If no more dimensions or increasing one dimension will not improve time.
+                if (i == a || (updatedT - Tvalues_[i]) < utils::COMP_MARGIN)
+                    break;
+            }
 
             // Include heuristics if necessary.
             if (heurStrategy_ == TIME)
@@ -166,8 +170,6 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FMM : public
             else if (heurStrategy_ == DISTANCE)
                 grid_->getCell(idx).setHeuristicTime( getPrecomputedDistance(idx) );
 
-            if (idx == 3242)
-                std::cout << "Value:  " << updatedT <<'\n';
             return updatedT;
         }
 
@@ -252,11 +254,11 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FMM : public
     protected:
         /** \brief Solves the Eikonal equation assuming that Tvalues_
             is sorted. */
-        double solveForNDims
+        double solveEikonalNDims
         (unsigned int idx, unsigned int dim) {
             // Solve for 1 dimension.
             if (dim == 1)
-                return Tvalues_[0] + grid_->getLeafSize()*grid_->getLeafSize() / (grid_->getCell(idx).getVelocity()*grid_->getCell(idx).getVelocity());
+                return Tvalues_[0] + grid_->getLeafSize() / grid_->getCell(idx).getVelocity();
 
             // Solve for any number > 1 of dimensions.
             double sumT = 0;
@@ -270,9 +272,8 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FMM : public
             double c = sumTT - grid_->getLeafSize() * grid_->getLeafSize() / (grid_->getCell(idx).getVelocity()*grid_->getCell(idx).getVelocity());
             double quad_term = b*b - 4*a*c;
 
-            // If inconsistent solution, solve using only the n-1 Tvalues_ (decreasing 1 dimension).
             if (quad_term < 0)
-                return solveForNDims(idx, dim-1);
+                return std::numeric_limits<double>::infinity();
             else
                 return (-b + sqrt(quad_term))/(2*a);
         }

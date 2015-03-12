@@ -121,8 +121,6 @@ template < class grid_t > class FSM : public FMM<grid_t> {
                             if(utils::isTimeBetterThan(newTime, prevTime)) {
                                 grid_->getCell(idx).setArrivalTime(newTime);
                                 keepSweeping = true;
-                                if (idx == 3242)
-                                    std::cout << "Updated: " << idx << "  " << newTime << '\n';
                             }
                             // EXPERIMENTAL - Value not updated, it has converged
                             else if(!isnan(newTime) && !isinf(newTime) && (idx == goal_idx_)) {
@@ -130,52 +128,6 @@ template < class grid_t > class FSM : public FMM<grid_t> {
                             }
                         }
             }
-        }
-
-        /** \brief FSM-specific solver. Solves recursively nD Eikonal equation for cell idx for
-            1D, 2D, etc.. until increasing dimensions does not imrpove the time.
-            If the neighbor value is higher than the current value is treated as
-            an infinite. */
-        virtual double solveEikonal
-        (const int & idx) {
-            unsigned int a = grid_t::getNDims(); // a parameter of the Eikonal equation.
-            Tvalues_.clear();
-            double updatedT;
-
-            if (idx == 3242)
-                std::cout << idx << "  " << grid_->getCell(idx).getVelocity() << "  ";
-
-            // Getting neigbhor values.
-            for (unsigned int dim = 0; dim < grid_t::getNDims(); ++dim) {
-                double minTInDim = grid_->getMinValueInDim(idx, dim);
-                if (idx == 3242)
-                    std::cout << minTInDim << "  ";
-                if (!isinf(minTInDim) && minTInDim < grid_->getCell(idx).getArrivalTime())
-                    Tvalues_.push_back(minTInDim);
-                else
-                    a -=1;
-            }
-
-            if (idx == 3242)
-                std::cout << '\n';
-
-            // FSM will try to solve for indices with no valid neighbor values.
-            if (a == 0)
-                return std::numeric_limits<double>::infinity();
-
-            // Sort the neighbor values to make easy the following code.
-            std::sort(Tvalues_.begin(), Tvalues_.end());
-
-            // Solve from 1dim to n-dim until incrementing 1 more dimension
-            // cannot improve the time.
-            for (unsigned i = 1; i <= a; ++i) {
-                updatedT = solveForNDims(idx, i);
-                if (i == a)
-                    break;
-                else if ((updatedT - Tvalues_[i]) < utils::COMP_MARGIN)
-                    break;
-            }
-            return updatedT;
         }
 
         virtual void reset
@@ -245,8 +197,8 @@ template < class grid_t > class FSM : public FMM<grid_t> {
         using FMM<grid_t>::setup_;
         using FMM<grid_t>::name_;
         using FMM<grid_t>::time_;
-        using FMM<grid_t>::solveForNDims;
         using FMM<grid_t>::Tvalues_;
+        using FMM<grid_t>::solveEikonal;
 
         /** \brief Number of sweeps performed. */
         unsigned int sweeps_;
