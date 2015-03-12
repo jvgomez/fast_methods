@@ -45,6 +45,7 @@
 // Dimension: change this value to the number of dimensions required.
 #define MAXDIMS 3
 
+/// \todo implement a more robust goal point stopping criterion.
 template < class grid_t > class FSM : public FMM<grid_t> {
 
     public:
@@ -76,13 +77,21 @@ template < class grid_t > class FSM : public FMM<grid_t> {
                 dimsize_[i] = 1;
         }
 
+        /** \brief Executes Solver setup (instead of FMM setup) and other checks. */
+        virtual void setup
+        () {
+            Solver<grid_t>::setup();
+
+            if (int(goal_idx_) != -1) {
+                console::warning("Setting a goal point in FSM is experimental. It may lead to wrong results.");
+            }
+        }
+
         /** \brief Actual method that implements FSM. */
         virtual void computeInternal
         () {
             if (!setup_)
                 setup();
-            if (int(goal_idx_) != -1)
-                console::warning("Setting a goal point in FSM is experimental. It may lead to wrong results.");
 
             // Initialization
             for (unsigned int i: init_points_) // For each initial point
@@ -93,8 +102,7 @@ template < class grid_t > class FSM : public FMM<grid_t> {
             bool stopPropagation = false;
             unsigned idx = 0;
 
-            while (keepSweeping && !stopPropagation && sweeps_ < maxSweeps_)
-            {
+            while (keepSweeping && !stopPropagation && sweeps_ < maxSweeps_) {
                 keepSweeping = false;
                 setSweep();
                 ++sweeps_;
@@ -117,7 +125,7 @@ template < class grid_t > class FSM : public FMM<grid_t> {
                                     std::cout << "Updated: " << idx << "  " << newTime << '\n';
                             }
                             // EXPERIMENTAL - Value not updated, it has converged
-                            else if(!isnan(newTime) && (idx == goal_idx_)) {
+                            else if(!isnan(newTime) && !isinf(newTime) && (idx == goal_idx_)) {
                                 stopPropagation = true;
                             }
                         }
@@ -234,7 +242,6 @@ template < class grid_t > class FSM : public FMM<grid_t> {
         using FMM<grid_t>::grid_;
         using FMM<grid_t>::init_points_;
         using FMM<grid_t>::goal_idx_;
-        using FMM<grid_t>::setup;
         using FMM<grid_t>::setup_;
         using FMM<grid_t>::name_;
         using FMM<grid_t>::time_;

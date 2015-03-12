@@ -13,6 +13,7 @@
 #include "../fmm/fim.hpp"
 #include "../fmm/gmm.hpp"
 #include "../fmm/ufmm.hpp"
+#include "../fmm/fsm.hpp"
 
 #include "../benchmark/benchmark.hpp"
 
@@ -63,8 +64,9 @@ int main()
     benchmark.addSolver(new FMMStar<FMGrid2D, FMPriorityQueue<FMCell> >("SFMM*"));
     benchmark.addSolver(new FMMStar<FMGrid2D, FMPriorityQueue<FMCell> >("SFMM*_Dist", DISTANCE));
     benchmark.addSolver(new GMM<FMGrid2D>);
-    benchmark.addSolver(new FIM<FMGrid2D>("FIM"));
-    benchmark.addSolver(new UFMM<FMGrid2D>("UFMM"));
+    benchmark.addSolver(new FIM<FMGrid2D>);
+    benchmark.addSolver(new UFMM<FMGrid2D>);
+    benchmark.addSolver(new FSM<FMGrid2D>);
 
     // Run benchmark
     benchmark.run();

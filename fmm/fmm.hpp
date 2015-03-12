@@ -80,6 +80,11 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FMM : public
             Solver<grid_t>::setup();
             narrow_band_.setMaxSize(grid_->size());
             setHeuristics(heurStrategy_); // Redundant, but safe.
+
+            if (int(goal_idx_) == -1 && heurStrategy_ != NOHEUR) {
+                console::warning("FMM: Heuristics set with no goal point. Deactivating heuristics.");
+                heurStrategy_ = NOHEUR;
+            }
         }
 
         /** \brief Actual method that implements FMM. */
