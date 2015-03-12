@@ -76,16 +76,8 @@ template <class T, size_t ndims> class nDGridMap {
         void resize
         (const std::array<unsigned int, ndims> & dimsize) {
             dimsize_ = dimsize;
-            resize(std::move(dimsize_));
-        }
-
-        /** \brief Resizes each dimension of the grid according dimsize. */
-        void resize
-        (std::array<unsigned int, ndims> && dimsize) {
-            dimsize_ = std::move(dimsize);
-            ncells_= 1;
-
             // Computing the total number of cells and the auxiliar array d_.
+            ncells_= 1;
             for (unsigned int i = 0; i < ndims; ++i) {
                 ncells_ *= dimsize_[i];
                 d_[i] = ncells_;
@@ -349,7 +341,7 @@ template <class T, size_t ndims> class nDGridMap {
 
     private:
         /** \brief Main container for the class. */
-        std::vector<T> cells_; 
+        std::vector<T> cells_;
         
         /** \brief Size of each dimension. */
         std::array<unsigned int, ndims> dimsize_;

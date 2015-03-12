@@ -82,54 +82,6 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FMM : public
             setHeuristics(heurStrategy_); // Redundant, but safe.
         }
 
-        /** \brief Solves nD Eikonal equation for cell idx. If heuristics are activated, it will add
-            the estimated travel time to goal with current velocity. */
-        virtual double solveEikonal
-        (const int & idx) {
-            unsigned int a = grid_t::getNDims(); // a parameter of the Eikonal equation.
-
-            Tvalues_.clear();
-            sumT_ = 0;
-            sumTT_ = 0;
-
-            double updatedT;
-
-            for (unsigned int dim = 0; dim < grid_t::getNDims(); ++dim) {
-                double minTInDim = grid_->getMinValueInDim(idx, dim);
-                if (!isinf(minTInDim) && minTInDim < grid_->getCell(idx).getArrivalTime()) {
-                    Tvalues_.push_back(minTInDim);
-                    sumT_ += Tvalues_.back();
-                    sumTT_ += minTInDim*minTInDim;
-                }
-                else
-                    a -=1;
-            }
-
-            if (a == 0)
-                return std::numeric_limits<double>::infinity();
-
-            // Solve in lower dimensions.
-            if (a < grid_t::getNDims())
-                updatedT = solveEikonalRecursive(idx, a, false);
-            else {
-                double b = -2*sumT_;
-                double c = sumTT_ - grid_->getLeafSize() * grid_->getLeafSize()/(grid_->getCell(idx).getVelocity()*grid_->getCell(idx).getVelocity());
-                double quad_term = b*b - 4*a*c;
-
-                if (quad_term < 0)
-                    updatedT = solveEikonalRecursive(idx, a-1, true);
-                else
-                    updatedT = (-b + sqrt(quad_term))/(2*a);
-            }
-
-            if (heurStrategy_ == TIME)
-                grid_->getCell(idx).setHeuristicTime( getPrecomputedDistance(idx)/grid_->getCell(idx).getVelocity() );
-            else if (heurStrategy_ == DISTANCE)
-                grid_->getCell(idx).setHeuristicTime( getPrecomputedDistance(idx) );
-
-            return updatedT;
-        }
-
         /** \brief Actual method that implements FMM. */
         virtual void computeInternal
         () {
@@ -177,6 +129,43 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FMM : public
                 } // For each neighbor.
             } // while narrow band not empty
         }
+
+        /** \brief Solves nD Eikonal equation for cell idx. If heuristics are activated, it will add
+            the estimated travel time to goal with current velocity. */
+        virtual double solveEikonal
+        (const int & idx) {
+            unsigned int a = grid_t::getNDims(); // a parameter of the Eikonal equation.
+            Tvalues_.clear();
+            double updatedT;
+
+            if (idx == 3242)
+                std::cout << idx << "  " << grid_->getCell(idx).getVelocity() << "  ";
+
+            for (unsigned int dim = 0; dim < grid_t::getNDims(); ++dim) {
+                double minTInDim = grid_->getMinValueInDim(idx, dim);
+                if (idx == 3242)
+                    std::cout << minTInDim << "  ";
+                if (!isinf(minTInDim) && minTInDim < grid_->getCell(idx).getArrivalTime())
+                    Tvalues_.push_back(minTInDim);
+                else
+                    a -=1;
+            }
+
+            // Sort the neighbor values to make easy the following code.
+            std::sort(Tvalues_.begin(), Tvalues_.end());
+            updatedT = solveForNDims(idx, a);
+
+            // Include heuristics if necessary.
+            if (heurStrategy_ == TIME)
+                grid_->getCell(idx).setHeuristicTime( getPrecomputedDistance(idx)/grid_->getCell(idx).getVelocity() );
+            else if (heurStrategy_ == DISTANCE)
+                grid_->getCell(idx).setHeuristicTime( getPrecomputedDistance(idx) );
+
+            if (idx == 3242)
+                std::cout << "Value:  " << updatedT <<'\n';
+            return updatedT;
+        }
+
 
         /** \brief Set heuristics flag. True is activated. It will precompute distances
             if not done already. */
@@ -256,27 +245,31 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FMM : public
 
     /// \note These accessing levels may need to be modified (and other solvers).
     protected:
-        virtual double solveEikonalRecursive
-        (unsigned int idx, unsigned int depth, bool removeMax) {
-            unsigned int a = depth;
-            if (removeMax) {
-                std::vector<double>::iterator maxTit = std::max_element(Tvalues_.begin(), Tvalues_.end());
-                sumT_ -= *maxTit;
-                sumTT_ -= *maxTit * *maxTit;
-                Tvalues_.erase(maxTit);
-            }
-            if (depth == 1)
+        /** \brief Solves the Eikonal equation assuming that Tvalues_
+            is sorted. */
+        double solveForNDims
+        (unsigned int idx, unsigned int dim) {
+            // Solve for 1 dimension.
+            if (dim == 1)
                 return Tvalues_[0] + grid_->getLeafSize()*grid_->getLeafSize() / (grid_->getCell(idx).getVelocity()*grid_->getCell(idx).getVelocity());
-            else {
-                double b = -2*sumT_;
-                double c = sumTT_ - grid_->getLeafSize() * grid_->getLeafSize()/(grid_->getCell(idx).getVelocity()*grid_->getCell(idx).getVelocity());
-                double quad_term = b*b - 4*a*c;
 
-                if (quad_term < 0)
-                    return solveEikonalRecursive(idx, depth-1, true);
-                else
-                    return (-b + sqrt(quad_term))/(2*a);
+            // Solve for any number > 1 of dimensions.
+            double sumT = 0;
+            double sumTT = 0;
+            for (unsigned i = 0; i < dim; ++i) {
+                sumT += Tvalues_[i];
+                sumTT += Tvalues_[i]*Tvalues_[i];
             }
+            double a = dim;
+            double b = -2*sumT;
+            double c = sumTT - grid_->getLeafSize() * grid_->getLeafSize() / (grid_->getCell(idx).getVelocity()*grid_->getCell(idx).getVelocity());
+            double quad_term = b*b - 4*a*c;
+
+            // If inconsistent solution, solve using only the n-1 Tvalues_ (decreasing 1 dimension).
+            if (quad_term < 0)
+                return solveForNDims(idx, dim-1);
+            else
+                return (-b + sqrt(quad_term))/(2*a);
         }
 
         using Solver<grid_t>::grid_;
@@ -289,19 +282,10 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FMM : public
         /** \brief Auxiliar array which stores the neighbor of each iteration of the computeFM() function. */
         std::array <unsigned int, 2*grid_t::getNDims()> neighbors;
 
-    private:
-        /** \brief Auxiliar value wich computes T1+T2+T3... Useful for generalizing the Eikonal solver. */
-        double                                          sumT_;
-
-        /** \brief Auxiliar value wich computes T1^2+T2^2+T3^2... Useful for generalizing the Eikonal solver. */
-        double                                          sumTT_;
-
         /** \brief Auxiliar vector with values T0,T1...Tn-1 variables in the Discretized Eikonal Equation. */
         std::vector<double>          Tvalues_;
 
-        /** \brief Auxiliar vector with values T0^2,T1^2...Tn-1^2 variables in the Discretized Eikonal Equation. */
-        std::vector<double>          TTvalues_;
-
+    private:
         /** \brief Instance of the heap used. */
         heap_t                                          narrow_band_;
 

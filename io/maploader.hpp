@@ -53,7 +53,7 @@ class MapLoader {
             std::array<unsigned int, ndims> dimsize;
             dimsize[0] = img.width();
             dimsize[1] = img.height();
-            grid.resize(std::move(dimsize));
+            grid.resize(dimsize);
 
             // Filling the grid flipping Y dim. We want bottom left to be the (0,0).
             cimg_forXY(img,x,y) {
@@ -105,7 +105,7 @@ class MapLoader {
                 file >> height;
 
                 std::array<unsigned int, ndims> dimsize = {width, height};
-                grid.resize(std::move(dimsize));
+                grid.resize(dimsize);
                 grid.setLeafSize(leafsize);
 
                 for (unsigned int i = 0; i < width*height; ++i)
