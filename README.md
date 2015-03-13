@@ -14,20 +14,27 @@ N-Dimensional Fast Marching Method V1.0
  - Jose Pardeiro jose.pardeiro _at_ gmail.com
  - Pablo Gely
 
-**FMM Versions:**
-- Fast Marching Method (FMM) with Binary Queue and Fibonacci Queue.
-- Simplified Fast Marhching Method (SFMM, FMM with a simple priority queue).
-- Fast Marching Square Method (FM2).
-- Fast Marching Square Star (FM2*) FM2 with CostToGo heuristics.
+## ALGORITHMS
+**Fast Marching Methods:**
+- [FMM](http://javiervgomez.com/fastmarching/classFMM.html): Fast Marching Method with Binary Queue and Fibonacci Queue.
+- [SFMM](http://javiervgomez.com/fastmarching/classFMM.html): Simplified Fast Marhching Method ([FMM](http://javiervgomez.com/fastmarching/classFMM.html) with a simple priority queue).
+- [FMM*](http://javiervgomez.com/fastmarching/classFMMStar.html): FMM and SFMM with CostToGo heuristics.
 
-**O(n) FMM versions:**
-- Group Marching Method (GMM).
-- Untidy Fast Marching Method.
-- Fast Iterative Method (FIM).
+**O(n) Fast Marching Methods:**
+- [GMM]((http://javiervgomez.com/fastmarching/classGMM.html): Group Marching Method.
+- [UFMM](http://javiervgomez.com/fastmarching/classUFMM.html): Untidy Fast Marching Method.
+- [FIM](http://javiervgomez.com/fastmarching/classFIM.html): Fast Iterative Method.
 
-**Other popular solvers:**
-- Fast Sweeping Method (FSM).
-- Lock Sweeping Method (LSM).
+**Fast Sweeping Methods:**
+- [FSM](http://javiervgomez.com/fastmarching/classFSM.html): Fast Sweeping Method.
+- [LSM](http://javiervgomez.com/fastmarching/classLSM.html): Lock Sweeping Method.
+
+**Other methods:**
+- Soon.
+
+**Fast Marching Square motion planning algorithms:**
+- [FM2](http://javiervgomez.com/fastmarching/classFM2.html): Fast Marching Square Method.
+- [FM2*](http://javiervgomez.com/fastmarching/classFM2Star.html): Fast Marching Square Star FM2 with CostToGo heuristics.
 
 **ROS**
 
