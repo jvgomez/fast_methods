@@ -1,3 +1,4 @@
 benchmark
 build*
-examples/
+examples
+doc

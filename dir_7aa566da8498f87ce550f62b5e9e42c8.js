@@ -7,6 +7,8 @@ var dir_7aa566da8498f87ce550f62b5e9e42c8 =
     [ "fsm.hpp", "fsm_8hpp_source.html", null ],
     [ "gmm.hpp", "gmm_8hpp_source.html", null ],
     [ "lsm.hpp", "lsm_8hpp_source.html", null ],
+    [ "sfmm.hpp", "sfmm_8hpp_source.html", null ],
+    [ "sfmmstar.hpp", "sfmmstar_8hpp_source.html", null ],
     [ "solver.hpp", "solver_8hpp_source.html", null ],
     [ "ufmm.hpp", "ufmm_8hpp_source.html", null ]
 ];

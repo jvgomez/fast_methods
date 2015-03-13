@@ -106,333 +106,336 @@ $(document).ready(function(){initNavTree('benchmarkcfg_8hpp_source.html','');});
 <div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="preprocessor">#include &quot;../io/maploader.hpp&quot;</span></div>
 <div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;</div>
 <div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="preprocessor">#include &quot;../fmm/fmm.hpp&quot;</span></div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="preprocessor">#include &quot;../fmm/fmmstar.hpp&quot;</span></div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="preprocessor">#include &quot;../fmm/fim.hpp&quot;</span></div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="preprocessor">#include &quot;../fmm/gmm.hpp&quot;</span></div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="preprocessor">#include &quot;../fmm/ufmm.hpp&quot;</span></div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;<span class="preprocessor">#include &quot;../fmm/fsm.hpp&quot;</span></div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;<span class="preprocessor">#include &quot;../fmm/lsm.hpp&quot;</span></div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;</div>
-<div class="line"><a name="l00042"></a><span class="lineno"><a class="line" href="classBenchmarkCFG.html">   42</a></span>&#160;<span class="keyword">class </span><a class="code" href="classBenchmarkCFG.html">BenchmarkCFG</a> {</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="preprocessor">#include &quot;../fmm/sfmm.hpp&quot;</span></div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="preprocessor">#include &quot;../fmm/fmmstar.hpp&quot;</span></div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="preprocessor">#include &quot;../fmm/sfmmstar.hpp&quot;</span></div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="preprocessor">#include &quot;../fmm/fim.hpp&quot;</span></div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;<span class="preprocessor">#include &quot;../fmm/gmm.hpp&quot;</span></div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;<span class="preprocessor">#include &quot;../fmm/ufmm.hpp&quot;</span></div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;<span class="preprocessor">#include &quot;../fmm/fsm.hpp&quot;</span></div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;<span class="preprocessor">#include &quot;../fmm/lsm.hpp&quot;</span></div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;</div>
 <div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00044"></a><span class="lineno"><a class="line" href="classBenchmarkCFG.html">   44</a></span>&#160;<span class="keyword">class </span><a class="code" href="classBenchmarkCFG.html">BenchmarkCFG</a> {</div>
 <div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;        <a class="code" href="classBenchmarkCFG.html#a451c8efb73f48cadb717ada871e90b47">BenchmarkCFG</a></div>
-<div class="line"><a name="l00048"></a><span class="lineno"><a class="line" href="classBenchmarkCFG.html#a451c8efb73f48cadb717ada871e90b47">   48</a></span>&#160;        () {}</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;        <a class="code" href="classBenchmarkCFG.html#a451c8efb73f48cadb717ada871e90b47">BenchmarkCFG</a></div>
-<div class="line"><a name="l00052"></a><span class="lineno"><a class="line" href="classBenchmarkCFG.html#a223962f3bee045041a3e48e4f4d529c9">   52</a></span>&#160;        (<span class="keyword">const</span> <span class="keywordtype">char</span> * filename) {</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;            <a class="code" href="classBenchmarkCFG.html#a09f68b08558853e7e7e9a0f355591f9a">readOptions</a>(filename);</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;        }</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;</div>
-<div class="line"><a name="l00057"></a><span class="lineno"><a class="line" href="classBenchmarkCFG.html#a09f68b08558853e7e7e9a0f355591f9a">   57</a></span>&#160;        <span class="keywordtype">bool</span> <a class="code" href="classBenchmarkCFG.html#a09f68b08558853e7e7e9a0f355591f9a">readOptions</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> * filename)</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;        {</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;            <span class="keyword">static</span> <span class="keyword">const</span> std::vector&lt;std::string&gt; knownSolvers = {</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;                <span class="stringliteral">&quot;fmm&quot;</span>, <span class="stringliteral">&quot;fmmstar&quot;</span>, <span class="stringliteral">&quot;fmmfib&quot;</span>, <span class="stringliteral">&quot;fmmfibstar&quot;</span>, <span class="stringliteral">&quot;sfmm&quot;</span>, <span class="stringliteral">&quot;sfmmstar&quot;</span>,</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;                <span class="stringliteral">&quot;gmm&quot;</span>, <span class="stringliteral">&quot;fim&quot;</span>, <span class="stringliteral">&quot;ufmm&quot;</span>, <span class="stringliteral">&quot;fsm&quot;</span>, <span class="stringliteral">&quot;lsm&quot;</span> <span class="comment">// Add solver here.</span></div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;            };</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;            std::fstream cfg(filename);</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;            <span class="keywordflow">if</span> (!cfg.good())</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;            {</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;               std::string error(<span class="stringliteral">&quot;Unable to open file: &quot;</span>);</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;               error += filename;</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;               <a class="code" href="classconsole.html#a69423871e197337783f9b699da398cbc">console::error</a>(error);</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;               <span class="keywordflow">return</span> 0;</div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;            }</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;</div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;            <a class="code" href="classBenchmarkCFG.html#a57842ff0d6587ebc119e92bb6ba0d369">path_</a> = boost::filesystem::absolute( boost::filesystem::path(filename) );</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;            boost::filesystem::path name = <a class="code" href="classBenchmarkCFG.html#a57842ff0d6587ebc119e92bb6ba0d369">path_</a>.filename();</div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;            name.replace_extension(<span class="stringliteral">&quot;&quot;</span>);</div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;</div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;            boost::program_options::options_description desc;</div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;            desc.add_options()</div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;                (<span class="stringliteral">&quot;grid.file&quot;</span>,          boost::program_options::value&lt;std::string&gt;(),                             <span class="stringliteral">&quot;Path to load a velocities map from image.&quot;</span>)</div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;                (<span class="stringliteral">&quot;grid.ndims&quot;</span>,         boost::program_options::value&lt;std::string&gt;()-&gt;default_value(<span class="stringliteral">&quot;2&quot;</span>),         <span class="stringliteral">&quot;Number of dimensions.&quot;</span>)</div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;                (<span class="stringliteral">&quot;grid.cell&quot;</span>,          boost::program_options::value&lt;std::string&gt;()-&gt;default_value(<span class="stringliteral">&quot;FMCell&quot;</span>),    <span class="stringliteral">&quot;Type of cell. FMCell by default.&quot;</span>)</div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;                (<span class="stringliteral">&quot;grid.dimsize&quot;</span>,       boost::program_options::value&lt;std::string&gt;()-&gt;default_value(<span class="stringliteral">&quot;200,200&quot;</span>),   <span class="stringliteral">&quot;Size of dimensions: N,M,O...&quot;</span>)</div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;                (<span class="stringliteral">&quot;problem.start&quot;</span>,      boost::program_options::value&lt;std::string&gt;()-&gt;required(),                 <span class="stringliteral">&quot;Start point: s1,s2,s3...&quot;</span>)</div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;                (<span class="stringliteral">&quot;problem.goal&quot;</span>,       boost::program_options::value&lt;std::string&gt;()-&gt;default_value(<span class="stringliteral">&quot;nan&quot;</span>),       <span class="stringliteral">&quot;Goal point: g1,g2,g3... By default no goal point.&quot;</span>)</div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;                (<span class="stringliteral">&quot;benchmark.name&quot;</span>,     boost::program_options::value&lt;std::string&gt;()-&gt;default_value(name.string()), <span class="stringliteral">&quot;Name of the benchmark.&quot;</span>)</div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;                (<span class="stringliteral">&quot;benchmark.runs&quot;</span>,     boost::program_options::value&lt;std::string&gt;()-&gt;default_value(<span class="stringliteral">&quot;10&quot;</span>),        <span class="stringliteral">&quot;Number of runs per solver.&quot;</span>)</div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;                (<span class="stringliteral">&quot;benchmark.savegrid&quot;</span>, boost::program_options::value&lt;std::string&gt;()-&gt;default_value(<span class="stringliteral">&quot;0&quot;</span>),         <span class="stringliteral">&quot;Save grid values of each run.&quot;</span>);</div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;</div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;            boost::program_options::variables_map vm;</div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;            boost::program_options::parsed_options po = boost::program_options::parse_config_file(cfg, desc, <span class="keyword">true</span>);</div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;            boost::program_options::store(po, vm);</div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;            boost::program_options::notify(vm);</div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;            cfg.close();</div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;</div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;            <span class="comment">// Storing registered options, intended for grid, problem and benchmark configuration.</span></div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;            <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; var : vm)</div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;                <a class="code" href="classBenchmarkCFG.html#a4da631dd9452383132dae778c6c52360">options_</a>[var.first] = boost::any_cast&lt;std::string&gt;(var.second.value());</div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;</div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;            <span class="comment">// Analyze unregistered options, intended for solvers.</span></div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;            std::vector&lt;std::string&gt; unr = boost::program_options::collect_unrecognized(po.options, boost::program_options::exclude_positional);</div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;            <span class="keywordflow">for</span> (std::size_t i = 0 ; i &lt; unr.size()/2 ; ++i)</div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;            {</div>
-<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;                std::string key = boost::to_lower_copy(unr[i*2]);</div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;                std::string val = unr[i*2 + 1];</div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;</div>
-<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;                <span class="keywordflow">if</span> (key.substr(0,8) == <span class="stringliteral">&quot;solvers.&quot;</span>)</div>
-<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;                {</div>
-<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;                    std::string solver = key.substr(8);</div>
-<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;                    <span class="comment">// If it is a known solver, save it together with its constructor</span></div>
-<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;                    <span class="comment">// parameters (if given).</span></div>
-<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;                    <span class="keywordflow">for</span> (std::size_t i = 0; i &lt; knownSolvers.size(); ++i)</div>
-<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;                        <span class="keywordflow">if</span> (solver == knownSolvers[i]) {</div>
-<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;                            <a class="code" href="classBenchmarkCFG.html#a0fa3d16dac50dcf5466ae8e0ccb27bf4">solverNames_</a>.push_back(knownSolvers[i]);</div>
-<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;                            <a class="code" href="classBenchmarkCFG.html#a6f13ebeb127a8cd60d61241c29fba1d5">ctorParams_</a>.push_back(val);</div>
-<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;                        }</div>
-<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;                }</div>
-<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;            }</div>
-<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;</div>
-<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;            <span class="keywordflow">return</span> 1;</div>
-<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;       }</div>
-<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;</div>
-<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;        <span class="keyword">template</span> &lt;<span class="keyword">class</span> gr<span class="keywordtype">id</span>_t, <span class="keyword">class</span> cell_t&gt;</div>
-<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;        <span class="keywordtype">void</span> configure</div>
-<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;        (<a class="code" href="classBenchmark.html">Benchmark&lt;grid_t&gt;</a> &amp; b) {</div>
-<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;            b.<a class="code" href="classBenchmark.html#a7458d937b2aef80af1a191ca40252b4a">setSaveLog</a>(<span class="keyword">true</span>);</div>
-<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;            b.<a class="code" href="classBenchmark.html#a102650550987c23aed530a1134f66bd1">setName</a>(getValue&lt;std::string&gt;(<span class="stringliteral">&quot;benchmark.name&quot;</span>));</div>
-<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;            b.<a class="code" href="classBenchmark.html#a4a05935558cef6965d1a6e806623e6cf">setSaveGrid</a>(getValue&lt;bool&gt;(<span class="stringliteral">&quot;benchmark.savegrid&quot;</span>));</div>
-<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;            b.<a class="code" href="classBenchmark.html#a9f28f46148d04526f8890c1e09fa3d81">setNRuns</a>(getValue&lt;unsigned int&gt;(<span class="stringliteral">&quot;benchmark.runs&quot;</span>));</div>
-<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;            b.<a class="code" href="classBenchmark.html#a2926d367a34f58e34b75c0344a0f4aee">setPath</a>(boost::filesystem::path(<span class="stringliteral">&quot;results&quot;</span>));</div>
-<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;            b.<a class="code" href="classBenchmark.html#a7017a4d963bd8845127ce0e92fc39333">fromCFG</a>(<span class="keyword">true</span>);</div>
-<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;</div>
-<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;            <span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> i = 0; i &lt; <a class="code" href="classBenchmarkCFG.html#a0fa3d16dac50dcf5466ae8e0ccb27bf4">solverNames_</a>.size(); ++i)</div>
-<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;            {</div>
-<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;                <span class="keyword">const</span> std::string &amp; name = <a class="code" href="classBenchmarkCFG.html#a0fa3d16dac50dcf5466ae8e0ccb27bf4">solverNames_</a>[i];</div>
-<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;</div>
-<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;                <span class="keywordtype">bool</span> defaultCtor = <span class="keyword">true</span>;</div>
-<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;                <span class="keywordflow">if</span> (!<a class="code" href="classBenchmarkCFG.html#a6f13ebeb127a8cd60d61241c29fba1d5">ctorParams_</a>[i].empty())</div>
-<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;                    defaultCtor = <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;</div>
-<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160;                <a class="code" href="classSolver.html">Solver&lt;grid_t&gt;</a> * solver;</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;        <a class="code" href="classBenchmarkCFG.html#a451c8efb73f48cadb717ada871e90b47">BenchmarkCFG</a></div>
+<div class="line"><a name="l00050"></a><span class="lineno"><a class="line" href="classBenchmarkCFG.html#a451c8efb73f48cadb717ada871e90b47">   50</a></span>&#160;        () {}</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;        <a class="code" href="classBenchmarkCFG.html#a451c8efb73f48cadb717ada871e90b47">BenchmarkCFG</a></div>
+<div class="line"><a name="l00054"></a><span class="lineno"><a class="line" href="classBenchmarkCFG.html#a223962f3bee045041a3e48e4f4d529c9">   54</a></span>&#160;        (<span class="keyword">const</span> <span class="keywordtype">char</span> * filename) {</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;            <a class="code" href="classBenchmarkCFG.html#a09f68b08558853e7e7e9a0f355591f9a">readOptions</a>(filename);</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;        }</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;</div>
+<div class="line"><a name="l00059"></a><span class="lineno"><a class="line" href="classBenchmarkCFG.html#a09f68b08558853e7e7e9a0f355591f9a">   59</a></span>&#160;        <span class="keywordtype">bool</span> <a class="code" href="classBenchmarkCFG.html#a09f68b08558853e7e7e9a0f355591f9a">readOptions</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> * filename)</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;        {</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;            <span class="keyword">static</span> <span class="keyword">const</span> std::vector&lt;std::string&gt; knownSolvers = {</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;                <span class="stringliteral">&quot;fmm&quot;</span>, <span class="stringliteral">&quot;fmmstar&quot;</span>, <span class="stringliteral">&quot;fmmfib&quot;</span>, <span class="stringliteral">&quot;fmmfibstar&quot;</span>, <span class="stringliteral">&quot;sfmm&quot;</span>, <span class="stringliteral">&quot;sfmmstar&quot;</span>,</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;                <span class="stringliteral">&quot;gmm&quot;</span>, <span class="stringliteral">&quot;fim&quot;</span>, <span class="stringliteral">&quot;ufmm&quot;</span>, <span class="stringliteral">&quot;fsm&quot;</span>, <span class="stringliteral">&quot;lsm&quot;</span> <span class="comment">// Add solver here.</span></div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;            };</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;            std::fstream cfg(filename);</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;            <span class="keywordflow">if</span> (!cfg.good())</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;            {</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;               std::string error(<span class="stringliteral">&quot;Unable to open file: &quot;</span>);</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;               error += filename;</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;               <a class="code" href="classconsole.html#a69423871e197337783f9b699da398cbc">console::error</a>(error);</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;               <span class="keywordflow">return</span> 0;</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;            }</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;            <a class="code" href="classBenchmarkCFG.html#a57842ff0d6587ebc119e92bb6ba0d369">path_</a> = boost::filesystem::absolute( boost::filesystem::path(filename) );</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;            boost::filesystem::path name = <a class="code" href="classBenchmarkCFG.html#a57842ff0d6587ebc119e92bb6ba0d369">path_</a>.filename();</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;            name.replace_extension(<span class="stringliteral">&quot;&quot;</span>);</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;            boost::program_options::options_description desc;</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;            desc.add_options()</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;                (<span class="stringliteral">&quot;grid.file&quot;</span>,          boost::program_options::value&lt;std::string&gt;(),                             <span class="stringliteral">&quot;Path to load a velocities map from image.&quot;</span>)</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;                (<span class="stringliteral">&quot;grid.ndims&quot;</span>,         boost::program_options::value&lt;std::string&gt;()-&gt;default_value(<span class="stringliteral">&quot;2&quot;</span>),         <span class="stringliteral">&quot;Number of dimensions.&quot;</span>)</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;                (<span class="stringliteral">&quot;grid.cell&quot;</span>,          boost::program_options::value&lt;std::string&gt;()-&gt;default_value(<span class="stringliteral">&quot;FMCell&quot;</span>),    <span class="stringliteral">&quot;Type of cell. FMCell by default.&quot;</span>)</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;                (<span class="stringliteral">&quot;grid.dimsize&quot;</span>,       boost::program_options::value&lt;std::string&gt;()-&gt;default_value(<span class="stringliteral">&quot;200,200&quot;</span>),   <span class="stringliteral">&quot;Size of dimensions: N,M,O...&quot;</span>)</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;                (<span class="stringliteral">&quot;problem.start&quot;</span>,      boost::program_options::value&lt;std::string&gt;()-&gt;required(),                 <span class="stringliteral">&quot;Start point: s1,s2,s3...&quot;</span>)</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;                (<span class="stringliteral">&quot;problem.goal&quot;</span>,       boost::program_options::value&lt;std::string&gt;()-&gt;default_value(<span class="stringliteral">&quot;nan&quot;</span>),       <span class="stringliteral">&quot;Goal point: g1,g2,g3... By default no goal point.&quot;</span>)</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;                (<span class="stringliteral">&quot;benchmark.name&quot;</span>,     boost::program_options::value&lt;std::string&gt;()-&gt;default_value(name.string()), <span class="stringliteral">&quot;Name of the benchmark.&quot;</span>)</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;                (<span class="stringliteral">&quot;benchmark.runs&quot;</span>,     boost::program_options::value&lt;std::string&gt;()-&gt;default_value(<span class="stringliteral">&quot;10&quot;</span>),        <span class="stringliteral">&quot;Number of runs per solver.&quot;</span>)</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;                (<span class="stringliteral">&quot;benchmark.savegrid&quot;</span>, boost::program_options::value&lt;std::string&gt;()-&gt;default_value(<span class="stringliteral">&quot;0&quot;</span>),         <span class="stringliteral">&quot;Save grid values of each run.&quot;</span>);</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;            boost::program_options::variables_map vm;</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;            boost::program_options::parsed_options po = boost::program_options::parse_config_file(cfg, desc, <span class="keyword">true</span>);</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;            boost::program_options::store(po, vm);</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;            boost::program_options::notify(vm);</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;            cfg.close();</div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;            <span class="comment">// Storing registered options, intended for grid, problem and benchmark configuration.</span></div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;            <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; var : vm)</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;                <a class="code" href="classBenchmarkCFG.html#a4da631dd9452383132dae778c6c52360">options_</a>[var.first] = boost::any_cast&lt;std::string&gt;(var.second.value());</div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;            <span class="comment">// Analyze unregistered options, intended for solvers.</span></div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;            std::vector&lt;std::string&gt; unr = boost::program_options::collect_unrecognized(po.options, boost::program_options::exclude_positional);</div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;            <span class="keywordflow">for</span> (std::size_t i = 0 ; i &lt; unr.size()/2 ; ++i)</div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;            {</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;                std::string key = boost::to_lower_copy(unr[i*2]);</div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;                std::string val = unr[i*2 + 1];</div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;</div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;                <span class="keywordflow">if</span> (key.substr(0,8) == <span class="stringliteral">&quot;solvers.&quot;</span>)</div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;                {</div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;                    std::string solver = key.substr(8);</div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;                    <span class="comment">// If it is a known solver, save it together with its constructor</span></div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;                    <span class="comment">// parameters (if given).</span></div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;                    <span class="keywordflow">for</span> (std::size_t i = 0; i &lt; knownSolvers.size(); ++i)</div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;                        <span class="keywordflow">if</span> (solver == knownSolvers[i]) {</div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;                            <a class="code" href="classBenchmarkCFG.html#a0fa3d16dac50dcf5466ae8e0ccb27bf4">solverNames_</a>.push_back(knownSolvers[i]);</div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;                            <a class="code" href="classBenchmarkCFG.html#a6f13ebeb127a8cd60d61241c29fba1d5">ctorParams_</a>.push_back(val);</div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;                        }</div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;                }</div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;            }</div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;</div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;            <span class="keywordflow">return</span> 1;</div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;       }</div>
+<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;</div>
+<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;        <span class="keyword">template</span> &lt;<span class="keyword">class</span> gr<span class="keywordtype">id</span>_t, <span class="keyword">class</span> cell_t&gt;</div>
+<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;        <span class="keywordtype">void</span> configure</div>
+<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;        (<a class="code" href="classBenchmark.html">Benchmark&lt;grid_t&gt;</a> &amp; b) {</div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;            b.<a class="code" href="classBenchmark.html#a7458d937b2aef80af1a191ca40252b4a">setSaveLog</a>(<span class="keyword">true</span>);</div>
+<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;            b.<a class="code" href="classBenchmark.html#a102650550987c23aed530a1134f66bd1">setName</a>(getValue&lt;std::string&gt;(<span class="stringliteral">&quot;benchmark.name&quot;</span>));</div>
+<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;            b.<a class="code" href="classBenchmark.html#a4a05935558cef6965d1a6e806623e6cf">setSaveGrid</a>(getValue&lt;bool&gt;(<span class="stringliteral">&quot;benchmark.savegrid&quot;</span>));</div>
+<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;            b.<a class="code" href="classBenchmark.html#a9f28f46148d04526f8890c1e09fa3d81">setNRuns</a>(getValue&lt;unsigned int&gt;(<span class="stringliteral">&quot;benchmark.runs&quot;</span>));</div>
+<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;            b.<a class="code" href="classBenchmark.html#a2926d367a34f58e34b75c0344a0f4aee">setPath</a>(boost::filesystem::path(<span class="stringliteral">&quot;results&quot;</span>));</div>
+<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;            b.<a class="code" href="classBenchmark.html#a7017a4d963bd8845127ce0e92fc39333">fromCFG</a>(<span class="keyword">true</span>);</div>
+<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;</div>
+<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;            <span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> i = 0; i &lt; <a class="code" href="classBenchmarkCFG.html#a0fa3d16dac50dcf5466ae8e0ccb27bf4">solverNames_</a>.size(); ++i)</div>
+<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;            {</div>
+<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;                <span class="keyword">const</span> std::string &amp; name = <a class="code" href="classBenchmarkCFG.html#a0fa3d16dac50dcf5466ae8e0ccb27bf4">solverNames_</a>[i];</div>
+<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;</div>
+<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;                <span class="keywordtype">bool</span> defaultCtor = <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;                <span class="keywordflow">if</span> (!<a class="code" href="classBenchmarkCFG.html#a6f13ebeb127a8cd60d61241c29fba1d5">ctorParams_</a>[i].empty())</div>
+<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160;                    defaultCtor = <span class="keyword">false</span>;</div>
 <div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;</div>
-<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;                <span class="keywordflow">if</span> (defaultCtor) {</div>
-<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;                    <span class="keywordflow">if</span> (name == <span class="stringliteral">&quot;fmm&quot;</span>)</div>
-<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;                        solver = <span class="keyword">new</span> <a class="code" href="classFMM.html">FMM&lt;grid_t&gt;</a>();</div>
-<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;                    <span class="keywordflow">else</span> <span class="keywordflow">if</span> (name == <span class="stringliteral">&quot;fmmstar&quot;</span>)</div>
-<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;                        solver = <span class="keyword">new</span> <a class="code" href="classFMMStar.html">FMMStar&lt;grid_t&gt;</a>();</div>
-<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;                    <span class="keywordflow">else</span> <span class="keywordflow">if</span> (name == <span class="stringliteral">&quot;fmmfib&quot;</span>)</div>
-<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;                        solver = <span class="keyword">new</span> <a class="code" href="classFMM.html">FMM&lt;grid_t, FMFibHeap&lt;cell_t&gt;</a> &gt;(<span class="stringliteral">&quot;FMMFib&quot;</span>);</div>
-<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;                    <span class="keywordflow">else</span> <span class="keywordflow">if</span> (name == <span class="stringliteral">&quot;fmmfibstar&quot;</span>)</div>
-<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;                        solver = <span class="keyword">new</span> <a class="code" href="classFMMStar.html">FMMStar&lt;grid_t,  FMFibHeap&lt;cell_t&gt;</a> &gt;(<span class="stringliteral">&quot;FMMFib*&quot;</span>);</div>
-<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;                    <span class="keywordflow">else</span> <span class="keywordflow">if</span> (name == <span class="stringliteral">&quot;sfmm&quot;</span>)</div>
-<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;                        solver = <span class="keyword">new</span> <a class="code" href="classFMM.html">FMM&lt;grid_t, FMPriorityQueue&lt;cell_t&gt;</a> &gt;(<span class="stringliteral">&quot;SFMM&quot;</span>);</div>
-<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;                    <span class="keywordflow">else</span> <span class="keywordflow">if</span> (name == <span class="stringliteral">&quot;sfmmstar&quot;</span>)</div>
-<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;                        solver = <span class="keyword">new</span> <a class="code" href="classFMMStar.html">FMMStar&lt;grid_t, FMPriorityQueue&lt;cell_t&gt;</a>&gt;(<span class="stringliteral">&quot;SFMM*&quot;</span>);</div>
-<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;                    <span class="keywordflow">else</span> <span class="keywordflow">if</span> (name == <span class="stringliteral">&quot;gmm&quot;</span>)</div>
-<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;                        solver = <span class="keyword">new</span> <a class="code" href="classGMM.html">GMM&lt;grid_t&gt;</a>();</div>
-<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;                    <span class="keywordflow">else</span> <span class="keywordflow">if</span> (name == <span class="stringliteral">&quot;fim&quot;</span>)</div>
-<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;                        solver = <span class="keyword">new</span> <a class="code" href="classFIM.html">FIM&lt;grid_t&gt;</a>();</div>
-<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;                    <span class="keywordflow">else</span> <span class="keywordflow">if</span> (name == <span class="stringliteral">&quot;ufmm&quot;</span>)</div>
-<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;                        solver = <span class="keyword">new</span> <a class="code" href="classUFMM.html">UFMM&lt;grid_t&gt;</a>();</div>
-<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;                    <span class="keywordflow">else</span> <span class="keywordflow">if</span> (name == <span class="stringliteral">&quot;fsm&quot;</span>)</div>
-<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;                        solver = <span class="keyword">new</span> <a class="code" href="classFSM.html">FSM&lt;grid_t&gt;</a>();</div>
-<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;                    <span class="keywordflow">else</span> <span class="keywordflow">if</span> (name == <span class="stringliteral">&quot;lsm&quot;</span>)</div>
-<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;                        solver = <span class="keyword">new</span> <a class="code" href="classLSM.html">LSM&lt;grid_t&gt;</a>();</div>
-<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;                    <span class="comment">// Add solver here.</span></div>
-<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;</div>
-<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;                    <span class="keywordflow">else</span></div>
-<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;                        <span class="keywordflow">continue</span>;</div>
-<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;                }</div>
-<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;                <span class="keywordflow">else</span> { <span class="comment">// Create solvers with specified constructor parameters.</span></div>
-<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;                    std::vector&lt;std::string&gt; p(<a class="code" href="classBenchmarkCFG.html#a631e64fffc9664b997a375ece856d45f">split</a>(<a class="code" href="classBenchmarkCFG.html#a6f13ebeb127a8cd60d61241c29fba1d5">ctorParams_</a>[i]));</div>
-<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;</div>
-<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;                    <span class="comment">// FMM and FMM*</span></div>
-<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;                    <span class="keywordflow">if</span> (name == <span class="stringliteral">&quot;fmm&quot;</span>)</div>
-<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;                        solver = <span class="keyword">new</span> <a class="code" href="classFMM.html">FMM&lt;grid_t&gt;</a>(<a class="code" href="classBenchmarkCFG.html#a6f13ebeb127a8cd60d61241c29fba1d5">ctorParams_</a>[i].c_str());</div>
-<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;                    <span class="keywordflow">else</span> <span class="keywordflow">if</span> (name == <span class="stringliteral">&quot;fmmstar&quot;</span>) {</div>
-<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;                        <span class="keywordflow">if</span> (p.size() == 1)</div>
-<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;                            solver = <span class="keyword">new</span> <a class="code" href="classFMMStar.html">FMMStar&lt;grid_t&gt;</a>(p[0].c_str());</div>
-<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;                        <span class="keywordflow">else</span> <span class="keywordflow">if</span> (p.size() == 2) {</div>
-<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;                            <span class="keywordflow">if</span> (p[1] == <span class="stringliteral">&quot;TIME&quot;</span>)</div>
-<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;                                solver = <span class="keyword">new</span> <a class="code" href="classFMMStar.html">FMMStar&lt;grid_t&gt;</a>(p[0].c_str(), TIME);</div>
-<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;                            <span class="keywordflow">else</span> <span class="keywordflow">if</span> (p[1] == <span class="stringliteral">&quot;DISTANCE&quot;</span>)</div>
-<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;                                solver = <span class="keyword">new</span> <a class="code" href="classFMMStar.html">FMMStar&lt;grid_t&gt;</a>(p[0].c_str(), DISTANCE);</div>
-<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;                        }</div>
-<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;                    }</div>
-<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;                    <span class="comment">// FMMFib and FMMFib*</span></div>
-<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;                    <span class="keywordflow">else</span> <span class="keywordflow">if</span> (name == <span class="stringliteral">&quot;fmmfib&quot;</span>)</div>
-<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;                        solver = <span class="keyword">new</span> <a class="code" href="classFMM.html">FMM&lt;grid_t, FMFibHeap&lt;cell_t&gt;</a> &gt;(<a class="code" href="classBenchmarkCFG.html#a6f13ebeb127a8cd60d61241c29fba1d5">ctorParams_</a>[i].c_str());</div>
-<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;                    <span class="keywordflow">else</span> <span class="keywordflow">if</span> (name == <span class="stringliteral">&quot;fmmfibstar&quot;</span>) {</div>
-<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;                        <span class="keywordflow">if</span> (p.size() == 1)</div>
-<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;                            solver = <span class="keyword">new</span> <a class="code" href="classFMMStar.html">FMMStar</a>&lt;grid_t, <a class="code" href="classFMFibHeap.html">FMFibHeap&lt;cell_t&gt;</a>&gt;(p[0].c_str());</div>
-<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;                        <span class="keywordflow">else</span> <span class="keywordflow">if</span> (p.size() == 2) {</div>
-<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;                            <span class="keywordflow">if</span> (p[1] == <span class="stringliteral">&quot;TIME&quot;</span>)</div>
-<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;                                solver = <span class="keyword">new</span> <a class="code" href="classFMMStar.html">FMMStar&lt;grid_t, FMFibHeap&lt;cell_t&gt;</a>&gt;(p[0].c_str(), TIME);</div>
-<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;                            <span class="keywordflow">else</span> <span class="keywordflow">if</span> (p[1] == <span class="stringliteral">&quot;DISTANCE&quot;</span>)</div>
-<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;                                solver = <span class="keyword">new</span> <a class="code" href="classFMMStar.html">FMMStar&lt;grid_t, FMFibHeap&lt;cell_t&gt;</a>&gt;(p[0].c_str(), DISTANCE);</div>
-<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;                        }</div>
-<div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160;                    }</div>
-<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;                    <span class="comment">// SFMM and SFMM*</span></div>
-<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;                    <span class="keywordflow">else</span> <span class="keywordflow">if</span> (name == <span class="stringliteral">&quot;sfmm&quot;</span>)</div>
-<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;                        solver = <span class="keyword">new</span> <a class="code" href="classFMM.html">FMM&lt;grid_t, FMPriorityQueue&lt;cell_t&gt;</a> &gt;(<a class="code" href="classBenchmarkCFG.html#a6f13ebeb127a8cd60d61241c29fba1d5">ctorParams_</a>[i].c_str());</div>
-<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;                    <span class="keywordflow">else</span> <span class="keywordflow">if</span> (name == <span class="stringliteral">&quot;sfmmstar&quot;</span>) {</div>
-<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;                        <span class="keywordflow">if</span> (p.size() == 1)</div>
-<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;                            solver = <span class="keyword">new</span> <a class="code" href="classFMMStar.html">FMMStar</a>&lt;grid_t, <a class="code" href="classFMPriorityQueue.html">FMPriorityQueue&lt;cell_t&gt;</a>&gt;(p[0].c_str());</div>
-<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;                        <span class="keywordflow">else</span> <span class="keywordflow">if</span> (p.size() == 2) {</div>
-<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;                            <span class="keywordflow">if</span> (p[1] == <span class="stringliteral">&quot;TIME&quot;</span>)</div>
-<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;                                solver = <span class="keyword">new</span> <a class="code" href="classFMMStar.html">FMMStar&lt;grid_t, FMPriorityQueue&lt;cell_t&gt;</a>&gt;(p[0].c_str(), TIME);</div>
-<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;                            <span class="keywordflow">else</span> <span class="keywordflow">if</span> (p[1] == <span class="stringliteral">&quot;DISTANCE&quot;</span>)</div>
-<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160;                                solver = <span class="keyword">new</span> <a class="code" href="classFMMStar.html">FMMStar&lt;grid_t, FMPriorityQueue&lt;cell_t&gt;</a>&gt;(p[0].c_str(), DISTANCE);</div>
-<div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;                        }</div>
-<div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160;                    }</div>
-<div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160;                    <span class="comment">// GMM</span></div>
-<div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160;                    <span class="keywordflow">else</span> <span class="keywordflow">if</span> (name == <span class="stringliteral">&quot;gmm&quot;</span>) {</div>
-<div class="line"><a name="l00214"></a><span class="lineno">  214</span>&#160;                        <span class="keywordflow">if</span> (p.size() == 1)</div>
-<div class="line"><a name="l00215"></a><span class="lineno">  215</span>&#160;                            solver = <span class="keyword">new</span> <a class="code" href="classGMM.html">GMM&lt;grid_t&gt;</a>(p[0].c_str());</div>
-<div class="line"><a name="l00216"></a><span class="lineno">  216</span>&#160;                        <span class="keywordflow">else</span> <span class="keywordflow">if</span> (p.size() == 2)</div>
-<div class="line"><a name="l00217"></a><span class="lineno">  217</span>&#160;                            solver = <span class="keyword">new</span> <a class="code" href="classGMM.html">GMM&lt;grid_t&gt;</a>(p[0].c_str(), boost::lexical_cast&lt;<span class="keywordtype">double</span>&gt;(p[1]));</div>
-<div class="line"><a name="l00218"></a><span class="lineno">  218</span>&#160;                    }</div>
-<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160;                    <span class="comment">// FIM</span></div>
-<div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160;                    <span class="keywordflow">else</span> <span class="keywordflow">if</span> (name == <span class="stringliteral">&quot;fim&quot;</span>) {</div>
-<div class="line"><a name="l00221"></a><span class="lineno">  221</span>&#160;                        <span class="keywordflow">if</span> (p.size() == 1)</div>
-<div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160;                            solver = <span class="keyword">new</span> <a class="code" href="classFIM.html">FIM&lt;grid_t&gt;</a>(p[0].c_str());</div>
-<div class="line"><a name="l00223"></a><span class="lineno">  223</span>&#160;                        <span class="keywordflow">else</span> <span class="keywordflow">if</span> (p.size() == 2)</div>
-<div class="line"><a name="l00224"></a><span class="lineno">  224</span>&#160;                            solver = <span class="keyword">new</span> <a class="code" href="classFIM.html">FIM&lt;grid_t&gt;</a>(p[0].c_str(), boost::lexical_cast&lt;<span class="keywordtype">double</span>&gt;(p[1]));</div>
-<div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160;                    }</div>
-<div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160;                    <span class="comment">// UFMM</span></div>
-<div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160;                    <span class="keywordflow">else</span> <span class="keywordflow">if</span> (name == <span class="stringliteral">&quot;ufmm&quot;</span>) {</div>
-<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160;                        <span class="keywordflow">if</span> (p.size() == 1)</div>
-<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160;                            solver = <span class="keyword">new</span> <a class="code" href="classUFMM.html">UFMM&lt;grid_t&gt;</a>(p[0].c_str());</div>
-<div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160;                        <span class="keywordflow">else</span> <span class="keywordflow">if</span> (p.size() == 2)</div>
-<div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160;                            solver = <span class="keyword">new</span> <a class="code" href="classUFMM.html">UFMM&lt;grid_t&gt;</a>(p[0].c_str(), boost::lexical_cast&lt;<span class="keywordtype">unsigned</span>&gt;(p[1]));</div>
-<div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160;                        <span class="keywordflow">else</span> <span class="keywordflow">if</span> (p.size() == 3)</div>
-<div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160;                            solver = <span class="keyword">new</span> <a class="code" href="classUFMM.html">UFMM&lt;grid_t&gt;</a>(p[0].c_str(), boost::lexical_cast&lt;<span class="keywordtype">unsigned</span>&gt;(p[1]), boost::lexical_cast&lt;double&gt;(p[2]));</div>
-<div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160;                    }</div>
-<div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160;                    <span class="comment">// FSM</span></div>
-<div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160;                    <span class="keywordflow">else</span> <span class="keywordflow">if</span> (name == <span class="stringliteral">&quot;fsm&quot;</span>) {</div>
-<div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160;                        <span class="keywordflow">if</span> (p.size() == 1)</div>
-<div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160;                            solver = <span class="keyword">new</span> <a class="code" href="classFSM.html">FSM&lt;grid_t&gt;</a>(p[0].c_str());</div>
-<div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160;                        <span class="keywordflow">else</span> <span class="keywordflow">if</span> (p.size() == 2)</div>
-<div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160;                            solver = <span class="keyword">new</span> <a class="code" href="classFSM.html">FSM&lt;grid_t&gt;</a>(p[0].c_str(), boost::lexical_cast&lt;<span class="keywordtype">unsigned</span>&gt;(p[1]));</div>
-<div class="line"><a name="l00241"></a><span class="lineno">  241</span>&#160;                    }</div>
-<div class="line"><a name="l00242"></a><span class="lineno">  242</span>&#160;                    <span class="comment">// LSM</span></div>
-<div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160;                    <span class="keywordflow">else</span> <span class="keywordflow">if</span> (name == <span class="stringliteral">&quot;lsm&quot;</span>) {</div>
-<div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160;                        <span class="keywordflow">if</span> (p.size() == 1)</div>
-<div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160;                            solver = <span class="keyword">new</span> <a class="code" href="classLSM.html">LSM&lt;grid_t&gt;</a>(p[0].c_str());</div>
-<div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160;                        <span class="keywordflow">else</span> <span class="keywordflow">if</span> (p.size() == 2)</div>
-<div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160;                            solver = <span class="keyword">new</span> <a class="code" href="classLSM.html">LSM&lt;grid_t&gt;</a>(p[0].c_str(), boost::lexical_cast&lt;<span class="keywordtype">unsigned</span>&gt;(p[1]));</div>
-<div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160;                    }</div>
-<div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160;                    <span class="comment">// Add solver here.</span></div>
-<div class="line"><a name="l00250"></a><span class="lineno">  250</span>&#160;</div>
-<div class="line"><a name="l00251"></a><span class="lineno">  251</span>&#160;                    <span class="keywordflow">else</span></div>
-<div class="line"><a name="l00252"></a><span class="lineno">  252</span>&#160;                        <span class="keywordflow">continue</span>;</div>
-<div class="line"><a name="l00253"></a><span class="lineno">  253</span>&#160;                }</div>
-<div class="line"><a name="l00254"></a><span class="lineno">  254</span>&#160;</div>
-<div class="line"><a name="l00255"></a><span class="lineno">  255</span>&#160;                b.<a class="code" href="classBenchmark.html#a89d766e24f43666e24dc68fd691a32e3">addSolver</a>(solver);</div>
-<div class="line"><a name="l00256"></a><span class="lineno">  256</span>&#160;            }</div>
-<div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160;</div>
-<div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160;            constexpr <span class="keywordtype">size_t</span> N = grid_t::getNDims();</div>
-<div class="line"><a name="l00259"></a><span class="lineno">  259</span>&#160;            grid_t * grid = <span class="keyword">new</span> grid_t();</div>
-<div class="line"><a name="l00260"></a><span class="lineno">  260</span>&#160;            <span class="keywordflow">if</span> (<a class="code" href="classBenchmarkCFG.html#a4da631dd9452383132dae778c6c52360">options_</a>.find(<span class="stringliteral">&quot;grid.file&quot;</span>) != <a class="code" href="classBenchmarkCFG.html#a4da631dd9452383132dae778c6c52360">options_</a>.end()) {</div>
-<div class="line"><a name="l00261"></a><span class="lineno">  261</span>&#160;                <a class="code" href="classMapLoader.html#a27f566714f26ee3af681016637e0a636">MapLoader::loadMapFromImg</a>(<a class="code" href="classBenchmarkCFG.html#a4da631dd9452383132dae778c6c52360">options_</a>.find(<span class="stringliteral">&quot;grid.file&quot;</span>)-&gt;second.c_str(), *grid);</div>
-<div class="line"><a name="l00262"></a><span class="lineno">  262</span>&#160;            }</div>
-<div class="line"><a name="l00263"></a><span class="lineno">  263</span>&#160;            <span class="keywordflow">else</span> {</div>
-<div class="line"><a name="l00264"></a><span class="lineno">  264</span>&#160;                <span class="keyword">const</span> std::string &amp; strToSplit = <a class="code" href="classBenchmarkCFG.html#a4da631dd9452383132dae778c6c52360">options_</a>.find(<span class="stringliteral">&quot;grid.dimsize&quot;</span>)-&gt;second;</div>
-<div class="line"><a name="l00265"></a><span class="lineno">  265</span>&#160;                std::array&lt;unsigned int, N&gt; dimSize = splitAndCast&lt;unsigned int, N&gt;(strToSplit);</div>
-<div class="line"><a name="l00266"></a><span class="lineno">  266</span>&#160;                grid-&gt;resize(dimSize);</div>
-<div class="line"><a name="l00267"></a><span class="lineno">  267</span>&#160;            }</div>
-<div class="line"><a name="l00268"></a><span class="lineno">  268</span>&#160;</div>
-<div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160;            <span class="keyword">const</span> std::string &amp; strToSplit2 = <a class="code" href="classBenchmarkCFG.html#a4da631dd9452383132dae778c6c52360">options_</a>.find(<span class="stringliteral">&quot;problem.start&quot;</span>)-&gt;second;</div>
-<div class="line"><a name="l00270"></a><span class="lineno">  270</span>&#160;            std::array&lt;unsigned int, N&gt; startCoords = splitAndCast&lt;unsigned int, N&gt;(strToSplit2);</div>
-<div class="line"><a name="l00271"></a><span class="lineno">  271</span>&#160;            <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> startIdx;</div>
-<div class="line"><a name="l00272"></a><span class="lineno">  272</span>&#160;            std::vector&lt;unsigned int&gt; startIndices;</div>
-<div class="line"><a name="l00273"></a><span class="lineno">  273</span>&#160;            grid-&gt;coord2idx(startCoords, startIdx);</div>
-<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160;            startIndices.push_back(startIdx);</div>
-<div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160;</div>
-<div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;            <span class="keyword">const</span> std::string &amp; strToSplit3 = <a class="code" href="classBenchmarkCFG.html#a4da631dd9452383132dae778c6c52360">options_</a>.find(<span class="stringliteral">&quot;problem.goal&quot;</span>)-&gt;second;</div>
-<div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;            <span class="keywordflow">if</span> (strToSplit3 != <span class="stringliteral">&quot;nan&quot;</span>)</div>
-<div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;            {</div>
-<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160;                <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> goalIdx;</div>
-<div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;                std::array&lt;unsigned int, N&gt; goalCoords = splitAndCast&lt;unsigned int, N&gt;(strToSplit3);</div>
-<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;                grid-&gt;coord2idx(goalCoords, goalIdx);</div>
-<div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160;                b.<a class="code" href="classBenchmark.html#a3ee735292a9a3737c5c7bf554ef5684b">setInitialAndGoalPoints</a>(startIndices, goalIdx);</div>
-<div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160;            }</div>
-<div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160;            <span class="keywordflow">else</span></div>
-<div class="line"><a name="l00285"></a><span class="lineno">  285</span>&#160;                b.<a class="code" href="classBenchmark.html#aa2c1e5f8c5b6ce3c110a8aa929695b32">setInitialPoints</a>(startIndices);</div>
-<div class="line"><a name="l00286"></a><span class="lineno">  286</span>&#160;</div>
-<div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160;            b.<a class="code" href="classBenchmark.html#a5db3a4730c85e38aec44c5e20eec545a">setEnvironment</a>(grid);</div>
-<div class="line"><a name="l00288"></a><span class="lineno">  288</span>&#160;        }</div>
-<div class="line"><a name="l00289"></a><span class="lineno">  289</span>&#160;</div>
-<div class="line"><a name="l00291"></a><span class="lineno">  291</span>&#160;        <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</div>
-<div class="line"><a name="l00292"></a><span class="lineno">  292</span>&#160;        T <a class="code" href="classBenchmarkCFG.html#a50574f4104d8e43832ca2f8ed0ba9bf6">getValue</a></div>
-<div class="line"><a name="l00293"></a><span class="lineno"><a class="line" href="classBenchmarkCFG.html#a50574f4104d8e43832ca2f8ed0ba9bf6">  293</a></span>&#160;        (<span class="keyword">const</span> std::string &amp; key) <span class="keyword">const</span> {</div>
-<div class="line"><a name="l00294"></a><span class="lineno">  294</span>&#160;            std::unordered_map&lt;std::string, std::string&gt;::const_iterator iter = <a class="code" href="classBenchmarkCFG.html#a4da631dd9452383132dae778c6c52360">options_</a>.find(key);</div>
-<div class="line"><a name="l00295"></a><span class="lineno">  295</span>&#160;            <span class="keywordflow">if</span> (iter != <a class="code" href="classBenchmarkCFG.html#a4da631dd9452383132dae778c6c52360">options_</a>.end())</div>
-<div class="line"><a name="l00296"></a><span class="lineno">  296</span>&#160;                <span class="keywordflow">return</span> boost::lexical_cast&lt;T&gt;(iter-&gt;second);</div>
-<div class="line"><a name="l00297"></a><span class="lineno">  297</span>&#160;            <span class="keywordflow">else</span></div>
-<div class="line"><a name="l00298"></a><span class="lineno">  298</span>&#160;                <span class="keywordflow">return</span> boost::lexical_cast&lt;T&gt;(0);</div>
-<div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160;        }</div>
-<div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160;</div>
-<div class="line"><a name="l00301"></a><span class="lineno">  301</span>&#160;    <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00302"></a><span class="lineno">  302</span>&#160;        <span class="comment">// Based on http://stackoverflow.com/a/236803/2283531</span></div>
-<div class="line"><a name="l00304"></a><span class="lineno">  304</span>&#160;<span class="comment"></span>        <span class="keyword">template</span> &lt;<span class="keyword">typename</span> T, <span class="keywordtype">size_t</span> N&gt;</div>
-<div class="line"><a name="l00305"></a><span class="lineno">  305</span>&#160;        std::array&lt;T,N&gt; <a class="code" href="classBenchmarkCFG.html#a63c58a9057025a2111b3b61b8e85d016">splitAndCast</a></div>
-<div class="line"><a name="l00306"></a><span class="lineno"><a class="line" href="classBenchmarkCFG.html#a63c58a9057025a2111b3b61b8e85d016">  306</a></span>&#160;        (<span class="keyword">const</span> std::string &amp; s)</div>
-<div class="line"><a name="l00307"></a><span class="lineno">  307</span>&#160;        {</div>
-<div class="line"><a name="l00308"></a><span class="lineno">  308</span>&#160;            std::array&lt;T,N&gt; elems;</div>
-<div class="line"><a name="l00309"></a><span class="lineno">  309</span>&#160;            std::stringstream ss(s);</div>
-<div class="line"><a name="l00310"></a><span class="lineno">  310</span>&#160;            std::string item;</div>
-<div class="line"><a name="l00311"></a><span class="lineno">  311</span>&#160;            <span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> i = 0; i &lt; N; ++i)</div>
-<div class="line"><a name="l00312"></a><span class="lineno">  312</span>&#160;            {</div>
-<div class="line"><a name="l00313"></a><span class="lineno">  313</span>&#160;                std::getline(ss, item, <span class="charliteral">&#39;,&#39;</span>);</div>
-<div class="line"><a name="l00314"></a><span class="lineno">  314</span>&#160;                elems[i] = boost::lexical_cast&lt;T&gt;(item);</div>
-<div class="line"><a name="l00315"></a><span class="lineno">  315</span>&#160;            }</div>
-<div class="line"><a name="l00316"></a><span class="lineno">  316</span>&#160;            <span class="keywordflow">return</span> elems;</div>
-<div class="line"><a name="l00317"></a><span class="lineno">  317</span>&#160;        }</div>
-<div class="line"><a name="l00318"></a><span class="lineno">  318</span>&#160;</div>
-<div class="line"><a name="l00320"></a><span class="lineno">  320</span>&#160;        std::vector&lt;std::string&gt; <a class="code" href="classBenchmarkCFG.html#a631e64fffc9664b997a375ece856d45f">split</a></div>
-<div class="line"><a name="l00321"></a><span class="lineno"><a class="line" href="classBenchmarkCFG.html#a631e64fffc9664b997a375ece856d45f">  321</a></span>&#160;        (<span class="keyword">const</span> std::string &amp; s) {</div>
-<div class="line"><a name="l00322"></a><span class="lineno">  322</span>&#160;            std::vector&lt;std::string&gt; elems;</div>
-<div class="line"><a name="l00323"></a><span class="lineno">  323</span>&#160;            std::stringstream ss(s);</div>
-<div class="line"><a name="l00324"></a><span class="lineno">  324</span>&#160;            std::string item;</div>
-<div class="line"><a name="l00325"></a><span class="lineno">  325</span>&#160;            <span class="keywordtype">size_t</span> pos = 1, str_size = s.length()-1;</div>
-<div class="line"><a name="l00326"></a><span class="lineno">  326</span>&#160;            <span class="keywordflow">while</span> (pos &lt; str_size) {</div>
-<div class="line"><a name="l00327"></a><span class="lineno">  327</span>&#160;                std::getline(ss, item, <span class="charliteral">&#39;,&#39;</span>);</div>
-<div class="line"><a name="l00328"></a><span class="lineno">  328</span>&#160;                elems.push_back(item);</div>
-<div class="line"><a name="l00329"></a><span class="lineno">  329</span>&#160;                pos += item.length();</div>
-<div class="line"><a name="l00330"></a><span class="lineno">  330</span>&#160;            }</div>
-<div class="line"><a name="l00331"></a><span class="lineno">  331</span>&#160;            <span class="keywordflow">return</span> elems;</div>
-<div class="line"><a name="l00332"></a><span class="lineno">  332</span>&#160;        }</div>
-<div class="line"><a name="l00333"></a><span class="lineno">  333</span>&#160;</div>
-<div class="line"><a name="l00335"></a><span class="lineno"><a class="line" href="classBenchmarkCFG.html#a0fa3d16dac50dcf5466ae8e0ccb27bf4">  335</a></span>&#160;        std::vector&lt;std::string&gt; <a class="code" href="classBenchmarkCFG.html#a0fa3d16dac50dcf5466ae8e0ccb27bf4">solverNames_</a>;</div>
-<div class="line"><a name="l00336"></a><span class="lineno">  336</span>&#160;        </div>
-<div class="line"><a name="l00338"></a><span class="lineno"><a class="line" href="classBenchmarkCFG.html#a6f13ebeb127a8cd60d61241c29fba1d5">  338</a></span>&#160;        std::vector&lt;std::string&gt; <a class="code" href="classBenchmarkCFG.html#a6f13ebeb127a8cd60d61241c29fba1d5">ctorParams_</a>;</div>
-<div class="line"><a name="l00339"></a><span class="lineno">  339</span>&#160;        </div>
-<div class="line"><a name="l00341"></a><span class="lineno"><a class="line" href="classBenchmarkCFG.html#a4da631dd9452383132dae778c6c52360">  341</a></span>&#160;        std::unordered_map&lt;std::string, std::string&gt; <a class="code" href="classBenchmarkCFG.html#a4da631dd9452383132dae778c6c52360">options_</a>;</div>
-<div class="line"><a name="l00342"></a><span class="lineno">  342</span>&#160;</div>
-<div class="line"><a name="l00344"></a><span class="lineno"><a class="line" href="classBenchmarkCFG.html#a57842ff0d6587ebc119e92bb6ba0d369">  344</a></span>&#160;        boost::filesystem::path <a class="code" href="classBenchmarkCFG.html#a57842ff0d6587ebc119e92bb6ba0d369">path_</a>;</div>
-<div class="line"><a name="l00345"></a><span class="lineno">  345</span>&#160;};</div>
-<div class="line"><a name="l00346"></a><span class="lineno">  346</span>&#160;</div>
-<div class="line"><a name="l00347"></a><span class="lineno">  347</span>&#160;<span class="preprocessor">#endif </span><span class="comment">/* BENCHMARKCFG_HPP_*/</span><span class="preprocessor"></span></div>
+<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;                <a class="code" href="classSolver.html">Solver&lt;grid_t&gt;</a> * solver;</div>
+<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;</div>
+<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;                <span class="keywordflow">if</span> (defaultCtor) {</div>
+<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;                    <span class="keywordflow">if</span> (name == <span class="stringliteral">&quot;fmm&quot;</span>)</div>
+<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;                        solver = <span class="keyword">new</span> <a class="code" href="classFMM.html">FMM&lt;grid_t&gt;</a>();</div>
+<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;                    <span class="keywordflow">else</span> <span class="keywordflow">if</span> (name == <span class="stringliteral">&quot;fmmstar&quot;</span>)</div>
+<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;                        solver = <span class="keyword">new</span> <a class="code" href="classFMMStar.html">FMMStar&lt;grid_t&gt;</a>();</div>
+<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;                    <span class="keywordflow">else</span> <span class="keywordflow">if</span> (name == <span class="stringliteral">&quot;fmmfib&quot;</span>)</div>
+<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;                        solver = <span class="keyword">new</span> <a class="code" href="classFMM.html">FMM&lt;grid_t, FMFibHeap&lt;cell_t&gt;</a> &gt;(<span class="stringliteral">&quot;FMMFib&quot;</span>);</div>
+<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;                    <span class="keywordflow">else</span> <span class="keywordflow">if</span> (name == <span class="stringliteral">&quot;fmmfibstar&quot;</span>)</div>
+<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;                        solver = <span class="keyword">new</span> <a class="code" href="classFMMStar.html">FMMStar&lt;grid_t,  FMFibHeap&lt;cell_t&gt;</a> &gt;(<span class="stringliteral">&quot;FMMFib*&quot;</span>);</div>
+<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;                    <span class="keywordflow">else</span> <span class="keywordflow">if</span> (name == <span class="stringliteral">&quot;sfmm&quot;</span>)</div>
+<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;                        solver = <span class="keyword">new</span> <a class="code" href="classSFMM.html">SFMM&lt;grid_t&gt;</a>(<span class="stringliteral">&quot;SFMM&quot;</span>);</div>
+<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;                    <span class="keywordflow">else</span> <span class="keywordflow">if</span> (name == <span class="stringliteral">&quot;sfmmstar&quot;</span>)</div>
+<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;                        solver = <span class="keyword">new</span> <a class="code" href="classSFMMStar.html">SFMMStar&lt;grid_t&gt;</a>(<span class="stringliteral">&quot;SFMM*&quot;</span>);</div>
+<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;                    <span class="keywordflow">else</span> <span class="keywordflow">if</span> (name == <span class="stringliteral">&quot;gmm&quot;</span>)</div>
+<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;                        solver = <span class="keyword">new</span> <a class="code" href="classGMM.html">GMM&lt;grid_t&gt;</a>();</div>
+<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;                    <span class="keywordflow">else</span> <span class="keywordflow">if</span> (name == <span class="stringliteral">&quot;fim&quot;</span>)</div>
+<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;                        solver = <span class="keyword">new</span> <a class="code" href="classFIM.html">FIM&lt;grid_t&gt;</a>();</div>
+<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;                    <span class="keywordflow">else</span> <span class="keywordflow">if</span> (name == <span class="stringliteral">&quot;ufmm&quot;</span>)</div>
+<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;                        solver = <span class="keyword">new</span> <a class="code" href="classUFMM.html">UFMM&lt;grid_t&gt;</a>();</div>
+<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;                    <span class="keywordflow">else</span> <span class="keywordflow">if</span> (name == <span class="stringliteral">&quot;fsm&quot;</span>)</div>
+<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;                        solver = <span class="keyword">new</span> <a class="code" href="classFSM.html">FSM&lt;grid_t&gt;</a>();</div>
+<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;                    <span class="keywordflow">else</span> <span class="keywordflow">if</span> (name == <span class="stringliteral">&quot;lsm&quot;</span>)</div>
+<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;                        solver = <span class="keyword">new</span> <a class="code" href="classLSM.html">LSM&lt;grid_t&gt;</a>();</div>
+<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;                    <span class="comment">// Add solver here.</span></div>
+<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;</div>
+<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;                    <span class="keywordflow">else</span></div>
+<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;                        <span class="keywordflow">continue</span>;</div>
+<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;                }</div>
+<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;                <span class="keywordflow">else</span> { <span class="comment">// Create solvers with specified constructor parameters.</span></div>
+<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;                    std::vector&lt;std::string&gt; p(<a class="code" href="classBenchmarkCFG.html#a631e64fffc9664b997a375ece856d45f">split</a>(<a class="code" href="classBenchmarkCFG.html#a6f13ebeb127a8cd60d61241c29fba1d5">ctorParams_</a>[i]));</div>
+<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;</div>
+<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;                    <span class="comment">// FMM and FMM*</span></div>
+<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;                    <span class="keywordflow">if</span> (name == <span class="stringliteral">&quot;fmm&quot;</span>)</div>
+<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;                        solver = <span class="keyword">new</span> <a class="code" href="classFMM.html">FMM&lt;grid_t&gt;</a>(<a class="code" href="classBenchmarkCFG.html#a6f13ebeb127a8cd60d61241c29fba1d5">ctorParams_</a>[i].c_str());</div>
+<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;                    <span class="keywordflow">else</span> <span class="keywordflow">if</span> (name == <span class="stringliteral">&quot;fmmstar&quot;</span>) {</div>
+<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;                        <span class="keywordflow">if</span> (p.size() == 1)</div>
+<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;                            solver = <span class="keyword">new</span> <a class="code" href="classFMMStar.html">FMMStar&lt;grid_t&gt;</a>(p[0].c_str());</div>
+<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;                        <span class="keywordflow">else</span> <span class="keywordflow">if</span> (p.size() == 2) {</div>
+<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;                            <span class="keywordflow">if</span> (p[1] == <span class="stringliteral">&quot;TIME&quot;</span>)</div>
+<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;                                solver = <span class="keyword">new</span> <a class="code" href="classFMMStar.html">FMMStar&lt;grid_t&gt;</a>(p[0].c_str(), TIME);</div>
+<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;                            <span class="keywordflow">else</span> <span class="keywordflow">if</span> (p[1] == <span class="stringliteral">&quot;DISTANCE&quot;</span>)</div>
+<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;                                solver = <span class="keyword">new</span> <a class="code" href="classFMMStar.html">FMMStar&lt;grid_t&gt;</a>(p[0].c_str(), DISTANCE);</div>
+<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;                        }</div>
+<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;                    }</div>
+<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;                    <span class="comment">// FMMFib and FMMFib*</span></div>
+<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;                    <span class="keywordflow">else</span> <span class="keywordflow">if</span> (name == <span class="stringliteral">&quot;fmmfib&quot;</span>)</div>
+<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;                        solver = <span class="keyword">new</span> <a class="code" href="classFMM.html">FMM&lt;grid_t, FMFibHeap&lt;cell_t&gt;</a> &gt;(<a class="code" href="classBenchmarkCFG.html#a6f13ebeb127a8cd60d61241c29fba1d5">ctorParams_</a>[i].c_str());</div>
+<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;                    <span class="keywordflow">else</span> <span class="keywordflow">if</span> (name == <span class="stringliteral">&quot;fmmfibstar&quot;</span>) {</div>
+<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;                        <span class="keywordflow">if</span> (p.size() == 1)</div>
+<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;                            solver = <span class="keyword">new</span> <a class="code" href="classFMMStar.html">FMMStar</a>&lt;grid_t, <a class="code" href="classFMFibHeap.html">FMFibHeap&lt;cell_t&gt;</a>&gt;(p[0].c_str());</div>
+<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;                        <span class="keywordflow">else</span> <span class="keywordflow">if</span> (p.size() == 2) {</div>
+<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;                            <span class="keywordflow">if</span> (p[1] == <span class="stringliteral">&quot;TIME&quot;</span>)</div>
+<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;                                solver = <span class="keyword">new</span> <a class="code" href="classFMMStar.html">FMMStar&lt;grid_t, FMFibHeap&lt;cell_t&gt;</a>&gt;(p[0].c_str(), TIME);</div>
+<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;                            <span class="keywordflow">else</span> <span class="keywordflow">if</span> (p[1] == <span class="stringliteral">&quot;DISTANCE&quot;</span>)</div>
+<div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160;                                solver = <span class="keyword">new</span> <a class="code" href="classFMMStar.html">FMMStar&lt;grid_t, FMFibHeap&lt;cell_t&gt;</a>&gt;(p[0].c_str(), DISTANCE);</div>
+<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;                        }</div>
+<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;                    }</div>
+<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;                    <span class="comment">// SFMM and SFMM*</span></div>
+<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;                    <span class="keywordflow">else</span> <span class="keywordflow">if</span> (name == <span class="stringliteral">&quot;sfmm&quot;</span>)</div>
+<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;                        solver = <span class="keyword">new</span> <a class="code" href="classSFMM.html">SFMM&lt;grid_t, cell_t&gt;</a>(<a class="code" href="classBenchmarkCFG.html#a6f13ebeb127a8cd60d61241c29fba1d5">ctorParams_</a>[i].c_str());</div>
+<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;                    <span class="keywordflow">else</span> <span class="keywordflow">if</span> (name == <span class="stringliteral">&quot;sfmmstar&quot;</span>) {</div>
+<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;                        <span class="keywordflow">if</span> (p.size() == 1)</div>
+<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;                            solver = <span class="keyword">new</span> <a class="code" href="classSFMMStar.html">SFMMStar&lt;grid_t, cell_t&gt;</a>(p[0].c_str());</div>
+<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;                        <span class="keywordflow">else</span> <span class="keywordflow">if</span> (p.size() == 2) {</div>
+<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;                            <span class="keywordflow">if</span> (p[1] == <span class="stringliteral">&quot;TIME&quot;</span>)</div>
+<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160;                                solver = <span class="keyword">new</span> <a class="code" href="classSFMMStar.html">SFMMStar&lt;grid_t, cell_t&gt;</a>(p[0].c_str(), TIME);</div>
+<div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;                            <span class="keywordflow">else</span> <span class="keywordflow">if</span> (p[1] == <span class="stringliteral">&quot;DISTANCE&quot;</span>)</div>
+<div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160;                                solver = <span class="keyword">new</span> <a class="code" href="classSFMMStar.html">SFMMStar&lt;grid_t, cell_t&gt;</a>(p[0].c_str(), DISTANCE);</div>
+<div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160;                        }</div>
+<div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160;                    }</div>
+<div class="line"><a name="l00214"></a><span class="lineno">  214</span>&#160;                    <span class="comment">// GMM</span></div>
+<div class="line"><a name="l00215"></a><span class="lineno">  215</span>&#160;                    <span class="keywordflow">else</span> <span class="keywordflow">if</span> (name == <span class="stringliteral">&quot;gmm&quot;</span>) {</div>
+<div class="line"><a name="l00216"></a><span class="lineno">  216</span>&#160;                        <span class="keywordflow">if</span> (p.size() == 1)</div>
+<div class="line"><a name="l00217"></a><span class="lineno">  217</span>&#160;                            solver = <span class="keyword">new</span> <a class="code" href="classGMM.html">GMM&lt;grid_t&gt;</a>(p[0].c_str());</div>
+<div class="line"><a name="l00218"></a><span class="lineno">  218</span>&#160;                        <span class="keywordflow">else</span> <span class="keywordflow">if</span> (p.size() == 2)</div>
+<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160;                            solver = <span class="keyword">new</span> <a class="code" href="classGMM.html">GMM&lt;grid_t&gt;</a>(p[0].c_str(), boost::lexical_cast&lt;<span class="keywordtype">double</span>&gt;(p[1]));</div>
+<div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160;                    }</div>
+<div class="line"><a name="l00221"></a><span class="lineno">  221</span>&#160;                    <span class="comment">// FIM</span></div>
+<div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160;                    <span class="keywordflow">else</span> <span class="keywordflow">if</span> (name == <span class="stringliteral">&quot;fim&quot;</span>) {</div>
+<div class="line"><a name="l00223"></a><span class="lineno">  223</span>&#160;                        <span class="keywordflow">if</span> (p.size() == 1)</div>
+<div class="line"><a name="l00224"></a><span class="lineno">  224</span>&#160;                            solver = <span class="keyword">new</span> <a class="code" href="classFIM.html">FIM&lt;grid_t&gt;</a>(p[0].c_str());</div>
+<div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160;                        <span class="keywordflow">else</span> <span class="keywordflow">if</span> (p.size() == 2)</div>
+<div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160;                            solver = <span class="keyword">new</span> <a class="code" href="classFIM.html">FIM&lt;grid_t&gt;</a>(p[0].c_str(), boost::lexical_cast&lt;<span class="keywordtype">double</span>&gt;(p[1]));</div>
+<div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160;                    }</div>
+<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160;                    <span class="comment">// UFMM</span></div>
+<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160;                    <span class="keywordflow">else</span> <span class="keywordflow">if</span> (name == <span class="stringliteral">&quot;ufmm&quot;</span>) {</div>
+<div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160;                        <span class="keywordflow">if</span> (p.size() == 1)</div>
+<div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160;                            solver = <span class="keyword">new</span> <a class="code" href="classUFMM.html">UFMM&lt;grid_t&gt;</a>(p[0].c_str());</div>
+<div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160;                        <span class="keywordflow">else</span> <span class="keywordflow">if</span> (p.size() == 2)</div>
+<div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160;                            solver = <span class="keyword">new</span> <a class="code" href="classUFMM.html">UFMM&lt;grid_t&gt;</a>(p[0].c_str(), boost::lexical_cast&lt;<span class="keywordtype">unsigned</span>&gt;(p[1]));</div>
+<div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160;                        <span class="keywordflow">else</span> <span class="keywordflow">if</span> (p.size() == 3)</div>
+<div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160;                            solver = <span class="keyword">new</span> <a class="code" href="classUFMM.html">UFMM&lt;grid_t&gt;</a>(p[0].c_str(), boost::lexical_cast&lt;<span class="keywordtype">unsigned</span>&gt;(p[1]), boost::lexical_cast&lt;double&gt;(p[2]));</div>
+<div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160;                    }</div>
+<div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160;                    <span class="comment">// FSM</span></div>
+<div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160;                    <span class="keywordflow">else</span> <span class="keywordflow">if</span> (name == <span class="stringliteral">&quot;fsm&quot;</span>) {</div>
+<div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160;                        <span class="keywordflow">if</span> (p.size() == 1)</div>
+<div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160;                            solver = <span class="keyword">new</span> <a class="code" href="classFSM.html">FSM&lt;grid_t&gt;</a>(p[0].c_str());</div>
+<div class="line"><a name="l00241"></a><span class="lineno">  241</span>&#160;                        <span class="keywordflow">else</span> <span class="keywordflow">if</span> (p.size() == 2)</div>
+<div class="line"><a name="l00242"></a><span class="lineno">  242</span>&#160;                            solver = <span class="keyword">new</span> <a class="code" href="classFSM.html">FSM&lt;grid_t&gt;</a>(p[0].c_str(), boost::lexical_cast&lt;<span class="keywordtype">unsigned</span>&gt;(p[1]));</div>
+<div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160;                    }</div>
+<div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160;                    <span class="comment">// LSM</span></div>
+<div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160;                    <span class="keywordflow">else</span> <span class="keywordflow">if</span> (name == <span class="stringliteral">&quot;lsm&quot;</span>) {</div>
+<div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160;                        <span class="keywordflow">if</span> (p.size() == 1)</div>
+<div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160;                            solver = <span class="keyword">new</span> <a class="code" href="classLSM.html">LSM&lt;grid_t&gt;</a>(p[0].c_str());</div>
+<div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160;                        <span class="keywordflow">else</span> <span class="keywordflow">if</span> (p.size() == 2)</div>
+<div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160;                            solver = <span class="keyword">new</span> <a class="code" href="classLSM.html">LSM&lt;grid_t&gt;</a>(p[0].c_str(), boost::lexical_cast&lt;<span class="keywordtype">unsigned</span>&gt;(p[1]));</div>
+<div class="line"><a name="l00250"></a><span class="lineno">  250</span>&#160;                    }</div>
+<div class="line"><a name="l00251"></a><span class="lineno">  251</span>&#160;                    <span class="comment">// Add solver here.</span></div>
+<div class="line"><a name="l00252"></a><span class="lineno">  252</span>&#160;</div>
+<div class="line"><a name="l00253"></a><span class="lineno">  253</span>&#160;                    <span class="keywordflow">else</span></div>
+<div class="line"><a name="l00254"></a><span class="lineno">  254</span>&#160;                        <span class="keywordflow">continue</span>;</div>
+<div class="line"><a name="l00255"></a><span class="lineno">  255</span>&#160;                }</div>
+<div class="line"><a name="l00256"></a><span class="lineno">  256</span>&#160;</div>
+<div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160;                b.<a class="code" href="classBenchmark.html#a89d766e24f43666e24dc68fd691a32e3">addSolver</a>(solver);</div>
+<div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160;            }</div>
+<div class="line"><a name="l00259"></a><span class="lineno">  259</span>&#160;</div>
+<div class="line"><a name="l00260"></a><span class="lineno">  260</span>&#160;            constexpr <span class="keywordtype">size_t</span> N = grid_t::getNDims();</div>
+<div class="line"><a name="l00261"></a><span class="lineno">  261</span>&#160;            grid_t * grid = <span class="keyword">new</span> grid_t();</div>
+<div class="line"><a name="l00262"></a><span class="lineno">  262</span>&#160;            <span class="keywordflow">if</span> (<a class="code" href="classBenchmarkCFG.html#a4da631dd9452383132dae778c6c52360">options_</a>.find(<span class="stringliteral">&quot;grid.file&quot;</span>) != <a class="code" href="classBenchmarkCFG.html#a4da631dd9452383132dae778c6c52360">options_</a>.end()) {</div>
+<div class="line"><a name="l00263"></a><span class="lineno">  263</span>&#160;                <a class="code" href="classMapLoader.html#a27f566714f26ee3af681016637e0a636">MapLoader::loadMapFromImg</a>(<a class="code" href="classBenchmarkCFG.html#a4da631dd9452383132dae778c6c52360">options_</a>.find(<span class="stringliteral">&quot;grid.file&quot;</span>)-&gt;second.c_str(), *grid);</div>
+<div class="line"><a name="l00264"></a><span class="lineno">  264</span>&#160;            }</div>
+<div class="line"><a name="l00265"></a><span class="lineno">  265</span>&#160;            <span class="keywordflow">else</span> {</div>
+<div class="line"><a name="l00266"></a><span class="lineno">  266</span>&#160;                <span class="keyword">const</span> std::string &amp; strToSplit = <a class="code" href="classBenchmarkCFG.html#a4da631dd9452383132dae778c6c52360">options_</a>.find(<span class="stringliteral">&quot;grid.dimsize&quot;</span>)-&gt;second;</div>
+<div class="line"><a name="l00267"></a><span class="lineno">  267</span>&#160;                std::array&lt;unsigned int, N&gt; dimSize = splitAndCast&lt;unsigned int, N&gt;(strToSplit);</div>
+<div class="line"><a name="l00268"></a><span class="lineno">  268</span>&#160;                grid-&gt;resize(dimSize);</div>
+<div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160;            }</div>
+<div class="line"><a name="l00270"></a><span class="lineno">  270</span>&#160;</div>
+<div class="line"><a name="l00271"></a><span class="lineno">  271</span>&#160;            <span class="keyword">const</span> std::string &amp; strToSplit2 = <a class="code" href="classBenchmarkCFG.html#a4da631dd9452383132dae778c6c52360">options_</a>.find(<span class="stringliteral">&quot;problem.start&quot;</span>)-&gt;second;</div>
+<div class="line"><a name="l00272"></a><span class="lineno">  272</span>&#160;            std::array&lt;unsigned int, N&gt; startCoords = splitAndCast&lt;unsigned int, N&gt;(strToSplit2);</div>
+<div class="line"><a name="l00273"></a><span class="lineno">  273</span>&#160;            <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> startIdx;</div>
+<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160;            std::vector&lt;unsigned int&gt; startIndices;</div>
+<div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160;            grid-&gt;coord2idx(startCoords, startIdx);</div>
+<div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;            startIndices.push_back(startIdx);</div>
+<div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;</div>
+<div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;            <span class="keyword">const</span> std::string &amp; strToSplit3 = <a class="code" href="classBenchmarkCFG.html#a4da631dd9452383132dae778c6c52360">options_</a>.find(<span class="stringliteral">&quot;problem.goal&quot;</span>)-&gt;second;</div>
+<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160;            <span class="keywordflow">if</span> (strToSplit3 != <span class="stringliteral">&quot;nan&quot;</span>)</div>
+<div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;            {</div>
+<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;                <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> goalIdx;</div>
+<div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160;                std::array&lt;unsigned int, N&gt; goalCoords = splitAndCast&lt;unsigned int, N&gt;(strToSplit3);</div>
+<div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160;                grid-&gt;coord2idx(goalCoords, goalIdx);</div>
+<div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160;                b.<a class="code" href="classBenchmark.html#a3ee735292a9a3737c5c7bf554ef5684b">setInitialAndGoalPoints</a>(startIndices, goalIdx);</div>
+<div class="line"><a name="l00285"></a><span class="lineno">  285</span>&#160;            }</div>
+<div class="line"><a name="l00286"></a><span class="lineno">  286</span>&#160;            <span class="keywordflow">else</span></div>
+<div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160;                b.<a class="code" href="classBenchmark.html#aa2c1e5f8c5b6ce3c110a8aa929695b32">setInitialPoints</a>(startIndices);</div>
+<div class="line"><a name="l00288"></a><span class="lineno">  288</span>&#160;</div>
+<div class="line"><a name="l00289"></a><span class="lineno">  289</span>&#160;            b.<a class="code" href="classBenchmark.html#a5db3a4730c85e38aec44c5e20eec545a">setEnvironment</a>(grid);</div>
+<div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160;        }</div>
+<div class="line"><a name="l00291"></a><span class="lineno">  291</span>&#160;</div>
+<div class="line"><a name="l00293"></a><span class="lineno">  293</span>&#160;        <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a name="l00294"></a><span class="lineno">  294</span>&#160;        T <a class="code" href="classBenchmarkCFG.html#a50574f4104d8e43832ca2f8ed0ba9bf6">getValue</a></div>
+<div class="line"><a name="l00295"></a><span class="lineno"><a class="line" href="classBenchmarkCFG.html#a50574f4104d8e43832ca2f8ed0ba9bf6">  295</a></span>&#160;        (<span class="keyword">const</span> std::string &amp; key) <span class="keyword">const</span> {</div>
+<div class="line"><a name="l00296"></a><span class="lineno">  296</span>&#160;            std::unordered_map&lt;std::string, std::string&gt;::const_iterator iter = <a class="code" href="classBenchmarkCFG.html#a4da631dd9452383132dae778c6c52360">options_</a>.find(key);</div>
+<div class="line"><a name="l00297"></a><span class="lineno">  297</span>&#160;            <span class="keywordflow">if</span> (iter != <a class="code" href="classBenchmarkCFG.html#a4da631dd9452383132dae778c6c52360">options_</a>.end())</div>
+<div class="line"><a name="l00298"></a><span class="lineno">  298</span>&#160;                <span class="keywordflow">return</span> boost::lexical_cast&lt;T&gt;(iter-&gt;second);</div>
+<div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160;            <span class="keywordflow">else</span></div>
+<div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160;                <span class="keywordflow">return</span> boost::lexical_cast&lt;T&gt;(0);</div>
+<div class="line"><a name="l00301"></a><span class="lineno">  301</span>&#160;        }</div>
+<div class="line"><a name="l00302"></a><span class="lineno">  302</span>&#160;</div>
+<div class="line"><a name="l00303"></a><span class="lineno">  303</span>&#160;    <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00304"></a><span class="lineno">  304</span>&#160;        <span class="comment">// Based on http://stackoverflow.com/a/236803/2283531</span></div>
+<div class="line"><a name="l00306"></a><span class="lineno">  306</span>&#160;<span class="comment"></span>        <span class="keyword">template</span> &lt;<span class="keyword">typename</span> T, <span class="keywordtype">size_t</span> N&gt;</div>
+<div class="line"><a name="l00307"></a><span class="lineno">  307</span>&#160;        std::array&lt;T,N&gt; <a class="code" href="classBenchmarkCFG.html#a63c58a9057025a2111b3b61b8e85d016">splitAndCast</a></div>
+<div class="line"><a name="l00308"></a><span class="lineno"><a class="line" href="classBenchmarkCFG.html#a63c58a9057025a2111b3b61b8e85d016">  308</a></span>&#160;        (<span class="keyword">const</span> std::string &amp; s)</div>
+<div class="line"><a name="l00309"></a><span class="lineno">  309</span>&#160;        {</div>
+<div class="line"><a name="l00310"></a><span class="lineno">  310</span>&#160;            std::array&lt;T,N&gt; elems;</div>
+<div class="line"><a name="l00311"></a><span class="lineno">  311</span>&#160;            std::stringstream ss(s);</div>
+<div class="line"><a name="l00312"></a><span class="lineno">  312</span>&#160;            std::string item;</div>
+<div class="line"><a name="l00313"></a><span class="lineno">  313</span>&#160;            <span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> i = 0; i &lt; N; ++i)</div>
+<div class="line"><a name="l00314"></a><span class="lineno">  314</span>&#160;            {</div>
+<div class="line"><a name="l00315"></a><span class="lineno">  315</span>&#160;                std::getline(ss, item, <span class="charliteral">&#39;,&#39;</span>);</div>
+<div class="line"><a name="l00316"></a><span class="lineno">  316</span>&#160;                elems[i] = boost::lexical_cast&lt;T&gt;(item);</div>
+<div class="line"><a name="l00317"></a><span class="lineno">  317</span>&#160;            }</div>
+<div class="line"><a name="l00318"></a><span class="lineno">  318</span>&#160;            <span class="keywordflow">return</span> elems;</div>
+<div class="line"><a name="l00319"></a><span class="lineno">  319</span>&#160;        }</div>
+<div class="line"><a name="l00320"></a><span class="lineno">  320</span>&#160;</div>
+<div class="line"><a name="l00322"></a><span class="lineno">  322</span>&#160;        std::vector&lt;std::string&gt; <a class="code" href="classBenchmarkCFG.html#a631e64fffc9664b997a375ece856d45f">split</a></div>
+<div class="line"><a name="l00323"></a><span class="lineno"><a class="line" href="classBenchmarkCFG.html#a631e64fffc9664b997a375ece856d45f">  323</a></span>&#160;        (<span class="keyword">const</span> std::string &amp; s) {</div>
+<div class="line"><a name="l00324"></a><span class="lineno">  324</span>&#160;            std::vector&lt;std::string&gt; elems;</div>
+<div class="line"><a name="l00325"></a><span class="lineno">  325</span>&#160;            std::stringstream ss(s);</div>
+<div class="line"><a name="l00326"></a><span class="lineno">  326</span>&#160;            std::string item;</div>
+<div class="line"><a name="l00327"></a><span class="lineno">  327</span>&#160;            <span class="keywordtype">size_t</span> pos = 1, str_size = s.length()-1;</div>
+<div class="line"><a name="l00328"></a><span class="lineno">  328</span>&#160;            <span class="keywordflow">while</span> (pos &lt; str_size) {</div>
+<div class="line"><a name="l00329"></a><span class="lineno">  329</span>&#160;                std::getline(ss, item, <span class="charliteral">&#39;,&#39;</span>);</div>
+<div class="line"><a name="l00330"></a><span class="lineno">  330</span>&#160;                elems.push_back(item);</div>
+<div class="line"><a name="l00331"></a><span class="lineno">  331</span>&#160;                pos += item.length();</div>
+<div class="line"><a name="l00332"></a><span class="lineno">  332</span>&#160;            }</div>
+<div class="line"><a name="l00333"></a><span class="lineno">  333</span>&#160;            <span class="keywordflow">return</span> elems;</div>
+<div class="line"><a name="l00334"></a><span class="lineno">  334</span>&#160;        }</div>
+<div class="line"><a name="l00335"></a><span class="lineno">  335</span>&#160;</div>
+<div class="line"><a name="l00337"></a><span class="lineno"><a class="line" href="classBenchmarkCFG.html#a0fa3d16dac50dcf5466ae8e0ccb27bf4">  337</a></span>&#160;        std::vector&lt;std::string&gt; <a class="code" href="classBenchmarkCFG.html#a0fa3d16dac50dcf5466ae8e0ccb27bf4">solverNames_</a>;</div>
+<div class="line"><a name="l00338"></a><span class="lineno">  338</span>&#160;        </div>
+<div class="line"><a name="l00340"></a><span class="lineno"><a class="line" href="classBenchmarkCFG.html#a6f13ebeb127a8cd60d61241c29fba1d5">  340</a></span>&#160;        std::vector&lt;std::string&gt; <a class="code" href="classBenchmarkCFG.html#a6f13ebeb127a8cd60d61241c29fba1d5">ctorParams_</a>;</div>
+<div class="line"><a name="l00341"></a><span class="lineno">  341</span>&#160;        </div>
+<div class="line"><a name="l00343"></a><span class="lineno"><a class="line" href="classBenchmarkCFG.html#a4da631dd9452383132dae778c6c52360">  343</a></span>&#160;        std::unordered_map&lt;std::string, std::string&gt; <a class="code" href="classBenchmarkCFG.html#a4da631dd9452383132dae778c6c52360">options_</a>;</div>
+<div class="line"><a name="l00344"></a><span class="lineno">  344</span>&#160;</div>
+<div class="line"><a name="l00346"></a><span class="lineno"><a class="line" href="classBenchmarkCFG.html#a57842ff0d6587ebc119e92bb6ba0d369">  346</a></span>&#160;        boost::filesystem::path <a class="code" href="classBenchmarkCFG.html#a57842ff0d6587ebc119e92bb6ba0d369">path_</a>;</div>
+<div class="line"><a name="l00347"></a><span class="lineno">  347</span>&#160;};</div>
+<div class="line"><a name="l00348"></a><span class="lineno">  348</span>&#160;</div>
+<div class="line"><a name="l00349"></a><span class="lineno">  349</span>&#160;<span class="preprocessor">#endif </span><span class="comment">/* BENCHMARKCFG_HPP_*/</span><span class="preprocessor"></span></div>
 <div class="ttc" id="classFSM_html"><div class="ttname"><a href="classFSM.html">FSM</a></div><div class="ttdoc">Implements Fast Sweeping Method. </div><div class="ttdef"><b>Definition:</b> <a href="fsm_8hpp_source.html#l00040">fsm.hpp:40</a></div></div>
-<div class="ttc" id="classFMPriorityQueue_html"><div class="ttname"><a href="classFMPriorityQueue.html">FMPriorityQueue</a></div><div class="ttdoc">Wrap for the Boost Priority Queue class to be used in the FM algorithms. Ready to be used with FMCell...</div><div class="ttdef"><b>Definition:</b> <a href="fmpriorityqueue_8hpp_source.html#l00027">fmpriorityqueue.hpp:27</a></div></div>
 <div class="ttc" id="classBenchmark_html_a2926d367a34f58e34b75c0344a0f4aee"><div class="ttname"><a href="classBenchmark.html#a2926d367a34f58e34b75c0344a0f4aee">Benchmark::setPath</a></div><div class="ttdeci">void setPath(const boost::filesystem::path &amp;path)</div><div class="ttdoc">Set the path where results will be saved. </div><div class="ttdef"><b>Definition:</b> <a href="benchmark_8hpp_source.html#l00084">benchmark.hpp:84</a></div></div>
 <div class="ttc" id="classUFMM_html"><div class="ttname"><a href="classUFMM.html">UFMM</a></div><div class="ttdoc">Fast Marching Method using a untidy priority queue (UFMM). </div><div class="ttdef"><b>Definition:</b> <a href="ufmm_8hpp_source.html#l00034">ufmm.hpp:34</a></div></div>
-<div class="ttc" id="classBenchmarkCFG_html"><div class="ttname"><a href="classBenchmarkCFG.html">BenchmarkCFG</a></div><div class="ttdoc">Configures a Benchmark class from a CFG file. Inspired in the OMPLapp benchmarking software: http://o...</div><div class="ttdef"><b>Definition:</b> <a href="benchmarkcfg_8hpp_source.html#l00042">benchmarkcfg.hpp:42</a></div></div>
-<div class="ttc" id="classBenchmarkCFG_html_a4da631dd9452383132dae778c6c52360"><div class="ttname"><a href="classBenchmarkCFG.html#a4da631dd9452383132dae778c6c52360">BenchmarkCFG::options_</a></div><div class="ttdeci">std::unordered_map&lt; std::string, std::string &gt; options_</div><div class="ttdoc">Option-value map. </div><div class="ttdef"><b>Definition:</b> <a href="benchmarkcfg_8hpp_source.html#l00341">benchmarkcfg.hpp:341</a></div></div>
+<div class="ttc" id="classBenchmarkCFG_html"><div class="ttname"><a href="classBenchmarkCFG.html">BenchmarkCFG</a></div><div class="ttdoc">Configures a Benchmark class from a CFG file. Inspired in the OMPLapp benchmarking software: http://o...</div><div class="ttdef"><b>Definition:</b> <a href="benchmarkcfg_8hpp_source.html#l00044">benchmarkcfg.hpp:44</a></div></div>
+<div class="ttc" id="classBenchmarkCFG_html_a4da631dd9452383132dae778c6c52360"><div class="ttname"><a href="classBenchmarkCFG.html#a4da631dd9452383132dae778c6c52360">BenchmarkCFG::options_</a></div><div class="ttdeci">std::unordered_map&lt; std::string, std::string &gt; options_</div><div class="ttdoc">Option-value map. </div><div class="ttdef"><b>Definition:</b> <a href="benchmarkcfg_8hpp_source.html#l00343">benchmarkcfg.hpp:343</a></div></div>
 <div class="ttc" id="classBenchmark_html_a4a05935558cef6965d1a6e806623e6cf"><div class="ttname"><a href="classBenchmark.html#a4a05935558cef6965d1a6e806623e6cf">Benchmark::setSaveGrid</a></div><div class="ttdeci">void setSaveGrid(bool s)</div><div class="ttdoc">Sets the saveGrid_ flag. </div><div class="ttdef"><b>Definition:</b> <a href="benchmark_8hpp_source.html#l00066">benchmark.hpp:66</a></div></div>
-<div class="ttc" id="classBenchmarkCFG_html_a631e64fffc9664b997a375ece856d45f"><div class="ttname"><a href="classBenchmarkCFG.html#a631e64fffc9664b997a375ece856d45f">BenchmarkCFG::split</a></div><div class="ttdeci">std::vector&lt; std::string &gt; split(const std::string &amp;s)</div><div class="ttdoc">From a string of format XXX,YY,ZZZ,... splis the elements (comma-separated) as a vector of strings...</div><div class="ttdef"><b>Definition:</b> <a href="benchmarkcfg_8hpp_source.html#l00321">benchmarkcfg.hpp:321</a></div></div>
+<div class="ttc" id="classBenchmarkCFG_html_a631e64fffc9664b997a375ece856d45f"><div class="ttname"><a href="classBenchmarkCFG.html#a631e64fffc9664b997a375ece856d45f">BenchmarkCFG::split</a></div><div class="ttdeci">std::vector&lt; std::string &gt; split(const std::string &amp;s)</div><div class="ttdoc">From a string of format XXX,YY,ZZZ,... splis the elements (comma-separated) as a vector of strings...</div><div class="ttdef"><b>Definition:</b> <a href="benchmarkcfg_8hpp_source.html#l00323">benchmarkcfg.hpp:323</a></div></div>
 <div class="ttc" id="classFMMStar_html"><div class="ttname"><a href="classFMMStar.html">FMMStar</a></div><div class="ttdoc">Encapsulates the calls to FMM with heuristics enabled. </div><div class="ttdef"><b>Definition:</b> <a href="fmmstar_8hpp_source.html#l00061">fmmstar.hpp:61</a></div></div>
 <div class="ttc" id="classBenchmark_html"><div class="ttname"><a href="classBenchmark.html">Benchmark</a></div><div class="ttdoc">This class provides the utilities to benchmark Fast Marching Solvers (configuration, running and logging). It works for FMM (any heap and SFMM), FIM and UFMM. It has not been tested with FM2 solvers. </div><div class="ttdef"><b>Definition:</b> <a href="benchmark_8hpp_source.html#l00033">benchmark.hpp:33</a></div></div>
+<div class="ttc" id="classSFMM_html"><div class="ttname"><a href="classSFMM.html">SFMM</a></div><div class="ttdoc">Implements the Simplified Fast Marching Method, encapsulating FMM with a priority queue...</div><div class="ttdef"><b>Definition:</b> <a href="sfmm_8hpp_source.html#l00044">sfmm.hpp:44</a></div></div>
 <div class="ttc" id="classBenchmark_html_a5db3a4730c85e38aec44c5e20eec545a"><div class="ttname"><a href="classBenchmark.html#a5db3a4730c85e38aec44c5e20eec545a">Benchmark::setEnvironment</a></div><div class="ttdeci">void setEnvironment(grid_t *grid)</div><div class="ttdoc">Sets the environment (grid map) the benchmark will be run on. </div><div class="ttdef"><b>Definition:</b> <a href="benchmark_8hpp_source.html#l00072">benchmark.hpp:72</a></div></div>
-<div class="ttc" id="classBenchmarkCFG_html_a09f68b08558853e7e7e9a0f355591f9a"><div class="ttname"><a href="classBenchmarkCFG.html#a09f68b08558853e7e7e9a0f355591f9a">BenchmarkCFG::readOptions</a></div><div class="ttdeci">bool readOptions(const char *filename)</div><div class="ttdoc">Parses the CFG file given. </div><div class="ttdef"><b>Definition:</b> <a href="benchmarkcfg_8hpp_source.html#l00057">benchmarkcfg.hpp:57</a></div></div>
+<div class="ttc" id="classSFMMStar_html"><div class="ttname"><a href="classSFMMStar.html">SFMMStar</a></div><div class="ttdef"><b>Definition:</b> <a href="sfmmstar_8hpp_source.html#l00041">sfmmstar.hpp:41</a></div></div>
+<div class="ttc" id="classBenchmarkCFG_html_a09f68b08558853e7e7e9a0f355591f9a"><div class="ttname"><a href="classBenchmarkCFG.html#a09f68b08558853e7e7e9a0f355591f9a">BenchmarkCFG::readOptions</a></div><div class="ttdeci">bool readOptions(const char *filename)</div><div class="ttdoc">Parses the CFG file given. </div><div class="ttdef"><b>Definition:</b> <a href="benchmarkcfg_8hpp_source.html#l00059">benchmarkcfg.hpp:59</a></div></div>
 <div class="ttc" id="classBenchmark_html_a89d766e24f43666e24dc68fd691a32e3"><div class="ttname"><a href="classBenchmark.html#a89d766e24f43666e24dc68fd691a32e3">Benchmark::addSolver</a></div><div class="ttdeci">void addSolver(Solver&lt; grid_t &gt; *solver)</div><div class="ttdoc">Adds a new solver to be benchmarked. </div><div class="ttdef"><b>Definition:</b> <a href="benchmark_8hpp_source.html#l00060">benchmark.hpp:60</a></div></div>
-<div class="ttc" id="classBenchmarkCFG_html_a57842ff0d6587ebc119e92bb6ba0d369"><div class="ttname"><a href="classBenchmarkCFG.html#a57842ff0d6587ebc119e92bb6ba0d369">BenchmarkCFG::path_</a></div><div class="ttdeci">boost::filesystem::path path_</div><div class="ttdoc">Stores the absolute path to the CFG file. </div><div class="ttdef"><b>Definition:</b> <a href="benchmarkcfg_8hpp_source.html#l00344">benchmarkcfg.hpp:344</a></div></div>
+<div class="ttc" id="classBenchmarkCFG_html_a57842ff0d6587ebc119e92bb6ba0d369"><div class="ttname"><a href="classBenchmarkCFG.html#a57842ff0d6587ebc119e92bb6ba0d369">BenchmarkCFG::path_</a></div><div class="ttdeci">boost::filesystem::path path_</div><div class="ttdoc">Stores the absolute path to the CFG file. </div><div class="ttdef"><b>Definition:</b> <a href="benchmarkcfg_8hpp_source.html#l00346">benchmarkcfg.hpp:346</a></div></div>
 <div class="ttc" id="classFMFibHeap_html"><div class="ttname"><a href="classFMFibHeap.html">FMFibHeap</a></div><div class="ttdef"><b>Definition:</b> <a href="fmfibheap_8hpp_source.html#l00028">fmfibheap.hpp:28</a></div></div>
 <div class="ttc" id="classBenchmark_html_aa2c1e5f8c5b6ce3c110a8aa929695b32"><div class="ttname"><a href="classBenchmark.html#aa2c1e5f8c5b6ce3c110a8aa929695b32">Benchmark::setInitialPoints</a></div><div class="ttdeci">void setInitialPoints(const std::vector&lt; unsigned int &gt; &amp;init_points)</div><div class="ttdoc">Sets the initial points (indices for the solvers). </div><div class="ttdef"><b>Definition:</b> <a href="benchmark_8hpp_source.html#l00102">benchmark.hpp:102</a></div></div>
-<div class="ttc" id="classBenchmarkCFG_html_a50574f4104d8e43832ca2f8ed0ba9bf6"><div class="ttname"><a href="classBenchmarkCFG.html#a50574f4104d8e43832ca2f8ed0ba9bf6">BenchmarkCFG::getValue</a></div><div class="ttdeci">T getValue(const std::string &amp;key) const </div><div class="ttdoc">Get the value for a given key (option). </div><div class="ttdef"><b>Definition:</b> <a href="benchmarkcfg_8hpp_source.html#l00293">benchmarkcfg.hpp:293</a></div></div>
-<div class="ttc" id="classBenchmarkCFG_html_a0fa3d16dac50dcf5466ae8e0ccb27bf4"><div class="ttname"><a href="classBenchmarkCFG.html#a0fa3d16dac50dcf5466ae8e0ccb27bf4">BenchmarkCFG::solverNames_</a></div><div class="ttdeci">std::vector&lt; std::string &gt; solverNames_</div><div class="ttdoc">Stores the names of the parsed solvers. </div><div class="ttdef"><b>Definition:</b> <a href="benchmarkcfg_8hpp_source.html#l00335">benchmarkcfg.hpp:335</a></div></div>
-<div class="ttc" id="classBenchmarkCFG_html_a63c58a9057025a2111b3b61b8e85d016"><div class="ttname"><a href="classBenchmarkCFG.html#a63c58a9057025a2111b3b61b8e85d016">BenchmarkCFG::splitAndCast</a></div><div class="ttdeci">std::array&lt; T, N &gt; splitAndCast(const std::string &amp;s)</div><div class="ttdoc">From a string of format XXX,YY,ZZZ,... splis the N elements and cast as type T (comma-separated) as a...</div><div class="ttdef"><b>Definition:</b> <a href="benchmarkcfg_8hpp_source.html#l00306">benchmarkcfg.hpp:306</a></div></div>
+<div class="ttc" id="classBenchmarkCFG_html_a50574f4104d8e43832ca2f8ed0ba9bf6"><div class="ttname"><a href="classBenchmarkCFG.html#a50574f4104d8e43832ca2f8ed0ba9bf6">BenchmarkCFG::getValue</a></div><div class="ttdeci">T getValue(const std::string &amp;key) const </div><div class="ttdoc">Get the value for a given key (option). </div><div class="ttdef"><b>Definition:</b> <a href="benchmarkcfg_8hpp_source.html#l00295">benchmarkcfg.hpp:295</a></div></div>
+<div class="ttc" id="classBenchmarkCFG_html_a0fa3d16dac50dcf5466ae8e0ccb27bf4"><div class="ttname"><a href="classBenchmarkCFG.html#a0fa3d16dac50dcf5466ae8e0ccb27bf4">BenchmarkCFG::solverNames_</a></div><div class="ttdeci">std::vector&lt; std::string &gt; solverNames_</div><div class="ttdoc">Stores the names of the parsed solvers. </div><div class="ttdef"><b>Definition:</b> <a href="benchmarkcfg_8hpp_source.html#l00337">benchmarkcfg.hpp:337</a></div></div>
+<div class="ttc" id="classBenchmarkCFG_html_a63c58a9057025a2111b3b61b8e85d016"><div class="ttname"><a href="classBenchmarkCFG.html#a63c58a9057025a2111b3b61b8e85d016">BenchmarkCFG::splitAndCast</a></div><div class="ttdeci">std::array&lt; T, N &gt; splitAndCast(const std::string &amp;s)</div><div class="ttdoc">From a string of format XXX,YY,ZZZ,... splis the N elements and cast as type T (comma-separated) as a...</div><div class="ttdef"><b>Definition:</b> <a href="benchmarkcfg_8hpp_source.html#l00308">benchmarkcfg.hpp:308</a></div></div>
 <div class="ttc" id="classSolver_html"><div class="ttname"><a href="classSolver.html">Solver</a></div><div class="ttdoc">Abstract class that serves as interface for the actual solvers implemented. It requires (at least) th...</div><div class="ttdef"><b>Definition:</b> <a href="solver_8hpp_source.html#l00039">solver.hpp:39</a></div></div>
 <div class="ttc" id="classMapLoader_html_a27f566714f26ee3af681016637e0a636"><div class="ttname"><a href="classMapLoader.html#a27f566714f26ee3af681016637e0a636">MapLoader::loadMapFromImg</a></div><div class="ttdeci">static void loadMapFromImg(const char *filename, nDGridMap&lt; T, ndims &gt; &amp;grid)</div><div class="ttdoc">Loads the initial binary map for a given grid. It is based on the nDGridMap::setOccupancy() which has...</div><div class="ttdef"><b>Definition:</b> <a href="maploader_8hpp_source.html#l00050">maploader.hpp:50</a></div></div>
-<div class="ttc" id="classLSM_html"><div class="ttname"><a href="classLSM.html">LSM</a></div><div class="ttdoc">Implements Lock Sweeping Method. </div><div class="ttdef"><b>Definition:</b> <a href="lsm_8hpp_source.html#l00040">lsm.hpp:40</a></div></div>
-<div class="ttc" id="classBenchmarkCFG_html_a451c8efb73f48cadb717ada871e90b47"><div class="ttname"><a href="classBenchmarkCFG.html#a451c8efb73f48cadb717ada871e90b47">BenchmarkCFG::BenchmarkCFG</a></div><div class="ttdeci">BenchmarkCFG()</div><div class="ttdoc">Requires readOptions to be manually called after this constructor. </div><div class="ttdef"><b>Definition:</b> <a href="benchmarkcfg_8hpp_source.html#l00048">benchmarkcfg.hpp:48</a></div></div>
+<div class="ttc" id="classLSM_html"><div class="ttname"><a href="classLSM.html">LSM</a></div><div class="ttdoc">Implements Lock Sweeping Method. </div><div class="ttdef"><b>Definition:</b> <a href="lsm_8hpp_source.html#l00041">lsm.hpp:41</a></div></div>
+<div class="ttc" id="classBenchmarkCFG_html_a451c8efb73f48cadb717ada871e90b47"><div class="ttname"><a href="classBenchmarkCFG.html#a451c8efb73f48cadb717ada871e90b47">BenchmarkCFG::BenchmarkCFG</a></div><div class="ttdeci">BenchmarkCFG()</div><div class="ttdoc">Requires readOptions to be manually called after this constructor. </div><div class="ttdef"><b>Definition:</b> <a href="benchmarkcfg_8hpp_source.html#l00050">benchmarkcfg.hpp:50</a></div></div>
 <div class="ttc" id="classFIM_html"><div class="ttname"><a href="classFIM.html">FIM</a></div><div class="ttdoc">Implements Fast Iterative Method. </div><div class="ttdef"><b>Definition:</b> <a href="fim_8hpp_source.html#l00033">fim.hpp:33</a></div></div>
 <div class="ttc" id="classBenchmark_html_a9f28f46148d04526f8890c1e09fa3d81"><div class="ttname"><a href="classBenchmark.html#a9f28f46148d04526f8890c1e09fa3d81">Benchmark::setNRuns</a></div><div class="ttdeci">void setNRuns(unsigned int n)</div><div class="ttdoc">Set number of runs for each solver. </div><div class="ttdef"><b>Definition:</b> <a href="benchmark_8hpp_source.html#l00078">benchmark.hpp:78</a></div></div>
 <div class="ttc" id="classconsole_html_a69423871e197337783f9b699da398cbc"><div class="ttname"><a href="classconsole.html#a69423871e197337783f9b699da398cbc">console::error</a></div><div class="ttdeci">static void error(const std::string &amp;val)</div><div class="ttdef"><b>Definition:</b> <a href="console_8cpp_source.html#l00159">console.cpp:159</a></div></div>
@@ -441,7 +444,7 @@ $(document).ready(function(){initNavTree('benchmarkcfg_8hpp_source.html','');});
 <div class="ttc" id="classFMM_html"><div class="ttname"><a href="classFMM.html">FMM&lt; grid_t &gt;</a></div></div>
 <div class="ttc" id="classBenchmark_html_a3ee735292a9a3737c5c7bf554ef5684b"><div class="ttname"><a href="classBenchmark.html#a3ee735292a9a3737c5c7bf554ef5684b">Benchmark::setInitialAndGoalPoints</a></div><div class="ttdeci">void setInitialAndGoalPoints(const std::vector&lt; unsigned int &gt; &amp;init_points, unsigned int goal_idx)</div><div class="ttdoc">Sets the initial and goal points (indices) for the solvers. </div><div class="ttdef"><b>Definition:</b> <a href="benchmark_8hpp_source.html#l00096">benchmark.hpp:96</a></div></div>
 <div class="ttc" id="classBenchmark_html_a7458d937b2aef80af1a191ca40252b4a"><div class="ttname"><a href="classBenchmark.html#a7458d937b2aef80af1a191ca40252b4a">Benchmark::setSaveLog</a></div><div class="ttdeci">void setSaveLog(bool s)</div><div class="ttdoc">Sets the flag to save the log to a file (true) or output in terminal (false). </div><div class="ttdef"><b>Definition:</b> <a href="benchmark_8hpp_source.html#l00090">benchmark.hpp:90</a></div></div>
-<div class="ttc" id="classBenchmarkCFG_html_a6f13ebeb127a8cd60d61241c29fba1d5"><div class="ttname"><a href="classBenchmarkCFG.html#a6f13ebeb127a8cd60d61241c29fba1d5">BenchmarkCFG::ctorParams_</a></div><div class="ttdeci">std::vector&lt; std::string &gt; ctorParams_</div><div class="ttdoc">Stores the constructor parameters for the parsed solvers. </div><div class="ttdef"><b>Definition:</b> <a href="benchmarkcfg_8hpp_source.html#l00338">benchmarkcfg.hpp:338</a></div></div>
+<div class="ttc" id="classBenchmarkCFG_html_a6f13ebeb127a8cd60d61241c29fba1d5"><div class="ttname"><a href="classBenchmarkCFG.html#a6f13ebeb127a8cd60d61241c29fba1d5">BenchmarkCFG::ctorParams_</a></div><div class="ttdeci">std::vector&lt; std::string &gt; ctorParams_</div><div class="ttdoc">Stores the constructor parameters for the parsed solvers. </div><div class="ttdef"><b>Definition:</b> <a href="benchmarkcfg_8hpp_source.html#l00340">benchmarkcfg.hpp:340</a></div></div>
 <div class="ttc" id="classBenchmark_html_a102650550987c23aed530a1134f66bd1"><div class="ttname"><a href="classBenchmark.html#a102650550987c23aed530a1134f66bd1">Benchmark::setName</a></div><div class="ttdeci">void setName(const std::string &amp;n)</div><div class="ttdoc">Sets the name of the benchmark. </div><div class="ttdef"><b>Definition:</b> <a href="benchmark_8hpp_source.html#l00182">benchmark.hpp:182</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
@@ -449,7 +452,7 @@ $(document).ready(function(){initNavTree('benchmarkcfg_8hpp_source.html','');});
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_44cec6e3ea30e076b9313c4641539d9f.html">benchmark</a></li><li class="navelem"><b>benchmarkcfg.hpp</b></li>
-    <li class="footer">Generated on Fri Mar 13 2015 12:30:52 for n-Dimensional Fast Marching by
+    <li class="footer">Generated on Fri Mar 13 2015 13:23:02 for n-Dimensional Fast Marching by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.6 </li>
   </ul>

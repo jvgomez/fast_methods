@@ -98,13 +98,16 @@ $(document).ready(function(){initNavTree('index.html','');});
 <li><a class="el" href="md_markdown_benchmarking.html">Benchmarking</a></li>
 <li><a href="../nDGridMap.pdf">nDGridMap implementation</a>: Probably, the most complex part of the code. It encapsulates the complexity of the n-dimensional generalization, so that solvers are implemented almost independently of the number of dimensions.</li>
 </ul>
-<dl class="section note"><dt>Note</dt><dd>Due to the nDimensional implementation, the Eikonal solver code for a given index is probably not very optimized, since it computes from 1D to nD until a better solution is not possible. For 2D and 3D (and probably nD) this is not necessary, but my tests while implementing <a class="el" href="classFSM.html" title="Implements Fast Sweeping Method. ">FSM</a> obligated me to do it that way in order to have consistent results. </dd></dl>
+<p>Please, carefully read the https://github.com/jvgomez/fastmarching/blob/master/README.md "README".</p>
+<dl class="section note"><dt>Note</dt><dd>Some of the classes are just wrappers that can be used with lower level classes. For instance, declaring a <a class="el" href="classSFMM.html" title="Implements the Simplified Fast Marching Method, encapsulating FMM with a priority queue...">SFMM</a>&lt;nDGridMap&lt;FMCell,2&gt; &gt; is the same as using <a class="el" href="classFMM.html" title="Implements the Fast Marching Method (FMM). ">FMM</a>&lt;nDGridMap&lt;FMCell,2&gt;, FMPriorityQueue&lt;FMCell&gt; &gt;. The same happens with the *Star solvers.</dd>
+<dd>
+Due to the nDimensional implementation, the Eikonal solver code for a given index is probably not very optimized, since it computes from 1D to nD until a better solution is not possible. For 2D and 3D (and probably nD) this is not necessary, but my tests while implementing <a class="el" href="classFSM.html" title="Implements Fast Sweeping Method. ">FSM</a> obligated me to do it that way in order to have consistent results. </dd></dl>
 </div></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Fri Mar 13 2015 12:30:52 for n-Dimensional Fast Marching by
+    <li class="footer">Generated on Fri Mar 13 2015 13:23:02 for n-Dimensional Fast Marching by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.6 </li>
   </ul>

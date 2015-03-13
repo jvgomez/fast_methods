@@ -1,0 +1,6 @@
+<map id="SFMMStar&lt; grid_t, cell_t &gt;" name="SFMMStar&lt; grid_t, cell_t &gt;">
+<area shape="rect" id="node2" href="$classSFMM.html" title="Implements the Simplified Fast Marching Method, encapsulating FMM with a priority queue..." alt="" coords="27,280,180,307"/>
+<area shape="rect" id="node3" href="$classFMM.html" title="FMM\&lt; grid_t, FMPriorityQueue\l\&lt; cell_t \&gt; \&gt;" alt="" coords="5,187,203,229"/>
+<area shape="rect" id="node4" href="$classSolver.html" title="Abstract class that serves as interface for the actual solvers implemented. It requires (at least) th..." alt="" coords="62,5,175,32"/>
+<area shape="rect" id="node5" href="$classFMM.html" title="Implements the Fast Marching Method (FMM). " alt="" coords="120,83,272,109"/>
+</map>

@@ -21,6 +21,7 @@ var hierarchy =
     [ "GridWritter", "classGridWritter.html", null ],
     [ "MapLoader", "classMapLoader.html", null ],
     [ "nDGridMap< T, ndims >", "classnDGridMap.html", null ],
+    [ "SFMMStarStar", "classSFMMStarStar.html", null ],
     [ "Solver< grid_t >", "classSolver.html", [
       [ "FM2< grid_t, heap_t >", "classFM2.html", [
         [ "test_fmm_benchmark.cpp", "md_markdown_building.html#building_bmtest", null ],
@@ -36,6 +37,11 @@ var hierarchy =
         ] ],
         [ "GMM< grid_t >", "classGMM.html", null ],
         [ "UFMM< grid_t, cell_t >", "classUFMM.html", null ]
+      ] ],
+      [ "FMM< grid_t, FMPriorityQueue< cell_t > >", "classFMM.html", [
+        [ "SFMM< grid_t, cell_t >", "classSFMM.html", [
+          [ "SFMMStar< grid_t, cell_t >", "classSFMMStar.html", null ]
+        ] ]
       ] ]
     ] ]
 ];

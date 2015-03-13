@@ -100,92 +100,94 @@ $(document).ready(function(){initNavTree('test__fmm_8cpp_source.html','');});
 <div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="preprocessor">#include &quot;../ndgridmap/ndgridmap.hpp&quot;</span></div>
 <div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;</div>
 <div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="preprocessor">#include &quot;../fmm/fmm.hpp&quot;</span></div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="preprocessor">#include &quot;../fmm/fmmstar.hpp&quot;</span></div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="preprocessor">#include &quot;../fmm/fmdata/fmfibheap.hpp&quot;</span></div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor">#include &quot;../fmm/fmdata/fmpriorityqueue.hpp&quot;</span></div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="preprocessor">#include &quot;../fmm/fim.hpp&quot;</span></div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="preprocessor">#include &quot;../fmm/gmm.hpp&quot;</span></div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="preprocessor">#include &quot;../fmm/ufmm.hpp&quot;</span></div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="preprocessor">#include &quot;../fmm/fsm.hpp&quot;</span></div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;</div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="preprocessor">#include &quot;../io/gridplotter.hpp&quot;</span></div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="preprocessor">#include &quot;../fmm/sfmm.hpp&quot;</span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="preprocessor">#include &quot;../fmm/sfmmstar.hpp&quot;</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor">#include &quot;../fmm/fmmstar.hpp&quot;</span></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="preprocessor">#include &quot;../fmm/fmdata/fmfibheap.hpp&quot;</span></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="preprocessor">#include &quot;../fmm/fmdata/fmpriorityqueue.hpp&quot;</span></div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="preprocessor">#include &quot;../fmm/fim.hpp&quot;</span></div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="preprocessor">#include &quot;../fmm/gmm.hpp&quot;</span></div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="preprocessor">#include &quot;../fmm/ufmm.hpp&quot;</span></div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="preprocessor">#include &quot;../fmm/fsm.hpp&quot;</span></div>
 <div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;</div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="keyword">using namespace </span>std;</div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="keyword">using namespace </span>std::chrono;</div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="keywordtype">int</span> main()</div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;{</div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;    <span class="comment">// A bit of shorthand.</span></div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;    <span class="keyword">typedef</span> <a class="code" href="classnDGridMap.html">nDGridMap&lt;FMCell, 2&gt;</a> FMGrid2D;</div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;    <span class="keyword">typedef</span> array&lt;unsigned int, 2&gt; Coord2D;</div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;    <span class="comment">// Grid, start and goal definition.</span></div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;    Coord2D dimsize {300,300};</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;    FMGrid2D grid_fmm (dimsize);</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;    Coord2D init_point = {150, 150};</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;    Coord2D goal_point = {250, 250};</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;    <span class="comment">// Solvers declaration.</span></div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    std::vector&lt;Solver&lt;FMGrid2D&gt;*&gt; solvers;</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;    solvers.push_back(<span class="keyword">new</span> <a class="code" href="classFMM.html">FMM&lt;FMGrid2D&gt;</a>);</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    solvers.push_back(<span class="keyword">new</span> <a class="code" href="classFMMStar.html">FMMStar&lt;FMGrid2D&gt;</a>);</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    solvers.push_back(<span class="keyword">new</span> <a class="code" href="classFMMStar.html">FMMStar&lt;FMGrid2D&gt;</a>(<span class="stringliteral">&quot;FMM*_Dist&quot;</span>, DISTANCE));</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    solvers.push_back(<span class="keyword">new</span> <a class="code" href="classFMM.html">FMM</a>&lt;FMGrid2D, <a class="code" href="classFMFibHeap.html">FMFibHeap&lt;FMCell&gt;</a> &gt;(<span class="stringliteral">&quot;FMFib&quot;</span>));</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    solvers.push_back(<span class="keyword">new</span> <a class="code" href="classFMMStar.html">FMMStar</a>&lt;FMGrid2D, <a class="code" href="classFMFibHeap.html">FMFibHeap&lt;FMCell&gt;</a> &gt;(<span class="stringliteral">&quot;FMM*Fib&quot;</span>));</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    solvers.push_back(<span class="keyword">new</span> <a class="code" href="classFMMStar.html">FMMStar</a>&lt;FMGrid2D, <a class="code" href="classFMFibHeap.html">FMFibHeap&lt;FMCell&gt;</a> &gt;(<span class="stringliteral">&quot;FMM*Fib_Dist&quot;</span>, DISTANCE));</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    solvers.push_back(<span class="keyword">new</span> <a class="code" href="classFMM.html">FMM</a>&lt;FMGrid2D, <a class="code" href="classFMPriorityQueue.html">FMPriorityQueue&lt;FMCell&gt;</a> &gt;(<span class="stringliteral">&quot;SFMM&quot;</span>));</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    solvers.push_back(<span class="keyword">new</span> <a class="code" href="classFMMStar.html">FMMStar</a>&lt;FMGrid2D, <a class="code" href="classFMPriorityQueue.html">FMPriorityQueue&lt;FMCell&gt;</a> &gt;(<span class="stringliteral">&quot;SFMM*&quot;</span>));</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;    solvers.push_back(<span class="keyword">new</span> <a class="code" href="classFMMStar.html">FMMStar</a>&lt;FMGrid2D, <a class="code" href="classFMPriorityQueue.html">FMPriorityQueue&lt;FMCell&gt;</a> &gt;(<span class="stringliteral">&quot;SFMM*_Dist&quot;</span>, DISTANCE));</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;    solvers.push_back(<span class="keyword">new</span> <a class="code" href="classGMM.html">GMM&lt;FMGrid2D&gt;</a>);</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;    solvers.push_back(<span class="keyword">new</span> <a class="code" href="classFIM.html">FIM&lt;FMGrid2D&gt;</a>);</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;    solvers.push_back(<span class="keyword">new</span> <a class="code" href="classUFMM.html">UFMM&lt;FMGrid2D&gt;</a>);</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    solvers.push_back(<span class="keyword">new</span> <a class="code" href="classFSM.html">FSM&lt;FMGrid2D&gt;</a>);</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    <span class="comment">// GMM, FIM and UFMM have some parameters, can be set by overloaded constructors.</span></div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    <span class="comment">// Executing every solver individually over the same grid.</span></div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    <span class="keywordflow">for</span> (<a class="code" href="classSolver.html">Solver&lt;FMGrid2D&gt;</a>* s :solvers)</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    {</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;        s-&gt;setEnvironment(&amp;grid_fmm);</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;        <span class="comment">//s-&gt;setInitialPoints(init_point); // If no goal_idx is set. Comment next line if this one is uncommented.</span></div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;        s-&gt;setInitialAndGoalPoints(init_point, goal_point);</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;        s-&gt;setup(); <span class="comment">// Not mandatory, but in FMMstar we want to precompute distances</span></div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;                    <span class="comment">// out of compute().</span></div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;        s-&gt;compute();</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;        cout &lt;&lt; <span class="stringliteral">&quot;\tElapsed &quot;</span>&lt;&lt; s-&gt;getName() &lt;&lt;<span class="stringliteral">&quot; time: &quot;</span> &lt;&lt; s-&gt;getTime() &lt;&lt; <span class="stringliteral">&quot; ms&quot;</span> &lt;&lt; <span class="charliteral">&#39;\n&#39;</span>;</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;        <a class="code" href="classGridPlotter.html#a74e6bbde1d936a64230280d739c0f78f">GridPlotter::plotArrivalTimes</a>(grid_fmm, s-&gt;getName());</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    }</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    <span class="comment">// Showing different type conversions methodologies. Solver names could be compared</span></div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;    <span class="comment">// but it is less reliable since they are user-defined.</span></div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;    <span class="comment">// Direct cast</span></div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;    <a class="code" href="classFMM.html">FMM&lt;FMGrid2D&gt;</a>* FMMtest = <span class="keyword">dynamic_cast&lt;</span> <a class="code" href="classFMM.html">FMM&lt;FMGrid2D&gt;</a>* <span class="keyword">&gt;</span>(solvers[6]);</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;    <span class="keywordflow">if</span> (FMMtest)</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;        std::cout &lt;&lt; <span class="stringliteral">&quot;Solver type SFMM&quot;</span> &lt;&lt;<span class="charliteral">&#39;\n&#39;</span>;</div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;    <span class="keywordflow">else</span></div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;        std::cout &lt;&lt; <span class="stringliteral">&quot;Solver NOT type SFMM&quot;</span> &lt;&lt;<span class="charliteral">&#39;\n&#39;</span>;</div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;    <a class="code" href="classFMM.html">FMM&lt;FMGrid2D, FMPriorityQueue&lt;FMCell&gt;</a>&gt;* FMMtest2 = <span class="keyword">dynamic_cast&lt;</span> <a class="code" href="classFMM.html">FMM&lt;FMGrid2D, FMPriorityQueue&lt;FMCell&gt;</a><span class="keyword">&gt;</span>* &gt;(solvers[6]);</div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;    <span class="keywordflow">if</span> (FMMtest2)</div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;        std::cout &lt;&lt; <span class="stringliteral">&quot;Solver type SFMM&quot;</span> &lt;&lt;<span class="charliteral">&#39;\n&#39;</span>;</div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;    <span class="keywordflow">else</span></div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;        std::cout &lt;&lt; <span class="stringliteral">&quot;Solver NOT type SFMM&quot;</span> &lt;&lt;<span class="charliteral">&#39;\n&#39;</span>;</div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;</div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;    <span class="comment">// Solver::as member function.</span></div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;    <span class="comment">// solvers[6]-&gt;setHeuristics(true) would not compile since there is not a Solver::setHeuristics</span></div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;    solvers[6]-&gt;<a class="code" href="classSolver.html#a4383bee353e58fd878ef846b291c6a26">as</a>&lt; <a class="code" href="classFMM.html">FMM&lt;FMGrid2D, FMPriorityQueue&lt;FMCell&gt;</a>&gt; &gt;()-&gt;setHeuristics(HeurStrategy::DISTANCE);</div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;    std::cout &lt;&lt; solvers[6]-&gt;<a class="code" href="classSolver.html#a4383bee353e58fd878ef846b291c6a26">as</a>&lt; <a class="code" href="classFMM.html">FMM&lt;FMGrid2D, FMPriorityQueue&lt;FMCell&gt;</a>&gt; &gt;()-&gt;getHeuristics() &lt;&lt; <span class="charliteral">&#39;\n&#39;</span>;</div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;</div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;    <span class="comment">// Preventing memory leaks.</span></div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;    <span class="keywordflow">for</span> (<span class="keyword">auto</span> &amp; s : solvers)</div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;        <span class="keyword">delete</span> s;</div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;</div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;    <span class="keywordflow">return</span> 0;</div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;}</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="preprocessor">#include &quot;../io/gridplotter.hpp&quot;</span></div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;</div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="keyword">using namespace </span>std;</div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="keyword">using namespace </span>std::chrono;</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="keywordtype">int</span> main()</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;{</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;    <span class="comment">// A bit of shorthand.</span></div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;    <span class="keyword">typedef</span> <a class="code" href="classnDGridMap.html">nDGridMap&lt;FMCell, 2&gt;</a> FMGrid2D;</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;    <span class="keyword">typedef</span> array&lt;unsigned int, 2&gt; Coord2D;</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;    <span class="comment">// Grid, start and goal definition.</span></div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;    Coord2D dimsize {300,300};</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;    FMGrid2D grid_fmm (dimsize);</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;    Coord2D init_point = {150, 150};</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;    Coord2D goal_point = {250, 250};</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;    <span class="comment">// Solvers declaration.</span></div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    std::vector&lt;Solver&lt;FMGrid2D&gt;*&gt; solvers;</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    solvers.push_back(<span class="keyword">new</span> <a class="code" href="classFMM.html">FMM&lt;FMGrid2D&gt;</a>);</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    solvers.push_back(<span class="keyword">new</span> <a class="code" href="classFMMStar.html">FMMStar&lt;FMGrid2D&gt;</a>);</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    solvers.push_back(<span class="keyword">new</span> <a class="code" href="classFMMStar.html">FMMStar&lt;FMGrid2D&gt;</a>(<span class="stringliteral">&quot;FMM*_Dist&quot;</span>, DISTANCE));</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    solvers.push_back(<span class="keyword">new</span> <a class="code" href="classFMM.html">FMM</a>&lt;FMGrid2D, <a class="code" href="classFMFibHeap.html">FMFibHeap&lt;FMCell&gt;</a> &gt;(<span class="stringliteral">&quot;FMFib&quot;</span>));</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    solvers.push_back(<span class="keyword">new</span> <a class="code" href="classFMMStar.html">FMMStar</a>&lt;FMGrid2D, <a class="code" href="classFMFibHeap.html">FMFibHeap&lt;FMCell&gt;</a> &gt;(<span class="stringliteral">&quot;FMM*Fib&quot;</span>));</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    solvers.push_back(<span class="keyword">new</span> <a class="code" href="classFMMStar.html">FMMStar</a>&lt;FMGrid2D, <a class="code" href="classFMFibHeap.html">FMFibHeap&lt;FMCell&gt;</a> &gt;(<span class="stringliteral">&quot;FMM*Fib_Dist&quot;</span>, DISTANCE));</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;    solvers.push_back(<span class="keyword">new</span> <a class="code" href="classSFMM.html">SFMM&lt;FMGrid2D&gt;</a>);</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;    solvers.push_back(<span class="keyword">new</span> <a class="code" href="classSFMMStar.html">SFMMStar&lt;FMGrid2D&gt;</a>);</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;    solvers.push_back(<span class="keyword">new</span> <a class="code" href="classSFMMStar.html">SFMMStar&lt;FMGrid2D&gt;</a>(<span class="stringliteral">&quot;SFMM*_Dist&quot;</span>, DISTANCE));</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;    solvers.push_back(<span class="keyword">new</span> <a class="code" href="classGMM.html">GMM&lt;FMGrid2D&gt;</a>);</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    solvers.push_back(<span class="keyword">new</span> <a class="code" href="classFIM.html">FIM&lt;FMGrid2D&gt;</a>);</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    solvers.push_back(<span class="keyword">new</span> <a class="code" href="classUFMM.html">UFMM&lt;FMGrid2D&gt;</a>);</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    solvers.push_back(<span class="keyword">new</span> <a class="code" href="classFSM.html">FSM&lt;FMGrid2D&gt;</a>);</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    <span class="comment">// GMM, FIM and UFMM have some parameters, can be set by overloaded constructors.</span></div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    <span class="comment">// Executing every solver individually over the same grid.</span></div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;    <span class="keywordflow">for</span> (<a class="code" href="classSolver.html">Solver&lt;FMGrid2D&gt;</a>* s :solvers)</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    {</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;        s-&gt;setEnvironment(&amp;grid_fmm);</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;        <span class="comment">//s-&gt;setInitialPoints(init_point); // If no goal_idx is set. Comment next line if this one is uncommented.</span></div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;        s-&gt;setInitialAndGoalPoints(init_point, goal_point);</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;        s-&gt;setup(); <span class="comment">// Not mandatory, but in FMMstar we want to precompute distances</span></div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;                    <span class="comment">// out of compute().</span></div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;        s-&gt;compute();</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;        cout &lt;&lt; <span class="stringliteral">&quot;\tElapsed &quot;</span>&lt;&lt; s-&gt;getName() &lt;&lt;<span class="stringliteral">&quot; time: &quot;</span> &lt;&lt; s-&gt;getTime() &lt;&lt; <span class="stringliteral">&quot; ms&quot;</span> &lt;&lt; <span class="charliteral">&#39;\n&#39;</span>;</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;        <a class="code" href="classGridPlotter.html#a74e6bbde1d936a64230280d739c0f78f">GridPlotter::plotArrivalTimes</a>(grid_fmm, s-&gt;getName());</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    }</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;    <span class="comment">// Showing different type conversions methodologies. Solver names could be compared</span></div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;    <span class="comment">// but it is less reliable since they are user-defined.</span></div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;    <span class="comment">// Direct cast</span></div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;    <span class="comment">/*FMM&lt;FMGrid2D&gt;* FMMtest = dynamic_cast&lt; FMM&lt;FMGrid2D&gt;* &gt;(solvers[6]);</span></div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;<span class="comment">    if (FMMtest)</span></div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;<span class="comment">        std::cout &lt;&lt; &quot;Solver type SFMM&quot; &lt;&lt;&#39;\n&#39;;</span></div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;<span class="comment">    else</span></div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;<span class="comment">        std::cout &lt;&lt; &quot;Solver NOT type SFMM&quot; &lt;&lt;&#39;\n&#39;;</span></div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;<span class="comment"></span></div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;<span class="comment">    FMM&lt;FMGrid2D, FMPriorityQueue&lt;FMCell&gt;&gt;* FMMtest2 = dynamic_cast&lt; FMM&lt;FMGrid2D, FMPriorityQueue&lt;FMCell&gt;&gt;* &gt;(solvers[6]);</span></div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;<span class="comment">    if (FMMtest2)</span></div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;<span class="comment">        std::cout &lt;&lt; &quot;Solver type SFMM&quot; &lt;&lt;&#39;\n&#39;;</span></div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;<span class="comment">    else</span></div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;<span class="comment">        std::cout &lt;&lt; &quot;Solver NOT type SFMM&quot; &lt;&lt;&#39;\n&#39;;</span></div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;<span class="comment"></span></div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;<span class="comment">    // Solver::as member function.</span></div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;<span class="comment">    // solvers[6]-&gt;setHeuristics(true) would not compile since there is not a Solver::setHeuristics</span></div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;<span class="comment">    solvers[6]-&gt;as&lt; FMM&lt;FMGrid2D, FMPriorityQueue&lt;FMCell&gt;&gt; &gt;()-&gt;setHeuristics(HeurStrategy::DISTANCE);</span></div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;<span class="comment">    std::cout &lt;&lt; solvers[6]-&gt;as&lt; FMM&lt;FMGrid2D, FMPriorityQueue&lt;FMCell&gt;&gt; &gt;()-&gt;getHeuristics() &lt;&lt; &#39;\n&#39;;</span></div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;<span class="comment">*/</span></div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;    <span class="comment">// Preventing memory leaks.</span></div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;    <span class="keywordflow">for</span> (<span class="keyword">auto</span> &amp; s : solvers)</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;        <span class="keyword">delete</span> s;</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;    <span class="keywordflow">return</span> 0;</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;}</div>
 <div class="ttc" id="classFSM_html"><div class="ttname"><a href="classFSM.html">FSM</a></div><div class="ttdoc">Implements Fast Sweeping Method. </div><div class="ttdef"><b>Definition:</b> <a href="fsm_8hpp_source.html#l00040">fsm.hpp:40</a></div></div>
-<div class="ttc" id="classFMPriorityQueue_html"><div class="ttname"><a href="classFMPriorityQueue.html">FMPriorityQueue</a></div><div class="ttdoc">Wrap for the Boost Priority Queue class to be used in the FM algorithms. Ready to be used with FMCell...</div><div class="ttdef"><b>Definition:</b> <a href="fmpriorityqueue_8hpp_source.html#l00027">fmpriorityqueue.hpp:27</a></div></div>
 <div class="ttc" id="classUFMM_html"><div class="ttname"><a href="classUFMM.html">UFMM</a></div><div class="ttdoc">Fast Marching Method using a untidy priority queue (UFMM). </div><div class="ttdef"><b>Definition:</b> <a href="ufmm_8hpp_source.html#l00034">ufmm.hpp:34</a></div></div>
-<div class="ttc" id="classSolver_html_a4383bee353e58fd878ef846b291c6a26"><div class="ttname"><a href="classSolver.html#a4383bee353e58fd878ef846b291c6a26">Solver::as</a></div><div class="ttdeci">T * as()</div><div class="ttdoc">Cast this instance to a desired type. </div><div class="ttdef"><b>Definition:</b> <a href="solver_8hpp_source.html#l00141">solver.hpp:141</a></div></div>
 <div class="ttc" id="classFMMStar_html"><div class="ttname"><a href="classFMMStar.html">FMMStar</a></div><div class="ttdoc">Encapsulates the calls to FMM with heuristics enabled. </div><div class="ttdef"><b>Definition:</b> <a href="fmmstar_8hpp_source.html#l00061">fmmstar.hpp:61</a></div></div>
+<div class="ttc" id="classSFMM_html"><div class="ttname"><a href="classSFMM.html">SFMM</a></div><div class="ttdoc">Implements the Simplified Fast Marching Method, encapsulating FMM with a priority queue...</div><div class="ttdef"><b>Definition:</b> <a href="sfmm_8hpp_source.html#l00044">sfmm.hpp:44</a></div></div>
+<div class="ttc" id="classSFMMStar_html"><div class="ttname"><a href="classSFMMStar.html">SFMMStar</a></div><div class="ttdef"><b>Definition:</b> <a href="sfmmstar_8hpp_source.html#l00041">sfmmstar.hpp:41</a></div></div>
 <div class="ttc" id="classnDGridMap_html"><div class="ttname"><a href="classnDGridMap.html">nDGridMap</a></div><div class="ttdoc">Templated class which represents a n-dimensional grid map. Its cells are assumed to be cubic...</div><div class="ttdef"><b>Definition:</b> <a href="ndgridmap_8hpp_source.html#l00046">ndgridmap.hpp:46</a></div></div>
 <div class="ttc" id="classFMFibHeap_html"><div class="ttname"><a href="classFMFibHeap.html">FMFibHeap</a></div><div class="ttdef"><b>Definition:</b> <a href="fmfibheap_8hpp_source.html#l00028">fmfibheap.hpp:28</a></div></div>
 <div class="ttc" id="classSolver_html"><div class="ttname"><a href="classSolver.html">Solver</a></div><div class="ttdoc">Abstract class that serves as interface for the actual solvers implemented. It requires (at least) th...</div><div class="ttdef"><b>Definition:</b> <a href="solver_8hpp_source.html#l00039">solver.hpp:39</a></div></div>
@@ -199,7 +201,7 @@ $(document).ready(function(){initNavTree('test__fmm_8cpp_source.html','');});
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d28a4824dc47e487b107a5db32ef43c4.html">examples</a></li><li class="navelem"><b>test_fmm.cpp</b></li>
-    <li class="footer">Generated on Fri Mar 13 2015 12:30:52 for n-Dimensional Fast Marching by
+    <li class="footer">Generated on Fri Mar 13 2015 13:23:02 for n-Dimensional Fast Marching by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.6 </li>
   </ul>

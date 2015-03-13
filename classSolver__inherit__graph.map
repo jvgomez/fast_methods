@@ -1,6 +1,9 @@
 <map id="Solver&lt; grid_t &gt;" name="Solver&lt; grid_t &gt;">
-<area shape="rect" id="node2" href="$classFM2.html" title="Implements the Fast Marching Square (FM2) planning algorithm. " alt="" coords="57,83,159,109"/>
-<area shape="rect" id="node4" href="$classFMM.html" title="Implements the Fast Marching Method (FMM). " alt="" coords="219,83,325,109"/>
-<area shape="rect" id="node3" href="$classFM2Star.html" title="Implements the Fast Marching Square Star (FM2*) planning algorithm. " alt="" coords="5,160,176,187"/>
-<area shape="rect" id="node5" href="$classFMMStar.html" title="Encapsulates the calls to FMM with heuristics enabled. " alt="" coords="201,160,377,187"/>
+<area shape="rect" id="node2" href="$classFM2.html" title="Implements the Fast Marching Square (FM2) planning algorithm. " alt="" coords="78,83,180,109"/>
+<area shape="rect" id="node4" href="$classFMM.html" title="Implements the Fast Marching Method (FMM). " alt="" coords="257,83,364,109"/>
+<area shape="rect" id="node6" href="$classFMM.html" title="FMM\&lt; grid_t, FMPriorityQueue\l\&lt; cell_t \&gt; \&gt;" alt="" coords="403,187,601,229"/>
+<area shape="rect" id="node3" href="$classFM2Star.html" title="Implements the Fast Marching Square Star (FM2*) planning algorithm. " alt="" coords="5,195,176,221"/>
+<area shape="rect" id="node5" href="$classFMMStar.html" title="Encapsulates the calls to FMM with heuristics enabled. " alt="" coords="201,195,377,221"/>
+<area shape="rect" id="node7" href="$classSFMM.html" title="Implements the Simplified Fast Marching Method, encapsulating FMM with a priority queue..." alt="" coords="426,280,579,307"/>
+<area shape="rect" id="node8" href="$classSFMMStar.html" title="SFMMStar\&lt; grid_t, cell_t \&gt;" alt="" coords="414,357,591,384"/>
 </map>

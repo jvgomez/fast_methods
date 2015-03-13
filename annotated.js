@@ -28,6 +28,9 @@ var annotated =
     [ "LSM", "classLSM.html", "classLSM" ],
     [ "MapLoader", "classMapLoader.html", "classMapLoader" ],
     [ "nDGridMap", "classnDGridMap.html", "classnDGridMap" ],
+    [ "SFMM", "classSFMM.html", "classSFMM" ],
+    [ "SFMMStar", "classSFMMStar.html", "classSFMMStar" ],
+    [ "SFMMStarStar", "classSFMMStarStar.html", null ],
     [ "Solver", "classSolver.html", "classSolver" ],
     [ "UFMM", "classUFMM.html", "classUFMM" ]
 ];
