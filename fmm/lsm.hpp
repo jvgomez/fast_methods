@@ -33,9 +33,8 @@
 #define LSM_HPP_
 
 #include "fsm.hpp"
+#include "fmdata/fmcell.h"
 #include "../utils/utils.h"
-
-#include <algorithm>
 
 /// \todo implement a more robust goal point stopping criterion.
 template < class grid_t > class LSM : public FSM<grid_t> {
@@ -45,20 +44,18 @@ template < class grid_t > class LSM : public FSM<grid_t> {
 
         LSM(const char * name, unsigned maxSweeps = std::numeric_limits<unsigned>::max()) : FSM<grid_t>(name, maxSweeps) {}
 
-        /** \brief Calls FSM::setEnvironment() and initializes the locking status. */
-        virtual void setEnvironment
-        (grid_t * g) {
-            FSM<grid_t>::setEnvironment(g);
-            // FMState::FROZEN - locked and FMState::OPEN - unlocked.
-            for(size_t i = 0; i < grid_->size(); ++i)
-                grid_->getCell(i).setState(FMState::FROZEN);
-        }
-
         /** \brief Actual method that implements LSM. */
         virtual void computeInternal
         () {
             if (!setup_)
                 setup();
+
+            // FMState::FROZEN - locked and FMState::OPEN - unlocked.
+            // The time this takes is negligible and if done in setup or
+            // setEnvironment it can affect other planners run in the same
+            // grid.
+            for(size_t i = 0; i < grid_->size(); ++i)
+                grid_->getCell(i).setState(FMState::FROZEN);
 
             // Initialization
             for (unsigned int i: init_points_) {
@@ -127,7 +124,6 @@ template < class grid_t > class LSM : public FSM<grid_t> {
         using FSM<grid_t>::goal_idx_;
         using FSM<grid_t>::setup_;
         using FSM<grid_t>::setup;
-        using FSM<grid_t>::setEnvironment;
         using FSM<grid_t>::name_;
         using FSM<grid_t>::time_;
         using FSM<grid_t>::recursiveIteration;
@@ -142,8 +138,8 @@ template < class grid_t > class LSM : public FSM<grid_t> {
         using FSM<grid_t>::ends_;
         using FSM<grid_t>::d_;
 
-        // Inherited members from FMM.
-        using FMM<grid_t>::neighbors_;
+        /** \brief Auxiliar array which stores the neighbor of each iteration of the computeFM() function. */
+        std::array <unsigned int, 2*grid_t::getNDims()> neighbors_;
 };
 
 #endif /* LSM_HPP_*/

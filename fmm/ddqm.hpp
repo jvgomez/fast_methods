@@ -29,23 +29,23 @@
 #ifndef DDQM_HPP_
 #define DDQM_HPP_
 
-#include "fmm.hpp"
+#include "eikonalsolver.hpp"
 #include "../utils/utils.h"
 
 /// \todo implement a more robust goal point stopping criterion.
-template < class grid_t > class DDQM : public FMM<grid_t> {
+template < class grid_t > class DDQM : public EikonalSolver<grid_t> {
 
     public:
-        //DDQM(unsigned maxSweeps = std::numeric_limits<unsigned>::max()) : FMM<grid_t>("DDQM", maxSweeps) {}
+        //DDQM(unsigned maxSweeps = std::numeric_limits<unsigned>::max()) : EikonalSolver<grid_t>("DDQM", maxSweeps) {}
 
-        //DDQM(const char * name, unsigned maxSweeps = std::numeric_limits<unsigned>::max()) : FMM<grid_t>(name, maxSweeps) {}
+        //DDQM(const char * name, unsigned maxSweeps = std::numeric_limits<unsigned>::max()) : EikonalSolver<grid_t>(name, maxSweeps) {}
 
-        DDQM(const char * name = "DDQM") : FMM<grid_t>(name) {}
+        DDQM(const char * name = "DDQM") : EikonalSolver<grid_t>(name) {}
 
-        /** \brief Calls FMM::setEnvironment() and --------. */
+        /** \brief Calls EikonalSolver::setEnvironment() and --------. */
         virtual void setEnvironment
         (grid_t * g) {
-            FMM<grid_t>::setEnvironment(g);
+            EikonalSolver<grid_t>::setEnvironment(g);
             // FMState::FROZEN - locked and FMState::OPEN - unlocked.
             /*for(size_t i = 0; i < grid_->size(); ++i)
                 grid_->getCell(i).setState(FMState::FROZEN);*/
@@ -68,7 +68,7 @@ template < class grid_t > class DDQM : public FMM<grid_t> {
 
         virtual void reset
         () {
-            Solver<grid_t>::reset();
+            EikonalSolver<grid_t>::reset();
         }
 
         virtual void printRunInfo
@@ -79,17 +79,17 @@ template < class grid_t > class DDQM : public FMM<grid_t> {
         }
 
     protected:
-        using FMM<grid_t>::grid_;
-        using FMM<grid_t>::init_points_;
-        using FMM<grid_t>::goal_idx_;
-        using FMM<grid_t>::setup_;
-        using FMM<grid_t>::setup;
-        using FMM<grid_t>::setEnvironment;
-        using FMM<grid_t>::name_;
-        using FMM<grid_t>::time_;
-        using FMM<grid_t>::solveEikonal;
-        //using FSM<grid_t>::d_;
-        using FMM<grid_t>::neighbors_;
+        using EikonalSolver<grid_t>::grid_;
+        using EikonalSolver<grid_t>::init_points_;
+        using EikonalSolver<grid_t>::goal_idx_;
+        using EikonalSolver<grid_t>::setup_;
+        using EikonalSolver<grid_t>::setup;
+        using EikonalSolver<grid_t>::name_;
+        using EikonalSolver<grid_t>::time_;
+        using EikonalSolver<grid_t>::solveEikonal;
+
+        /** \brief Auxiliar array which stores the neighbor of each iteration of the computeFM() function. */
+        std::array <unsigned int, 2*grid_t::getNDims()> neighbors_;
 };
 
 #endif /* DDQM_HPP_*/

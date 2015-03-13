@@ -50,7 +50,7 @@
 #include <fstream>
 #include <array>
 
-#include "solver.hpp"
+#include "eikonalsolver.hpp"
 
 #include "fmdata/fmcell.h"
 #include "fmdata/fmdaryheap.hpp"
@@ -61,23 +61,23 @@
 /** \brief Heuristic strategy to be used. TIME = DISTANCE/local velocity. */
 enum HeurStrategy {NOHEUR = 0, TIME, DISTANCE};
 
-template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FMM : public Solver<grid_t> {
+template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FMM : public EikonalSolver<grid_t> {
 
     public:
-        FMM(HeurStrategy h = NOHEUR) : Solver<grid_t>("FMM"), heurStrategy_(h), precomputed_(false) {
+        FMM(HeurStrategy h = NOHEUR) : EikonalSolver<grid_t>("FMM"), heurStrategy_(h), precomputed_(false) {
             /// \todo automate the naming depending on the heap.
             //if (static_cast<FMFibHeap>(heap_t))
              //   name_ = "FMMFib";
         }
 
-        FMM(const char * name, HeurStrategy h = NOHEUR) : Solver<grid_t>(name), heurStrategy_(h), precomputed_(false) {}
+        FMM(const char * name, HeurStrategy h = NOHEUR) : EikonalSolver<grid_t>(name), heurStrategy_(h), precomputed_(false) {}
 
         virtual ~FMM() { clear(); }
 
-        /** \brief Executes Solver setup and sets maximum size for the narrow band. */
+        /** \brief Executes EikonalSolver setup and sets maximum size for the narrow band. */
         virtual void setup
         () {
-            Solver<grid_t>::setup();
+            EikonalSolver<grid_t>::setup();
             narrow_band_.setMaxSize(grid_->size());
             setHeuristics(heurStrategy_); // Redundant, but safe.
 
@@ -100,11 +100,17 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FMM : public
             // Algorithm initialization
             for (unsigned int &i: init_points_) { // For each initial point
                 grid_->getCell(i).setArrivalTime(0);
+                // Include heuristics if necessary.
+                if (heurStrategy_ == TIME)
+                    grid_->getCell(i).setHeuristicTime( getPrecomputedDistance(i)/grid_->getCell(i).getVelocity() );
+                else if (heurStrategy_ == DISTANCE)
+                    grid_->getCell(i).setHeuristicTime( getPrecomputedDistance(i) );
                 narrow_band_.push( &(grid_->getCell(i)) );
             }
 
             // Main loop.
             while (!stopWavePropagation && !narrow_band_.empty()) {
+                //std::cout << "iterating" << "  " << narrow_band_.size() << '\n';
                 unsigned int idxMin = narrow_band_.popMinIdx();
                 n_neighs = grid_->getNeighbors(idxMin, neighbors_);
                 grid_->getCell(idxMin).setState(FMState::FROZEN);
@@ -114,6 +120,14 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FMM : public
                         continue;
                     else {
                         double new_arrival_time = solveEikonal(j);
+
+                        // Include heuristics if necessary.
+                        if (heurStrategy_ == TIME)
+                            grid_->getCell(j).setHeuristicTime( getPrecomputedDistance(j)/grid_->getCell(j).getVelocity() );
+                        else if (heurStrategy_ == DISTANCE)
+                            grid_->getCell(j).setHeuristicTime( getPrecomputedDistance(j) );
+
+                        // Updating narrow band if necessary.
                         if (grid_->getCell(j).getState() == FMState::NARROW) {
                             if (new_arrival_time < grid_->getCell(j).getArrivalTime()) {
                                 grid_->getCell(j).setArrivalTime(new_arrival_time);
@@ -127,49 +141,11 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FMM : public
                         } // neighbors_ open.
                     } // neighbors_ not frozen.
                 } // For each neighbor.
+
                 if (idxMin == goal_idx_)
                     stopWavePropagation = true;
             } // while narrow band not empty
         }
-
-        /** \brief Solves nD Eikonal equation for cell idx. If heuristics are activated, it will add
-            the estimated travel time to goal with current velocity. */
-        virtual double solveEikonal
-        (const int & idx) {
-            unsigned int a = grid_t::getNDims(); // a parameter of the Eikonal equation.
-            Tvalues_.clear();
-
-            for (unsigned int dim = 0; dim < grid_t::getNDims(); ++dim) {
-                double minTInDim = grid_->getMinValueInDim(idx, dim);
-                if (!isinf(minTInDim) && minTInDim < grid_->getCell(idx).getArrivalTime())
-                    Tvalues_.push_back(minTInDim);
-                else
-                    a -=1;
-            }
-
-            if (a == 0)
-                return std::numeric_limits<double>::infinity();
-
-            // Sort the neighbor values to make easy the following code.
-            /// \todo given that this sorts a small vector, a n^2 methods could be better. Test it.
-            std::sort(Tvalues_.begin(), Tvalues_.end());
-            double updatedT;
-            for (unsigned i = 1; i <= a; ++i) {
-                updatedT = solveEikonalNDims(idx, i);
-                // If no more dimensions or increasing one dimension will not improve time.
-                if (i == a || (updatedT - Tvalues_[i]) < utils::COMP_MARGIN)
-                    break;
-            }
-
-            // Include heuristics if necessary.
-            if (heurStrategy_ == TIME)
-                grid_->getCell(idx).setHeuristicTime( getPrecomputedDistance(idx)/grid_->getCell(idx).getVelocity() );
-            else if (heurStrategy_ == DISTANCE)
-                grid_->getCell(idx).setHeuristicTime( getPrecomputedDistance(idx) );
-
-            return updatedT;
-        }
-
 
         /** \brief Set heuristics flag. True is activated. It will precompute distances
             if not done already. */
@@ -198,7 +174,7 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FMM : public
 
         virtual void reset
         () {
-            Solver<grid_t>::reset();
+            EikonalSolver<grid_t>::reset();
             narrow_band_.clear();
         }
 
@@ -247,46 +223,18 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FMM : public
         }
 
 
-    /// \note These accessing levels may need to be modified (and other solvers).
+    /// \note These accessing levels may need to be modified (and other EikonalSolvers).
     protected:
-        /** \brief Solves the Eikonal equation assuming that Tvalues_
-            is sorted. */
-        double solveEikonalNDims
-        (unsigned int idx, unsigned int dim) {
-            // Solve for 1 dimension.
-            if (dim == 1)
-                return Tvalues_[0] + grid_->getLeafSize() / grid_->getCell(idx).getVelocity();
-
-            // Solve for any number > 1 of dimensions.
-            double sumT = 0;
-            double sumTT = 0;
-            for (unsigned i = 0; i < dim; ++i) {
-                sumT += Tvalues_[i];
-                sumTT += Tvalues_[i]*Tvalues_[i];
-            }
-            double a = dim;
-            double b = -2*sumT;
-            double c = sumTT - grid_->getLeafSize() * grid_->getLeafSize() / (grid_->getCell(idx).getVelocity()*grid_->getCell(idx).getVelocity());
-            double quad_term = b*b - 4*a*c;
-
-            if (quad_term < 0)
-                return std::numeric_limits<double>::infinity();
-            else
-                return (-b + sqrt(quad_term))/(2*a);
-        }
-
-        using Solver<grid_t>::grid_;
-        using Solver<grid_t>::init_points_;
-        using Solver<grid_t>::goal_idx_;
-        using Solver<grid_t>::setup_;
-        using Solver<grid_t>::name_;
-        using Solver<grid_t>::time_;
+        using EikonalSolver<grid_t>::grid_;
+        using EikonalSolver<grid_t>::init_points_;
+        using EikonalSolver<grid_t>::goal_idx_;
+        using EikonalSolver<grid_t>::setup_;
+        using EikonalSolver<grid_t>::name_;
+        using EikonalSolver<grid_t>::time_;
+        using EikonalSolver<grid_t>::solveEikonal;
 
         /** \brief Auxiliar array which stores the neighbor of each iteration of the computeFM() function. */
         std::array <unsigned int, 2*grid_t::getNDims()> neighbors_;
-
-        /** \brief Auxiliar vector with values T0,T1...Tn-1 variables in the Discretized Eikonal Equation. */
-        std::vector<double>          Tvalues_;
 
     private:
         /** \brief Instance of the heap used. */
