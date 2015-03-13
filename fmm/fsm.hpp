@@ -84,7 +84,6 @@ template < class grid_t > class FSM : public FMM<grid_t> {
             for (unsigned int i: init_points_) // For each initial point
                 grid_->getCell(i).setArrivalTime(0);
 
-            // Getting dimsizes and filling the other dimensions.
             keepSweeping_ = true;
             stopPropagation_ = false;
 

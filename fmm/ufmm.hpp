@@ -65,10 +65,10 @@ template <class grid_t, class cell_t = FMCell> class UFMM : public FMM <grid_t> 
             // Main loop
             while (!stopWavePropagation && !narrow_band_->empty()) {
                 unsigned int idxMin = narrow_band_->popMinIdx();
-                n_neighs = grid_->getNeighbors(idxMin, neighbors);
+                n_neighs = grid_->getNeighbors(idxMin, neighbors_);
                 grid_->getCell(idxMin).setState(FMState::FROZEN);
                 for (unsigned int s = 0; s < n_neighs; ++s) { // For each neighbor
-                    j = neighbors[s];
+                    j = neighbors_[s];
                     if ( (grid_->getCell(j).getState() == FMState::FROZEN) || grid_->getCell(j).isOccupied()|| (grid_->getCell(j).getVelocity() == 0) ) // If Frozen,obstacle or velocity = 0
                         continue;
                     else {
@@ -104,7 +104,7 @@ template <class grid_t, class cell_t = FMCell> class UFMM : public FMM <grid_t> 
 
     protected:
         using FMM<grid_t>::grid_;
-        using FMM<grid_t>::neighbors;
+        using FMM<grid_t>::neighbors_;
         using FMM<grid_t>::solveEikonal;
         using FMM<grid_t>::init_points_;
         using FMM<grid_t>::goal_idx_;

@@ -53,9 +53,9 @@ template < class grid_t > class GMM : public FMM <grid_t> {
             for (unsigned int &i: init_points_) { // For each initial point
                 grid_->getCell(i).setArrivalTime(0);
                 grid_->getCell(i).setState(FMState::FROZEN);
-                n_neighs = grid_->getNeighbors(i, neighbors);
+                n_neighs = grid_->getNeighbors(i, neighbors_);
                 for (unsigned int s = 0; s < n_neighs; ++s){  // For each neighbor
-                    j = neighbors[s];
+                    j = neighbors_[s];
                     if ((grid_->getCell(j).getState() == FMState::FROZEN) || grid_->getCell(j).isOccupied() || (grid_->getCell(j).getVelocity() == 0)) // If Frozen,obstacle or velocity = 0
                         continue;
                     else {
@@ -86,9 +86,9 @@ template < class grid_t > class GMM : public FMM <grid_t> {
                 // First pass
                 for( ; i!=q; --i) {//for each gamma in the reverse order
                     if( grid_->getCell(*i).getArrivalTime() <= tm_) {
-                        n_neighs = grid_->getNeighbors(*i, neighbors);
+                        n_neighs = grid_->getNeighbors(*i, neighbors_);
                         for (unsigned int s = 0; s < n_neighs; ++s){  // For each neighbor of gamma
-                            j = neighbors[s];
+                            j = neighbors_[s];
                             if ( (grid_->getCell(j).getState() == FMState::FROZEN) || grid_->getCell(j).isOccupied() || (grid_->getCell(j).getVelocity() == 0)) // If Frozen,obstacle or velocity = 0
                                 continue;
                             else {
@@ -105,9 +105,9 @@ template < class grid_t > class GMM : public FMM <grid_t> {
                 i = gamma_.begin();
                 for(size_t z = 0; z < narrow_size; ++z) {//for each gamma in the forward order
                     if( grid_->getCell(*i).getArrivalTime()<= tm_) {
-                        n_neighs = grid_->getNeighbors(*i, neighbors);
+                        n_neighs = grid_->getNeighbors(*i, neighbors_);
                         for (unsigned int s = 0; s < n_neighs; ++s) {// for each neighbor of gamma
-                            j = neighbors[s];
+                            j = neighbors_[s];
                             if ((grid_->getCell(j).getState() == FMState::FROZEN) || grid_->getCell(j).isOccupied() || (grid_->getCell(j).getVelocity() == 0)) // If Frozen,obstacle or velocity = 0
                                 continue;
                             else {
@@ -146,7 +146,7 @@ template < class grid_t > class GMM : public FMM <grid_t> {
 
     protected:
         using FMM<grid_t>::grid_;
-        using FMM<grid_t>::neighbors;
+        using FMM<grid_t>::neighbors_;
         using FMM<grid_t>::solveEikonal;
         using FMM<grid_t>::init_points_;
         using FMM<grid_t>::goal_idx_;

@@ -2,12 +2,12 @@ N-Dimensional Fast Marching Method V1.0
 
 [Biicode](https://www.biicode.com/) blocks status:
 
-[![Build Status](https://webapi.biicode.com/v1/badges/jvgomez/jvgomez/console/master)](https://www.biicode.com/jvgomez/console) 
-[![Build Status](https://webapi.biicode.com/v1/badges/jvgomez/jvgomez/ndgridmap/master)](https://www.biicode.com/jvgomez/ndgridmap) 
-[![Build Status](https://webapi.biicode.com/v1/badges/jvgomez/jvgomez/fmm/master)](https://www.biicode.com/jvgomez/fmm) 
-[![Build Status](https://webapi.biicode.com/v1/badges/endher/endher/fm2/master)](https://www.biicode.com/endher/fm2) 
-[![Build Status](https://webapi.biicode.com/v1/badges/jvgomez/jvgomez/fmexamples/master)](https://www.biicode.com/jvgomez/fmexamples) 
-[![Build Status](https://webapi.biicode.com/v1/badges/jvgomez/jvgomez/fm2examples/master)](https://www.biicode.com/jvgomez/fm2examples) 
+[![Build Status](https://webapi.biicode.com/v1/badges/jvgomez/jvgomez/console/master)](https://www.biicode.com/jvgomez/console)
+[![Build Status](https://webapi.biicode.com/v1/badges/jvgomez/jvgomez/ndgridmap/master)](https://www.biicode.com/jvgomez/ndgridmap)
+[![Build Status](https://webapi.biicode.com/v1/badges/jvgomez/jvgomez/fmm/master)](https://www.biicode.com/jvgomez/fmm)
+[![Build Status](https://webapi.biicode.com/v1/badges/endher/endher/fm2/master)](https://www.biicode.com/endher/fm2)
+[![Build Status](https://webapi.biicode.com/v1/badges/jvgomez/jvgomez/fmexamples/master)](https://www.biicode.com/jvgomez/fmexamples)
+[![Build Status](https://webapi.biicode.com/v1/badges/jvgomez/jvgomez/fm2examples/master)](https://www.biicode.com/jvgomez/fm2examples)
 
 **Authors:**
  - Javier V. Gomez javvgomez _at_ gmail.com www.javiervgomez.com
@@ -27,6 +27,7 @@ N-Dimensional Fast Marching Method V1.0
 
 **Other popular solvers:**
 - Fast Sweeping Method (FSM).
+- Lock Sweeping Method (LSM).
 
 **ROS**
 

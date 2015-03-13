@@ -53,6 +53,32 @@ template < class grid_t > class LSM : public FSM<grid_t> {
                 grid_->getCell(i).setState(FMState::FROZEN);
         }
 
+        /** \brief Actual method that implements LSM. */
+        virtual void computeInternal
+        () {
+            if (!setup_)
+                setup();
+
+            // Initialization
+            for (unsigned int i: init_points_) {
+                grid_->getCell(i).setArrivalTime(0);
+                unsigned int n_neighs = grid_->getNeighbors(i, neighbors_);
+                for (unsigned int j = 0; j < n_neighs; ++j)
+                    grid_->getCell(neighbors_[j]).setState(FMState::OPEN);
+            }
+
+            // Getting dimsizes and filling the other dimensions.
+            keepSweeping_ = true;
+            stopPropagation_ = false;
+
+            while (keepSweeping_ && !stopPropagation_ && sweeps_ < maxSweeps_) {
+                keepSweeping_ = false;
+                setSweep();
+                ++sweeps_;
+                recursiveIteration(grid_t::getNDims()-1);
+            }
+        }
+
         virtual void reset
         () {
             FSM<grid_t>::reset();
@@ -73,15 +99,25 @@ template < class grid_t > class LSM : public FSM<grid_t> {
         /** \brief Actually executes one solving iteration of the LSM. */
         virtual void solveForIdx
         (unsigned idx) {
-            /*const double prevTime = grid_->getCell(idx).getArrivalTime();
-            const double newTime = solveEikonal(idx);
-            if(utils::isTimeBetterThan(newTime, prevTime)) {
-                grid_->getCell(idx).setArrivalTime(newTime);
-                keepSweeping_ = true;
+            if (grid_->getCell(idx).getState() == FMState::OPEN) {
+                const double prevTime = grid_->getCell(idx).getArrivalTime();
+                const double newTime = solveEikonal(idx);
+
+                // Update time if better and unlock neighbors with higher time.
+                if(utils::isTimeBetterThan(newTime, prevTime)) {
+                    grid_->getCell(idx).setArrivalTime(newTime);
+                    keepSweeping_ = true;
+                    unsigned int n_neighs = grid_->getNeighbors(idx, neighbors_);
+                    for (unsigned int i = 0; i < n_neighs; ++i)
+                        if (utils::isTimeBetterThan(newTime, grid_->getCell(neighbors_[i]).getArrivalTime()))
+                            grid_->getCell(neighbors_[i]).setState(FMState::OPEN);
+                }
+                // EXPERIMENTAL - Value not updated, it has converged
+                else if(!isnan(newTime) && !isinf(newTime) && (idx == goal_idx_))
+                    stopPropagation_ = true;
+
+                grid_->getCell(idx).setState(FMState::FROZEN);
             }
-            // EXPERIMENTAL - Value not updated, it has converged
-            else if(!isnan(newTime) && !isinf(newTime) && (idx == goal_idx_))
-                stopPropagation_ = true;*/
         }
 
         // Inherited members from FSM.
@@ -90,8 +126,10 @@ template < class grid_t > class LSM : public FSM<grid_t> {
         using FSM<grid_t>::goal_idx_;
         using FSM<grid_t>::setup_;
         using FSM<grid_t>::setup;
+        using FSM<grid_t>::setEnvironment;
         using FSM<grid_t>::name_;
         using FSM<grid_t>::time_;
+        using FSM<grid_t>::recursiveIteration;
         using FSM<grid_t>::solveEikonal;
         using FSM<grid_t>::setSweep;
         using FSM<grid_t>::sweeps_;
@@ -102,6 +140,9 @@ template < class grid_t > class LSM : public FSM<grid_t> {
         using FSM<grid_t>::inits_;
         using FSM<grid_t>::ends_;
         using FSM<grid_t>::d_;
+
+        // Inherited members from FMM.
+        using FMM<grid_t>::neighbors_;
 };
 
 #endif /* LSM_HPP_*/

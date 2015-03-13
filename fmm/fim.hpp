@@ -55,9 +55,9 @@ template < class grid_t > class FIM : public FMM <grid_t> {
                 grid_->getCell(i).setArrivalTime(0);
                 grid_->getCell(i).setState(FMState::FROZEN);
 
-                n_neighs = grid_->getNeighbors(i, neighbors);
+                n_neighs = grid_->getNeighbors(i, neighbors_);
                 for (unsigned int s = 0; s < n_neighs; ++s) {// For each neighbor
-                    j = neighbors[s];
+                    j = neighbors_[s];
                     if ( (grid_->getCell(j).getState() == FMState::OPEN) && !grid_->getCell(j).isOccupied()) {
                         active_list_.push_back(j);
                         grid_->getCell(j).setState(FMState::NARROW);
@@ -74,9 +74,9 @@ template < class grid_t > class FIM : public FMM <grid_t> {
                         grid_->getCell(*i).setArrivalTime(q);
                     if (fabs(p - q) <= E_) {// if the cell has converged
                         grid_->getCell(*i).setState(FMState::FROZEN);
-                        n_neighs = grid_->getNeighbors(*i, neighbors);
+                        n_neighs = grid_->getNeighbors(*i, neighbors_);
                         for (unsigned int s = 0; s < n_neighs; ++s){  // For each neighbor of converged cells of active_list
-                            j = neighbors[s];
+                            j = neighbors_[s];
                             if ((grid_->getCell(j).getState() == FMState::OPEN) && (grid_->getCell(j).getVelocity() != 0)) {
                                 active_list_.insert(i,j);
                                 grid_->getCell(j).setState(FMState::NARROW);
@@ -105,7 +105,7 @@ template < class grid_t > class FIM : public FMM <grid_t> {
 
     protected:
         using FMM<grid_t>::grid_;
-        using FMM<grid_t>::neighbors;
+        using FMM<grid_t>::neighbors_;
         using FMM<grid_t>::solveEikonal;
         using FMM<grid_t>::init_points_;
         using FMM<grid_t>::goal_idx_;

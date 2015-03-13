@@ -6,6 +6,8 @@ We provide two different ways to perform benchmarks: coding or using configurati
 ## Coding
 Check test_fmm_benchmark.cpp and [building](@ref building_bmtest) to find more information about how to use the Benchmark class.
 
+\note The benchmark application is currently limited to 3D and to work with FMCell-based nDGridMap. However, it is really easy to modify that. Check fmm_benchmark.cpp and follow the comments within the code for more instructions.
+
 ## Benchmarking application
 This application allows to configure and run benchmarks very easily. It is implemented in fmm_benchmark.cpp and uses BenchmarkCFG to parse the CFG files and configure a Benchmark class.
 
