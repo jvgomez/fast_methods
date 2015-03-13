@@ -7,7 +7,9 @@
 #include "../ndgridmap/ndgridmap.hpp"
 
 #include "../fmm/fmm.hpp"
+#include "../fmm/sfmm.hpp"
 #include "../fmm/fmmstar.hpp"
+#include "../fmm/sfmmstar.hpp"
 #include "../fmm/fmdata/fmfibheap.hpp"
 #include "../fmm/fmdata/fmpriorityqueue.hpp"
 #include "../fmm/fim.hpp"
@@ -60,9 +62,9 @@ int main()
     benchmark.addSolver(new FMM<FMGrid2D, FMFibHeap<FMCell> >("FMFib"));
     benchmark.addSolver(new FMMStar<FMGrid2D, FMFibHeap<FMCell> >("FMM*Fib"));
     benchmark.addSolver(new FMMStar<FMGrid2D, FMFibHeap<FMCell> >("FMM*Fib_Dist", DISTANCE));
-    benchmark.addSolver(new FMM<FMGrid2D, FMPriorityQueue<FMCell> >("SFMM"));
-    benchmark.addSolver(new FMMStar<FMGrid2D, FMPriorityQueue<FMCell> >("SFMM*"));
-    benchmark.addSolver(new FMMStar<FMGrid2D, FMPriorityQueue<FMCell> >("SFMM*_Dist", DISTANCE));
+    benchmark.addSolver(new SFMM<FMGrid2D>);
+    benchmark.addSolver(new SFMMStar<FMGrid2D>);
+    benchmark.addSolver(new SFMMStar<FMGrid2D>("SFMM*_Dist", DISTANCE));
     benchmark.addSolver(new GMM<FMGrid2D>);
     benchmark.addSolver(new FIM<FMGrid2D>);
     benchmark.addSolver(new UFMM<FMGrid2D>);

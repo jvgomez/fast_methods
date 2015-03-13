@@ -16,9 +16,10 @@ N-Dimensional Fast Marching Method V1.0
 
 ## ALGORITHMS
 **Fast Marching Methods:**
-- [FMM](http://javiervgomez.com/fastmarching/classFMM.html): Fast Marching Method with Binary Queue and Fibonacci Queue.
-- [SFMM](http://javiervgomez.com/fastmarching/classFMM.html): Simplified Fast Marhching Method ([FMM](http://javiervgomez.com/fastmarching/classFMM.html) with a simple priority queue).
-- [FMM*](http://javiervgomez.com/fastmarching/classFMMStar.html): FMM and SFMM with CostToGo heuristics.
+- [FMM](http://javiervgomez.com/fastmarching/classFMM.html): Fast Marching Method with Binary Queue and Fibonacci Queue (binary by default).
+- [FMM*](http://javiervgomez.com/fastmarching/classFMMStar.html): FMM with CostToGo heuristics.
+- [SFMM](http://javiervgomez.com/fastmarching/classSFMM.html): Simplified Fast Marhching Method.
+- [SFMM*](http://javiervgomez.com/fastmarching/classSFMMStar.html): SFMM with CostToGo heuristics..
 
 **O(n) Fast Marching Methods:**
 - [GMM]((http://javiervgomez.com/fastmarching/classGMM.html): Group Marching Method.

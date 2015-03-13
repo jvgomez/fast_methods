@@ -82,7 +82,7 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FMM : public
             setHeuristics(heurStrategy_); // Redundant, but safe.
 
             if (int(goal_idx_) == -1 && heurStrategy_ != NOHEUR) {
-                console::warning("FMM: Heuristics set with no goal point. Deactivating heuristics.");
+                console::warning("FMM/SFMM: Heuristics set with no goal point. Deactivating heuristics.");
                 heurStrategy_ = NOHEUR;
             }
         }

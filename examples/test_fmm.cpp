@@ -7,6 +7,8 @@
 #include "../ndgridmap/ndgridmap.hpp"
 
 #include "../fmm/fmm.hpp"
+#include "../fmm/sfmm.hpp"
+#include "../fmm/sfmmstar.hpp"
 #include "../fmm/fmmstar.hpp"
 #include "../fmm/fmdata/fmfibheap.hpp"
 #include "../fmm/fmdata/fmpriorityqueue.hpp"
@@ -40,9 +42,9 @@ int main()
     solvers.push_back(new FMM<FMGrid2D, FMFibHeap<FMCell> >("FMFib"));
     solvers.push_back(new FMMStar<FMGrid2D, FMFibHeap<FMCell> >("FMM*Fib"));
     solvers.push_back(new FMMStar<FMGrid2D, FMFibHeap<FMCell> >("FMM*Fib_Dist", DISTANCE));
-    solvers.push_back(new FMM<FMGrid2D, FMPriorityQueue<FMCell> >("SFMM"));
-    solvers.push_back(new FMMStar<FMGrid2D, FMPriorityQueue<FMCell> >("SFMM*"));
-    solvers.push_back(new FMMStar<FMGrid2D, FMPriorityQueue<FMCell> >("SFMM*_Dist", DISTANCE));
+    solvers.push_back(new SFMM<FMGrid2D>);
+    solvers.push_back(new SFMMStar<FMGrid2D>);
+    solvers.push_back(new SFMMStar<FMGrid2D>("SFMM*_Dist", DISTANCE));
     solvers.push_back(new GMM<FMGrid2D>);
     solvers.push_back(new FIM<FMGrid2D>);
     solvers.push_back(new UFMM<FMGrid2D>);
@@ -65,7 +67,7 @@ int main()
     // Showing different type conversions methodologies. Solver names could be compared
     // but it is less reliable since they are user-defined.
     // Direct cast
-    FMM<FMGrid2D>* FMMtest = dynamic_cast< FMM<FMGrid2D>* >(solvers[6]);
+    /*FMM<FMGrid2D>* FMMtest = dynamic_cast< FMM<FMGrid2D>* >(solvers[6]);
     if (FMMtest)
         std::cout << "Solver type SFMM" <<'\n';
     else
@@ -81,7 +83,7 @@ int main()
     // solvers[6]->setHeuristics(true) would not compile since there is not a Solver::setHeuristics
     solvers[6]->as< FMM<FMGrid2D, FMPriorityQueue<FMCell>> >()->setHeuristics(HeurStrategy::DISTANCE);
     std::cout << solvers[6]->as< FMM<FMGrid2D, FMPriorityQueue<FMCell>> >()->getHeuristics() << '\n';
-
+*/
     // Preventing memory leaks.
     for (auto & s : solvers)
         delete s;

@@ -7,8 +7,9 @@
     The grid is assumed to be squared, that is Delta(x) = Delta(y) = leafsize_
 
     @par External documentation:
-        H. Zhao, A fast sweeping method for Eikonal equations, Math. Comp. 74 (2005), 603-627.
-        <a href="http://www.ams.org/journals/mcom/2005-74-250/S0025-5718-04-01678-3/S0025-5718-04-01678-3.pdf">[PDF]</a>
+        S. Bak, J. McLaughlin, D. Renzi, Some Improvements for the Fast Sweeping Method,
+        SIAM J. Sci. Comput., 32(5), 2853–2874.
+        <a href="http://epubs.siam.org/doi/abs/10.1137/090749645">[More Info]</a>
 
     NOTE: The sweeping directions are inverted with respect to the paper to make implementation easier. And sweeping
     is implemented recursively (undetermined number of nested for loops) to achieve n-dimensional behaviour.
