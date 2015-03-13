@@ -97,7 +97,7 @@ $(document).ready(function(){initNavTree('todo.html','');});
 <p>does not have support for multiple starts or goals. </p>
 <p class="enddd">the way ctor parameters are given could be improved (as declareParams in OMPL - command pattern).  </p>
 </dd>
-<dt><a class="anchor" id="_todo000013"></a><a class="el" href="classClass.html" title="Represents a generic Cell to be used in gridmaps. ">Class</a> <a class="el" href="classCell.html">Cell</a>  </dt>
+<dt><a class="anchor" id="_todo000014"></a><a class="el" href="classClass.html" title="Represents a generic Cell to be used in gridmaps. ">Class</a> <a class="el" href="classCell.html">Cell</a>  </dt>
 <dd>No checks are done (out of bounds, etc) to improve efficienty. Overload functions to add optional input checking.  </dd>
 <dt><a class="anchor" id="_todo000002"></a><a class="el" href="classClass.html" title="Represents a generic Cell to be used in gridmaps. ">Class</a> <a class="el" href="classconsole.html">console</a>  </dt>
 <dd>a member method like string but with const char* is missing.  </dd>
@@ -115,15 +115,17 @@ $(document).ready(function(){initNavTree('todo.html','');});
 <dd>automate the naming depending on the heap.  </dd>
 <dt><a class="anchor" id="_todo000009"></a><a class="el" href="classClass.html" title="Represents a generic Cell to be used in gridmaps. ">Class</a> <a class="el" href="classFSM.html">FSM&lt; grid_t &gt;</a>  </dt>
 <dd>implement a more robust goal point stopping criterion.  </dd>
-<dt><a class="anchor" id="_todo000011"></a><a class="el" href="classClass.html" title="Represents a generic Cell to be used in gridmaps. ">Class</a> <a class="el" href="classGridPlotter.html">GridPlotter</a>  </dt>
+<dt><a class="anchor" id="_todo000012"></a><a class="el" href="classClass.html" title="Represents a generic Cell to be used in gridmaps. ">Class</a> <a class="el" href="classGridPlotter.html">GridPlotter</a>  </dt>
 <dd><p class="startdd">include checks which ensure that the grids are adecuate for the functions used. </p>
 <p class="enddd">generalize plotMapPaths to work with multiple (n&gt;2) paths.  </p>
 </dd>
-<dt><a class="anchor" id="_todo000012"></a><a class="el" href="classClass.html" title="Represents a generic Cell to be used in gridmaps. ">Class</a> <a class="el" href="classMapLoader.html">MapLoader</a>  </dt>
+<dt><a class="anchor" id="_todo000010"></a><a class="el" href="classClass.html" title="Represents a generic Cell to be used in gridmaps. ">Class</a> <a class="el" href="classLSM.html">LSM&lt; grid_t &gt;</a>  </dt>
+<dd>implement a more robust goal point stopping criterion.  </dd>
+<dt><a class="anchor" id="_todo000013"></a><a class="el" href="classClass.html" title="Represents a generic Cell to be used in gridmaps. ">Class</a> <a class="el" href="classMapLoader.html">MapLoader</a>  </dt>
 <dd><p class="startdd">Include checks which ensure that the grids are adequate for the functions used. </p>
 <p class="enddd">When loading an empty grid, cells are not correctly initialized. Although it works properly, values are not set to Inf (that is why we have Nan values in obstacles.)  </p>
 </dd>
-<dt><a class="anchor" id="_todo000014"></a><a class="el" href="classClass.html" title="Represents a generic Cell to be used in gridmaps. ">Class</a> <a class="el" href="classnDGridMap.html">nDGridMap&lt; T, ndims &gt;</a>  </dt>
+<dt><a class="anchor" id="_todo000015"></a><a class="el" href="classClass.html" title="Represents a generic Cell to be used in gridmaps. ">Class</a> <a class="el" href="classnDGridMap.html">nDGridMap&lt; T, ndims &gt;</a>  </dt>
 <dd><p class="startdd">Neighbors precomputation could speed things up. </p>
 <p class="enddd">Improve coord2idx function in order to just pass n coordinates and not an array. </p>
 </dd>
@@ -133,7 +135,7 @@ $(document).ready(function(){initNavTree('todo.html','');});
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Fri Mar 13 2015 09:04:51 for n-Dimensional Fast Marching by
+    <li class="footer">Generated on Fri Mar 13 2015 12:04:55 for n-Dimensional Fast Marching by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.6 </li>
   </ul>

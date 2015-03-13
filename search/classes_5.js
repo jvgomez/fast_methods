@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['ndgridmap',['nDGridMap',['../classnDGridMap.html',1,'']]]
+  ['maploader',['MapLoader',['../classMapLoader.html',1,'']]]
 ];

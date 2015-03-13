@@ -107,7 +107,7 @@ Inheritance diagram for FMM&lt; grid_t, heap_t &gt;:</div>
 <div class="dyncontent">
 <div class="center"><img src="classFMM__inherit__graph.png" border="0" usemap="#FMM_3_01grid__t_00_01heap__t_01_4_inherit__map" alt="Inheritance graph"/></div>
 <map name="FMM_3_01grid__t_00_01heap__t_01_4_inherit__map" id="FMM_3_01grid__t_00_01heap__t_01_4_inherit__map">
-<area shape="rect" id="node3" href="classFMMStar.html" title="Encapsulates the calls to FMM with heuristics enabled. " alt="" coords="5,173,181,200"/><area shape="rect" id="node4" href="classFMM.html" title="FMM\&lt; grid_t \&gt;" alt="" coords="205,173,312,200"/><area shape="rect" id="node2" href="classSolver.html" title="Abstract class that serves as interface for the actual solvers implemented. It requires (at least) th..." alt="" coords="58,5,171,32"/><area shape="rect" id="node5" href="classFIM.html" title="Implements Fast Iterative Method. " alt="" coords="19,251,117,277"/><area shape="rect" id="node6" href="classFSM.html" title="Implements Fast Sweeping Method up to 3D. " alt="" coords="141,251,245,277"/><area shape="rect" id="node7" href="classGMM.html" title="Templated class which computes Group Marching Method (GMM). " alt="" coords="270,251,377,277"/><area shape="rect" id="node8" href="classUFMM.html" title="Fast Marching Method using a untidy priority queue (UFMM). " alt="" coords="403,251,556,277"/></map>
+<area shape="rect" id="node3" href="classFMMStar.html" title="Encapsulates the calls to FMM with heuristics enabled. " alt="" coords="16,173,192,200"/><area shape="rect" id="node4" href="classFMM.html" title="FMM\&lt; grid_t \&gt;" alt="" coords="216,173,323,200"/><area shape="rect" id="node2" href="classSolver.html" title="Abstract class that serves as interface for the actual solvers implemented. It requires (at least) th..." alt="" coords="69,5,181,32"/><area shape="rect" id="node5" href="classFIM.html" title="Implements Fast Iterative Method. " alt="" coords="5,251,104,277"/><area shape="rect" id="node6" href="classFSM.html" title="Implements Fast Sweeping Method. " alt="" coords="128,251,232,277"/><area shape="rect" id="node8" href="classGMM.html" title="Templated class which computes Group Marching Method (GMM). " alt="" coords="257,251,364,277"/><area shape="rect" id="node9" href="classUFMM.html" title="Fast Marching Method using a untidy priority queue (UFMM). " alt="" coords="389,251,543,277"/><area shape="rect" id="node7" href="classLSM.html" title="Implements Lock Sweeping Method. " alt="" coords="128,328,232,355"/></map>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <div class="dynheader">
 Collaboration diagram for FMM&lt; grid_t, heap_t &gt;:</div>
@@ -225,11 +225,11 @@ int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
-<tr class="memitem:af6ab46392c117677bcbf6b811abd5e16"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af6ab46392c117677bcbf6b811abd5e16"></a>
+<tr class="memitem:a8fe9684749933426e69f1114e13fa843"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8fe9684749933426e69f1114e13fa843"></a>
 std::array&lt; unsigned int, <br class="typebreak"/>
-2 *grid_t::getNDims()&gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFMM.html#af6ab46392c117677bcbf6b811abd5e16">neighbors</a></td></tr>
-<tr class="memdesc:af6ab46392c117677bcbf6b811abd5e16"><td class="mdescLeft">&#160;</td><td class="mdescRight">Auxiliar array which stores the neighbor of each iteration of the computeFM() function. <br/></td></tr>
-<tr class="separator:af6ab46392c117677bcbf6b811abd5e16"><td class="memSeparator" colspan="2">&#160;</td></tr>
+2 *grid_t::getNDims()&gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFMM.html#a8fe9684749933426e69f1114e13fa843">neighbors_</a></td></tr>
+<tr class="memdesc:a8fe9684749933426e69f1114e13fa843"><td class="mdescLeft">&#160;</td><td class="mdescRight">Auxiliar array which stores the neighbor of each iteration of the computeFM() function. <br/></td></tr>
+<tr class="separator:a8fe9684749933426e69f1114e13fa843"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6e8090538ecd20fdbdc8ae1b2da82a35"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6e8090538ecd20fdbdc8ae1b2da82a35"></a>
 std::vector&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFMM.html#a6e8090538ecd20fdbdc8ae1b2da82a35">Tvalues_</a></td></tr>
 <tr class="memdesc:a6e8090538ecd20fdbdc8ae1b2da82a35"><td class="mdescLeft">&#160;</td><td class="mdescRight">Auxiliar vector with values T0,T1...Tn-1 variables in the Discretized Eikonal Equation. <br/></td></tr>
@@ -421,7 +421,7 @@ template&lt;class grid_t, class heap_t = FMDaryHeap&lt;FMCell&gt;&gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="classFMM.html">FMM</a></li>
-    <li class="footer">Generated on Fri Mar 13 2015 09:04:51 for n-Dimensional Fast Marching by
+    <li class="footer">Generated on Fri Mar 13 2015 12:04:55 for n-Dimensional Fast Marching by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.6 </li>
   </ul>

@@ -25,6 +25,7 @@ var annotated =
     [ "GridPoints", "classGridPoints.html", "classGridPoints" ],
     [ "GridWriter", "classGridWriter.html", "classGridWriter" ],
     [ "GridWritter", "classGridWritter.html", null ],
+    [ "LSM", "classLSM.html", "classLSM" ],
     [ "MapLoader", "classMapLoader.html", "classMapLoader" ],
     [ "nDGridMap", "classnDGridMap.html", "classnDGridMap" ],
     [ "Solver", "classSolver.html", "classSolver" ],

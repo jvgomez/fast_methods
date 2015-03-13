@@ -1,9 +1,10 @@
 <map id="FMM&lt; grid_t, heap_t &gt;" name="FMM&lt; grid_t, heap_t &gt;">
-<area shape="rect" id="node3" href="$classFMMStar.html" title="Encapsulates the calls to FMM with heuristics enabled. " alt="" coords="5,173,181,200"/>
-<area shape="rect" id="node4" href="$classFMM.html" title="FMM\&lt; grid_t \&gt;" alt="" coords="205,173,312,200"/>
-<area shape="rect" id="node2" href="$classSolver.html" title="Abstract class that serves as interface for the actual solvers implemented. It requires (at least) th..." alt="" coords="58,5,171,32"/>
-<area shape="rect" id="node5" href="$classFIM.html" title="Implements Fast Iterative Method. " alt="" coords="19,251,117,277"/>
-<area shape="rect" id="node6" href="$classFSM.html" title="Implements Fast Sweeping Method up to 3D. " alt="" coords="141,251,245,277"/>
-<area shape="rect" id="node7" href="$classGMM.html" title="Templated class which computes Group Marching Method (GMM). " alt="" coords="270,251,377,277"/>
-<area shape="rect" id="node8" href="$classUFMM.html" title="Fast Marching Method using a untidy priority queue (UFMM). " alt="" coords="403,251,556,277"/>
+<area shape="rect" id="node3" href="$classFMMStar.html" title="Encapsulates the calls to FMM with heuristics enabled. " alt="" coords="16,173,192,200"/>
+<area shape="rect" id="node4" href="$classFMM.html" title="FMM\&lt; grid_t \&gt;" alt="" coords="216,173,323,200"/>
+<area shape="rect" id="node2" href="$classSolver.html" title="Abstract class that serves as interface for the actual solvers implemented. It requires (at least) th..." alt="" coords="69,5,181,32"/>
+<area shape="rect" id="node5" href="$classFIM.html" title="Implements Fast Iterative Method. " alt="" coords="5,251,104,277"/>
+<area shape="rect" id="node6" href="$classFSM.html" title="Implements Fast Sweeping Method. " alt="" coords="128,251,232,277"/>
+<area shape="rect" id="node8" href="$classGMM.html" title="Templated class which computes Group Marching Method (GMM). " alt="" coords="257,251,364,277"/>
+<area shape="rect" id="node9" href="$classUFMM.html" title="Fast Marching Method using a untidy priority queue (UFMM). " alt="" coords="389,251,543,277"/>
+<area shape="rect" id="node7" href="$classLSM.html" title="Implements Lock Sweeping Method. " alt="" coords="128,328,232,355"/>
 </map>

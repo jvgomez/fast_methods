@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['solver',['Solver',['../classSolver.html',1,'']]]
+  ['ndgridmap',['nDGridMap',['../classnDGridMap.html',1,'']]]
 ];

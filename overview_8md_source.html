@@ -101,7 +101,7 @@ $(document).ready(function(){initNavTree('overview_8md.html','');});
 <div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;- [<a class="code" href="classnDGridMap.html">nDGridMap</a> implementation](../<a class="code" href="classnDGridMap.html">nDGridMap</a>.pdf): Probably, the most complex part of the code. It encapsulates the complexity of the n-dimensional generalization, so that solvers are implemented almost independently of the number of dimensions.</div>
 <div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;</div>
 <div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;\note Due to the nDimensional implementation, the Eikonal solver code <span class="keywordflow">for</span> a given index is probably not very optimized, since it computes from 1D to nD until a better solution is not possible. For 2D and 3D (and probably nD) <span class="keyword">this</span> is not necessary, but my tests <span class="keywordflow">while</span> implementing <a class="code" href="classFSM.html">FSM</a> obligated me to <span class="keywordflow">do</span> it that way in order to have consistent results.</div>
-<div class="ttc" id="classFSM_html"><div class="ttname"><a href="classFSM.html">FSM</a></div><div class="ttdoc">Implements Fast Sweeping Method up to 3D. </div><div class="ttdef"><b>Definition:</b> <a href="fsm_8hpp_source.html#l00040">fsm.hpp:40</a></div></div>
+<div class="ttc" id="classFSM_html"><div class="ttname"><a href="classFSM.html">FSM</a></div><div class="ttdoc">Implements Fast Sweeping Method. </div><div class="ttdef"><b>Definition:</b> <a href="fsm_8hpp_source.html#l00040">fsm.hpp:40</a></div></div>
 <div class="ttc" id="classnDGridMap_html"><div class="ttname"><a href="classnDGridMap.html">nDGridMap</a></div><div class="ttdoc">Templated class which represents a n-dimensional grid map. Its cells are assumed to be cubic...</div><div class="ttdef"><b>Definition:</b> <a href="ndgridmap_8hpp_source.html#l00046">ndgridmap.hpp:46</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
@@ -109,7 +109,7 @@ $(document).ready(function(){initNavTree('overview_8md.html','');});
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><b>overview.md</b></li>
-    <li class="footer">Generated on Fri Mar 13 2015 09:04:51 for n-Dimensional Fast Marching by
+    <li class="footer">Generated on Fri Mar 13 2015 12:04:55 for n-Dimensional Fast Marching by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.6 </li>
   </ul>

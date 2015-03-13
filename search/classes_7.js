@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['ufmm',['UFMM',['../classUFMM.html',1,'']]]
+  ['solver',['Solver',['../classSolver.html',1,'']]]
 ];

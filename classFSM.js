@@ -10,6 +10,7 @@ var classFSM =
     [ "setEnvironment", "classFSM.html#a2c35be2b1ed35849e12a6a33483df3e0", null ],
     [ "setSweep", "classFSM.html#a36f7673a3b59fc9902bc13e7024a133a", null ],
     [ "setup", "classFSM.html#af7208fd884fdbdd43c865f6594a316fb", null ],
+    [ "solveForIdx", "classFSM.html#a8baf7246a64931497fd64ff8f99515b0", null ],
     [ "d_", "classFSM.html#a5f42ed3c1b7b05bec6e27a5c24218330", null ],
     [ "dimsize_", "classFSM.html#adfbd126eb0551db067242d4c1af376f8", null ],
     [ "ends_", "classFSM.html#ad04382750366d54cea7bf6e31b95e588", null ],

@@ -6,5 +6,6 @@ var searchData=
   ['log_5f',['log_',['../classBenchmark.html#a765b2d9f467a2b40336e8d0a4502a6b6',1,'Benchmark']]],
   ['logconfig',['logConfig',['../classBenchmark.html#ad1cd93d9cd580c3cdb1e4ef78765084b',1,'Benchmark']]],
   ['logrun',['logRun',['../classBenchmark.html#abe280db2e5fa1b2bba0fcf0192015abd',1,'Benchmark']]],
+  ['lsm',['LSM',['../classLSM.html',1,'']]],
   ['library_20design',['Library design',['../md_markdown_design.html',1,'']]]
 ];

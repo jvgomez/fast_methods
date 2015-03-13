@@ -140,6 +140,7 @@ $(document).ready(function(){initNavTree('functions_func.html','');});
 , <a class="el" href="classFMM.html#a12cd6bd56c25c247fc083731e2f2ae4d">FMM&lt; grid_t, heap_t &gt;</a>
 , <a class="el" href="classFSM.html#a79f41d7f602c6581afd21b11991eddfa">FSM&lt; grid_t &gt;</a>
 , <a class="el" href="classGMM.html#a2ec8def85b377097abac249876f52781">GMM&lt; grid_t &gt;</a>
+, <a class="el" href="classLSM.html#ae283ccd44e6431fa1a497ba70344c2e2">LSM&lt; grid_t &gt;</a>
 , <a class="el" href="classSolver.html#a8d1a9379b21402e66dfc163bc56cee15">Solver&lt; grid_t &gt;</a>
 , <a class="el" href="classUFMM.html#a0ee2c680815f7e5e5490e6c44967a907">UFMM&lt; grid_t, cell_t &gt;</a>
 </li>
@@ -365,12 +366,16 @@ $(document).ready(function(){initNavTree('functions_func.html','');});
 <li>readOptions()
 : <a class="el" href="classBenchmarkCFG.html#a09f68b08558853e7e7e9a0f355591f9a">BenchmarkCFG</a>
 </li>
+<li>recursiveIteration()
+: <a class="el" href="classFSM.html#a986f7b1d8bac11e30319d311d7058fd8">FSM&lt; grid_t &gt;</a>
+</li>
 <li>reset()
 : <a class="el" href="classFIM.html#ab6d5777b0dd8ae5df799ad0b3a7a068f">FIM&lt; grid_t &gt;</a>
 , <a class="el" href="classFM2.html#a5f37c3fa8b92a974e8b9bc9766c60c7e">FM2&lt; grid_t, heap_t &gt;</a>
 , <a class="el" href="classFMM.html#ad833a7099e5473411a6b3ff4f1ec837c">FMM&lt; grid_t, heap_t &gt;</a>
 , <a class="el" href="classFSM.html#af6aa73cc525d15e4232a93149dee7f01">FSM&lt; grid_t &gt;</a>
 , <a class="el" href="classGMM.html#ab7432a95c9ad8a3582178e69a21d8d12">GMM&lt; grid_t &gt;</a>
+, <a class="el" href="classLSM.html#a403c95298fd92ea15e6b4d9c2f24c075">LSM&lt; grid_t &gt;</a>
 , <a class="el" href="classSolver.html#afe071d33aed4ae0082d0293a9ac3f968">Solver&lt; grid_t &gt;</a>
 , <a class="el" href="classUFMM.html#a3ab99ee90708947f016fcd673286c60d">UFMM&lt; grid_t, cell_t &gt;</a>
 </li>
@@ -419,6 +424,7 @@ $(document).ready(function(){initNavTree('functions_func.html','');});
 : <a class="el" href="classBenchmark.html#a5db3a4730c85e38aec44c5e20eec545a">Benchmark&lt; grid_t &gt;</a>
 , <a class="el" href="classFM2.html#a5e9ff8fee56c86c84ca6b58b5e2f2caf">FM2&lt; grid_t, heap_t &gt;</a>
 , <a class="el" href="classFSM.html#a2c35be2b1ed35849e12a6a33483df3e0">FSM&lt; grid_t &gt;</a>
+, <a class="el" href="classLSM.html#a0944f61ddd579b2f410cd4a8b23f5f4f">LSM&lt; grid_t &gt;</a>
 , <a class="el" href="classSolver.html#a7ccc2ab5b4b924c90e385134172cccac">Solver&lt; grid_t &gt;</a>
 </li>
 <li>setHeuristics()
@@ -445,7 +451,7 @@ $(document).ready(function(){initNavTree('functions_func.html','');});
 : <a class="el" href="classBenchmark.html#a9f28f46148d04526f8890c1e09fa3d81">Benchmark&lt; grid_t &gt;</a>
 </li>
 <li>setOccupiedCells()
-: <a class="el" href="classnDGridMap.html#a227f8319aec9391f7199c9564374a816">nDGridMap&lt; T, ndims &gt;</a>
+: <a class="el" href="classnDGridMap.html#ab672e23ad2e72eebe28ea944d242fcd3">nDGridMap&lt; T, ndims &gt;</a>
 </li>
 <li>setPath()
 : <a class="el" href="classBenchmark.html#a2926d367a34f58e34b75c0344a0f4aee">Benchmark&lt; grid_t &gt;</a>
@@ -485,6 +491,10 @@ $(document).ready(function(){initNavTree('functions_func.html','');});
 <li>solveEikonalNDims()
 : <a class="el" href="classFMM.html#a189fe1405216965eb36d6387eb0e4a23">FMM&lt; grid_t, heap_t &gt;</a>
 </li>
+<li>solveForIdx()
+: <a class="el" href="classFSM.html#a8baf7246a64931497fd64ff8f99515b0">FSM&lt; grid_t &gt;</a>
+, <a class="el" href="classLSM.html#a84bad4e69cade646bec41203b294cc6f">LSM&lt; grid_t &gt;</a>
+</li>
 <li>split()
 : <a class="el" href="classBenchmarkCFG.html#a631e64fffc9664b997a375ece856d45f">BenchmarkCFG</a>
 </li>
@@ -521,7 +531,7 @@ $(document).ready(function(){initNavTree('functions_func.html','');});
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Fri Mar 13 2015 09:04:51 for n-Dimensional Fast Marching by
+    <li class="footer">Generated on Fri Mar 13 2015 12:04:55 for n-Dimensional Fast Marching by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.6 </li>
   </ul>

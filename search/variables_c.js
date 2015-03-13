@@ -6,6 +6,6 @@ var searchData=
   ['narrow_5fband_5f',['narrow_band_',['../classFMM.html#ad0bbb7922fb02ce745a30b580adcaea6',1,'FMM::narrow_band_()'],['../classUFMM.html#ac7daa17bb6aafd38005ad191d68645f3',1,'UFMM::narrow_band_()']]],
   ['ncells_5f',['ncells_',['../classnDGridMap.html#a3185ee4f343934bd7ec6dce359d4c7d0',1,'nDGridMap']]],
   ['ndims_5f',['ndims_',['../classGradientDescent.html#a89ce1d16ca0808515283fe26fbcf1f60',1,'GradientDescent']]],
-  ['neighbors',['neighbors',['../classFMM.html#af6ab46392c117677bcbf6b811abd5e16',1,'FMM']]],
+  ['neighbors_5f',['neighbors_',['../classFMM.html#a8fe9684749933426e69f1114e13fa843',1,'FMM']]],
   ['nruns_5f',['nruns_',['../classBenchmark.html#a3c1e9fce757032a3d9447d26548a5e64',1,'Benchmark']]]
 ];

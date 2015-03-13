@@ -18,7 +18,7 @@ var classFMM =
     [ "heur_coord_", "classFMM.html#ab02e003eef6289dcd3fad73565e9f4f0", null ],
     [ "heurStrategy_", "classFMM.html#a6704af3de764d4aa6d0b42c550794181", null ],
     [ "narrow_band_", "classFMM.html#ad0bbb7922fb02ce745a30b580adcaea6", null ],
-    [ "neighbors", "classFMM.html#af6ab46392c117677bcbf6b811abd5e16", null ],
+    [ "neighbors_", "classFMM.html#a8fe9684749933426e69f1114e13fa843", null ],
     [ "precomputed_", "classFMM.html#af1a7a08de6950cdb78682f2279df257a", null ],
     [ "Tvalues_", "classFMM.html#a6e8090538ecd20fdbdc8ae1b2da82a35", null ]
 ];
