@@ -1,13 +1,6 @@
 /*! \class FSM
     \brief Implements Fast Sweeping Method up to 3D.
 
-    IMPORTANT NOTE: A maximum number of dimensions is set because of the sweeps implementation
-    which require nested loops. The alternative is to do it recursively, but that would make the
-    algorithm slower and FSM is rarely used above 3D.
-
-    The FSM code contains information about how to set the maximum number of dimensions. Look for
-    "// Dimension:" comments.
-
     It uses as a main container the nDGridMap class. The nDGridMap type T
     has to use an FMCell or derived.
 
@@ -17,7 +10,8 @@
         H. Zhao, A fast sweeping method for Eikonal equations, Math. Comp. 74 (2005), 603-627.
         <a href="http://www.ams.org/journals/mcom/2005-74-250/S0025-5718-04-01678-3/S0025-5718-04-01678-3.pdf">[PDF]</a>
 
-    NOTE: The sweeping directions are inverted with respect to the paper to make implementation easier.
+    NOTE: The sweeping directions are inverted with respect to the paper to make implementation easier. And sweeping
+    is implemented recursively (undetermined number of nested for loops) to achieve n-dimensional behaviour.
 
     Copyright (C) 2015 Javier V. Gomez
     www.javiervgomez.com
@@ -41,9 +35,6 @@
 #include "../utils/utils.h"
 
 #include <algorithm>
-
-// Dimension: change this value to the number of dimensions required.
-#define MAXDIMS 3
 
 /// \todo implement a more robust goal point stopping criterion.
 template < class grid_t > class FSM : public FMM<grid_t> {
@@ -70,11 +61,12 @@ template < class grid_t > class FSM : public FMM<grid_t> {
             FMM<grid_t>::setEnvironment(g);
             // Filling the size of the dimensions...
             std::array<unsigned, grid_t::getNDims()> dimsize = g->getDimSizes();
-            for (size_t i = 0; i < grid_t::getNDims(); ++i)
+            size_t ncells = 1;
+            for (size_t i = 0; i < grid_t::getNDims(); ++i) {
                 dimsize_[i] = dimsize[i];
-            // ... and the extended dimensions.
-            for (size_t i = grid_t::getNDims(); i < MAXDIMS; ++i)
-                dimsize_[i] = 1;
+                ncells *= dimsize[i];
+                d_[i] = ncells;
+            }
         }
 
         /** \brief Executes Solver setup (instead of FMM setup) and other checks. */
@@ -98,35 +90,15 @@ template < class grid_t > class FSM : public FMM<grid_t> {
                 grid_->getCell(i).setArrivalTime(0);
 
             // Getting dimsizes and filling the other dimensions.
-            bool keepSweeping = true;
-            bool stopPropagation = false;
-            unsigned idx = 0;
+            keepSweeping_ = true;
+            stopPropagation_ = false;
 
-            while (keepSweeping && !stopPropagation && sweeps_ < maxSweeps_) {
-                keepSweeping = false;
+            while (keepSweeping_ && !stopPropagation_ && sweeps_ < maxSweeps_) {
+                keepSweeping_ = false;
                 setSweep();
                 ++sweeps_;
 
-                // Dimension: nest as many for loops as MAXDIMS.
-                for (int k = inits_[2]; k != ends_[2]; k+=incs_[2])
-                    for (int j = inits_[1]; j != ends_[1]; j+=incs_[1])
-                        for (int i = inits_[0]; i != ends_[0]; i+=incs_[0])
-                        {
-                            // Dimension: update the index computation (for 4D it is
-                            // l*dimsize_[0]*dimsize_[1]*dimsize_[2] + k*...
-                            // and so on.
-                            idx = k*dimsize_[0]*dimsize_[1] + j *dimsize_[0] + i;
-                            const double prevTime = grid_->getCell(idx).getArrivalTime();
-                            const double newTime = solveEikonal(idx);
-                            if(utils::isTimeBetterThan(newTime, prevTime)) {
-                                grid_->getCell(idx).setArrivalTime(newTime);
-                                keepSweeping = true;
-                            }
-                            // EXPERIMENTAL - Value not updated, it has converged
-                            else if(!isnan(newTime) && !isinf(newTime) && (idx == goal_idx_)) {
-                                stopPropagation = true;
-                            }
-                        }
+                recursiveIteration(grid_t::getNDims()-1);
             }
         }
 
@@ -147,6 +119,28 @@ template < class grid_t > class FSM : public FMM<grid_t> {
         }
 
     protected:
+        void recursiveIteration
+        (size_t depth, int it = 0) {
+            if (depth > 0) {
+                for(int i = inits_[depth]; i != ends_[depth]; i += incs_[depth])
+                    recursiveIteration(depth-1, it + i*d_[depth-1]);
+            }
+            else {
+                for(int i = inits_[0]; i != ends_[0]; i += incs_[0]) {
+                    unsigned idx = it + i;
+                    const double prevTime = grid_->getCell(idx).getArrivalTime();
+                    const double newTime = solveEikonal(idx);
+                    if(utils::isTimeBetterThan(newTime, prevTime)) {
+                        grid_->getCell(idx).setArrivalTime(newTime);
+                        keepSweeping_ = true;
+                    }
+                    // EXPERIMENTAL - Value not updated, it has converged
+                    else if(!isnan(newTime) && !isinf(newTime) && (idx == goal_idx_))
+                        stopPropagation_ = true;
+                }
+            }
+        }
+
         /** \brief Set the sweep variables: initial and final indices for iterations,
              and the increment of each iteration in every dimension.
 
@@ -184,7 +178,7 @@ template < class grid_t > class FSM : public FMM<grid_t> {
         /** \brief Initializes the internal arrays employed. */
         virtual void initializeSweepArrays
         () {
-            for (size_t i = 0; i < MAXDIMS; ++i) {
+            for (size_t i = 0; i < grid_t::getNDims(); ++i) {
                 incs_[i] = 1;
                 inits_[i] = 0;
                 ends_[i] = 1;
@@ -206,18 +200,28 @@ template < class grid_t > class FSM : public FMM<grid_t> {
         /** \brief Number of maximum sweeps to perform. */
         unsigned maxSweeps_;
 
+        /** \brief Flag to indicate that at least one more sweep is required. */
+        bool keepSweeping_;
+
+        /** \brief Flag to stop sweeping (used when goal point has converged). */
+        bool stopPropagation_;
+
     private:
         /** \brief Sweep directions {-1,1} for each dimension. Extended dimensions always 1. */
-        std::array<int, MAXDIMS> incs_;
+        std::array<int, grid_t::getNDims()> incs_;
 
         /** \brief Initial indices for each dimension. Extended dimensions always 0. */
-        std::array<int, MAXDIMS> inits_;
+        std::array<int, grid_t::getNDims()> inits_;
 
         /** \brief Final indices for each dimension. Extended dimensions always 1. */
-        std::array<int, MAXDIMS> ends_;
+        std::array<int, grid_t::getNDims()> ends_;
 
         /** \brief Size of each dimension, extended to the maximum size. Extended dimensions always 1. */
-        std::array<int, MAXDIMS> dimsize_;
+        std::array<int, grid_t::getNDims()> dimsize_;
+
+        /** \brief Auxiliar array to speed up indexing generalization: stores parcial multiplications of dimensions sizes. d_[0] = dimsize_[0];
+            d_[1] = dimsize_[0]*dimsize_[1]; etc. */
+        std::array<int, grid_t::getNDims()> d_;
 };
 
 #endif /* FSM_HPP_*/

@@ -16,6 +16,9 @@ N-Dimensional Fast Marching Method V1.0
 - Untidy Fast Marching Method.
 - Fast Iterative Method (FIM).
 
+** Other popular solvers:**
+- Fast Sweeping Method (FSM).
+
 **ROS**
 
 ROS nodes using this code (tested in the TurtleBot) are provided in a separate repo:

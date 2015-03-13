@@ -356,14 +356,17 @@ template <class T, size_t ndims> class nDGridMap {
         bool clean_;
 
         // Auxiliar vectors to speed things up.
-        /** \brief Auxiliar array to speed up neighbor and indexing generalization: stores parcial multiplications of dimensions sizes. d_[0] = dimsize_[0];
-            d_[1] = dimsize_[0]*dimsize_[1]; etc.*/
+        /** \brief Auxiliar array to speed up neighbor and indexing generalization:
+            stores parcial multiplications of dimensions sizes. d_[0] = dimsize_[0];
+            d_[1] = dimsize_[0]*dimsize_[1]; etc. */
         std::array<unsigned int, ndims> d_;
                                                                                                              
-        /** \brief  Auxiliar array to speed up neighbor and indexing generalization: for getMinValueInDim() function.*/
+        /** \brief  Auxiliar array to speed up neighbor and indexing generalization:
+            for getMinValueInDim() function. */
         std::array<unsigned int, 2> n_;
         
-        /** \brief Internal variable that counts the number of neighbors found in every iteration. Modified by getNeighbours(), getNeighborsInDim() and getMinValueInDim(). functions.*/
+        /** \brief Internal variable that counts the number of neighbors found in
+            every iteration. Modified by getNeighbours(), getNeighborsInDim() and getMinValueInDim() functions. */
         unsigned int n_neighs;
         
         /** \brief Caches the occupied cells (obstacles). */
