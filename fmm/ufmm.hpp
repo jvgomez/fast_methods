@@ -58,11 +58,10 @@ template <class grid_t, class cell_t = FMCell> class UFMM : public FMM <grid_t> 
             // Algorithm initialization
             for (unsigned int &i : init_points_) { // For each initial point
                 grid_->getCell(i).setArrivalTime(0);
-                grid_->getCell(i).setState(FMState::FROZEN);
                 narrow_band_->push( &(grid_->getCell(i)) );
             }
 
-            // Main loop
+            // Main loop.
             while (!stopWavePropagation && !narrow_band_->empty()) {
                 unsigned int idxMin = narrow_band_->popMinIdx();
                 n_neighs = grid_->getNeighbors(idxMin, neighbors_);

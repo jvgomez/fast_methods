@@ -108,15 +108,12 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FMM : public
                 unsigned int idxMin = narrow_band_.popMinIdx();
                 n_neighs = grid_->getNeighbors(idxMin, neighbors_);
                 grid_->getCell(idxMin).setState(FMState::FROZEN);
-
                 for (unsigned int s = 0; s < n_neighs; ++s) {
                     j = neighbors_[s];
-                    // If Frozen or obstacle
                     if ((grid_->getCell(j).getState() == FMState::FROZEN) || grid_->getCell(j).isOccupied())
                         continue;
                     else {
                         double new_arrival_time = solveEikonal(j);
-                        // Updating narrow band if necessary.
                         if (grid_->getCell(j).getState() == FMState::NARROW) {
                             if (new_arrival_time < grid_->getCell(j).getArrivalTime()) {
                                 grid_->getCell(j).setArrivalTime(new_arrival_time);
@@ -129,9 +126,9 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FMM : public
                             narrow_band_.push( &(grid_->getCell(j)) );
                         } // neighbors_ open.
                     } // neighbors_ not frozen.
-                    if (idxMin == goal_idx_)
-                        stopWavePropagation = true;
                 } // For each neighbor.
+                if (idxMin == goal_idx_)
+                    stopWavePropagation = true;
             } // while narrow band not empty
         }
 
