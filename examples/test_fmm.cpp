@@ -16,6 +16,7 @@
 #include "../fmm/gmm.hpp"
 #include "../fmm/ufmm.hpp"
 #include "../fmm/fsm.hpp"
+#include "../fmm/lsm.hpp"
 
 #include "../io/gridplotter.hpp"
 
@@ -49,6 +50,7 @@ int main()
     solvers.push_back(new FIM<FMGrid2D>);
     solvers.push_back(new UFMM<FMGrid2D>);
     solvers.push_back(new FSM<FMGrid2D>);
+    solvers.push_back(new LSM<FMGrid2D>);
     // GMM, FIM and UFMM have some parameters, can be set by overloaded constructors.
 
     // Executing every solver individually over the same grid.

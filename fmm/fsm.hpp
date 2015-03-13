@@ -31,20 +31,20 @@
 #ifndef FSM_HPP_
 #define FSM_HPP_
 
-#include "fmm.hpp"
+#include "eikonalsolver.hpp"
 #include "../utils/utils.h"
 
 #include <algorithm>
 
 /// \todo implement a more robust goal point stopping criterion.
-template < class grid_t > class FSM : public FMM<grid_t> {
+template < class grid_t > class FSM : public EikonalSolver<grid_t> {
 
     public:
-        FSM(unsigned maxSweeps = std::numeric_limits<unsigned>::max()) : FMM<grid_t>("FSM"),
+        FSM(unsigned maxSweeps = std::numeric_limits<unsigned>::max()) : EikonalSolver<grid_t>("FSM"),
             sweeps_(0),
             maxSweeps_(maxSweeps) {}
 
-        FSM(const char * name, unsigned maxSweeps = std::numeric_limits<unsigned>::max()) : FMM<grid_t>(name),
+        FSM(const char * name, unsigned maxSweeps = std::numeric_limits<unsigned>::max()) : EikonalSolver<grid_t>(name),
             sweeps_(0),
             maxSweeps_(maxSweeps) {}
 
@@ -52,7 +52,7 @@ template < class grid_t > class FSM : public FMM<grid_t> {
              Since a maximum number of dimensions is assumed, fills the rest with size 1. */
         virtual void setEnvironment
         (grid_t * g) {
-            FMM<grid_t>::setEnvironment(g);
+            EikonalSolver<grid_t>::setEnvironment(g);
             // Filling the size of the dimensions...
             std::array<unsigned, grid_t::getNDims()> dimsize = g->getDimSizes();
             size_t ncells = 1;
@@ -65,10 +65,10 @@ template < class grid_t > class FSM : public FMM<grid_t> {
             Tvalues_.reserve(grid_t::getNDims());
         }
 
-        /** \brief Executes Solver setup (instead of FMM setup) and other checks. */
+        /** \brief Executes Solver setup (instead of EikonalSolver setup) and other checks. */
         virtual void setup
         () {
-            Solver<grid_t>::setup();
+            EikonalSolver<grid_t>::setup();
             initializeSweepArrays();
             if (int(goal_idx_) != -1)
                 console::warning("Setting a goal point in FSM (and LSM) is experimental. It may lead to wrong results.");
@@ -97,7 +97,7 @@ template < class grid_t > class FSM : public FMM<grid_t> {
 
         virtual void reset
         () {
-            FMM<grid_t>::reset();
+            EikonalSolver<grid_t>::reset();
             sweeps_ = 0;
             initializeSweepArrays();
         }
@@ -184,14 +184,14 @@ template < class grid_t > class FSM : public FMM<grid_t> {
             }
         }
 
-        using FMM<grid_t>::grid_;
-        using FMM<grid_t>::init_points_;
-        using FMM<grid_t>::goal_idx_;
-        using FMM<grid_t>::setup_;
-        using FMM<grid_t>::name_;
-        using FMM<grid_t>::time_;
-        using FMM<grid_t>::Tvalues_;
-        using FMM<grid_t>::solveEikonal;
+        using EikonalSolver<grid_t>::grid_;
+        using EikonalSolver<grid_t>::init_points_;
+        using EikonalSolver<grid_t>::goal_idx_;
+        using EikonalSolver<grid_t>::setup_;
+        using EikonalSolver<grid_t>::name_;
+        using EikonalSolver<grid_t>::time_;
+        using EikonalSolver<grid_t>::Tvalues_;
+        using EikonalSolver<grid_t>::solveEikonal;
 
         /** \brief Number of sweeps performed. */
         unsigned int sweeps_;
