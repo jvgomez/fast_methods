@@ -1,10 +1,10 @@
 var NAVTREE =
 [
   [ "n-Dimensional Fast Marching", "index.html", [
+    [ "Overview", "index.html", null ],
     [ "Benchmarking", "md_markdown_benchmarking.html", null ],
     [ "Building", "md_markdown_building.html", null ],
     [ "Library design", "md_markdown_design.html", null ],
-    [ "Overview", "md_markdown_overview.html", null ],
     [ "Todo List", "todo.html", null ],
     [ "Classes", null, [
       [ "Class List", "annotated.html", "annotated" ],
