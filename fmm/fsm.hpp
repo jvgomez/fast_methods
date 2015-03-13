@@ -92,7 +92,6 @@ template < class grid_t > class FSM : public FMM<grid_t> {
                 keepSweeping_ = false;
                 setSweep();
                 ++sweeps_;
-
                 recursiveIteration(grid_t::getNDims()-1);
             }
         }
@@ -114,6 +113,8 @@ template < class grid_t > class FSM : public FMM<grid_t> {
         }
 
     protected:
+        /** \brief Equivalent to nesting as many for loops as dimensions. For every most inner
+         * loop iteration, solveForIdx() is called for the corresponding idx. */
         void recursiveIteration
         (size_t depth, int it = 0) {
             if (depth > 0) {
@@ -121,19 +122,23 @@ template < class grid_t > class FSM : public FMM<grid_t> {
                     recursiveIteration(depth-1, it + i*d_[depth-1]);
             }
             else {
-                for(int i = inits_[0]; i != ends_[0]; i += incs_[0]) {
-                    unsigned idx = it + i;
-                    const double prevTime = grid_->getCell(idx).getArrivalTime();
-                    const double newTime = solveEikonal(idx);
-                    if(utils::isTimeBetterThan(newTime, prevTime)) {
-                        grid_->getCell(idx).setArrivalTime(newTime);
-                        keepSweeping_ = true;
-                    }
-                    // EXPERIMENTAL - Value not updated, it has converged
-                    else if(!isnan(newTime) && !isinf(newTime) && (idx == goal_idx_))
-                        stopPropagation_ = true;
-                }
+                for(int i = inits_[0]; i != ends_[0]; i += incs_[0])
+                    solveForIdx(it+i);
             }
+        }
+
+        /** \brief Actually executes one solving iteration of the FSM. */
+        virtual void solveForIdx
+        (unsigned idx) {
+            const double prevTime = grid_->getCell(idx).getArrivalTime();
+            const double newTime = solveEikonal(idx);
+            if(utils::isTimeBetterThan(newTime, prevTime)) {
+                grid_->getCell(idx).setArrivalTime(newTime);
+                keepSweeping_ = true;
+            }
+            // EXPERIMENTAL - Value not updated, it has converged
+            else if(!isnan(newTime) && !isinf(newTime) && (idx == goal_idx_))
+                stopPropagation_ = true;
         }
 
         /** \brief Set the sweep variables: initial and final indices for iterations,

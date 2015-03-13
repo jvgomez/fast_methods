@@ -44,33 +44,20 @@ template < class grid_t > class LSM : public FSM<grid_t> {
 
         LSM(const char * name, unsigned maxSweeps = std::numeric_limits<unsigned>::max()) : FSM<grid_t>(name, maxSweeps) {}
 
-        /** \brief Actual method that implements LSM. */
-        virtual void computeInternal
-        () {
-            if (!setup_)
-                setup();
-
-            // Initialization
-            for (unsigned int i: init_points_) // For each initial point
-                grid_->getCell(i).setArrivalTime(0);
-
-            // Getting dimsizes and filling the other dimensions.
-            keepSweeping_ = true;
-            stopPropagation_ = false;
-
-            while (keepSweeping_ && !stopPropagation_ && sweeps_ < maxSweeps_) {
-                keepSweeping_ = false;
-                setSweep();
-                ++sweeps_;
-
-                recursiveIteration(grid_t::getNDims()-1);
-            }
+        /** \brief Calls FSM::setEnvironment() and initializes the locking status. */
+        virtual void setEnvironment
+        (grid_t * g) {
+            FSM<grid_t>::setEnvironment(g);
+            // FMState::FROZEN - locked and FMState::OPEN - unlocked.
+            for(size_t i = 0; i < grid_->size(); ++i)
+                grid_->getCell(i).setState(FMState::FROZEN);
         }
 
         virtual void reset
         () {
             FSM<grid_t>::reset();
-            sweeps_ = 0;
+            for(size_t i = 0; i < grid_->size(); ++i)
+                grid_->getCell(i).setState(FMState::FROZEN);
         }
 
         virtual void printRunInfo
@@ -83,27 +70,18 @@ template < class grid_t > class LSM : public FSM<grid_t> {
         }
 
     protected:
-        void recursiveIteration
-        (size_t depth, int it = 0) {
-            if (depth > 0) {
-                for(int i = inits_[depth]; i != ends_[depth]; i += incs_[depth])
-                    recursiveIteration(depth-1, it + i*d_[depth-1]);
+        /** \brief Actually executes one solving iteration of the LSM. */
+        virtual void solveForIdx
+        (unsigned idx) {
+            /*const double prevTime = grid_->getCell(idx).getArrivalTime();
+            const double newTime = solveEikonal(idx);
+            if(utils::isTimeBetterThan(newTime, prevTime)) {
+                grid_->getCell(idx).setArrivalTime(newTime);
+                keepSweeping_ = true;
             }
-            else {
-                for(int i = inits_[0]; i != ends_[0]; i += incs_[0]) {
-                    unsigned idx = it + i;
-                    const double prevTime = grid_->getCell(idx).getArrivalTime();
-                    const double newTime = solveEikonal(idx);
-                    if(utils::isTimeBetterThan(newTime, prevTime)) {
-                        grid_->getCell(idx).setArrivalTime(newTime);
-                        keepSweeping_ = true;
-                    }
-                    // EXPERIMENTAL - Value not updated, it has converged
-                    else if(!isnan(newTime) && !isinf(newTime) && (idx == goal_idx_))
-                        stopPropagation_ = true;
-
-                }
-            }
+            // EXPERIMENTAL - Value not updated, it has converged
+            else if(!isnan(newTime) && !isinf(newTime) && (idx == goal_idx_))
+                stopPropagation_ = true;*/
         }
 
         // Inherited members from FSM.
