@@ -1,5 +1,5 @@
 /*! \class FSM
-    \brief Implements Fast Sweeping Method up to 3D.
+    \brief Implements Fast Sweeping Method.
 
     It uses as a main container the nDGridMap class. The nDGridMap type T
     has to use an FMCell or derived.
@@ -42,17 +42,11 @@ template < class grid_t > class FSM : public FMM<grid_t> {
     public:
         FSM(unsigned maxSweeps = std::numeric_limits<unsigned>::max()) : FMM<grid_t>("FSM"),
             sweeps_(0),
-            maxSweeps_(maxSweeps) {
-            initializeSweepArrays();
-            Tvalues_.reserve(grid_t::getNDims());
-        }
+            maxSweeps_(maxSweeps) {}
 
         FSM(const char * name, unsigned maxSweeps = std::numeric_limits<unsigned>::max()) : FMM<grid_t>(name),
             sweeps_(0),
-            maxSweeps_(maxSweeps) {
-            initializeSweepArrays();
-            Tvalues_.reserve(grid_t::getNDims());
-        }
+            maxSweeps_(maxSweeps) {}
 
         /** \brief Sets and cleans the grid in which operations will be performed.
              Since a maximum number of dimensions is assumed, fills the rest with size 1. */
@@ -67,16 +61,17 @@ template < class grid_t > class FSM : public FMM<grid_t> {
                 ncells *= dimsize[i];
                 d_[i] = ncells;
             }
+
+            Tvalues_.reserve(grid_t::getNDims());
         }
 
         /** \brief Executes Solver setup (instead of FMM setup) and other checks. */
         virtual void setup
         () {
             Solver<grid_t>::setup();
-
-            if (int(goal_idx_) != -1) {
-                console::warning("Setting a goal point in FSM is experimental. It may lead to wrong results.");
-            }
+            initializeSweepArrays();
+            if (int(goal_idx_) != -1)
+                console::warning("Setting a goal point in FSM (and LSM) is experimental. It may lead to wrong results.");
         }
 
         /** \brief Actual method that implements FSM. */
@@ -206,7 +201,6 @@ template < class grid_t > class FSM : public FMM<grid_t> {
         /** \brief Flag to stop sweeping (used when goal point has converged). */
         bool stopPropagation_;
 
-    private:
         /** \brief Sweep directions {-1,1} for each dimension. Extended dimensions always 1. */
         std::array<int, grid_t::getNDims()> incs_;
 
