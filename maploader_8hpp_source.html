@@ -116,13 +116,13 @@ $(document).ready(function(){initNavTree('maploader_8hpp_source.html','');});
 <div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;</div>
 <div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;            <span class="comment">// Filling the grid flipping Y dim. We want bottom left to be the (0,0).</span></div>
 <div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;            cimg_forXY(img,x,y) {</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;                <span class="keywordtype">double</span> occupancy = img(x,y);</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;                <span class="keywordtype">double</span> occupancy = img(x,y)/255;</div>
 <div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;                <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> idx = img.width()*(img.height()-y-1)+x;</div>
 <div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;                grid[idx].setOccupancy(occupancy);</div>
 <div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;                <span class="keywordflow">if</span> (grid[idx].isOccupied())</div>
 <div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;                    obs.push_back(idx);</div>
 <div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;                }</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;            grid.<a class="code" href="classnDGridMap.html#a227f8319aec9391f7199c9564374a816">setOccupiedCells</a>(obs);</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;            grid.<a class="code" href="classnDGridMap.html#a227f8319aec9391f7199c9564374a816">setOccupiedCells</a>(std::move(obs));</div>
 <div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;        }</div>
 <div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;</div>
 <div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;        <span class="keyword">template</span>&lt;<span class="keyword">class</span> T, <span class="keywordtype">size_t</span> ndims&gt;</div>
@@ -160,7 +160,7 @@ $(document).ready(function(){initNavTree('maploader_8hpp_source.html','');});
 <div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;                    <span class="keywordflow">if</span> (grid[i].isOccupied())</div>
 <div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;                        obs.push_back(i);</div>
 <div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;                }</div>
-<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;                grid.<a class="code" href="classnDGridMap.html#a227f8319aec9391f7199c9564374a816">setOccupiedCells</a>(obs);</div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;                grid.<a class="code" href="classnDGridMap.html#a227f8319aec9391f7199c9564374a816">setOccupiedCells</a>(std::move(obs));</div>
 <div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;                <span class="keywordflow">return</span> 1;</div>
 <div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;            }</div>
 <div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;            <span class="keywordflow">else</span></div>
@@ -172,10 +172,10 @@ $(document).ready(function(){initNavTree('maploader_8hpp_source.html','');});
 <div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;};</div>
 <div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;</div>
 <div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;<span class="preprocessor">#endif </span><span class="comment">/* MAPLOADER_H_ */</span><span class="preprocessor"></span></div>
-<div class="ttc" id="classnDGridMap_html_ac58e643ba1a6306a0c389f0a0aaa44ab"><div class="ttname"><a href="classnDGridMap.html#ac58e643ba1a6306a0c389f0a0aaa44ab">nDGridMap::resize</a></div><div class="ttdeci">void resize(const std::array&lt; unsigned int, ndims &gt; &amp;dimsize)</div><div class="ttdoc">Resizes each dimension of the grid according dimsize. </div><div class="ttdef"><b>Definition:</b> <a href="ndgridmap_8hpp_source.html#l00075">ndgridmap.hpp:75</a></div></div>
+<div class="ttc" id="classnDGridMap_html_ac58e643ba1a6306a0c389f0a0aaa44ab"><div class="ttname"><a href="classnDGridMap.html#ac58e643ba1a6306a0c389f0a0aaa44ab">nDGridMap::resize</a></div><div class="ttdeci">void resize(const std::array&lt; unsigned int, ndims &gt; &amp;dimsize)</div><div class="ttdoc">Resizes each dimension of the grid according dimsize. </div><div class="ttdef"><b>Definition:</b> <a href="ndgridmap_8hpp_source.html#l00077">ndgridmap.hpp:77</a></div></div>
 <div class="ttc" id="classMapLoader_html"><div class="ttname"><a href="classMapLoader.html">MapLoader</a></div><div class="ttdoc">Auxiliar static class which helps to load maps into nDGridMap. </div><div class="ttdef"><b>Definition:</b> <a href="maploader_8hpp_source.html#l00032">maploader.hpp:32</a></div></div>
-<div class="ttc" id="classnDGridMap_html_a227f8319aec9391f7199c9564374a816"><div class="ttname"><a href="classnDGridMap.html#a227f8319aec9391f7199c9564374a816">nDGridMap::setOccupiedCells</a></div><div class="ttdeci">void setOccupiedCells(const std::vector&lt; unsigned int &gt; &amp;obs)</div><div class="ttdoc">Sets the cells which are occupied. Usually called by grid loaders. </div><div class="ttdef"><b>Definition:</b> <a href="ndgridmap_8hpp_source.html#l00322">ndgridmap.hpp:322</a></div></div>
-<div class="ttc" id="classnDGridMap_html"><div class="ttname"><a href="classnDGridMap.html">nDGridMap</a></div><div class="ttdoc">Templated class which represents a n-dimensional grid map. Its cells are assumed to be cubic...</div><div class="ttdef"><b>Definition:</b> <a href="ndgridmap_8hpp_source.html#l00044">ndgridmap.hpp:44</a></div></div>
+<div class="ttc" id="classnDGridMap_html_a227f8319aec9391f7199c9564374a816"><div class="ttname"><a href="classnDGridMap.html#a227f8319aec9391f7199c9564374a816">nDGridMap::setOccupiedCells</a></div><div class="ttdeci">void setOccupiedCells(const std::vector&lt; unsigned int &gt; &amp;obs)</div><div class="ttdoc">Sets the cells which are occupied. Usually called by grid loaders. </div><div class="ttdef"><b>Definition:</b> <a href="ndgridmap_8hpp_source.html#l00323">ndgridmap.hpp:323</a></div></div>
+<div class="ttc" id="classnDGridMap_html"><div class="ttname"><a href="classnDGridMap.html">nDGridMap</a></div><div class="ttdoc">Templated class which represents a n-dimensional grid map. Its cells are assumed to be cubic...</div><div class="ttdef"><b>Definition:</b> <a href="ndgridmap_8hpp_source.html#l00046">ndgridmap.hpp:46</a></div></div>
 <div class="ttc" id="classconsole_html_a69423871e197337783f9b699da398cbc"><div class="ttname"><a href="classconsole.html#a69423871e197337783f9b699da398cbc">console::error</a></div><div class="ttdeci">static void error(const std::string &amp;val)</div><div class="ttdef"><b>Definition:</b> <a href="console_8cpp_source.html#l00159">console.cpp:159</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
@@ -183,7 +183,7 @@ $(document).ready(function(){initNavTree('maploader_8hpp_source.html','');});
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_bc161955dc3a3d2485839eba21420d01.html">io</a></li><li class="navelem"><b>maploader.hpp</b></li>
-    <li class="footer">Generated on Tue Mar 3 2015 15:34:36 for n-Dimensional Fast Marching by
+    <li class="footer">Generated on Fri Mar 13 2015 09:04:51 for n-Dimensional Fast Marching by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.6 </li>
   </ul>

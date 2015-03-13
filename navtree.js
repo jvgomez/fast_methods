@@ -4,7 +4,7 @@ var NAVTREE =
     [ "Benchmarking", "md_markdown_benchmarking.html", null ],
     [ "Building", "md_markdown_building.html", null ],
     [ "Library design", "md_markdown_design.html", null ],
-    [ "Overview", "md_markdown_main.html", null ],
+    [ "Overview", "md_markdown_overview.html", null ],
     [ "Todo List", "todo.html", null ],
     [ "Classes", null, [
       [ "Class List", "annotated.html", "annotated" ],
@@ -25,7 +25,7 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "annotated.html",
-"classSolver.html"
+"classGridPlotter.html#aa464d1f4b19d2e4f46e46a5ed429bbc8"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

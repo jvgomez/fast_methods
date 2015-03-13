@@ -18,6 +18,7 @@ var annotated =
     [ "FMMStar", "classFMMStar.html", "classFMMStar" ],
     [ "FMPriorityQueue", "classFMPriorityQueue.html", "classFMPriorityQueue" ],
     [ "FMUntidyQueue", "classFMUntidyQueue.html", "classFMUntidyQueue" ],
+    [ "FSM", "classFSM.html", "classFSM" ],
     [ "GMM", "classGMM.html", "classGMM" ],
     [ "GradientDescent", "classGradientDescent.html", "classGradientDescent" ],
     [ "GridPlotter", "classGridPlotter.html", "classGridPlotter" ],

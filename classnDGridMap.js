@@ -24,6 +24,7 @@ var classnDGridMap =
     [ "setClean", "classnDGridMap.html#af0ae8adfc81acf71f8a567a95b7c8c02", null ],
     [ "setLeafSize", "classnDGridMap.html#a6afc8da3ceb0081ebc23caca93c2bc66", null ],
     [ "setOccupiedCells", "classnDGridMap.html#a227f8319aec9391f7199c9564374a816", null ],
+    [ "setOccupiedCells", "classnDGridMap.html#ab672e23ad2e72eebe28ea944d242fcd3", null ],
     [ "showCoords", "classnDGridMap.html#a161c26f6eaf97b3ab116d4673e1331c3", null ],
     [ "showCoords", "classnDGridMap.html#a0e894fea9302b0409e62845198b72454", null ],
     [ "showIdx", "classnDGridMap.html#ad67757462f2036907ab0ef24674ea327", null ],

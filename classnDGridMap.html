@@ -202,6 +202,10 @@ std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hre
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnDGridMap.html#a227f8319aec9391f7199c9564374a816">setOccupiedCells</a> (const std::vector&lt; unsigned int &gt; &amp;obs)</td></tr>
 <tr class="memdesc:a227f8319aec9391f7199c9564374a816"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the cells which are occupied. Usually called by grid loaders. <br/></td></tr>
 <tr class="separator:a227f8319aec9391f7199c9564374a816"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab672e23ad2e72eebe28ea944d242fcd3"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab672e23ad2e72eebe28ea944d242fcd3"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnDGridMap.html#ab672e23ad2e72eebe28ea944d242fcd3">setOccupiedCells</a> (std::vector&lt; unsigned int &gt; &amp;&amp;obs)</td></tr>
+<tr class="memdesc:ab672e23ad2e72eebe28ea944d242fcd3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets (by move semantics) the cells which are occupied. Usually called by grid loaders. <br/></td></tr>
+<tr class="separator:ab672e23ad2e72eebe28ea944d242fcd3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0c6192263d0e72de4fc47c32184519da"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0c6192263d0e72de4fc47c32184519da"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnDGridMap.html#a0c6192263d0e72de4fc47c32184519da">getOccupiedCells</a> (std::vector&lt; unsigned int &gt; &amp;obs) const </td></tr>
 <tr class="memdesc:a0c6192263d0e72de4fc47c32184519da"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the indices of the occupied cells of the grid. <br/></td></tr>
@@ -246,7 +250,7 @@ std::array&lt; unsigned int, 2 &gt;&#160;</td><td class="memItemRight" valign="b
 <tr class="separator:a8c7b2b078691ad298780bc7b9f648a94"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae80c60d4c2f90f09787fe330f90f8e69"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae80c60d4c2f90f09787fe330f90f8e69"></a>
 unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnDGridMap.html#ae80c60d4c2f90f09787fe330f90f8e69">n_neighs</a></td></tr>
-<tr class="memdesc:ae80c60d4c2f90f09787fe330f90f8e69"><td class="mdescLeft">&#160;</td><td class="mdescRight">Internal variable that counts the number of neighbors found in every iteration. Modified by getNeighbours(), <a class="el" href="classnDGridMap.html#ab68c69cd8f4bdd1118bee83a16931ff8" title="Computes the indices of the 4-connectivity neighbors of cell idx in a specified direction dim...">getNeighborsInDim()</a> and <a class="el" href="classnDGridMap.html#a933f96e30ef87474a083797b5bca705b" title="Resturns the minimum value of neighbors of cell idx in dimension dim. ">getMinValueInDim()</a>. functions. <br/></td></tr>
+<tr class="memdesc:ae80c60d4c2f90f09787fe330f90f8e69"><td class="mdescLeft">&#160;</td><td class="mdescRight">Internal variable that counts the number of neighbors found in every iteration. Modified by getNeighbours(), <a class="el" href="classnDGridMap.html#ab68c69cd8f4bdd1118bee83a16931ff8" title="Computes the indices of the 4-connectivity neighbors of cell idx in a specified direction dim...">getNeighborsInDim()</a> and <a class="el" href="classnDGridMap.html#a933f96e30ef87474a083797b5bca705b" title="Resturns the minimum value of neighbors of cell idx in dimension dim. ">getMinValueInDim()</a> functions. <br/></td></tr>
 <tr class="separator:ae80c60d4c2f90f09787fe330f90f8e69"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ada81ac6b1dceb514173a848512530073"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ada81ac6b1dceb514173a848512530073"></a>
 std::vector&lt; unsigned int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnDGridMap.html#ada81ac6b1dceb514173a848512530073">occupied_</a></td></tr>
@@ -263,7 +267,7 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
 <div class="textblock"><h3>template&lt;class T, size_t ndims&gt;<br/>
 class nDGridMap&lt; T, ndims &gt;</h3>
 
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000013">Todo:</a></b></dt><dd><p class="startdd">Neighbors precomputation could speed things up. </p>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000014">Todo:</a></b></dt><dd><p class="startdd">Neighbors precomputation could speed things up. </p>
 <p class="enddd">Improve coord2idx function in order to just pass n coordinates and not an array. </p>
 </dd></dl>
 <p>Based on a flat array in which the generalized indexing operations are efficiently implemented, according to this document <a href="http://javiervgomez.com/pages/n-dimensional-gridmaps-formulation-and-implementation.html">nDGridMaps</a> It is important to read this document in order to understand the class.</p>
@@ -274,7 +278,7 @@ class nDGridMap&lt; T, ndims &gt;</h3>
 <p>Copyright (C) 2014 Javier V. Gomez and Jose Pardeiro www.javiervgomez.com</p>
 <p>This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version. This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details. You should have received a copy of the GNU General Public License along with this program. If not, see <a href="http://www.gnu.org/licenses/">http://www.gnu.org/licenses/</a>. </p>
 
-<p>Definition at line <a class="el" href="ndgridmap_8hpp_source.html#l00044">44</a> of file <a class="el" href="ndgridmap_8hpp_source.html">ndgridmap.hpp</a>.</p>
+<p>Definition at line <a class="el" href="ndgridmap_8hpp_source.html#l00046">46</a> of file <a class="el" href="ndgridmap_8hpp_source.html">ndgridmap.hpp</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" id="af74e5281da12062ddcd958b76df5903a"></a>
 <div class="memitem">
@@ -317,7 +321,7 @@ template&lt;class T, size_t ndims&gt; </div>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="ndgridmap_8hpp_source.html#l00067">67</a> of file <a class="el" href="ndgridmap_8hpp_source.html">ndgridmap.hpp</a>.</p>
+<p>Definition at line <a class="el" href="ndgridmap_8hpp_source.html#l00069">69</a> of file <a class="el" href="ndgridmap_8hpp_source.html">ndgridmap.hpp</a>.</p>
 
 </div>
 </div>
@@ -330,7 +334,7 @@ template&lt;class T, size_t ndims&gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="classnDGridMap.html">nDGridMap</a></li>
-    <li class="footer">Generated on Tue Mar 3 2015 15:34:37 for n-Dimensional Fast Marching by
+    <li class="footer">Generated on Fri Mar 13 2015 09:04:51 for n-Dimensional Fast Marching by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.6 </li>
   </ul>

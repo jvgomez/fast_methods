@@ -1,8 +1,12 @@
 var searchData=
 [
-  ['overview',['Overview',['../md_markdown_main.html',1,'']]],
-  ['occupancy_5f',['occupancy_',['../classCell.html#ad92ef92a3db7d02ca587a59367574fa3',1,'Cell']]],
-  ['occupied_5f',['occupied_',['../classnDGridMap.html#ada81ac6b1dceb514173a848512530073',1,'nDGridMap']]],
-  ['operator_5b_5d',['operator[]',['../classnDGridMap.html#a44894a1934743d1e62310db1916b990c',1,'nDGridMap']]],
-  ['options_5f',['options_',['../classBenchmarkCFG.html#a4da631dd9452383132dae778c6c52360',1,'BenchmarkCFG']]]
+  ['n_5f',['n_',['../classnDGridMap.html#a8c7b2b078691ad298780bc7b9f648a94',1,'nDGridMap']]],
+  ['n_5fneighs',['n_neighs',['../classnDGridMap.html#ae80c60d4c2f90f09787fe330f90f8e69',1,'nDGridMap']]],
+  ['name_5f',['name_',['../classBenchmark.html#aeea93203bda688bab6cb5d0df2c371e3',1,'Benchmark::name_()'],['../classSolver.html#a2a56d58e17fa2a526432669d951843a2',1,'Solver::name_()']]],
+  ['narrow_5fband_5f',['narrow_band_',['../classFMM.html#ad0bbb7922fb02ce745a30b580adcaea6',1,'FMM::narrow_band_()'],['../classUFMM.html#ac7daa17bb6aafd38005ad191d68645f3',1,'UFMM::narrow_band_()']]],
+  ['ncells_5f',['ncells_',['../classnDGridMap.html#a3185ee4f343934bd7ec6dce359d4c7d0',1,'nDGridMap']]],
+  ['ndgridmap',['nDGridMap',['../classnDGridMap.html',1,'nDGridMap&lt; T, ndims &gt;'],['../classnDGridMap.html#af74e5281da12062ddcd958b76df5903a',1,'nDGridMap::nDGridMap()']]],
+  ['ndims_5f',['ndims_',['../classGradientDescent.html#a89ce1d16ca0808515283fe26fbcf1f60',1,'GradientDescent']]],
+  ['neighbors',['neighbors',['../classFMM.html#af6ab46392c117677bcbf6b811abd5e16',1,'FMM']]],
+  ['nruns_5f',['nruns_',['../classBenchmark.html#a3c1e9fce757032a3d9447d26548a5e64',1,'Benchmark']]]
 ];

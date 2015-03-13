@@ -130,6 +130,7 @@ $(document).ready(function(){initNavTree('functions_s.html','');});
 <li>setEnvironment()
 : <a class="el" href="classBenchmark.html#a5db3a4730c85e38aec44c5e20eec545a">Benchmark&lt; grid_t &gt;</a>
 , <a class="el" href="classFM2.html#a5e9ff8fee56c86c84ca6b58b5e2f2caf">FM2&lt; grid_t, heap_t &gt;</a>
+, <a class="el" href="classFSM.html#a2c35be2b1ed35849e12a6a33483df3e0">FSM&lt; grid_t &gt;</a>
 , <a class="el" href="classSolver.html#a7ccc2ab5b4b924c90e385134172cccac">Solver&lt; grid_t &gt;</a>
 </li>
 <li>setHeuristics()
@@ -156,7 +157,7 @@ $(document).ready(function(){initNavTree('functions_s.html','');});
 : <a class="el" href="classBenchmark.html#a9f28f46148d04526f8890c1e09fa3d81">Benchmark&lt; grid_t &gt;</a>
 </li>
 <li>setOccupiedCells()
-: <a class="el" href="classnDGridMap.html#a227f8319aec9391f7199c9564374a816">nDGridMap&lt; T, ndims &gt;</a>
+: <a class="el" href="classnDGridMap.html#ab672e23ad2e72eebe28ea944d242fcd3">nDGridMap&lt; T, ndims &gt;</a>
 </li>
 <li>setPath()
 : <a class="el" href="classBenchmark.html#a2926d367a34f58e34b75c0344a0f4aee">Benchmark&lt; grid_t &gt;</a>
@@ -167,10 +168,14 @@ $(document).ready(function(){initNavTree('functions_s.html','');});
 <li>setSaveLog()
 : <a class="el" href="classBenchmark.html#a7458d937b2aef80af1a191ca40252b4a">Benchmark&lt; grid_t &gt;</a>
 </li>
+<li>setSweep()
+: <a class="el" href="classFSM.html#a36f7673a3b59fc9902bc13e7024a133a">FSM&lt; grid_t &gt;</a>
+</li>
 <li>setup()
 : <a class="el" href="classFM2.html#a51fbf349af8662d24021e7dc6f65a16d">FM2&lt; grid_t, heap_t &gt;</a>
 , <a class="el" href="classFM2Star.html#aa04f4649f46ab72dbd29d41af817d766">FM2Star&lt; grid_t, heap_t &gt;</a>
 , <a class="el" href="classFMM.html#a2e54a7f706ad3d49f1a163f4165553d0">FMM&lt; grid_t, heap_t &gt;</a>
+, <a class="el" href="classFSM.html#af7208fd884fdbdd43c865f6594a316fb">FSM&lt; grid_t &gt;</a>
 , <a class="el" href="classSolver.html#a575df5c73bdd5124da4c674ea079969d">Solver&lt; grid_t &gt;</a>
 </li>
 <li>setup_
@@ -191,6 +196,9 @@ $(document).ready(function(){initNavTree('functions_s.html','');});
 </li>
 <li>solveEikonal()
 : <a class="el" href="classFMM.html#ad779a6e61b65e1c98c2194231b63d606">FMM&lt; grid_t, heap_t &gt;</a>
+</li>
+<li>solveEikonalNDims()
+: <a class="el" href="classFMM.html#a189fe1405216965eb36d6387eb0e4a23">FMM&lt; grid_t, heap_t &gt;</a>
 </li>
 <li>solver_
 : <a class="el" href="classFM2.html#aefa940fdbc6f3cddb27abb70e5e83aad">FM2&lt; grid_t, heap_t &gt;</a>
@@ -214,6 +222,9 @@ $(document).ready(function(){initNavTree('functions_s.html','');});
 <li>state_
 : <a class="el" href="classFMCell.html#a4dbaed73a2313cc23ae313adafdd5226">FMCell</a>
 </li>
+<li>stopPropagation_
+: <a class="el" href="classFSM.html#a272763c50b55704856a981f4a904169a">FSM&lt; grid_t &gt;</a>
+</li>
 <li>str_error()
 : <a class="el" href="classconsole.html#a7a52dc0ed43be6dcbb64a4696dd30c21">console</a>
 </li>
@@ -223,11 +234,8 @@ $(document).ready(function(){initNavTree('functions_s.html','');});
 <li>str_warning()
 : <a class="el" href="classconsole.html#ac8c35db85d2dc95724425cb945bf3fb0">console</a>
 </li>
-<li>sumT
-: <a class="el" href="classFMM.html#a785a562c785bcf5fccc8b39ace70a932">FMM&lt; grid_t, heap_t &gt;</a>
-</li>
-<li>sumTT
-: <a class="el" href="classFMM.html#a03791dfd24e3fa124baab80feb9d3674">FMM&lt; grid_t, heap_t &gt;</a>
+<li>sweeps_
+: <a class="el" href="classFSM.html#ab351294a8b60c76760666e9bbc639fcd">FSM&lt; grid_t &gt;</a>
 </li>
 </ul>
 </div><!-- contents -->
@@ -235,7 +243,7 @@ $(document).ready(function(){initNavTree('functions_s.html','');});
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Tue Mar 3 2015 15:34:37 for n-Dimensional Fast Marching by
+    <li class="footer">Generated on Fri Mar 13 2015 09:04:51 for n-Dimensional Fast Marching by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.6 </li>
   </ul>

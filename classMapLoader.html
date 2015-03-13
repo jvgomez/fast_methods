@@ -112,7 +112,7 @@ Static Public Member Functions</h2></td></tr>
 <tr class="separator:a42fb78ce2ad7b62ce83809bf0f2673ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><dl class="todo"><dt><b><a class="el" href="todo.html#_todo000011">Todo:</a></b></dt><dd><p class="startdd">Include checks which ensure that the grids are adequate for the functions used. </p>
+<div class="textblock"><dl class="todo"><dt><b><a class="el" href="todo.html#_todo000012">Todo:</a></b></dt><dd><p class="startdd">Include checks which ensure that the grids are adequate for the functions used. </p>
 <p class="enddd">When loading an empty grid, cells are not correctly initialized. Although it works properly, values are not set to Inf (that is why we have Nan values in obstacles.) </p>
 </dd></dl>
 <p>It is based on the CImg library, therefore it has to be accessible. Copyright (C) 2014 Javier V. Gomez www.javiervgomez.com</p>
@@ -153,7 +153,7 @@ template&lt;class T , size_t ndims&gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>The image should be monochromatic and only 2D grids should be passed.</p>
+<p>The image should be 256bits grayscale and only 2D grids should be passed.</p>
 <p>It also stores all the false values as initial points for a later compute() function in <a class="el" href="classFM2.html" title="Implements the Fast Marching Square (FM2) planning algorithm. ">FM2</a>.</p>
 <p>The Y dimension flipping is because <a class="el" href="classnDGridMap.html" title="Templated class which represents a n-dimensional grid map. Its cells are assumed to be cubic...">nDGridMap</a> works in X-Y coordinates, not in image indices as CImg.</p>
 <p>IMPORTANT NOTE: no type-checkings are done. T type has to be <a class="el" href="classCell.html">Cell</a> or any class with bool setOccupancy() method.</p>
@@ -203,7 +203,7 @@ template&lt;class T , size_t ndims&gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>The image should be monochromatic!</p>
+<p>Occupancy values should be between 0 and 1.</p>
 <p>In also stores all the false values to as initial points for a later computeFM function in <a class="el" href="classFM2.html" title="Implements the Fast Marching Square (FM2) planning algorithm. ">FM2</a>.</p>
 <p>Should be used only in 2D grids.</p>
 <p>The Y dimension flipping is because <a class="el" href="classnDGridMap.html" title="Templated class which represents a n-dimensional grid map. Its cells are assumed to be cubic...">nDGridMap</a> works in X-Y coordinates, not in image indices as CImg.</p>
@@ -230,7 +230,7 @@ template&lt;class T , size_t ndims&gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="classMapLoader.html">MapLoader</a></li>
-    <li class="footer">Generated on Tue Mar 3 2015 15:34:37 for n-Dimensional Fast Marching by
+    <li class="footer">Generated on Fri Mar 13 2015 09:04:51 for n-Dimensional Fast Marching by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.6 </li>
   </ul>

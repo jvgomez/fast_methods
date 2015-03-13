@@ -11,6 +11,7 @@ var classSolver =
     [ "getGrid", "classSolver.html#ae9a8112571d970d975c896e7367d5f83", null ],
     [ "getName", "classSolver.html#a720c179ac61c335739de5ceeab06864e", null ],
     [ "getTime", "classSolver.html#a43d3609f3e1f03158006d8207a860415", null ],
+    [ "printRunInfo", "classSolver.html#aa6c7a7b3357dcced445506e6d92644d2", null ],
     [ "reset", "classSolver.html#afe071d33aed4ae0082d0293a9ac3f968", null ],
     [ "sanityChecks", "classSolver.html#a6b537cbde3277605dc55b20a26e779db", null ],
     [ "setEnvironment", "classSolver.html#a7ccc2ab5b4b924c90e385134172cccac", null ],

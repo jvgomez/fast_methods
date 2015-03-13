@@ -31,6 +31,7 @@ var hierarchy =
       ] ],
       [ "FMM< grid_t >", "classFMM.html", [
         [ "FIM< grid_t >", "classFIM.html", null ],
+        [ "FSM< grid_t >", "classFSM.html", null ],
         [ "GMM< grid_t >", "classGMM.html", null ],
         [ "UFMM< grid_t, cell_t >", "classUFMM.html", null ]
       ] ]
