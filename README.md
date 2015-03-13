@@ -25,7 +25,7 @@ N-Dimensional Fast Marching Method V1.0
 - Untidy Fast Marching Method.
 - Fast Iterative Method (FIM).
 
-** Other popular solvers:**
+**Other popular solvers:**
 - Fast Sweeping Method (FSM).
 
 **ROS**
