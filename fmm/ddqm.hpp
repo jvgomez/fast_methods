@@ -30,7 +30,11 @@
 #define DDQM_HPP_
 
 #include "eikonalsolver.hpp"
+#include "fmdata/fmcell.h"
+
 #include "../utils/utils.h"
+
+#include <queue>
 
 /// \todo implement a more robust goal point stopping criterion.
 template < class grid_t > class DDQM : public EikonalSolver<grid_t> {
@@ -42,13 +46,13 @@ template < class grid_t > class DDQM : public EikonalSolver<grid_t> {
 
         DDQM(const char * name = "DDQM") : EikonalSolver<grid_t>(name) {}
 
-        /** \brief Calls EikonalSolver::setEnvironment() and --------. */
+        /** \brief Calls EikonalSolver::setEnvironment() and sets the initial threshold. */
         virtual void setEnvironment
         (grid_t * g) {
             EikonalSolver<grid_t>::setEnvironment(g);
-            // FMState::FROZEN - locked and FMState::OPEN - unlocked.
-            /*for(size_t i = 0; i < grid_->size(); ++i)
-                grid_->getCell(i).setState(FMState::FROZEN);*/
+            double avgSpeed = 2*grid_->getLeafSize(); /// \todo compute it properly.
+            threshold_ =1.5 / avgSpeed;
+            thStep_ = 2;
         }
 
         /** \brief Actual method that implements DDQM. */
@@ -57,13 +61,69 @@ template < class grid_t > class DDQM : public EikonalSolver<grid_t> {
             if (!setup_)
                 setup();
 
+            // FMState::FROZEN - locked and FMState::OPEN - unlocked.
+            // The time this takes is negligible and if done in setup or
+            // setEnvironment it can affect other planners run in the same
+            // grid.
+            for(size_t i = 0; i < grid_->size(); ++i)
+                grid_->getCell(i).setState(FMState::FROZEN);
+
             // Initialization
+            unsigned int n_neighs = 0;
             for (unsigned int i: init_points_) {
                 grid_->getCell(i).setArrivalTime(0);
-                unsigned int n_neighs = grid_->getNeighbors(i, neighbors_);
-                for (unsigned int j = 0; j < n_neighs; ++j)
+                n_neighs = grid_->getNeighbors(i, neighbors_);
+                for (unsigned int j = 0; j < n_neighs; ++j) {
                     grid_->getCell(neighbors_[j]).setState(FMState::OPEN);
+                    queues_[0].push(j);
+                }
             }
+
+            // percentages_[0] is in lower queue. [1] is in total.
+            std::array<size_t, 2> percents = {0,0};
+
+            // lq is the index of the lower queue (to avoid swapping and copying).
+            unsigned int lq = 0;
+            while (!queues_[0].empty() || !queues_[1].empty()) {
+                while (!queues_[lq].empty()) {
+                    unsigned int idx = queues_[lq].front();
+                    queues_[lq].pop();
+                    double newT = solveEikonal(idx);
+                    if (utils::isTimeBetterThan(newT, grid_->getCell(idx).getArrivalTime())) {
+                        grid_->getCell(idx).setArrivalTime(newT);
+                        n_neighs = grid_->getNeighbors(idx, neighbors_);
+                        for (unsigned int j = 0; j < n_neighs; ++j)
+                            if (grid_->getCell(j).getState() == FMState::FROZEN) // In the paper they say unlocked here, but makes no sense!!
+                                if(utils::isTimeBetterThan(newT, grid_->getCell(j).getArrivalTime())) {
+                                    grid_->getCell(j).setState(FMState::OPEN);
+                                    percents[1] += 1;
+                                    if (utils::isTimeBetterThan(newT, threshold_)) {
+                                        queues_[lq].push(j); // Insert in lower queue.
+                                        percents[0] += 1;
+                                    }
+                                    else
+                                        queues_[(lq+1)%2].push(j); // Insert in higher queue.
+                                }
+                    } // If time is improved.
+                    grid_->getCell(idx).setState(FMState::FROZEN);
+                } // While lower queue is not empty.
+
+                lq = (lq+1)%2;
+                increaseThreshold(percents);
+            }
+        }
+
+        void increaseThreshold
+        (std::array<size_t, 2> & percents) {
+            double minPercent = 0.65;
+            double maxPercent = 0.7;
+            double currentPercent = percents[0]/percents[1];
+            if (currentPercent < minPercent)
+                thStep_ *= 1.5;
+            if (currentPercent > maxPercent)
+                thStep_ /= 2.0;
+            threshold_ += thStep_;
+            percents = {0,0};
         }
 
         virtual void reset
@@ -90,6 +150,12 @@ template < class grid_t > class DDQM : public EikonalSolver<grid_t> {
 
         /** \brief Auxiliar array which stores the neighbor of each iteration of the computeFM() function. */
         std::array <unsigned int, 2*grid_t::getNDims()> neighbors_;
+
+        std::array<std::queue<unsigned int>, 2> queues_;
+
+        double threshold_;
+        double thStep_;
+
 };
 
 #endif /* DDQM_HPP_*/
