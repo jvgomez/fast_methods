@@ -32,6 +32,7 @@
 #include "../fmm/fim.hpp"
 #include "../fmm/gmm.hpp"
 #include "../fmm/ufmm.hpp"
+#include "../fmm/fsm.hpp"
 
 /// \todo the getter functions do not check if the types are admissible.
 /// \todo does not have support for multiple starts or goals.
@@ -56,7 +57,7 @@ class BenchmarkCFG {
         {
             static const std::vector<std::string> knownSolvers = {
                 "fmm", "fmmstar", "fmmfib", "fmmfibstar", "sfmm", "sfmmstar",
-                "gmm", "fim", "ufmm"
+                "gmm", "fim", "ufmm", "fsm" // Add solver here.
             };
 
             std::fstream cfg(filename);
@@ -156,6 +157,10 @@ class BenchmarkCFG {
                         solver = new FIM<grid_t>();
                     else if (name == "ufmm")
                         solver = new UFMM<grid_t>();
+                    else if (name == "fsm")
+                        solver = new FSM<grid_t>();
+                    // Add solver here.
+
                     else
                         continue;
                 }
@@ -224,6 +229,15 @@ class BenchmarkCFG {
                         else if (p.size() == 3)
                             solver = new UFMM<grid_t>(p[0].c_str(), boost::lexical_cast<unsigned>(p[1]), boost::lexical_cast<double>(p[2]));
                     }
+                    // FSM
+                    else if (name == "fsm") {
+                        if (p.size() == 1)
+                            solver = new FSM<grid_t>(p[0].c_str());
+                        else if (p.size() == 2)
+                            solver = new FSM<grid_t>(p[0].c_str(), boost::lexical_cast<unsigned>(p[1]));
+                    }
+                    // Add solver here.
+
                     else
                         continue;
                 }

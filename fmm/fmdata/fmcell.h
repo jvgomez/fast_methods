@@ -64,10 +64,10 @@ class FMCell : public Cell{
     protected:
         /** \brief State of the cell. */
         FMState state_;
-        
+
         /** \brief Used when sorted with FMUntidyQueue. */
         int bucket_;
-        
+
         /** \brief Heuristic value. */
         double hValue_;
 };

@@ -58,13 +58,7 @@
 #include "../ndgridmap/ndgridmap.hpp"
 #include "../console/console.h"
 
-/** \brief An user-implements abs for integer values. */
-unsigned int absUI
-(int a) {
-    return (a>0) ? (a) : (-a);
-}
-
-/** \brief HEuristic strategy to be used. TIME = DISTANCE/local velocity. */
+/** \brief Heuristic strategy to be used. TIME = DISTANCE/local velocity. */
 enum HeurStrategy {NOHEUR = 0, TIME, DISTANCE};
 
 template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FMM : public Solver<grid_t> {
@@ -86,49 +80,11 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FMM : public
             Solver<grid_t>::setup();
             narrow_band_.setMaxSize(grid_->size());
             setHeuristics(heurStrategy_); // Redundant, but safe.
-        }
 
-        /** \brief Solves nD Eikonal equation for cell idx. If heuristics are activated, it will add
-            the estimated travel time to goal with current velocity. */
-        virtual double solveEikonal
-        (const int & idx) {
-            unsigned int a = grid_t::getNDims(); // a parameter of the Eikonal equation.
-
-            double updatedT;
-            sumT = 0;
-            sumTT = 0;
-
-            for (unsigned int dim = 0; dim < grid_t::getNDims(); ++dim) {
-                double minTInDim = grid_->getMinValueInDim(idx, dim);
-                if (!isinf(minTInDim)) {
-                    Tvalues[dim] = minTInDim;
-                    sumT += Tvalues[dim];
-                    TTvalues[dim] = Tvalues[dim]*Tvalues[dim];
-                    sumTT += TTvalues[dim];
-                }
-                else {
-                    Tvalues[dim] = 0;
-                    TTvalues[dim] = 0;
-                    a -=1 ;
-                }
+            if (int(goal_idx_) == -1 && heurStrategy_ != NOHEUR) {
+                console::warning("FMM: Heuristics set with no goal point. Deactivating heuristics.");
+                heurStrategy_ = NOHEUR;
             }
-
-            double b = -2*sumT;
-            double c = sumTT - grid_->getLeafSize() * grid_->getLeafSize()/(grid_->getCell(idx).getVelocity()*grid_->getCell(idx).getVelocity());
-            double quad_term = b*b - 4*a*c;
-            if (quad_term < 0) {
-                double minT = *(std::min_element(Tvalues.begin(), Tvalues.end()));
-                updatedT = grid_->getLeafSize() * grid_->getLeafSize()/(grid_->getCell(idx).getVelocity()*grid_->getCell(idx).getVelocity()) + minT;
-            }
-            else
-                updatedT = (-b + sqrt(quad_term))/(2*a);
-
-            if (heurStrategy_ == TIME)
-                grid_->getCell(idx).setHeuristicTime( getPrecomputedDistance(idx)/grid_->getCell(idx).getVelocity() );
-            else if (heurStrategy_ == DISTANCE)
-                grid_->getCell(idx).setHeuristicTime( getPrecomputedDistance(idx) );
-
-            return updatedT;
         }
 
         /** \brief Actual method that implements FMM. */
@@ -178,6 +134,45 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FMM : public
                 } // For each neighbor.
             } // while narrow band not empty
         }
+
+        /** \brief Solves nD Eikonal equation for cell idx. If heuristics are activated, it will add
+            the estimated travel time to goal with current velocity. */
+        virtual double solveEikonal
+        (const int & idx) {
+            unsigned int a = grid_t::getNDims(); // a parameter of the Eikonal equation.
+            Tvalues_.clear();
+
+            for (unsigned int dim = 0; dim < grid_t::getNDims(); ++dim) {
+                double minTInDim = grid_->getMinValueInDim(idx, dim);
+                if (!isinf(minTInDim) && minTInDim < grid_->getCell(idx).getArrivalTime())
+                    Tvalues_.push_back(minTInDim);
+                else
+                    a -=1;
+            }
+
+            if (a == 0)
+                return std::numeric_limits<double>::infinity();
+
+            // Sort the neighbor values to make easy the following code.
+            /// \todo given that this sorts a small vector, a n^2 methods could be better. Test it.
+            std::sort(Tvalues_.begin(), Tvalues_.end());
+            double updatedT;
+            for (unsigned i = 1; i <= a; ++i) {
+                updatedT = solveEikonalNDims(idx, i);
+                // If no more dimensions or increasing one dimension will not improve time.
+                if (i == a || (updatedT - Tvalues_[i]) < utils::COMP_MARGIN)
+                    break;
+            }
+
+            // Include heuristics if necessary.
+            if (heurStrategy_ == TIME)
+                grid_->getCell(idx).setHeuristicTime( getPrecomputedDistance(idx)/grid_->getCell(idx).getVelocity() );
+            else if (heurStrategy_ == DISTANCE)
+                grid_->getCell(idx).setHeuristicTime( getPrecomputedDistance(idx) );
+
+            return updatedT;
+        }
+
 
         /** \brief Set heuristics flag. True is activated. It will precompute distances
             if not done already. */
@@ -238,7 +233,7 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FMM : public
             grid_->idx2coord(idx, position);
 
             for (unsigned int i = 0; i < grid_t::getNDims(); ++i)
-                distance[i] = absUI(position[i] - heur_coord_[i]);
+                distance[i] = utils::absUI(position[i] - heur_coord_[i]);
 
             unsigned int idx_dist;
             grid_->coord2idx(distance, idx_dist);
@@ -246,30 +241,57 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FMM : public
             return distances_[idx_dist];
         }
 
-    /// \todo These accessing levels may need to be modified (and other solvers).
+        virtual void printRunInfo
+        () const {
+            console::info("Fast Marching Method");
+            std::cout << '\t' << name_ << '\n'
+                      << '\t' << "Heuristic type: " << heurStrategy_ << '\n'
+                      << '\t' << "Elapsed time: " << time_ << " ms\n";
+        }
+
+
+    /// \note These accessing levels may need to be modified (and other solvers).
     protected:
+        /** \brief Solves the Eikonal equation assuming that Tvalues_
+            is sorted. */
+        double solveEikonalNDims
+        (unsigned int idx, unsigned int dim) {
+            // Solve for 1 dimension.
+            if (dim == 1)
+                return Tvalues_[0] + grid_->getLeafSize() / grid_->getCell(idx).getVelocity();
+
+            // Solve for any number > 1 of dimensions.
+            double sumT = 0;
+            double sumTT = 0;
+            for (unsigned i = 0; i < dim; ++i) {
+                sumT += Tvalues_[i];
+                sumTT += Tvalues_[i]*Tvalues_[i];
+            }
+            double a = dim;
+            double b = -2*sumT;
+            double c = sumTT - grid_->getLeafSize() * grid_->getLeafSize() / (grid_->getCell(idx).getVelocity()*grid_->getCell(idx).getVelocity());
+            double quad_term = b*b - 4*a*c;
+
+            if (quad_term < 0)
+                return std::numeric_limits<double>::infinity();
+            else
+                return (-b + sqrt(quad_term))/(2*a);
+        }
+
         using Solver<grid_t>::grid_;
         using Solver<grid_t>::init_points_;
         using Solver<grid_t>::goal_idx_;
         using Solver<grid_t>::setup_;
         using Solver<grid_t>::name_;
+        using Solver<grid_t>::time_;
 
         /** \brief Auxiliar array which stores the neighbor of each iteration of the computeFM() function. */
         std::array <unsigned int, 2*grid_t::getNDims()> neighbors;
 
+        /** \brief Auxiliar vector with values T0,T1...Tn-1 variables in the Discretized Eikonal Equation. */
+        std::vector<double>          Tvalues_;
+
     private:
-        /** \brief Auxiliar value wich computes T1+T2+T3... Useful for generalizing the Eikonal solver. */
-        double                                          sumT;
-
-        /** \brief Auxiliar value wich computes T1^2+T2^2+T3^2... Useful for generalizing the Eikonal solver. */
-        double                                          sumTT;
-
-        /** \brief Auxiliar array with values T0,T1...Tn-1 variables in the Discretized Eikonal Equation. */
-        std::array<double, grid_t::getNDims()>          Tvalues;
-
-        /** \brief Auxiliar array with values T0^2,T1^2...Tn-1^2 variables in the Discretized Eikonal Equation. */
-        std::array<double, grid_t::getNDims()>          TTvalues;
-
         /** \brief Instance of the heap used. */
         heap_t                                          narrow_band_;
 

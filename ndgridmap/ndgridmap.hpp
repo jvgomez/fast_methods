@@ -36,6 +36,8 @@
 #include <array>
 #include <sstream>
 
+#include <utility>
+
 #include "../console/console.h"
 
 /// \todo Neighbors precomputation could speed things up.
@@ -74,9 +76,8 @@ template <class T, size_t ndims> class nDGridMap {
         void resize
         (const std::array<unsigned int, ndims> & dimsize) {
             dimsize_ = dimsize;
-            ncells_= 1;
-
             // Computing the total number of cells and the auxiliar array d_.
+            ncells_= 1;
             for (unsigned int i = 0; i < ndims; ++i) {
                 ncells_ *= dimsize_[i];
                 d_[i] = ncells_;
@@ -323,6 +324,12 @@ template <class T, size_t ndims> class nDGridMap {
             occupied_ = obs;
         }
 
+        /** \brief Sets (by move semantics) the cells which are occupied. Usually called by grid loaders. */
+        inline void setOccupiedCells
+        (std::vector<unsigned int>&& obs) {
+            occupied_ = std::move(obs);
+        }
+
         /** \brief Returns the indices of the occupied cells of the grid. */
         inline void getOccupiedCells
         (std::vector<unsigned int> & obs) const {
@@ -334,7 +341,7 @@ template <class T, size_t ndims> class nDGridMap {
 
     private:
         /** \brief Main container for the class. */
-        std::vector<T> cells_; 
+        std::vector<T> cells_;
         
         /** \brief Size of each dimension. */
         std::array<unsigned int, ndims> dimsize_;
@@ -349,14 +356,17 @@ template <class T, size_t ndims> class nDGridMap {
         bool clean_;
 
         // Auxiliar vectors to speed things up.
-        /** \brief Auxiliar array to speed up neighbor and indexing generalization: stores parcial multiplications of dimensions sizes. d_[0] = dimsize_[0];
-            d_[1] = dimsize_[0]*dimsize_[1]; etc.*/
+        /** \brief Auxiliar array to speed up neighbor and indexing generalization:
+            stores parcial multiplications of dimensions sizes. d_[0] = dimsize_[0];
+            d_[1] = dimsize_[0]*dimsize_[1]; etc. */
         std::array<unsigned int, ndims> d_;
                                                                                                              
-        /** \brief  Auxiliar array to speed up neighbor and indexing generalization: for getMinValueInDim() function.*/
+        /** \brief  Auxiliar array to speed up neighbor and indexing generalization:
+            for getMinValueInDim() function. */
         std::array<unsigned int, 2> n_;
         
-        /** \brief Internal variable that counts the number of neighbors found in every iteration. Modified by getNeighbours(), getNeighborsInDim() and getMinValueInDim(). functions.*/
+        /** \brief Internal variable that counts the number of neighbors found in
+            every iteration. Modified by getNeighbours(), getNeighborsInDim() and getMinValueInDim() functions. */
         unsigned int n_neighs;
         
         /** \brief Caches the occupied cells (obstacles). */

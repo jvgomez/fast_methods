@@ -27,6 +27,9 @@
 #include <string>
 #include <limits>
 
+#include "../utils/utils.h"
+
+
 /// \todo No checks are done (out of bounds, etc) to improve efficienty. Overload functions to add optional input checking.
 class Cell {
 
@@ -52,7 +55,7 @@ class Cell {
         virtual inline unsigned int getIndex() const       {return index_;}
 
         virtual inline bool isOccupied() const {
-            if (occupancy_ < std::numeric_limits<double>::epsilon() * 1e3)
+            if (occupancy_ < utils::COMP_MARGIN)
                 return true;
             return false;
         }

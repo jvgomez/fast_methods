@@ -1,5 +1,5 @@
 cmake_minimum_required (VERSION 2.6) 
-project (examples) 
+project (fmmbenchmark) 
 
 # Set a default build type for single-configuration
 # CMake generators if no build type is set.
@@ -22,9 +22,9 @@ include_directories (${EXAMPLES_SOURCE_DIR}/../io)
 # Third party internal includes
 include_directories (${EXAMPLES_SOURCE_DIR}/../thirdparty) 
 
-add_executable (fmm_benchmark fmm_benchmark.cpp
+add_executable (fmmbenchmark fmm_benchmark.cpp
                         ../console/console.cpp
                         ../ndgridmap/cell.cpp
                         ../fmm/fmdata/fmcell.cpp
                         )  
-target_link_libraries ( fmm_benchmark boost_system boost_filesystem boost_program_options X11 pthread)
+target_link_libraries ( fmmbenchmark boost_system boost_filesystem boost_program_options pthread X11)
