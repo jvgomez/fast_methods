@@ -232,9 +232,7 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FMM : public
         using EikonalSolver<grid_t>::name_;
         using EikonalSolver<grid_t>::time_;
         using EikonalSolver<grid_t>::solveEikonal;
-
-        /** \brief Auxiliar array which stores the neighbor of each iteration of the computeFM() function. */
-        std::array <unsigned int, 2*grid_t::getNDims()> neighbors_;
+        using EikonalSolver<grid_t>::neighbors_;
 
     private:
         /** \brief Instance of the heap used. */

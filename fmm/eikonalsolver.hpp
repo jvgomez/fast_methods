@@ -104,6 +104,9 @@ class EikonalSolver : public Solver<grid_t>{
         /** \brief Auxiliar vector with values T0,T1...Tn-1 variables in the Discretized Eikonal Equation. */
         std::vector<double>          Tvalues_;
 
+        /** \brief Auxiliar array which stores the neighbor of each iteration of the computeFM() function. */
+        std::array <unsigned int, 2*grid_t::getNDims()> neighbors_;
+
         using Solver<grid_t>::grid_;
 };
 

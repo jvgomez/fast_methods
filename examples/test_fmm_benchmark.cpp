@@ -17,6 +17,7 @@
 #include "../fmm/ufmm.hpp"
 #include "../fmm/fsm.hpp"
 #include "../fmm/lsm.hpp"
+#include "../fmm/ddqm.hpp"
 
 #include "../benchmark/benchmark.hpp"
 
@@ -71,6 +72,7 @@ int main()
     benchmark.addSolver(new UFMM<FMGrid2D>);
     benchmark.addSolver(new FSM<FMGrid2D>);
     benchmark.addSolver(new LSM<FMGrid2D>);
+    benchmark.addSolver(new DDQM<FMGrid2D>);
 
     // Run benchmark
     benchmark.run();

@@ -28,13 +28,13 @@
 #ifndef GMM_HPP_
 #define GMM_HPP_
 
-#include "fmm.hpp"
+#include "eikonalsolver.hpp"
 
-template < class grid_t > class GMM : public FMM <grid_t> {
+template < class grid_t > class GMM : public EikonalSolver <grid_t> {
 
     public:
-        GMM(double dt = 1) : FMM<grid_t>("GMM"), deltau_(dt) {}
-        GMM(const char * name, double dt = 1) : FMM<grid_t>(name), deltau_(dt) {}
+        GMM(double dt = 1) : EikonalSolver<grid_t>("GMM"), deltau_(dt) {}
+        GMM(const char * name, double dt = 1) : EikonalSolver<grid_t>(name), deltau_(dt) {}
 
         virtual ~GMM() { clear(); }
 
@@ -56,7 +56,7 @@ template < class grid_t > class GMM : public FMM <grid_t> {
                 n_neighs = grid_->getNeighbors(i, neighbors_);
                 for (unsigned int s = 0; s < n_neighs; ++s){  // For each neighbor
                     j = neighbors_[s];
-                    if ((grid_->getCell(j).getState() == FMState::FROZEN) || grid_->getCell(j).isOccupied() || (grid_->getCell(j).getVelocity() == 0)) // If Frozen,obstacle or velocity = 0
+                    if ((grid_->getCell(j).getState() == FMState::FROZEN) || grid_->getCell(j).isOccupied())
                         continue;
                     else {
                         double new_arrival_time = solveEikonal(j);
@@ -139,19 +139,19 @@ template < class grid_t > class GMM : public FMM <grid_t> {
 
         virtual void reset
         () {
-            FMM<grid_t>::reset();
+            EikonalSolver<grid_t>::reset();
             gamma_.clear();
             tm_ = 0;
         }
 
     protected:
-        using FMM<grid_t>::grid_;
-        using FMM<grid_t>::neighbors_;
-        using FMM<grid_t>::solveEikonal;
-        using FMM<grid_t>::init_points_;
-        using FMM<grid_t>::goal_idx_;
-        using FMM<grid_t>::setup;
-        using FMM<grid_t>::setup_;
+        using EikonalSolver<grid_t>::grid_;
+        using EikonalSolver<grid_t>::solveEikonal;
+        using EikonalSolver<grid_t>::init_points_;
+        using EikonalSolver<grid_t>::goal_idx_;
+        using EikonalSolver<grid_t>::setup;
+        using EikonalSolver<grid_t>::setup_;
+        using EikonalSolver<grid_t>::neighbors_;
 
     private:
         /** \brief Global bound that determines the group of cells of gamma that will be updated in each step. */

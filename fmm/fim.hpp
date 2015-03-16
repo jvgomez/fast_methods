@@ -28,13 +28,13 @@
 #ifndef FIM_HPP_
 #define FIM_HPP_
 
-#include "fmm.hpp"
+#include "eikonalsolver.hpp"
 
-template < class grid_t > class FIM : public FMM <grid_t> {
+template < class grid_t > class FIM : public EikonalSolver<grid_t> {
 
     public:
-        FIM(double error = 0) : FMM<grid_t>("FIM"), E_(error) {}
-        FIM(const char * name, double error = 0) : FMM<grid_t>(name), E_(error) {}
+        FIM(double error = 0) : EikonalSolver<grid_t>("FIM"), E_(error) {}
+        FIM(const char * name, double error = 0) : EikonalSolver<grid_t>(name), E_(error) {}
 
         virtual ~FIM() { clear(); }
 
@@ -99,18 +99,18 @@ template < class grid_t > class FIM : public FMM <grid_t> {
 
         virtual void reset
         () {
-            FMM<grid_t>::reset();
+            EikonalSolver<grid_t>::reset();
             active_list_.clear();
         }
 
     protected:
-        using FMM<grid_t>::grid_;
-        using FMM<grid_t>::neighbors_;
-        using FMM<grid_t>::solveEikonal;
-        using FMM<grid_t>::init_points_;
-        using FMM<grid_t>::goal_idx_;
-        using FMM<grid_t>::setup;
-        using FMM<grid_t>::setup_;
+        using EikonalSolver<grid_t>::grid_;
+        using EikonalSolver<grid_t>::solveEikonal;
+        using EikonalSolver<grid_t>::init_points_;
+        using EikonalSolver<grid_t>::goal_idx_;
+        using EikonalSolver<grid_t>::setup;
+        using EikonalSolver<grid_t>::setup_;
+        using EikonalSolver<grid_t>::neighbors_;
 
     private:
         /** \brief List wich stores the narrow band of each iteration. */

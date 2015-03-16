@@ -78,6 +78,8 @@ template < class grid_t > class DDQM : public EikonalSolver<grid_t> {
                 grid_->getCell(i).setArrivalTime(0);
                 n_neighs = grid_->getNeighbors(i, neighbors_);
                 for (unsigned int j = 0; j < n_neighs; ++j) {
+                    if (grid_->getCell(neighbors_[j]).isOccupied())
+                        continue;
                     grid_->getCell(neighbors_[j]).setState(FMState::OPEN);
                     queues_[0].push(neighbors_[j]);
                 }
@@ -90,10 +92,12 @@ template < class grid_t > class DDQM : public EikonalSolver<grid_t> {
             // counts[0] tracks insertions in lower queue. counts[1] is total insertions.
             std::array<size_t, 2> counts = {0,0};
 
-            while (!queues_[0].empty() || !queues_[1].empty()) {
+            while (!queues_[0].empty() || !queues_[1].empty() && !stopPropagation) {
                 while (!queues_[lq].empty() && !stopPropagation) {
                     unsigned int idx = queues_[lq].front();
                     queues_[lq].pop();
+                    if (grid_->getCell(idx).isOccupied())
+                        continue;
                     double newT = solveEikonal(idx);
                     if (utils::isTimeBetterThan(newT, grid_->getCell(idx).getArrivalTime())) {
                         grid_->getCell(idx).setArrivalTime(newT);
@@ -125,6 +129,7 @@ template < class grid_t > class DDQM : public EikonalSolver<grid_t> {
             }
         }
 
+        /** \brief Dynamically increases the threshold according to the reference paper. */
         void increaseThreshold
         (std::array<size_t, 2> & counts) {
             double minPercent = 0.65;
@@ -145,6 +150,14 @@ template < class grid_t > class DDQM : public EikonalSolver<grid_t> {
         virtual void reset
         () {
             EikonalSolver<grid_t>::reset();
+
+            while(!queues_[0].empty())
+                queues_[0].pop();
+            while(!queues_[1].empty())
+                queues_[1].pop();
+            double avgSpeed = 1.0/(grid_->getAvgSpeed()*grid_->getLeafSize());
+            thStep_ = 1.5 / avgSpeed;
+            threshold_ = thStep_;
         }
 
         virtual void printRunInfo
@@ -163,9 +176,7 @@ template < class grid_t > class DDQM : public EikonalSolver<grid_t> {
         using EikonalSolver<grid_t>::name_;
         using EikonalSolver<grid_t>::time_;
         using EikonalSolver<grid_t>::solveEikonal;
-
-        /** \brief Auxiliar array which stores the neighbor of each iteration of the computeFM() function. */
-        std::array <unsigned int, 2*grid_t::getNDims()> neighbors_;
+        using EikonalSolver<grid_t>::neighbors_;
 
         /** \brief Queues which contain the lower and higher cells to be expanded in further iterations. */
         std::array<std::queue<unsigned int>, 2> queues_;

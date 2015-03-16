@@ -28,18 +28,18 @@
 #ifndef UFMM_HPP_
 #define UFMM_HPP_
 
-#include "fmm.hpp"
+#include "eikonalsolver.hpp"
 #include "fmdata/fmuntidyqueue.hpp"
 
-template <class grid_t, class cell_t = FMCell> class UFMM : public FMM <grid_t> {
+template <class grid_t, class cell_t = FMCell> class UFMM : public EikonalSolver<grid_t> {
 
     public:
         UFMM
-        (unsigned s = 1000, double inc = 2) :  FMM<grid_t>("UFMM"), heap_s_(s), heap_inc_(inc) {
+        (unsigned s = 1000, double inc = 2) : EikonalSolver<grid_t>("UFMM"), heap_s_(s), heap_inc_(inc) {
             narrow_band_ = new FMUntidyQueue<cell_t> (heap_s_, heap_inc_);
         }
         UFMM
-        (const char * name, unsigned s = 1000, double inc = 2) : FMM<grid_t>(name), heap_s_(s), heap_inc_(inc) {
+        (const char * name, unsigned s = 1000, double inc = 2) : EikonalSolver<grid_t>(name), heap_s_(s), heap_inc_(inc) {
             narrow_band_ = new FMUntidyQueue<cell_t> (heap_s_, heap_inc_);
         }
 
@@ -68,7 +68,7 @@ template <class grid_t, class cell_t = FMCell> class UFMM : public FMM <grid_t> 
                 grid_->getCell(idxMin).setState(FMState::FROZEN);
                 for (unsigned int s = 0; s < n_neighs; ++s) { // For each neighbor
                     j = neighbors_[s];
-                    if ( (grid_->getCell(j).getState() == FMState::FROZEN) || grid_->getCell(j).isOccupied()|| (grid_->getCell(j).getVelocity() == 0) ) // If Frozen,obstacle or velocity = 0
+                    if ( (grid_->getCell(j).getState() == FMState::FROZEN) || grid_->getCell(j).isOccupied())
                         continue;
                     else {
                         double new_arrival_time = solveEikonal(j);
@@ -97,18 +97,18 @@ template <class grid_t, class cell_t = FMCell> class UFMM : public FMM <grid_t> 
 
         virtual void reset
         () {
-            FMM<grid_t>::reset();
+            EikonalSolver<grid_t>::reset();
             narrow_band_->clear();
         }
 
     protected:
-        using FMM<grid_t>::grid_;
-        using FMM<grid_t>::neighbors_;
-        using FMM<grid_t>::solveEikonal;
-        using FMM<grid_t>::init_points_;
-        using FMM<grid_t>::goal_idx_;
-        using FMM<grid_t>::setup;
-        using FMM<grid_t>::setup_;
+        using EikonalSolver<grid_t>::grid_;
+        using EikonalSolver<grid_t>::solveEikonal;
+        using EikonalSolver<grid_t>::init_points_;
+        using EikonalSolver<grid_t>::goal_idx_;
+        using EikonalSolver<grid_t>::setup;
+        using EikonalSolver<grid_t>::setup_;
+        using EikonalSolver<grid_t>::neighbors_;
 
     private:
         /** \brief Number of buckets in the heap. */

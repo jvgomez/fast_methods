@@ -17,6 +17,7 @@
 #include "../fmm/ufmm.hpp"
 #include "../fmm/fsm.hpp"
 #include "../fmm/lsm.hpp"
+#include "../fmm/ddqm.hpp"
 
 #include "../io/gridplotter.hpp"
 
@@ -51,6 +52,7 @@ int main()
     solvers.push_back(new UFMM<FMGrid2D>);
     solvers.push_back(new FSM<FMGrid2D>);
     solvers.push_back(new LSM<FMGrid2D>);
+    solvers.push_back(new DDQM<FMGrid2D>);
     // GMM, FIM and UFMM have some parameters, can be set by overloaded constructors.
 
     // Executing every solver individually over the same grid.
@@ -69,7 +71,7 @@ int main()
     // Showing different type conversions methodologies. Solver names could be compared
     // but it is less reliable since they are user-defined.
     // Direct cast
-    /*FMM<FMGrid2D>* FMMtest = dynamic_cast< FMM<FMGrid2D>* >(solvers[6]);
+    FMM<FMGrid2D>* FMMtest = dynamic_cast< FMM<FMGrid2D>* >(solvers[6]);
     if (FMMtest)
         std::cout << "Solver type SFMM" <<'\n';
     else
@@ -85,7 +87,7 @@ int main()
     // solvers[6]->setHeuristics(true) would not compile since there is not a Solver::setHeuristics
     solvers[6]->as< FMM<FMGrid2D, FMPriorityQueue<FMCell>> >()->setHeuristics(HeurStrategy::DISTANCE);
     std::cout << solvers[6]->as< FMM<FMGrid2D, FMPriorityQueue<FMCell>> >()->getHeuristics() << '\n';
-*/
+
     // Preventing memory leaks.
     for (auto & s : solvers)
         delete s;

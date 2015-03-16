@@ -122,7 +122,8 @@ template < class grid_t > class FSM : public EikonalSolver<grid_t> {
             }
             else {
                 for(int i = inits_[0]; i != ends_[0]; i += incs_[0])
-                    solveForIdx(it+i);
+                    if (!grid_->getCell(it+i).isOccupied())
+                        solveForIdx(it+i);
             }
         }
 
