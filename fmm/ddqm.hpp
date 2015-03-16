@@ -36,7 +36,7 @@
 
 #include <queue>
 
-/// \todo implement a more robust goal point stopping criterion.
+/// \todo implement a goal point stopping criterion.
 template < class grid_t > class DDQM : public EikonalSolver<grid_t> {
 
     public:
@@ -50,9 +50,10 @@ template < class grid_t > class DDQM : public EikonalSolver<grid_t> {
         virtual void setEnvironment
         (grid_t * g) {
             EikonalSolver<grid_t>::setEnvironment(g);
-            double avgSpeed = 2*grid_->getLeafSize(); /// \todo compute it properly.
-            threshold_ =1.5 / avgSpeed;
-            thStep_ = 2;
+            //double avgSpeed = 1.0/(0.5*grid_->getLeafSize()); /// \todo compute it properly: 0.5 is F avg.
+            double avgSpeed = 1.0/(0.5*grid_->getLeafSize());
+            thStep_ = 1.5 / avgSpeed;
+            threshold_ = thStep_;
         }
 
         /** \brief Actual method that implements DDQM. */
@@ -75,55 +76,75 @@ template < class grid_t > class DDQM : public EikonalSolver<grid_t> {
                 n_neighs = grid_->getNeighbors(i, neighbors_);
                 for (unsigned int j = 0; j < n_neighs; ++j) {
                     grid_->getCell(neighbors_[j]).setState(FMState::OPEN);
-                    queues_[0].push(j);
+                    queues_[0].push(neighbors_[j]);
                 }
             }
 
             // percentages_[0] is in lower queue. [1] is in total.
-            std::array<size_t, 2> percents = {0,0};
+            std::array<size_t, 2> counts = {0,0};
 
             // lq is the index of the lower queue (to avoid swapping and copying).
             unsigned int lq = 0;
             while (!queues_[0].empty() || !queues_[1].empty()) {
+                //std::cout << "Updated: " << lq << "  " << thStep_ << "  " << threshold_ << '\n';
                 while (!queues_[lq].empty()) {
+                    //std::cout << "New it: " << lq << "  " << queues_[lq].size() << "  " << queues_[(lq+1)%2].size() << '\n';
                     unsigned int idx = queues_[lq].front();
                     queues_[lq].pop();
                     double newT = solveEikonal(idx);
+                    //std::cout << idx << " -> " << newT << "  " << grid_->getCell(idx).getArrivalTime() << '\n';
                     if (utils::isTimeBetterThan(newT, grid_->getCell(idx).getArrivalTime())) {
                         grid_->getCell(idx).setArrivalTime(newT);
                         n_neighs = grid_->getNeighbors(idx, neighbors_);
-                        for (unsigned int j = 0; j < n_neighs; ++j)
-                            if (grid_->getCell(j).getState() == FMState::FROZEN) // In the paper they say unlocked here, but makes no sense!!
-                                if(utils::isTimeBetterThan(newT, grid_->getCell(j).getArrivalTime())) {
-                                    grid_->getCell(j).setState(FMState::OPEN);
-                                    percents[1] += 1;
+                        for (unsigned int j = 0; j < n_neighs; ++j) {
+                            unsigned int n = neighbors_[j];
+                            //std::cout << "Neighbors of: " << idx << '\n';
+                            if (grid_->getCell(n).getState() == FMState::FROZEN) { // In the paper they say unlocked here, but makes no sense!!
+                                //std::cout << '\t' << n << "  " << newT << "   " <<  grid_->getCell(n).getArrivalTime() << '\n';
+                                if(utils::isTimeBetterThan(newT, grid_->getCell(n).getArrivalTime())) {
+                                    grid_->getCell(n).setState(FMState::OPEN);
+                                    counts[1] += 1;
                                     if (utils::isTimeBetterThan(newT, threshold_)) {
-                                        queues_[lq].push(j); // Insert in lower queue.
-                                        percents[0] += 1;
+                                        queues_[lq].push(n); // Insert in lower queue.
+                                        counts[0] += 1;
+                                        //std::cout << '\t'<< n << " Inserted in lower." << '\n';
                                     }
-                                    else
-                                        queues_[(lq+1)%2].push(j); // Insert in higher queue.
+                                    else {
+                                        //std::cout << '\t'<< n << " Inserted in higher." << '\n';
+                                        queues_[(lq+1)%2].push(n); // Insert in higher queue.
+                                    }
+
                                 }
+                                //else
+                                    //std::cout << '\t'<< n << " Not inserted" << '\n';
+                            }
+                        }
                     } // If time is improved.
                     grid_->getCell(idx).setState(FMState::FROZEN);
+                    //std::cout << '\n';
                 } // While lower queue is not empty.
 
                 lq = (lq+1)%2;
-                increaseThreshold(percents);
+                increaseThreshold(counts);
             }
         }
 
         void increaseThreshold
-        (std::array<size_t, 2> & percents) {
+        (std::array<size_t, 2> & counts) {
             double minPercent = 0.65;
             double maxPercent = 0.7;
-            double currentPercent = percents[0]/percents[1];
-            if (currentPercent < minPercent)
+            double currentPercent;
+            //std::cout << "   Percent: " << counts[0]/double(counts[1]) << '\n';
+            if (counts[1] != 0)
+                currentPercent = counts[0]/double(counts[1]);
+            else
+                currentPercent = 1.0;
+            if (currentPercent <= minPercent)
                 thStep_ *= 1.5;
-            if (currentPercent > maxPercent)
+            else if (currentPercent >= maxPercent)
                 thStep_ /= 2.0;
             threshold_ += thStep_;
-            percents = {0,0};
+            counts = {0,0};
         }
 
         virtual void reset
