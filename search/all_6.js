@@ -1,6 +1,7 @@
 var searchData=
 [
   ['gamma_5f',['gamma_',['../classGMM.html#a67a3d5c6b5b64fad99ab8ff3b4df6ef7',1,'GMM']]],
+  ['getavgspeed',['getAvgSpeed',['../classnDGridMap.html#a8a3b9ce90cec55c444e1b930f68b63f1',1,'nDGridMap']]],
   ['getcell',['getCell',['../classnDGridMap.html#abdc1fe37e241e7a3c4cbd0ddf3526071',1,'nDGridMap']]],
   ['getdimsizes',['getDimSizes',['../classnDGridMap.html#ab91a3cca2228d10f41b2e5378aceb74b',1,'nDGridMap']]],
   ['getdimsizesstr',['getDimSizesStr',['../classnDGridMap.html#addfe0ab654c22fd3f5eb560c5b0d1cb8',1,'nDGridMap']]],

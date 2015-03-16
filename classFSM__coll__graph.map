@@ -1,7 +1,4 @@
 <map id="FSM&lt; grid_t &gt;" name="FSM&lt; grid_t &gt;">
-<area shape="rect" id="node2" href="$classFMM.html" title="FMM\&lt; grid_t \&gt;" alt="" coords="120,187,227,213"/>
-<area shape="rect" id="node3" href="$classSolver.html" title="Abstract class that serves as interface for the actual solvers implemented. It requires (at least) th..." alt="" coords="5,5,117,32"/>
-<area shape="rect" id="node6" href="$classFMM.html" title="Implements the Fast Marching Method (FMM). " alt="" coords="97,96,249,123"/>
-<area shape="rect" id="node4" href="$classFMDaryHeap.html" title="FMDaryHeap\&lt; FMCell \&gt;" alt="" coords="274,96,435,123"/>
-<area shape="rect" id="node5" href="$classFMDaryHeap.html" title="Wrap for the Boost D&#45;ary Heap class to be used as a binary heap in the FM algorithms. Ready to be used with FMCell and derived types. " alt="" coords="279,5,429,32"/>
+<area shape="rect" id="node2" href="$classEikonalSolver.html" title="Abstract class that serves as interface for the actual EikonalSolvers implemented. It requires (at least) the computeInternal method to be implemented,. " alt="" coords="4,80,157,107"/>
+<area shape="rect" id="node3" href="$classSolver.html" title="Abstract class that serves as interface for the actual solvers implemented. It requires (at least) th..." alt="" coords="25,5,137,32"/>
 </map>

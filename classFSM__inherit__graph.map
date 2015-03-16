@@ -1,6 +1,5 @@
 <map id="FSM&lt; grid_t &gt;" name="FSM&lt; grid_t &gt;">
-<area shape="rect" id="node5" href="$classLSM.html" title="Implements Lock Sweeping Method. " alt="" coords="7,328,111,355"/>
-<area shape="rect" id="node2" href="$classFMM.html" title="FMM\&lt; grid_t \&gt;" alt="" coords="5,173,112,200"/>
-<area shape="rect" id="node3" href="$classSolver.html" title="Abstract class that serves as interface for the actual solvers implemented. It requires (at least) th..." alt="" coords="17,5,129,32"/>
-<area shape="rect" id="node4" href="$classFMM.html" title="Implements the Fast Marching Method (FMM). " alt="" coords="75,83,227,109"/>
+<area shape="rect" id="node4" href="$classLSM.html" title="Implements Lock Sweeping Method. " alt="" coords="29,229,133,256"/>
+<area shape="rect" id="node2" href="$classEikonalSolver.html" title="Abstract class that serves as interface for the actual EikonalSolvers implemented. It requires (at least) the computeInternal method to be implemented,. " alt="" coords="4,80,157,107"/>
+<area shape="rect" id="node3" href="$classSolver.html" title="Abstract class that serves as interface for the actual solvers implemented. It requires (at least) th..." alt="" coords="25,5,137,32"/>
 </map>

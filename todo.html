@@ -97,35 +97,37 @@ $(document).ready(function(){initNavTree('todo.html','');});
 <p>does not have support for multiple starts or goals. </p>
 <p class="enddd">the way ctor parameters are given could be improved (as declareParams in OMPL - command pattern).  </p>
 </dd>
-<dt><a class="anchor" id="_todo000014"></a><a class="el" href="classClass.html" title="Represents a generic Cell to be used in gridmaps. ">Class</a> <a class="el" href="classCell.html">Cell</a>  </dt>
+<dt><a class="anchor" id="_todo000015"></a><a class="el" href="classClass.html" title="Represents a generic Cell to be used in gridmaps. ">Class</a> <a class="el" href="classCell.html">Cell</a>  </dt>
 <dd>No checks are done (out of bounds, etc) to improve efficienty. Overload functions to add optional input checking.  </dd>
 <dt><a class="anchor" id="_todo000002"></a><a class="el" href="classClass.html" title="Represents a generic Cell to be used in gridmaps. ">Class</a> <a class="el" href="classconsole.html">console</a>  </dt>
 <dd>a member method like string but with const char* is missing.  </dd>
+<dt><a class="anchor" id="_todo000005"></a><a class="el" href="classClass.html" title="Represents a generic Cell to be used in gridmaps. ">Class</a> <a class="el" href="classDDQM.html">DDQM&lt; grid_t &gt;</a>  </dt>
+<dd>implement a more robust goal point stopping criterion.  </dd>
+<dt><a class="anchor" id="_todo000006"></a>Member <a class="el" href="classEikonalSolver.html#a5356709955ffc118dd7f5e55c291b159">EikonalSolver&lt; grid_t &gt;::solveEikonal</a>  (const int &amp;idx)</dt>
+<dd>given that this sorts a small vector, a n^2 methods could be better. Test it.  </dd>
 <dt><a class="anchor" id="_todo000003"></a><a class="el" href="classClass.html" title="Represents a generic Cell to be used in gridmaps. ">Class</a> <a class="el" href="classFM2.html">FM2&lt; grid_t, heap_t &gt;</a>  </dt>
 <dd>Include support to other solvers (<a class="el" href="classGMM.html" title="Templated class which computes Group Marching Method (GMM). ">GMM</a>, <a class="el" href="classFIM.html" title="Implements Fast Iterative Method. ">FIM</a>, <a class="el" href="classUFMM.html" title="Fast Marching Method using a untidy priority queue (UFMM). ">UFMM</a>). It requires a better way of setting parameters.  </dd>
 <dt><a class="anchor" id="_todo000004"></a><a class="el" href="classClass.html" title="Represents a generic Cell to be used in gridmaps. ">Class</a> <a class="el" href="classFM2Star.html">FM2Star&lt; grid_t, heap_t &gt;</a>  </dt>
 <dd>Include support to other solvers (<a class="el" href="classGMM.html" title="Templated class which computes Group Marching Method (GMM). ">GMM</a>, <a class="el" href="classFIM.html" title="Implements Fast Iterative Method. ">FIM</a>, <a class="el" href="classUFMM.html" title="Fast Marching Method using a untidy priority queue (UFMM). ">UFMM</a>). Requires theoretical work on heuristics on these methods.  </dd>
-<dt><a class="anchor" id="_todo000005"></a><a class="el" href="classClass.html" title="Represents a generic Cell to be used in gridmaps. ">Class</a> <a class="el" href="classFMCell.html">FMCell</a>  </dt>
+<dt><a class="anchor" id="_todo000007"></a><a class="el" href="classClass.html" title="Represents a generic Cell to be used in gridmaps. ">Class</a> <a class="el" href="classFMCell.html">FMCell</a>  </dt>
 <dd>Overload functions to add the option of input checking. No checks are faster.  </dd>
-<dt><a class="anchor" id="_todo000006"></a>Member <a class="el" href="classFMM.html#af8ef5521e45d7dc00463df5f3d0d3b99">FMM&lt; grid_t, heap_t &gt;::FMM</a>  (HeurStrategy h=NOHEUR)</dt>
+<dt><a class="anchor" id="_todo000008"></a>Member <a class="el" href="classFMM.html#af8ef5521e45d7dc00463df5f3d0d3b99">FMM&lt; grid_t, heap_t &gt;::FMM</a>  (HeurStrategy h=NOHEUR)</dt>
 <dd>automate the naming depending on the heap.  </dd>
-<dt><a class="anchor" id="_todo000007"></a>Member <a class="el" href="classFMM.html#ad779a6e61b65e1c98c2194231b63d606">FMM&lt; grid_t, heap_t &gt;::solveEikonal</a>  (const int &amp;idx)</dt>
-<dd>given that this sorts a small vector, a n^2 methods could be better. Test it.  </dd>
-<dt><a class="anchor" id="_todo000008"></a>Member <a class="el" href="classFMMStar.html#a95adea7096945f9ded8dad3a938eae01">FMMStar&lt; grid_t, heap_t &gt;::FMMStar</a>  (HeurStrategy h=TIME)</dt>
+<dt><a class="anchor" id="_todo000009"></a>Member <a class="el" href="classFMMStar.html#a95adea7096945f9ded8dad3a938eae01">FMMStar&lt; grid_t, heap_t &gt;::FMMStar</a>  (HeurStrategy h=TIME)</dt>
 <dd>automate the naming depending on the heap.  </dd>
-<dt><a class="anchor" id="_todo000009"></a><a class="el" href="classClass.html" title="Represents a generic Cell to be used in gridmaps. ">Class</a> <a class="el" href="classFSM.html">FSM&lt; grid_t &gt;</a>  </dt>
+<dt><a class="anchor" id="_todo000010"></a><a class="el" href="classClass.html" title="Represents a generic Cell to be used in gridmaps. ">Class</a> <a class="el" href="classFSM.html">FSM&lt; grid_t &gt;</a>  </dt>
 <dd>implement a more robust goal point stopping criterion.  </dd>
-<dt><a class="anchor" id="_todo000012"></a><a class="el" href="classClass.html" title="Represents a generic Cell to be used in gridmaps. ">Class</a> <a class="el" href="classGridPlotter.html">GridPlotter</a>  </dt>
+<dt><a class="anchor" id="_todo000013"></a><a class="el" href="classClass.html" title="Represents a generic Cell to be used in gridmaps. ">Class</a> <a class="el" href="classGridPlotter.html">GridPlotter</a>  </dt>
 <dd><p class="startdd">include checks which ensure that the grids are adecuate for the functions used. </p>
 <p class="enddd">generalize plotMapPaths to work with multiple (n&gt;2) paths.  </p>
 </dd>
-<dt><a class="anchor" id="_todo000010"></a><a class="el" href="classClass.html" title="Represents a generic Cell to be used in gridmaps. ">Class</a> <a class="el" href="classLSM.html">LSM&lt; grid_t &gt;</a>  </dt>
+<dt><a class="anchor" id="_todo000011"></a><a class="el" href="classClass.html" title="Represents a generic Cell to be used in gridmaps. ">Class</a> <a class="el" href="classLSM.html">LSM&lt; grid_t &gt;</a>  </dt>
 <dd>implement a more robust goal point stopping criterion.  </dd>
-<dt><a class="anchor" id="_todo000013"></a><a class="el" href="classClass.html" title="Represents a generic Cell to be used in gridmaps. ">Class</a> <a class="el" href="classMapLoader.html">MapLoader</a>  </dt>
+<dt><a class="anchor" id="_todo000014"></a><a class="el" href="classClass.html" title="Represents a generic Cell to be used in gridmaps. ">Class</a> <a class="el" href="classMapLoader.html">MapLoader</a>  </dt>
 <dd><p class="startdd">Include checks which ensure that the grids are adequate for the functions used. </p>
 <p class="enddd">When loading an empty grid, cells are not correctly initialized. Although it works properly, values are not set to Inf (that is why we have Nan values in obstacles.)  </p>
 </dd>
-<dt><a class="anchor" id="_todo000015"></a><a class="el" href="classClass.html" title="Represents a generic Cell to be used in gridmaps. ">Class</a> <a class="el" href="classnDGridMap.html">nDGridMap&lt; T, ndims &gt;</a>  </dt>
+<dt><a class="anchor" id="_todo000016"></a><a class="el" href="classClass.html" title="Represents a generic Cell to be used in gridmaps. ">Class</a> <a class="el" href="classnDGridMap.html">nDGridMap&lt; T, ndims &gt;</a>  </dt>
 <dd><p class="startdd">Neighbors precomputation could speed things up. </p>
 <p class="enddd">Improve coord2idx function in order to just pass n coordinates and not an array. </p>
 </dd>
@@ -135,7 +137,7 @@ $(document).ready(function(){initNavTree('todo.html','');});
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Fri Mar 13 2015 13:23:02 for n-Dimensional Fast Marching by
+    <li class="footer">Generated on Mon Mar 16 2015 13:20:26 for n-Dimensional Fast Marching by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.6 </li>
   </ul>

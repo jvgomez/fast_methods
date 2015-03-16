@@ -7,6 +7,8 @@ var annotated =
     [ "Class", "classClass.html", null ],
     [ "console", "classconsole.html", "classconsole" ],
     [ "Console", "classConsole.html", null ],
+    [ "DDQM", "classDDQM.html", "classDDQM" ],
+    [ "EikonalSolver", "classEikonalSolver.html", "classEikonalSolver" ],
     [ "FIM", "classFIM.html", "classFIM" ],
     [ "FM2", "classFM2.html", "classFM2" ],
     [ "FM2Star", "classFM2Star.html", "classFM2Star" ],

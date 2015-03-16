@@ -1,4 +1,5 @@
 <map id="FMMStar&lt; grid_t, heap_t &gt;" name="FMMStar&lt; grid_t, heap_t &gt;">
-<area shape="rect" id="node2" href="$classFMM.html" title="Implements the Fast Marching Method (FMM). " alt="" coords="17,80,169,107"/>
-<area shape="rect" id="node3" href="$classSolver.html" title="Abstract class that serves as interface for the actual solvers implemented. It requires (at least) th..." alt="" coords="37,5,149,32"/>
+<area shape="rect" id="node2" href="$classFMM.html" title="Implements the Fast Marching Method (FMM). " alt="" coords="17,155,169,181"/>
+<area shape="rect" id="node3" href="$classEikonalSolver.html" title="Abstract class that serves as interface for the actual EikonalSolvers implemented. It requires (at least) the computeInternal method to be implemented,. " alt="" coords="16,80,169,107"/>
+<area shape="rect" id="node4" href="$classSolver.html" title="Abstract class that serves as interface for the actual solvers implemented. It requires (at least) th..." alt="" coords="37,5,149,32"/>
 </map>

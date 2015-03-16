@@ -5,6 +5,7 @@ var classnDGridMap =
     [ "clean", "classnDGridMap.html#a74d5ad1ae551de68784ad1a313d36bed", null ],
     [ "clear", "classnDGridMap.html#a7178107c64d3700539712b10c10d3a4b", null ],
     [ "coord2idx", "classnDGridMap.html#a1935c125c0ede99c2bb6484938219999", null ],
+    [ "getAvgSpeed", "classnDGridMap.html#a8a3b9ce90cec55c444e1b930f68b63f1", null ],
     [ "getCell", "classnDGridMap.html#abdc1fe37e241e7a3c4cbd0ddf3526071", null ],
     [ "getDimSizes", "classnDGridMap.html#ab91a3cca2228d10f41b2e5378aceb74b", null ],
     [ "getDimSizesStr", "classnDGridMap.html#addfe0ab654c22fd3f5eb560c5b0d1cb8", null ],

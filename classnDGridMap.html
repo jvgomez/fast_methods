@@ -210,6 +210,10 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnDGridMap.html#a0c6192263d0e72de4fc47c32184519da">getOccupiedCells</a> (std::vector&lt; unsigned int &gt; &amp;obs) const </td></tr>
 <tr class="memdesc:a0c6192263d0e72de4fc47c32184519da"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the indices of the occupied cells of the grid. <br/></td></tr>
 <tr class="separator:a0c6192263d0e72de4fc47c32184519da"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8a3b9ce90cec55c444e1b930f68b63f1"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8a3b9ce90cec55c444e1b930f68b63f1"></a>
+double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnDGridMap.html#a8a3b9ce90cec55c444e1b930f68b63f1">getAvgSpeed</a> ()</td></tr>
+<tr class="memdesc:a8a3b9ce90cec55c444e1b930f68b63f1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the avegare velocity ignoring those with 0 velocitie (obstacles). <br/></td></tr>
+<tr class="separator:a8a3b9ce90cec55c444e1b930f68b63f1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
@@ -267,7 +271,7 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
 <div class="textblock"><h3>template&lt;class T, size_t ndims&gt;<br/>
 class nDGridMap&lt; T, ndims &gt;</h3>
 
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000015">Todo:</a></b></dt><dd><p class="startdd">Neighbors precomputation could speed things up. </p>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000016">Todo:</a></b></dt><dd><p class="startdd">Neighbors precomputation could speed things up. </p>
 <p class="enddd">Improve coord2idx function in order to just pass n coordinates and not an array. </p>
 </dd></dl>
 <p>Based on a flat array in which the generalized indexing operations are efficiently implemented, according to this document <a href="http://javiervgomez.com/pages/n-dimensional-gridmaps-formulation-and-implementation.html">nDGridMaps</a> It is important to read this document in order to understand the class.</p>
@@ -334,7 +338,7 @@ template&lt;class T, size_t ndims&gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="classnDGridMap.html">nDGridMap</a></li>
-    <li class="footer">Generated on Fri Mar 13 2015 13:23:02 for n-Dimensional Fast Marching by
+    <li class="footer">Generated on Mon Mar 16 2015 13:20:26 for n-Dimensional Fast Marching by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.6 </li>
   </ul>

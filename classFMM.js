@@ -12,13 +12,9 @@ var classFMM =
     [ "reset", "classFMM.html#ad833a7099e5473411a6b3ff4f1ec837c", null ],
     [ "setHeuristics", "classFMM.html#adfbec063e6835d70336a9b61e61b1d66", null ],
     [ "setup", "classFMM.html#a2e54a7f706ad3d49f1a163f4165553d0", null ],
-    [ "solveEikonal", "classFMM.html#ad779a6e61b65e1c98c2194231b63d606", null ],
-    [ "solveEikonalNDims", "classFMM.html#a189fe1405216965eb36d6387eb0e4a23", null ],
     [ "distances_", "classFMM.html#aba698f295eecfe2567e70d7acc09e69d", null ],
     [ "heur_coord_", "classFMM.html#ab02e003eef6289dcd3fad73565e9f4f0", null ],
     [ "heurStrategy_", "classFMM.html#a6704af3de764d4aa6d0b42c550794181", null ],
     [ "narrow_band_", "classFMM.html#ad0bbb7922fb02ce745a30b580adcaea6", null ],
-    [ "neighbors_", "classFMM.html#a8fe9684749933426e69f1114e13fa843", null ],
-    [ "precomputed_", "classFMM.html#af1a7a08de6950cdb78682f2279df257a", null ],
-    [ "Tvalues_", "classFMM.html#a6e8090538ecd20fdbdc8ae1b2da82a35", null ]
+    [ "precomputed_", "classFMM.html#af1a7a08de6950cdb78682f2279df257a", null ]
 ];
