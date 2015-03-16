@@ -65,7 +65,7 @@ template < class grid_t > class FSM : public EikonalSolver<grid_t> {
             Tvalues_.reserve(grid_t::getNDims());
         }
 
-        /** \brief Executes Solver setup (instead of EikonalSolver setup) and other checks. */
+        /** \brief Executes EikonalSolver setup and other checks. */
         virtual void setup
         () {
             EikonalSolver<grid_t>::setup();

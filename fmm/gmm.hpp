@@ -150,7 +150,7 @@ template < class grid_t > class GMM : public FMM <grid_t> {
         using FMM<grid_t>::solveEikonal;
         using FMM<grid_t>::init_points_;
         using FMM<grid_t>::goal_idx_;
-        using Solver<grid_t>::setup;
+        using FMM<grid_t>::setup;
         using FMM<grid_t>::setup_;
 
     private:

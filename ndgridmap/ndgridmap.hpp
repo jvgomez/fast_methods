@@ -339,6 +339,20 @@ template <class T, size_t ndims> class nDGridMap {
         /** \brief Makes the number of dimensions of the grid available at compilation time. */
         static constexpr size_t getNDims() {return ndims;}
 
+        /** \brief Returns the avegare velocity ignoring those with 0 velocitie (obstacles). */
+        double getAvgSpeed
+        () {
+            double sum = 0;
+            unsigned int nObs = 0;
+            for (const T & c : cells_) {
+                if (!c.isOccupied())
+                    sum += c.getVelocity();
+                else
+                    ++nObs;
+            }
+            return sum/(ncells_ - nObs);
+        }
+
     private:
         /** \brief Main container for the class. */
         std::vector<T> cells_;

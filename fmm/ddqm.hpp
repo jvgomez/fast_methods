@@ -36,24 +36,27 @@
 
 #include <queue>
 
-/// \todo implement a goal point stopping criterion.
+/// \todo implement a more robust goal point stopping criterion.
 template < class grid_t > class DDQM : public EikonalSolver<grid_t> {
 
     public:
-        //DDQM(unsigned maxSweeps = std::numeric_limits<unsigned>::max()) : EikonalSolver<grid_t>("DDQM", maxSweeps) {}
-
-        //DDQM(const char * name, unsigned maxSweeps = std::numeric_limits<unsigned>::max()) : EikonalSolver<grid_t>(name, maxSweeps) {}
-
         DDQM(const char * name = "DDQM") : EikonalSolver<grid_t>(name) {}
 
         /** \brief Calls EikonalSolver::setEnvironment() and sets the initial threshold. */
         virtual void setEnvironment
         (grid_t * g) {
             EikonalSolver<grid_t>::setEnvironment(g);
-            //double avgSpeed = 1.0/(0.5*grid_->getLeafSize()); /// \todo compute it properly: 0.5 is F avg.
-            double avgSpeed = 1.0/(0.5*grid_->getLeafSize());
+            double avgSpeed = 1.0/(grid_->getAvgSpeed()*grid_->getLeafSize());
             thStep_ = 1.5 / avgSpeed;
             threshold_ = thStep_;
+        }
+
+        /** \brief Executes EikonalSolver setup and other checks. */
+        virtual void setup
+        () {
+            EikonalSolver<grid_t>::setup();
+            if (int(goal_idx_) != -1)
+                console::warning("Setting a goal point in DDQM is experimental. It may lead to wrong results.");
         }
 
         /** \brief Actual method that implements DDQM. */
@@ -80,48 +83,41 @@ template < class grid_t > class DDQM : public EikonalSolver<grid_t> {
                 }
             }
 
-            // percentages_[0] is in lower queue. [1] is in total.
-            std::array<size_t, 2> counts = {0,0};
+            bool stopPropagation = false;
 
             // lq is the index of the lower queue (to avoid swapping and copying).
             unsigned int lq = 0;
+            // counts[0] tracks insertions in lower queue. counts[1] is total insertions.
+            std::array<size_t, 2> counts = {0,0};
+
             while (!queues_[0].empty() || !queues_[1].empty()) {
-                //std::cout << "Updated: " << lq << "  " << thStep_ << "  " << threshold_ << '\n';
-                while (!queues_[lq].empty()) {
-                    //std::cout << "New it: " << lq << "  " << queues_[lq].size() << "  " << queues_[(lq+1)%2].size() << '\n';
+                while (!queues_[lq].empty() && !stopPropagation) {
                     unsigned int idx = queues_[lq].front();
                     queues_[lq].pop();
                     double newT = solveEikonal(idx);
-                    //std::cout << idx << " -> " << newT << "  " << grid_->getCell(idx).getArrivalTime() << '\n';
                     if (utils::isTimeBetterThan(newT, grid_->getCell(idx).getArrivalTime())) {
                         grid_->getCell(idx).setArrivalTime(newT);
                         n_neighs = grid_->getNeighbors(idx, neighbors_);
                         for (unsigned int j = 0; j < n_neighs; ++j) {
                             unsigned int n = neighbors_[j];
-                            //std::cout << "Neighbors of: " << idx << '\n';
-                            if (grid_->getCell(n).getState() == FMState::FROZEN) { // In the paper they say unlocked here, but makes no sense!!
-                                //std::cout << '\t' << n << "  " << newT << "   " <<  grid_->getCell(n).getArrivalTime() << '\n';
+                            if (grid_->getCell(n).getState() == FMState::FROZEN) // In the paper they say unlocked here, but makes no sense!!
                                 if(utils::isTimeBetterThan(newT, grid_->getCell(n).getArrivalTime())) {
                                     grid_->getCell(n).setState(FMState::OPEN);
                                     counts[1] += 1;
                                     if (utils::isTimeBetterThan(newT, threshold_)) {
                                         queues_[lq].push(n); // Insert in lower queue.
                                         counts[0] += 1;
-                                        //std::cout << '\t'<< n << " Inserted in lower." << '\n';
                                     }
-                                    else {
-                                        //std::cout << '\t'<< n << " Inserted in higher." << '\n';
+                                    else
                                         queues_[(lq+1)%2].push(n); // Insert in higher queue.
-                                    }
-
                                 }
-                                //else
-                                    //std::cout << '\t'<< n << " Not inserted" << '\n';
-                            }
                         }
                     } // If time is improved.
                     grid_->getCell(idx).setState(FMState::FROZEN);
-                    //std::cout << '\n';
+                    // EXPERIMENTAL - Value not updated, it has converged
+                    if(idx == goal_idx_)
+                        stopPropagation = true;
+
                 } // While lower queue is not empty.
 
                 lq = (lq+1)%2;
@@ -134,7 +130,6 @@ template < class grid_t > class DDQM : public EikonalSolver<grid_t> {
             double minPercent = 0.65;
             double maxPercent = 0.7;
             double currentPercent;
-            //std::cout << "   Percent: " << counts[0]/double(counts[1]) << '\n';
             if (counts[1] != 0)
                 currentPercent = counts[0]/double(counts[1]);
             else
@@ -172,11 +167,14 @@ template < class grid_t > class DDQM : public EikonalSolver<grid_t> {
         /** \brief Auxiliar array which stores the neighbor of each iteration of the computeFM() function. */
         std::array <unsigned int, 2*grid_t::getNDims()> neighbors_;
 
+        /** \brief Queues which contain the lower and higher cells to be expanded in further iterations. */
         std::array<std::queue<unsigned int>, 2> queues_;
 
+        /** \brief Current queue cutoff to divide lower and higher queues. */
         double threshold_;
-        double thStep_;
 
+        /** \brief Threshold step for each full iteration. */
+        double thStep_;
 };
 
 #endif /* DDQM_HPP_*/
