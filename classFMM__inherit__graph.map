@@ -1,8 +1,8 @@
 <map id="FMM&lt; grid_t, heap_t &gt;" name="FMM&lt; grid_t, heap_t &gt;">
-<area shape="rect" id="node4" href="$classFMMStar.html" title="Encapsulates the calls to FMM with heuristics enabled. " alt="" coords="5,272,181,299"/>
-<area shape="rect" id="node5" href="$classFMM.html" title="FMM\&lt; grid_t, FMPriorityQueue\l\&lt; cell_t \&gt; \&gt;" alt="" coords="206,265,404,306"/>
-<area shape="rect" id="node2" href="$classEikonalSolver.html" title="Abstract class that serves as interface for the actual EikonalSolvers implemented. It requires (at least) the computeInternal method to be implemented,. " alt="" coords="37,83,191,109"/>
-<area shape="rect" id="node3" href="$classSolver.html" title="Abstract class that serves as interface for the actual solvers implemented. It requires (at least) th..." alt="" coords="58,5,171,32"/>
-<area shape="rect" id="node6" href="$classSFMM.html" title="Implements the Simplified Fast Marching Method, encapsulating FMM with a priority queue..." alt="" coords="229,357,381,384"/>
-<area shape="rect" id="node7" href="$classSFMMStar.html" title="SFMMStar\&lt; grid_t, cell_t \&gt;" alt="" coords="217,435,393,461"/>
+<area shape="rect" id="node4" href="$classFMMStar.html" title="Encapsulates the calls to FMM with heuristics enabled. " alt="" coords="5,269,184,295"/>
+<area shape="rect" id="node5" href="$classFMM.html" title="FMM\&lt; grid_t, FMPriorityQueue\l\&lt; cell_t \&gt; \&gt;" alt="" coords="208,261,411,303"/>
+<area shape="rect" id="node2" href="$classEikonalSolver.html" title="Abstract class that serves as interface for the actual EikonalSolvers implemented. It requires (at least) the computeInternal method to be implemented,. " alt="" coords="37,81,195,108"/>
+<area shape="rect" id="node3" href="$classSolver.html" title="Abstract class that serves as interface for the actual solvers implemented. It requires (at least) th..." alt="" coords="59,5,173,32"/>
+<area shape="rect" id="node6" href="$classSFMM.html" title="Implements the Simplified Fast Marching Method, encapsulating FMM with a priority queue..." alt="" coords="231,352,387,379"/>
+<area shape="rect" id="node7" href="$classSFMMStar.html" title="SFMMStar\&lt; grid_t, cell_t \&gt;" alt="" coords="219,428,399,455"/>
 </map>

@@ -1,4 +1,4 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$classCell.html" title="Cell" alt="" coords="6,5,50,32"/>
-<area shape="rect" id="node2" href="$classFMCell.html" title="A stand&#45;alone, standard C++ class which represents each one of the cells of a gridmap and its typical..." alt="" coords="99,5,162,32"/>
+<area shape="rect" id="node1" href="$classCell.html" title="Cell" alt="" coords="5,5,51,32"/>
+<area shape="rect" id="node2" href="$classFMCell.html" title="A stand&#45;alone, standard C++ class which represents each one of the cells of a gridmap and its typical..." alt="" coords="99,5,163,32"/>
 </map>

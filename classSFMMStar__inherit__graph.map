@@ -1,7 +1,7 @@
 <map id="SFMMStar&lt; grid_t, cell_t &gt;" name="SFMMStar&lt; grid_t, cell_t &gt;">
-<area shape="rect" id="node2" href="$classSFMM.html" title="Implements the Simplified Fast Marching Method, encapsulating FMM with a priority queue..." alt="" coords="27,357,180,384"/>
-<area shape="rect" id="node3" href="$classFMM.html" title="FMM\&lt; grid_t, FMPriorityQueue\l\&lt; cell_t \&gt; \&gt;" alt="" coords="5,265,203,306"/>
-<area shape="rect" id="node4" href="$classEikonalSolver.html" title="Abstract class that serves as interface for the actual EikonalSolvers implemented. It requires (at least) the computeInternal method to be implemented,. " alt="" coords="4,83,157,109"/>
-<area shape="rect" id="node6" href="$classFMM.html" title="Implements the Fast Marching Method (FMM). " alt="" coords="103,160,255,187"/>
-<area shape="rect" id="node5" href="$classSolver.html" title="Abstract class that serves as interface for the actual solvers implemented. It requires (at least) th..." alt="" coords="25,5,137,32"/>
+<area shape="rect" id="node2" href="$classSFMM.html" title="Implements the Simplified Fast Marching Method, encapsulating FMM with a priority queue..." alt="" coords="29,352,185,379"/>
+<area shape="rect" id="node3" href="$classFMM.html" title="FMM\&lt; grid_t, FMPriorityQueue\l\&lt; cell_t \&gt; \&gt;" alt="" coords="6,261,209,303"/>
+<area shape="rect" id="node4" href="$classEikonalSolver.html" title="Abstract class that serves as interface for the actual EikonalSolvers implemented. It requires (at least) the computeInternal method to be implemented,. " alt="" coords="5,81,164,108"/>
+<area shape="rect" id="node6" href="$classFMM.html" title="Implements the Fast Marching Method (FMM). " alt="" coords="106,157,261,184"/>
+<area shape="rect" id="node5" href="$classSolver.html" title="Abstract class that serves as interface for the actual solvers implemented. It requires (at least) th..." alt="" coords="27,5,142,32"/>
 </map>
