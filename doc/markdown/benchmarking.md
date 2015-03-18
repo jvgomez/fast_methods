@@ -182,19 +182,20 @@ This will generate the folder `fastmarching/benchmark/results` with the logs of 
 \note This script is under constant development and you may need some modifications depending on your purpose.
 
 ## Adding new solvers to this benchmark
-If you have implemented a custom solver derived from Solver class, you can easily add it to the benchmarking framework. Just follow this steps (text between "\_\_text\_\_" is meant to be changed by your solver name):
+If you have implemented a custom solver derived from Solver class, you can easily add it to the benchmarking framework. Just follow this steps ("__mysolver__" is meant to be changed by your solver name):
 
 \note To help you finding out the places in which you have to add your solver, look for the comment "// Add solver here."
 
 1. Add its name (lowercase) as known solver in `benchmarkcfg.hpp` (within `readOptions()` member function):
-``` cpp
+~~~~~~~~~~~~~{.cpp}
 static const std::vector<std::string> knownSolvers = {
     "fmm", "fmmstar", "fmmfib", "fmmfibstar", "sfmm", "sfmmstar",
     "gmm", "fim", "ufmm", "fsm", "__mysolver__"
 };
-```
-2. In the same file, within `configure()`, set the creation of the solver without parameters:
+~~~~~~~~~~~~~
 
+2. In the same file, within `configure()`, set the creation of the solver without parameters:
+~~~~~~~~~~~~~{.cpp}
     else if (name == "ufmm")
         solver = new UFMM<grid_t>();
     else if (name == "fsm")
@@ -203,9 +204,9 @@ static const std::vector<std::string> knownSolvers = {
         solver = new __MySolver__<grid_t>();
     else
         continue;
-```
+~~~~~~~~~~~~~
 3. Finally, below the previous code, insert your solver creation with constructor parameters (in case it has any):
-``` cpp
+~~~~~~~~~~~~~{.cpp}
 // UFMM
 else if (name == "ufmm") {
     if (p.size() == 1)
@@ -231,6 +232,6 @@ else if (name == "__mysolver__") {
     else if (p.size() == 3)
     	//.... In case constructor can have more parameters.
 }
-```
+~~~~~~~~~~~~~
 
 After these changes, you are ready to incude your solver in a CFG file and run the benchmarks.

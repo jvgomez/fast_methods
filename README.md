@@ -22,7 +22,7 @@ N-Dimensional Fast Marching Method V1.0
 - [SFMM*](http://javiervgomez.com/fastmarching/classSFMMStar.html): SFMM with CostToGo heuristics..
 
 **O(n) Fast Marching Methods:**
-- [GMM]((http://javiervgomez.com/fastmarching/classGMM.html): Group Marching Method.
+- [GMM](http://javiervgomez.com/fastmarching/classGMM.html): Group Marching Method.
 - [UFMM](http://javiervgomez.com/fastmarching/classUFMM.html): Untidy Fast Marching Method.
 - [FIM](http://javiervgomez.com/fastmarching/classFIM.html): Fast Iterative Method.
 

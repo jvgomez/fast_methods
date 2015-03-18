@@ -90,6 +90,9 @@ class EikonalSolver : public Solver<grid_t>{
                 sumT += Tvalues_[i];
                 sumTT += Tvalues_[i]*Tvalues_[i];
             }
+
+            // These a,b,c values are simplified since leafsize^2, which should be present in the three
+            // terms but they are cancelled out when solving the quadratic function.
             double a = dim;
             double b = -2*sumT;
             double c = sumTT - grid_->getLeafSize() * grid_->getLeafSize() / (grid_->getCell(idx).getVelocity()*grid_->getCell(idx).getVelocity());

@@ -25,8 +25,8 @@
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef NDGRIDMAP_H_
-#define NDGRIDMAP_H_
+#ifndef NDGRIDMAP_HPP_
+#define NDGRIDMAP_HPP_
 
 #include <iostream>
 #include <vector>
@@ -42,6 +42,7 @@
 
 /// \todo Neighbors precomputation could speed things up.
 /// \todo Improve coord2idx function in order to just pass n coordinates and not an array.
+/// \todo Create d_ with 1 and d_[1] size of X, d_[2] size of Y, etc, to generalize dimensions.
 
 template <class T, size_t ndims> class nDGridMap {
 
@@ -113,7 +114,7 @@ template <class T, size_t ndims> class nDGridMap {
         /** \brief Returns the size of each dimension. */
         inline std::array<unsigned int, ndims> getDimSizes() const { return dimsize_;}
 
-         /** \brief Resturns the minimum value of neighbors of cell idx in dimension dim. */
+         /** \brief Returns the minimum value of neighbors of cell idx in dimension dim. */
         double getMinValueInDim
         (unsigned int idx, unsigned int dim) {
             n_neighs = 0; // How many neighbors obtained in that dimension.
@@ -152,59 +153,42 @@ template <class T, size_t ndims> class nDGridMap {
             those functions. */
         void getNeighborsInDim
         (unsigned int idx, std::array<unsigned int, 2*ndims>& neighs, unsigned int dim) {
-            unsigned int c1,c2;
+            unsigned int c1,c2; // Candidate neighbors in dimension.
             if (dim == 0) {
                 c1 = idx-1;
                 c2 = idx+1;
-                // Checking neighbor 1.
-                if ((c1 >= 0) && (c1/d_[0] == idx/d_[0]))
-                    neighs[n_neighs++] = c1;
-                // Checking neighbor 2.
-                //if ((c2 < ncells_) && (c2/d_[0] == idx/d_[0])) // full check, not necessary.
-                if (c2/d_[0] == idx/d_[0])
-                    neighs[n_neighs++] = c2;
             }
             else {
-                // neighbors proposed.
                 c1 = idx-d_[dim-1];
                 c2 = idx+d_[dim-1];
-                // Checking neighbor 1.
-                if ((c1 >= 0) && (c1/d_[dim] == idx/d_[dim]))
-                    neighs[n_neighs++] = c1;
-                // Checking neighbor 2.
-                //if ((c2 < ncells_) && (c2/d_[dimi] == idx/d_[dim])) // full check, not necessary.
-                if (c2/d_[dim] == idx/d_[dim])
-                    neighs[n_neighs++] = c2;
             }
+            // Checking neighbor 1: is in the same n-dimensional slice (row, plane, cube, etc)?
+            if ((c1 >= 0) && (c1/d_[dim] == idx/d_[dim]))
+                neighs[n_neighs++] = c1;
+            // Checking neighbor 2. Full check, not necessary: if >ncells_ then is in another slice.
+            if (c2/d_[dim] == idx/d_[dim])
+                neighs[n_neighs++] = c2;
         }
 
-        /** \brief Special version of this function to be used with getMinValueInDim(). */
+        /** \brief Special version (because of neighbors array size) of this function to be used with getMinValueInDim(). */
         void getNeighborsInDim
         (unsigned int idx, std::array<unsigned int, 2>& neighs, unsigned int dim) {
+            // Candidate neighbors in dimension.
             unsigned int c1,c2;
             if (dim == 0) {
                 c1 = idx-1;
                 c2 = idx+1;
-                // Checking neighbor 1.
-                if ((c1 >= 0) && (c1/d_[0] == idx/d_[0]))
-                    neighs[n_neighs++] = c1;
-                // Checking neighbor 2.
-                //if ((c2 < ncells_) && (c2/d_[0] == idx/d_[0])) // full check, not necessary.
-                if (c2/d_[0] == idx/d_[0])
-                    neighs[n_neighs++] = c2;
             }
             else {
-                // neighbors proposed.
                 c1 = idx-d_[dim-1];
                 c2 = idx+d_[dim-1];
-                // Checking neighbor 1.
-                if ((c1 >= 0) && (c1/d_[dim] == idx/d_[dim]))
-                    neighs[n_neighs++] = c1;
-                // Checking neighbor 2.
-                //if ((c2 < ncells_) && (c2/d_[dimi] == idx/d_[dim])) // full check, not necessary.
-                if (c2/d_[dim] == idx/d_[dim])
-                    neighs[n_neighs++] = c2;
             }
+            // Checking neighbor 1: is in the same n-dimensional slice (row, plane, cube, etc)?
+            if ((c1 >= 0) && (c1/d_[dim] == idx/d_[dim]))
+                neighs[n_neighs++] = c1;
+            // Checking neighbor 2. Full check, not necessary: if >ncells_ then is in another slice.
+            if (c2/d_[dim] == idx/d_[dim])
+                neighs[n_neighs++] = c2;
         }
 
         /** \brief Transforms from index to coordinates. */
@@ -356,16 +340,16 @@ template <class T, size_t ndims> class nDGridMap {
     private:
         /** \brief Main container for the class. */
         std::vector<T> cells_;
-        
+
         /** \brief Size of each dimension. */
         std::array<unsigned int, ndims> dimsize_;
-        
+
         /** \brief Real size of the cells. It is assumed that the cells in the grid are cubic. */
         double leafsize_;
-        
+
         /** \brief Number of cells in the grid (size) */
         unsigned int ncells_;
-        
+
         /** \brief Flag to indicate if the grid is ready to use. */
         bool clean_;
 
@@ -374,17 +358,17 @@ template <class T, size_t ndims> class nDGridMap {
             stores parcial multiplications of dimensions sizes. d_[0] = dimsize_[0];
             d_[1] = dimsize_[0]*dimsize_[1]; etc. */
         std::array<unsigned int, ndims> d_;
-                                                                                                             
+
         /** \brief  Auxiliar array to speed up neighbor and indexing generalization:
             for getMinValueInDim() function. */
         std::array<unsigned int, 2> n_;
-        
+
         /** \brief Internal variable that counts the number of neighbors found in
             every iteration. Modified by getNeighbours(), getNeighborsInDim() and getMinValueInDim() functions. */
         unsigned int n_neighs;
-        
+
         /** \brief Caches the occupied cells (obstacles). */
         std::vector<unsigned int> occupied_;
 };
 
-#endif /* NDGRIDCELL_H_*/
+#endif /* NDGRIDCELL_HPP_*/
