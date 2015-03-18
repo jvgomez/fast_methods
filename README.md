@@ -138,6 +138,7 @@ At the top of each file there are specific TODO comments. Here are some others:
 
 - Upload as a unique biicode block.
 - Review and update nDGridMap.pdf
+- Fix Doxygen warnings.
 - Convert all scripts to python (or similar) so that they keep completely open source.
 - Improve the way FM2 and its versions deal with the grid when running multiple times on the same grid. Concretely, avoid recomputation of velocities map.
 - Reimplement FM2Dir from scratch. Currently in data/alpha folder.
