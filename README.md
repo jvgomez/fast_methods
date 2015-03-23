@@ -137,6 +137,7 @@ Although there are a lot of folders, they are quite simple. It is organized this
 At the top of each file there are specific TODO comments. Here are some others:
 
 - Upload as a unique biicode block.
+- printRunInfo implementation missing for most of the solvers.
 - Review and update nDGridMap.pdf
 - Fix Doxygen warnings.
 - Convert all scripts to python (or similar) so that they keep completely open source.
