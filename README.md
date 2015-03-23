@@ -138,6 +138,7 @@ At the top of each file there are specific TODO comments. Here are some others:
 
 - Upload as a unique biicode block.
 - printRunInfo implementation missing for most of the solvers.
+- Unify GridWriter and GridPlotter functions parameter order: (grid, name)
 - Review and update nDGridMap.pdf
 - Fix Doxygen warnings.
 - Convert all scripts to python (or similar) so that they keep completely open source.
