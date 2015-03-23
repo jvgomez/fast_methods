@@ -31,7 +31,7 @@ N-Dimensional Fast Marching Method V1.0
 - [LSM](http://javiervgomez.com/fastmarching/classLSM.html): Lock Sweeping Method.
 
 **Other methods:**
-- Soon.
+- [DDQM](http://javiervgomez.com/fastmarching/classDDQM.html): Dynamic Double Queue Method.
 
 **Fast Marching Square motion planning algorithms:**
 - [FM2](http://javiervgomez.com/fastmarching/classFM2.html): Fast Marching Square Method.
@@ -55,6 +55,11 @@ jvgomez/fm2examples
 https://www.biicode.com/endher
 endher/fm2
 
+#### v0.6 ChangeLog
+- solveEikonal made more stable, but a bit less efficient.
+- Added FSM, LSM, DDQM.
+- Added another hierarchy layer: EikonalSolver.
+- Some small tweaks, improvements and better documentation.
 
 ## DISCLAIMER and IMPORTANT NOTES
 

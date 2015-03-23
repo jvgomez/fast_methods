@@ -92,7 +92,7 @@ template < class grid_t > class DDQM : public EikonalSolver<grid_t> {
             // counts[0] tracks insertions in lower queue. counts[1] is total insertions.
             std::array<size_t, 2> counts = {0,0};
 
-            while (!queues_[0].empty() || !queues_[1].empty() && !stopPropagation) {
+            while ((!queues_[0].empty() || !queues_[1].empty()) && !stopPropagation) {
                 while (!queues_[lq].empty() && !stopPropagation) {
                     unsigned int idx = queues_[lq].front();
                     queues_[lq].pop();
