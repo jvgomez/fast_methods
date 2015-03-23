@@ -16,6 +16,7 @@ var searchData=
   ['fmmbase',['FMMBase',['../classFMMStar.html#a83407fadf3525dd6a9732d1947c720b6',1,'FMMStar::FMMBase()'],['../classSFMM.html#a842b8a87d654cbc5f43836ebf2679f1f',1,'SFMM::FMMBase()']]],
   ['fmmstar',['FMMStar',['../classFMMStar.html',1,'FMMStar&lt; grid_t, heap_t &gt;'],['../classFMMStar.html#a95adea7096945f9ded8dad3a938eae01',1,'FMMStar::FMMStar()']]],
   ['fmpriorityqueue',['FMPriorityQueue',['../classFMPriorityQueue.html',1,'FMPriorityQueue&lt; cell_t &gt;'],['../classFMPriorityQueue.html#a06f298e68b0153ea35462459626c354c',1,'FMPriorityQueue::FMPriorityQueue()']]],
+  ['fmsm',['FMSM',['../classFMSM.html',1,'']]],
   ['fmtid_5f',['fmtID_',['../classBenchmark.html#a17d1625d3ab46fc1813d643634927417',1,'Benchmark']]],
   ['fmuntidyqueue',['FMUntidyQueue',['../classFMUntidyQueue.html',1,'FMUntidyQueue&lt; cell_t &gt;'],['../classFMUntidyQueue.html#af95c160a28f273c793ec8df8ab04aafe',1,'FMUntidyQueue::FMUntidyQueue()']]],
   ['formatid',['formatID',['../classBenchmark.html#a1b385fc3a44d5aff4a2035fcecb1507e',1,'Benchmark']]],
