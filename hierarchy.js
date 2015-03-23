@@ -6,8 +6,8 @@ var hierarchy =
       [ "FMCell", "classFMCell.html", null ]
     ] ],
     [ "Class", "classClass.html", null ],
-    [ "Console", "classConsole.html", null ],
     [ "console", "classconsole.html", null ],
+    [ "Console", "classConsole.html", null ],
     [ "FMCompare< cell_t >", "structFMCompare.html", null ],
     [ "FMDaryHeap< cell_t >", "classFMDaryHeap.html", null ],
     [ "FMFibHeap< cell_t >", "classFMFibHeap.html", null ],
@@ -34,7 +34,6 @@ var hierarchy =
             [ "SFMMStar< grid_t, cell_t >", "classSFMMStar.html", null ]
           ] ]
         ] ],
-        [ "FMSM< grid_t >", "classFMSM.html", null ],
         [ "FSM< grid_t >", "classFSM.html", [
           [ "LSM< grid_t >", "classLSM.html", null ]
         ] ],
