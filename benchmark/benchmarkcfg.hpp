@@ -83,6 +83,7 @@ class BenchmarkCFG {
                 ("grid.ndims",         boost::program_options::value<std::string>()->default_value("2"),         "Number of dimensions.")
                 ("grid.cell",          boost::program_options::value<std::string>()->default_value("FMCell"),    "Type of cell. FMCell by default.")
                 ("grid.dimsize",       boost::program_options::value<std::string>()->default_value("200,200"),   "Size of dimensions: N,M,O...")
+                ("grid.leafsize",      boost::program_options::value<std::string>()->default_value("1"),         "Leafsize (assuming cubic cells).")
                 ("problem.start",      boost::program_options::value<std::string>()->required(),                 "Start point: s1,s2,s3...")
                 ("problem.goal",       boost::program_options::value<std::string>()->default_value("nan"),       "Goal point: g1,g2,g3... By default no goal point.")
                 ("benchmark.name",     boost::program_options::value<std::string>()->default_value(name.string()), "Name of the benchmark.")
@@ -274,6 +275,8 @@ class BenchmarkCFG {
                 std::array<unsigned int, N> dimSize = splitAndCast<unsigned int, N>(strToSplit);
                 grid->resize(dimSize);
             }
+
+            grid->setLeafSize(getValue<double>("grid.leafsize"));
 
             const std::string & strToSplit2 = options_.find("problem.start")->second;
             std::array<unsigned int, N> startCoords = splitAndCast<unsigned int, N>(strToSplit2);
