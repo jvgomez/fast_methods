@@ -47,8 +47,9 @@ Start and goal coordinates. Note the format: `s_x, s_y, s_z, ...` and `g_x, g_y,
     name=test_img
     runs=5
     #savegrid=1
+    #savegrid=2
 
-Set the name of the benchmark and the number of runs for each solver. If `savegrid` is 1, a `.grid` file will be saved for every run identified as `<runID>.grid`, stored in a folder `results/<benchmark_name>`. By default only the log will be saved.
+Set the name of the benchmark and the number of runs for each solver. If `savegrid == 1` a `.grid` file will be saved for the last run of each solver, identified with solver given name (i.e. `FMM.grid`. If `savegrid == 2` a `.grid` file is saved for every run identified as `<runID>.grid`. In both cases, grid files will be stored in a folder `results/<benchmark_name>`. By default only the log will be saved.
 
     [solvers]
     fmm=

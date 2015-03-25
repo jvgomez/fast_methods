@@ -35,7 +35,7 @@ class Benchmark {
     public:
 
         Benchmark
-        (bool saveGrid = false, bool saveLog = true) :
+        (unsigned int saveGrid = 0, bool saveLog = true) :
         saveGrid_(saveGrid),
         saveLog_(saveLog),
         runID_(0),
@@ -63,7 +63,7 @@ class Benchmark {
 
         /** \brief Sets the saveGrid_ flag. */
         void setSaveGrid
-        (bool s) {
+        (unsigned int s) {
             saveGrid_ = s;
         }
 
@@ -126,15 +126,18 @@ class Benchmark {
                 for (unsigned int i = 0; i < nruns_; ++i)
                 {
                     ++runID_;
+                    s->reset();
                     s->compute();
                     logRun(s);
 
-                    if (saveGrid_)
+                    if (saveGrid_ == 2)
                         saveGrid(s);
 
-                    s->reset();
                     ++showProgress;
                 }
+                if (saveGrid_ == 1)
+                    saveGrid(s);
+                s->reset();                
             }
 
             if (saveLog_)
@@ -164,7 +167,11 @@ class Benchmark {
         void saveGrid
         (Solver<grid_t>* s) const {
             thread_local boost::filesystem::path filename;
-            filename = path_ / name_ / fmtID_;
+            if (saveGrid_ == 1)
+                filename = path_ / name_ / s->getName();
+            if (saveGrid_ == 2)
+                filename = path_ / name_ / fmtID_;
+            
             filename.replace_extension(".grid");
             GridWriter::saveGridValues(filename.string().c_str(), *(s->getGrid()));
         }
@@ -251,8 +258,9 @@ class Benchmark {
         /** \brief Log stream. */
         std::stringstream                                   log_;
 
-        /** \brief If true, the grids are saved to files. */
-        bool                                                saveGrid_;
+        /** \brief If 1, the resulting grids (times) of the first run of each solver are saved to files.
+             If 2, the grids for all runs of each solver are saved. */
+        unsigned int                                        saveGrid_;
         
         /** \brief  If true, the log is saved to file. Output on terminal otherwise. */
         bool                                                saveLog_;

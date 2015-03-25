@@ -128,7 +128,7 @@ class BenchmarkCFG {
         (Benchmark<grid_t> & b) {
             b.setSaveLog(true);
             b.setName(getValue<std::string>("benchmark.name"));
-            b.setSaveGrid(getValue<bool>("benchmark.savegrid"));
+            b.setSaveGrid(getValue<unsigned int>("benchmark.savegrid"));
             b.setNRuns(getValue<unsigned int>("benchmark.runs"));
             b.setPath(boost::filesystem::path("results"));
             b.fromCFG(true);

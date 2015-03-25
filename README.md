@@ -55,12 +55,6 @@ jvgomez/fm2examples
 https://www.biicode.com/endher
 endher/fm2
 
-#### v0.6 ChangeLog
-- solveEikonal made more stable, but a bit less efficient.
-- Added FSM, LSM, DDQM.
-- Added another hierarchy layer: EikonalSolver.
-- Some small tweaks, improvements and better documentation.
-
 ## DISCLAIMER and IMPORTANT NOTES
 
 - The code is not deeply tested. I've just tested it works for the cases I need. If you find any problem, have any question (or whatever), please write to: javvgomez _at_ gmail.com
