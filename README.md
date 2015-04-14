@@ -135,7 +135,6 @@ Although there are a lot of folders, they are quite simple. It is organized this
 
 At the top of each file there are specific TODO comments. Here are some others:
 
-- Add support to create Benchmark grids from .grid files.
 - Upload as a unique biicode block.
 - printRunInfo implementation missing for most of the solvers.
 - Unify GridWriter and GridPlotter functions parameter order: (grid, name)
