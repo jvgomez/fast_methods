@@ -28,11 +28,14 @@ It will parse `benchmark.cfg` and run all the solvers in the environment set wit
     [grid]
     # File: route to image from the current terminal working dir, NOT from this file folder.
     file=../../data/img.png
+    #text=../../data/map.grid
     #ndims=2
     #cell=FMCell
     #dimsize=300,300
 
 Under grid label, we configure the enviroment. If a file is provided (in occupancy format, that is, 8bits grayscale) `FMCell` and 2 dimensions will be assumed. `dimsize` will be adapted to the size of the image given. A 2D FMCell, 200x200 grid is given by default.
+
+\note Those key requiring relative paths, such as `file` or `text`, require relative paths using as current folder the current working directory of the terminal executing the benchmark, not the CFG file folder neither the benchmarking program binary folder.
 
     [problem]
     start=150,150

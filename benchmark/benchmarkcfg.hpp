@@ -80,6 +80,7 @@ class BenchmarkCFG {
             boost::program_options::options_description desc;
             desc.add_options()
                 ("grid.file",          boost::program_options::value<std::string>(),                             "Path to load a velocities map from image.")
+                ("grid.text",          boost::program_options::value<std::string>(),                             "Path to load a velocities map from a .grid file.")
                 ("grid.ndims",         boost::program_options::value<std::string>()->default_value("2"),         "Number of dimensions.")
                 ("grid.cell",          boost::program_options::value<std::string>()->default_value("FMCell"),    "Type of cell. FMCell by default.")
                 ("grid.dimsize",       boost::program_options::value<std::string>()->default_value("200,200"),   "Size of dimensions: N,M,O...")
@@ -267,8 +268,11 @@ class BenchmarkCFG {
 
             constexpr size_t N = grid_t::getNDims();
             grid_t * grid = new grid_t();
-            if (options_.find("grid.file") != options_.end()) {
+            if (options_.find("grid.file") != options_.end())
                 MapLoader::loadMapFromImg(options_.find("grid.file")->second.c_str(), *grid);
+            else if (options_.find("grid.text") != options_.end()) {
+                if(!MapLoader::loadMapFromText(options_.find("grid.text")->second.c_str(), *grid))
+                    exit(1);
             }
             else {
                 const std::string & strToSplit = options_.find("grid.dimsize")->second;
