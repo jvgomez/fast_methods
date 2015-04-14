@@ -69,6 +69,13 @@ int main(int argc, const char ** argv)
                     b.run();
                     break;
                 }
+                case 4:
+                {
+                    Benchmark<nDGridMap<FMCell,4> > b;
+                    bcfg.configure<nDGridMap<FMCell,4>, FMCell>(b);
+                    b.run();
+                    break;
+                }
                 // Include here new dimensions copying, pasting and changing x.
                 /*case x:
                 {

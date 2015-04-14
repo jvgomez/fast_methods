@@ -6,9 +6,15 @@ close all;
 % This file assumes that all the experiments in path_to_benchmarks logged 
 % the same algorithms in the same order.
 
+%% Set the number of dimensions to analyze.
+% nd = 2;
+% nd = 3;
+nd = 4;
+
 %% Folders containing the results
-path_to_benchmarks = '2d/results/';
-path_to_errors = '2d_error/results/';
+
+path_to_benchmarks = [num2str(nd) 'd/results/'];
+% path_to_errors = [num2str(nd) 'd_error/results/'];
 
 %% Opening benchmark file.
 files = [];
@@ -58,58 +64,58 @@ ylabel('Time (ms)');
 
 %% Analyzing errors for FMM, FIM and UFMM
 % Assumes this ordering: 0001 FMM, 0002 FIM, 0003 UFMM
-files_err = [];
-dirs_err = [];
-elements_err = dir(path_to_errors);
-for i = 3:size(elements_err,1)
-    if ~elements_err(i).isdir
-        files_err = [files_err; elements_err(i)];
-    else
-        dirs_err = [dirs_err; elements_err(i)];
-    end
-end
-
-L1 = zeros(2,size(dirs_err,1));
-Linf = zeros(2,size(dirs_err,1));
-
-for i = 1:size(dirs_err,1)
-    % Load grids
-    grids_path = strcat(path_to_errors, dirs_err(i).name, '/');
-    fmm_grid = parseGrid(strcat(grids_path, '0001.grid'));
-    fim_grid = parseGrid(strcat(grids_path, '0002.grid'));
-    ufmm_grid = parseGrid(strcat(grids_path, '0003.grid'));
-    
-    % Compute errors
-    fim_err = fim_grid.cells - fmm_grid.cells;
-    ufmm_err = ufmm_grid.cells - fmm_grid.cells;
-    
-    % L1 norm is done with the integral (actually the mean of L1), see 
-    % Lp spaces for more info: http://en.wikipedia.org/wiki/Lp_space#Lp_spaces
-    % L1 = sum(|xi|*hx*hy) = sum(|xi|)*hx*hy (numerical integration.
-    L1(1,i) = norm(fim_err(:), 1) * fim_grid.leafsize^2;
-    L1(2,i) = norm(ufmm_err(:), 1) * ufmm_grid.leafsize^2;
-    
-    Linf(1,i) = norm(fim_err(:), Inf) * fim_grid.leafsize^2;
-    Linf(2,i) = norm(ufmm_err(:), Inf) * ufmm_grid.leafsize^2;
-end
-
-%% Plotting
-markers_err = [markers(5,:); markers(6,:)]; % Positions of FIM and UFMM.
-colors_err = [colors(5,:); colors(6,:)];
-
-figure;
-hold on;
-for i = 1:2
-    plot(ncells, L1(i,:), markers_err(i,:), 'MarkerSize', 7, 'LineWidth', 1, 'Color', colors_err(i,:));
-end
-for i = 1:2
-    plot(ncells, Linf(i,:), ['-',markers_err(i,:)], 'MarkerSize', 7, 'LineWidth', 1, 'Color', colors_err(i,:));
-end
-algs_err = cell(1,4);
-algs_err{1} = 'FIM L_1';
-algs_err{2} = 'UFMM L_1';
-algs_err{3} = 'FIM L_\infty';
-algs_err{4} = 'UFMM L_\infty';
-h = legend(algs_err, 'Location', 'northwest');
-xlabel('# Cells');
-ylabel('L_1 Norm (s)');
+% files_err = [];
+% dirs_err = [];
+% elements_err = dir(path_to_errors);
+% for i = 3:size(elements_err,1)
+%     if ~elements_err(i).isdir
+%         files_err = [files_err; elements_err(i)];
+%     else
+%         dirs_err = [dirs_err; elements_err(i)];
+%     end
+% end
+% 
+% L1 = zeros(2,size(dirs_err,1));
+% Linf = zeros(2,size(dirs_err,1));
+% 
+% for i = 1:size(dirs_err,1)
+%     % Load grids
+%     grids_path = strcat(path_to_errors, dirs_err(i).name, '/');
+%     fmm_grid = parseGrid(strcat(grids_path, '0001.grid'));
+%     fim_grid = parseGrid(strcat(grids_path, '0002.grid'));
+%     ufmm_grid = parseGrid(strcat(grids_path, '0003.grid'));
+%     
+%     % Compute errors
+%     fim_err = fim_grid.cells - fmm_grid.cells;
+%     ufmm_err = ufmm_grid.cells - fmm_grid.cells;
+%     
+%     % L1 norm is done with the integral (actually the mean of L1), see 
+%     % Lp spaces for more info: http://en.wikipedia.org/wiki/Lp_space#Lp_spaces
+%     % L1 = sum(|xi|*hx*hy) = sum(|xi|)*hx*hy (numerical integration.
+%     L1(1,i) = norm(fim_err(:), 1) * fim_grid.leafsize^2;
+%     L1(2,i) = norm(ufmm_err(:), 1) * ufmm_grid.leafsize^2;
+%     
+%     Linf(1,i) = norm(fim_err(:), Inf) * fim_grid.leafsize^2;
+%     Linf(2,i) = norm(ufmm_err(:), Inf) * ufmm_grid.leafsize^2;
+% end
+% 
+% %% Plotting
+% markers_err = [markers(5,:); markers(6,:)]; % Positions of FIM and UFMM.
+% colors_err = [colors(5,:); colors(6,:)];
+% 
+% figure;
+% hold on;
+% for i = 1:2
+%     plot(ncells, L1(i,:), markers_err(i,:), 'MarkerSize', 7, 'LineWidth', 1, 'Color', colors_err(i,:));
+% end
+% for i = 1:2
+%     plot(ncells, Linf(i,:), ['-',markers_err(i,:)], 'MarkerSize', 7, 'LineWidth', 1, 'Color', colors_err(i,:));
+% end
+% algs_err = cell(1,4);
+% algs_err{1} = 'FIM L_1';
+% algs_err{2} = 'UFMM L_1';
+% algs_err{3} = 'FIM L_\infty';
+% algs_err{4} = 'UFMM L_\infty';
+% h = legend(algs_err, 'Location', 'northwest');
+% xlabel('# Cells');
+% ylabel('L_1 Norm (s)');
