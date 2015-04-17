@@ -59,7 +59,7 @@ for i = 1:size(algs,2)
     plot(nbars, times(i,:), markers(i,:), 'MarkerSize', 7, 'LineWidth', 1, 'Color', colors(i,:));
 end
 legend(algs, 'Location', 'northwest');
-xlabel('# Cells');
+xlabel('# Barriers');
 ylabel('Time (ms)');
 
 %% Analyzing errors for FMM, FIM and UFMM
