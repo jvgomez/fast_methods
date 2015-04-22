@@ -28,6 +28,8 @@
 #ifndef FIM_HPP_
 #define FIM_HPP_
 
+#include <list>
+
 #include "eikonalsolver.hpp"
 
 template < class grid_t > class FIM : public EikonalSolver<grid_t> {
