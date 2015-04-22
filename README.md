@@ -130,6 +130,7 @@ Although there are a lot of folders, they are quite simple. It is organized this
 ## KNOWN ISSUES
 
 - Gradient Descent for FM2* could fail if very narrow passages are in the way of the path.
+- It seems that UFMM can fail in maps with random (or similar) velocity changes.
 
 ## TODO
 
