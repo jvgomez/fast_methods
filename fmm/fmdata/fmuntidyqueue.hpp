@@ -55,13 +55,18 @@ template<class cell_t = FMCell> class FMUntidyQueue {
             c->setBucket(i);
         }
 
-        /** \brief Pops index of the element with lowest value and removes it from the heap. */
-        unsigned int popMinIdx
+        /** \brief Returns index of the element with lowest value. */
+        unsigned int topIdx
         (){
             const cell_t * c = queue_->top();
-            queue_->pop();
             int index_pop = c->getIndex();
             return index_pop;
+        }
+
+        /** \brief Removes the top value of the heap. */
+        void pop
+        () {
+            queue_->pop();
         }
 
         /** \brief Deallocates heap memory. */

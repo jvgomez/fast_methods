@@ -41,7 +41,7 @@ template <class cell_t = FMCell> class FMPriorityQueue{
         }
 
         /** \brief Pushes a new element into the heap. */
-        void push 
+        void push
         (const cell_t * c) {
             heap_.push(c);
         }

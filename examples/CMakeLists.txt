@@ -45,9 +45,9 @@ add_executable (test_fmm_benchmark test_fmm_benchmark.cpp
                         )
 target_link_libraries (test_fmm_benchmark boost_system boost_filesystem boost_program_options)
 
-add_executable (test_fm3d test_fm3d.cpp
+add_executable (test_fmm3d test_fmm3d.cpp
                 ../console/console.cpp
                 ../ndgridmap/cell.cpp
                 ../fmm/fmdata/fmcell.cpp
                 )
-target_link_libraries (test_fm3d)
+target_link_libraries (test_fmm3d)

@@ -63,10 +63,11 @@ template <class grid_t, class cell_t = FMCell> class UFMM : public EikonalSolver
 
             // Main loop.
             while (!stopWavePropagation && !narrow_band_->empty()) {
-                unsigned int idxMin = narrow_band_->popMinIdx();
+                unsigned int idxMin = narrow_band_->topIdx(); // pop() has to be called after pushing in this case (because
+                                                              // of the untidy queue implementation.
                 n_neighs = grid_->getNeighbors(idxMin, neighbors_);
                 grid_->getCell(idxMin).setState(FMState::FROZEN);
-                for (unsigned int s = 0; s < n_neighs; ++s) { // For each neighbor
+                for (unsigned int s = 0; s < n_neighs; ++s) { // For each neighbor.
                     j = neighbors_[s];
                     if ( (grid_->getCell(j).getState() == FMState::FROZEN) || grid_->getCell(j).isOccupied())
                         continue;
@@ -85,6 +86,7 @@ template <class grid_t, class cell_t = FMCell> class UFMM : public EikonalSolver
                         } // neighbors open.
                     } // neighbors not frozen.
                 } // For each neighbor.
+                narrow_band_->pop();
                 if (idxMin == goal_idx_)
                     stopWavePropagation = true;
             } // while narrow band is not empty
