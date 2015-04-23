@@ -31,6 +31,7 @@
 #include <list>
 
 #include "eikonalsolver.hpp"
+#include "../utils/utils.h"
 
 template < class grid_t > class FIM : public EikonalSolver<grid_t> {
 
@@ -49,7 +50,7 @@ template < class grid_t > class FIM : public EikonalSolver<grid_t> {
             double q =-1;
             double p =-1;
             unsigned int n_neighs = 0;
-            unsigned int j = 0;
+            unsigned int x_nb = 0;
             bool stopWavePropagation = 0;
 
             // Algorithm initialization.
@@ -59,36 +60,39 @@ template < class grid_t > class FIM : public EikonalSolver<grid_t> {
 
                 n_neighs = grid_->getNeighbors(i, neighbors_);
                 for (unsigned int s = 0; s < n_neighs; ++s) {// For each neighbor
-                    j = neighbors_[s];
-                    if ( (grid_->getCell(j).getState() == FMState::OPEN) && !grid_->getCell(j).isOccupied()) {
-                        active_list_.push_back(j);
-                        grid_->getCell(j).setState(FMState::NARROW);
+                    x_nb = neighbors_[s];
+                    if ( (grid_->getCell(x_nb).getState() == FMState::OPEN) && !grid_->getCell(x_nb).isOccupied()) {
+                        active_list_.push_back(x_nb);
+                        grid_->getCell(x_nb).setState(FMState::NARROW);
                     }
                 }
             }
 
             // Main loop.
             while(!stopWavePropagation && !active_list_.empty()) {
-                for (std::list<unsigned int>::iterator i = active_list_.begin(); i!=active_list_.end(); ++i) {// for each cell of active_list
-                    p = grid_->getCell(*i).getArrivalTime();
-                    q = solveEikonal(*i);
-                    if(p>q)
-                        grid_->getCell(*i).setArrivalTime(q);
-                    if (fabs(p - q) <= E_) {// if the cell has converged
-                        grid_->getCell(*i).setState(FMState::FROZEN);
-                        n_neighs = grid_->getNeighbors(*i, neighbors_);
-                        for (unsigned int s = 0; s < n_neighs; ++s){  // For each neighbor of converged cells of active_list
-                            j = neighbors_[s];
-                            if ((grid_->getCell(j).getState() == FMState::OPEN) && (grid_->getCell(j).getVelocity() != 0)) {
-                                active_list_.insert(i,j);
-                                grid_->getCell(j).setState(FMState::NARROW);
+                for (std::list<unsigned int>::iterator x = active_list_.begin(); x!=active_list_.end(); ++x) { // for each cell of active_list
+                    p = grid_->getCell(*x).getArrivalTime();
+                    q = solveEikonal(*x);
+                    grid_->getCell(*x).setArrivalTime(q);
+                    if (fabs(p - q) <= E_) { // if the cell has converged
+                        n_neighs = grid_->getNeighbors(*x, neighbors_);
+                        for (unsigned int s = 0; s < n_neighs; ++s){ // For each neighbor of converged cells of active_list
+                            x_nb = neighbors_[s];
+                            if (grid_->getCell(x_nb).getState() != FMState::NARROW && !grid_->getCell(x_nb).isOccupied()) {
+                                p = grid_->getCell(x_nb).getArrivalTime();
+                                q = solveEikonal(x_nb);
+                                if (utils::isTimeBetterThan(q, p)) {
+                                    grid_->getCell(x_nb).setArrivalTime(q);
+                                    active_list_.insert(x, x_nb);
+                                    grid_->getCell(x_nb).setState(FMState::NARROW);
+                                    }
                             }
                         }// For each neighbor of converged cells of active_list
-                    grid_->getCell(*i).setState(FMState::FROZEN);
-                    if (*i == goal_idx_)
+                    if (*x == goal_idx_)
                         stopWavePropagation = true;
-                    i = active_list_.erase(i);
-                    i--;
+                    grid_->getCell(*x).setState(FMState::FROZEN);
+                    x = active_list_.erase(x);
+                    --x;
                     }// if the cell has converged
                 }// for each cell of active_list
             }//while active_list is not empty
