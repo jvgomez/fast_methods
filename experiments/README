@@ -8,6 +8,8 @@ CFG and map files to run the benchmarking script. Separated by problems and numb
 
 Each problem has its own benchmarking analisys Matlab script, and some of the scripts to create the maps to be used in the benchmarks.
 
+IMPORTANT: The CFG files and folder structure are highly coupled with the scripts. Take a moment to study them or create your own scripts and folder structure.
+
 The grid sizes were chosen so that the total number of cells is approximatelly the same for all dimensions. For instance:
 
 - A 2D 100*100 grid has 10000 cells.
