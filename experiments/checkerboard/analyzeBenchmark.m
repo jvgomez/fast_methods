@@ -123,5 +123,5 @@ algs_err{2} = 'UFMM L_1';
 algs_err{3} = 'FIM L_\infty';
 algs_err{4} = 'UFMM L_\infty';
 h = legend(algs_err, 'Location', 'northwest');
-xlabel('# Cells');
-ylabel('L_1 Norm (s)');
+xlabel('Min. Velocity');
+ylabel('Norm (s)');
