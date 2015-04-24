@@ -62,11 +62,12 @@ template <class grid_t, class cell_t = FMCell> class UFMM : public EikonalSolver
             }
 
             // Main loop.
+            unsigned int idxMin = 0;
             while (!stopWavePropagation && !narrow_band_->empty()) {
-                unsigned int idxMin = narrow_band_->topIdx(); // pop() has to be called after pushing in this case (because
-                                                              // of the untidy queue implementation.
-                n_neighs = grid_->getNeighbors(idxMin, neighbors_);
+                idxMin = narrow_band_->topIdx(); // pop() has to be called after pushing in this case (because
+                                                 // of the untidy queue implementation.
                 grid_->getCell(idxMin).setState(FMState::FROZEN);
+                n_neighs = grid_->getNeighbors(idxMin, neighbors_);
                 for (unsigned int s = 0; s < n_neighs; ++s) { // For each neighbor.
                     j = neighbors_[s];
                     if ( (grid_->getCell(j).getState() == FMState::FROZEN) || grid_->getCell(j).isOccupied())
@@ -74,7 +75,7 @@ template <class grid_t, class cell_t = FMCell> class UFMM : public EikonalSolver
                     else {
                         double new_arrival_time = solveEikonal(j);
                         if (grid_->getCell(j).getState() == FMState::NARROW) { // Updating narrow band if necessary.
-                            if (new_arrival_time < grid_->getCell(j).getArrivalTime() ) {
+                            if (utils::isTimeBetterThan(new_arrival_time, grid_->getCell(j).getArrivalTime()) ) {
                                 grid_->getCell(j).setArrivalTime(new_arrival_time);
                                 narrow_band_->increase( &(grid_->getCell(j)) );
                             }
@@ -90,6 +91,15 @@ template <class grid_t, class cell_t = FMCell> class UFMM : public EikonalSolver
                 if (idxMin == goal_idx_)
                     stopWavePropagation = true;
             } // while narrow band is not empty
+        }
+
+        virtual void printRunInfo
+        () const {
+            console::info("Untidy Fast Marching Method");
+            std::cout << '\t' << name_ << '\n'
+                      << '\t' << "Number of buckets: " << heap_s_ << '\n'
+                      << '\t' << "Maximum increment " << heap_inc_ << '\n'
+                      << '\t' << "Elapsed time: " << time_ << " ms\n";
         }
 
         virtual void clear
@@ -111,12 +121,14 @@ template <class grid_t, class cell_t = FMCell> class UFMM : public EikonalSolver
         using EikonalSolver<grid_t>::setup;
         using EikonalSolver<grid_t>::setup_;
         using EikonalSolver<grid_t>::neighbors_;
+        using EikonalSolver<grid_t>::name_;
+        using EikonalSolver<grid_t>::time_;
 
     private:
         /** \brief Number of buckets in the heap. */
         unsigned                heap_s_;
 
-        /** \brief Size (maximum increment) of each bucket. */
+        /** \brief Size (maximum increment) of the heap. */
         double                  heap_inc_;
 
         /** \brief Heap Instance of the priority queue used. */
