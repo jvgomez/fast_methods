@@ -7,6 +7,7 @@ nd = 3;
 % Number of barriers
 nbar = 9;
 
+mkdir('maps');
 if nd == 2
     height = 1000;
     width = 2000;
