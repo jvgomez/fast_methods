@@ -40,7 +40,11 @@ for i = 1:size(algs,2)
 end
 
 for i = 1:nexps
-    vmin(i) = str2double(exps{i}.name(12:end))/10;
+    vmin(i) = str2double(exps{i}.name(12:end));
+    
+    if vmin(i) == 0
+        vmin(i) = 1;
+    end
     
     for j = 1:size(exps{i}.exp,1)
         times(j,i) = mean(exps{i}.exp{j,2});        
@@ -95,11 +99,9 @@ for i = 1:size(dirs_err,1)
     % where dom(X) is the real size of dimension X and numX the number of
     % cells in that dimension.
     domX = 1;
-    domY = 1;
     numX = size(fmm_grid.cells,1);
-    numY = size(fmm_grid.cells,2);
-    L1(1,i) = norm(fim_err(:), 1) * domX*domY / (numX*numY);
-    L1(2,i) = norm(ufmm_err(:), 1) * domX*domY / (numX*numY); % dom(X)=dom(Y)=1;
+    L1(1,i) = norm(fim_err(:), 1) * domX^nd  / (numX^nd); % Assuming cubic grid.
+    L1(2,i) = norm(ufmm_err(:), 1) * domX^nd  / (numX^nd);
     
     Linf(1,i) = norm(fim_err(:), Inf);
     Linf(2,i) = norm(ufmm_err(:), Inf);
@@ -122,6 +124,6 @@ algs_err{1} = 'FIM L_1';
 algs_err{2} = 'UFMM L_1';
 algs_err{3} = 'FIM L_\infty';
 algs_err{4} = 'UFMM L_\infty';
-h = legend(algs_err, 'Location', 'northwest');
+h = legend(algs_err, 'Location', 'northeast');
 xlabel('Min. Velocity');
 ylabel('Norm (s)');
