@@ -38,8 +38,7 @@ template<class cell_t = FMCell> class FMUntidyQueue {
         /** \brief Pushes a new element into the heap. */
         void push
         (cell_t * c) {
-            int i = queue_->push(c, c->getArrivalTime());
-            c->setBucket(i);
+            c->setBucket( queue_->push(c, c->getArrivalTime()) );
         }
 
         /** \brief Returns current size of the heap. */
@@ -52,8 +51,7 @@ template<class cell_t = FMCell> class FMUntidyQueue {
              Also updates the bucket of the cell. */
         void increase
         (cell_t * c) {
-            int i = queue_->increase_priority(c, c->getBucket(), c->getArrivalTime());
-            c->setBucket(i);
+            c->setBucket( queue_->increase_priority(c, c->getBucket(), c->getArrivalTime()) );
         }
 
         /** \brief Returns index of the element with \e lowest value (to be popped next). */
@@ -80,7 +78,7 @@ template<class cell_t = FMCell> class FMUntidyQueue {
             return queue_->empty();
         }
 
-    //protected:
+    protected:
         /** \brief The actual Unitidy queue for cell_t. */
         levelset::PriorityQueue<const cell_t * > * queue_;
 };
