@@ -23,6 +23,7 @@
 #include <string>
 #include <array>
 
+#include "../fmm/fmdata/fmcell.h"
 #include "../ndgridmap/ndgridmap.hpp"
 
 #include "../thirdparty/CImg.h"
@@ -222,6 +223,34 @@ class GridPlotter {
           name += " Values and Path";
           img.display(name.c_str(), false);
       }
+
+      /** \brief Plots the FMState of a cell.
+           Should be used only in 2D grids.
+
+           The Y dimension flipping is because nDGridMap works in X-Y coordinates, not in image indices as CImg.
+
+          IMPORTANT NOTE: no type-checkings are done. T type has to be Cell or any class with bool getValue() method. */
+       template<class T, size_t ndims = 2>
+       static void plotFMStates
+       (nDGridMap<T, ndims> & grid, std::string name = "") {
+           std::array<unsigned int,2> d = grid.getDimSizes();
+           //double max_val = grid.getMaxValue();
+           CImg<unsigned int> img(d[0],d[1],1,1,0);
+           // Filling the image flipping Y dim. We want now top left to be the (0,0).
+           cimg_forXY(img,x,y) {
+               FMState state = grid[img.width()*(img.height()-y-1)+x].getState();
+               unsigned int val = 0;
+               if (state == FMState::NARROW)
+                   val = 127;
+               else if (state == FMState::OPEN)
+                   val = 255;
+               img(x,y) = val;
+           }
+           //img.map( CImg<double>::jet_LUT256() );
+           name += "FMStates";
+           img.display(name.c_str(), false);
+       }
+
 };
 
 #endif /* GRIDPLOTTER_H_ */

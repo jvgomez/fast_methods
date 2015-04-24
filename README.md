@@ -136,6 +136,7 @@ Although there are a lot of folders, they are quite simple. It is organized this
 
 At the top of each file there are specific TODO comments. Here are some others:
 
+- Improve untidy queue implementation with hash maps (specially remove element in increase_priority()).
 - Upload as a unique biicode block.
 - printRunInfo implementation missing for most of the solvers.
 - Unify GridWriter and GridPlotter functions parameter order: (grid, name)
