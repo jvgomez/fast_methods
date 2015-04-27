@@ -8,8 +8,8 @@ close all;
 % bars can result in strange plots, but it should be easy to adapt it.
 
 %% Set the number of dimensions to analyze.
-nd = 2;
-% nd = 3;
+% nd = 2;
+nd = 3;
 
 %% Folders containing the results
 

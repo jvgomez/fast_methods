@@ -17,16 +17,16 @@ for vmin = 0:10:100 % For each velocity ranges
         cells = side*side;
         % Savig up to 2 decimals.
         map = round((vmin2 + (1-vmin2)*rand(side,side))*100)/100;
-        saveGridToFile(map, ['maps/2dchecker_' num2str(vmin2) '.grid']);
+        saveGridToFile(map, ['maps/2drandom_' num2str(vmin2) '.grid']);
     elseif nd == 3
         cells = side*side*side;
         % Savig up to 2 decimals.
         map = round((vmin2 + (1-vmin2)*rand(side,side,side))*100)/100;
-        saveGridToFile(map, ['maps/3dchecker_' num2str(vmin2) '.grid']);
+        saveGridToFile(map, ['maps/3drandom_' num2str(vmin2) '.grid']);
     elseif nd == 4
         cells = side*side*side*side;
         % Savig up to 2 decimals.
         map = round((vmin2 + (1-vmin2)*rand(side,side,side,side))*100)/100;
-        saveGridToFile(map, ['maps/4dchecker_' num2str(vmin2) '.grid']);
+        saveGridToFile(map, ['maps/4drandom_' num2str(vmin2) '.grid']);
     end
 end
