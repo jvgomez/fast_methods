@@ -68,6 +68,7 @@ class EikonalSolver : public Solver<grid_t>{
             for (unsigned i = 1; i <= a; ++i) {
                 updatedT = solveEikonalNDims(idx, i);
                 // If no more dimensions or increasing one dimension will not improve time.
+                /// \todo use isTimeBetterThan()
                 if (i == a || (updatedT - Tvalues_[i]) < utils::COMP_MARGIN)
                     break;
             }
