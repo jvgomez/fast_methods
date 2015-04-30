@@ -7,8 +7,8 @@ close all;
 % the same algorithms in the same order.
 
 %% Set the number of dimensions to analyze.
-nd = 2;
-% nd = 3;
+% nd = 2;
+nd = 3;
 % nd = 4;
 
 %% Folders containing the results
@@ -59,3 +59,15 @@ end
 legend(algs, 'Location', 'northwest');
 xlabel('# Cells');
 ylabel('Time (ms)');
+
+
+%% Proportional plotting, with respect to FMM
+ratios = bsxfun(@rdivide, times, times(1,:));
+figure;
+hold on;
+for i = 1:size(algs,2)
+    plot(ncells, ratios(i,:), markers(i,:), 'MarkerSize', 7, 'LineWidth', 1, 'Color', colors(i,:));
+end
+xlabel('# Cells');
+ylabel('Ratio Time/FMM Time');
+
