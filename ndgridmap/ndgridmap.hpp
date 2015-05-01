@@ -337,6 +337,16 @@ template <class T, size_t ndims> class nDGridMap {
             return sum/(ncells_ - nObs);
         }
 
+        /** \brief Returns the maximum speed (occupancy value) in the grid. */
+        double getMaxSpeed
+        () {
+            double max = 0;
+            for (const T & c : cells_)
+                if (max < c.getVelocity())
+                    max = c.getVelocity();
+            return max;
+        }
+
     private:
         /** \brief Main container for the class. */
         std::vector<T> cells_;
