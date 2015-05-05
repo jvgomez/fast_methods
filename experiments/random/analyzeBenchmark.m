@@ -11,8 +11,10 @@ close all;
 
 %% Set the number of dimensions to analyze.
 % nd = 2;
-nd = 3;
-% nd = 4;
+% nd = 3;
+nd = 4;
+
+fs = 16;
 
 %% Folders containing the results
 path_to_benchmarks = [num2str(nd) 'd/results/'];
@@ -69,9 +71,12 @@ hold on;
 for i = 1:size(algs,2)
     plot(vmin, times(i,:), markers(i,:), 'MarkerSize', 7, 'LineWidth', 1, 'Color', colors(i,:));
 end
-legend(algs, 'Location', 'northeast');
-xlabel('Min. Velocity');
-ylabel('Time (ms)');
+legend(algs, 'Location', 'northeast','FontSize', fs);
+xlabel('Min. Velocity (units)','FontSize', fs);
+ylabel('Time (ms)','FontSize', fs);
+set(gca,'FontSize', fs);
+box on;
+saveas(gcf, [num2str(nd) 'random.pdf'],'pdf');
 
 %% Zooming to see the others
 figure;
@@ -79,8 +84,8 @@ hold on;
 for i = 1:size(algs,2)
     plot(vmin, times(i,:), markers(i,:), 'MarkerSize', 7, 'LineWidth', 1, 'Color', colors(i,:));
 end
-xlabel('Min. Velocity');
-ylabel('Time (ms)');
+xlabel('Min. Velocity (units)','FontSize', fs);
+ylabel('Time (ms)','FontSize', fs);
 xlim([0 100]);
 
 if nd == 2
@@ -90,6 +95,9 @@ elseif nd == 3
 else
     ylim([0 50000]);
 end
+box on;
+set(gca,'FontSize', fs);
+saveas(gcf, [num2str(nd) 'random_zoom.pdf'],'pdf');
 
 % %% Analyzing errors for FMM, FIM and UFMM
 % % Assumes this ordering: 0001 FMM, 0002 FIM, 0003 UFMM

@@ -8,8 +8,10 @@ close all;
 % bars can result in strange plots, but it should be easy to adapt it.
 
 %% Set the number of dimensions to analyze.
-nd = 2;
-% nd = 3;
+% nd = 2;
+nd = 3;
+
+fs = 16;
 
 %% Folders containing the results
 path_to_benchmarks = [num2str(nd) 'd/results/'];
@@ -56,6 +58,10 @@ hold on;
 for i = 1:size(algs,2)
     plot(nbars, times(i,:), markers(i,:), 'MarkerSize', 7, 'LineWidth', 1, 'Color', colors(i,:));
 end
-legend(algs, 'Location', 'northwest');
-xlabel('# Barriers');
-ylabel('Time (ms)');
+legend(algs, 'Location', 'northwest','FontSize', fs);
+legend boxoff
+xlabel('# Barriers','FontSize', fs);
+ylabel('Time (ms)','FontSize', fs);
+set(gca,'FontSize', fs);
+box on;
+saveas(gcf, [num2str(nd) 'barriers.pdf'],'pdf');

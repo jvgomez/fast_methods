@@ -7,9 +7,11 @@ close all;
 % the same algorithms in the same order.
 
 %% Set the number of dimensions to analyze.
-% nd = 2;
-nd = 3;
+nd = 2;
+% nd = 3;
 % nd = 4;
+
+fs = 16;
 
 %% Folders containing the results
 path_to_benchmarks = [num2str(nd) 'd/results/'];
@@ -56,10 +58,14 @@ hold on;
 for i = 1:size(algs,2)
     plot(ncells, times(i,:), markers(i,:), 'MarkerSize', 7, 'LineWidth', 1, 'Color', colors(i,:));
 end
-legend(algs, 'Location', 'northwest');
-xlabel('# Cells');
-ylabel('Time (ms)');
+lgnd = legend(algs, 'Location', 'northwest', 'FontSize', fs);
+legend boxoff;
+xlabel('# Cells', 'FontSize', fs);
+ylabel('Time (ms)', 'FontSize', fs);
+box on;
+set(gca,'FontSize', fs);
 
+saveas(gcf, [num2str(nd) 'emptymap.pdf'],'pdf');
 
 %% Proportional plotting, with respect to FMM
 ratios = bsxfun(@rdivide, times, times(1,:));
@@ -68,6 +74,9 @@ hold on;
 for i = 1:size(algs,2)
     plot(ncells, ratios(i,:), markers(i,:), 'MarkerSize', 7, 'LineWidth', 1, 'Color', colors(i,:));
 end
-xlabel('# Cells');
-ylabel('Ratio Time/FMM Time');
+xlabel('# Cells', 'FontSize', fs);
+ylabel('Ratio Time/FMM Time', 'FontSize', fs);
+box on;
+
+saveas(gcf, [num2str(nd) 'emptymap_ratio.pdf'],'pdf');
 
