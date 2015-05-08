@@ -1,9 +1,9 @@
 %% Dummy script to generate the random maps used in the benchmarking.
 
 % Number of dimensions.
-% nd = 2;
+nd = 2;
 % nd = 3;
-nd = 4;
+% nd = 4;
 
 % Number of total cells.
 cells = 4e6;
@@ -11,7 +11,8 @@ cells = 4e6;
 mkdir('maps');
 side = round(cells^(1/nd));
 side10 = round(side/10);
-for vmin = 0:10:100 % For each velocity ranges
+% for vmin = 0:10:100 % For each velocity ranges
+for vmin = 100
     if nd == 2
         cells = side*side;
         map = ones(side, side);
@@ -71,3 +72,6 @@ for vmin = 0:10:100 % For each velocity ranges
         end
     end
 end
+
+% Command for save 2d as pdf:
+% image(map./100*255); axis image; box on; set(gca,'XTick',[]);set(gca,'YTick',[]); colormap gray(256);

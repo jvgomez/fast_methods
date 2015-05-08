@@ -2,9 +2,9 @@
 
 %% NOTE: files called checker for simplicity!!
 % Number of dimensions.
-% nd = 2;
+nd = 2;
 % nd = 3;
-nd = 4;
+% nd = 4;
 
 % Number of total cells.
 cells = 4e6;
@@ -30,3 +30,6 @@ for vmin = 0:10:100 % For each velocity ranges
         saveGridToFile(map, ['maps/4drandom_' num2str(vmin2) '.grid']);
     end
 end
+
+% Command to save 2d to pdf: 
+% image(map./100*255); axis image; box on; set(gca,'XTick',[]);set(gca,'YTick',[]); colormap gray(256);

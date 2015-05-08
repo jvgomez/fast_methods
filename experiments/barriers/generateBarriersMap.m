@@ -47,6 +47,7 @@ if nd == 2
 
         map = map';
         imwrite(map, ['maps/2dbarriers_' num2str(i) '.png']);
+        
     end
 elseif nd == 3
     size = 100;
