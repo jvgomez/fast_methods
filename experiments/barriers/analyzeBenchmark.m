@@ -65,3 +65,18 @@ ylabel('Time (ms)','FontSize', fs);
 set(gca,'FontSize', fs);
 box on;
 saveas(gcf, [num2str(nd) 'barriers.pdf'],'pdf');
+
+%% Proportional plotting, with respect to FMM
+ratios = bsxfun(@rdivide, times, times(1,:));
+figure;
+hold on;
+for i = 1:size(algs,2)
+    plot(nbars, ratios(i,:), markers(i,:), 'MarkerSize', 7, 'LineWidth', 1, 'Color', colors(i,:));
+end
+xlabel('# Cells', 'FontSize', fs);
+ylabel('Ratio Time/FMM Time', 'FontSize', fs);
+box on;
+set(gca,'FontSize', fs);
+
+saveas(gcf, [num2str(nd) 'barriers_ratio.pdf'],'pdf');
+

@@ -77,6 +77,7 @@ end
 xlabel('# Cells', 'FontSize', fs);
 ylabel('Ratio Time/FMM Time', 'FontSize', fs);
 box on;
+set(gca,'FontSize', fs);
 
 saveas(gcf, [num2str(nd) 'emptymap_ratio.pdf'],'pdf');
 

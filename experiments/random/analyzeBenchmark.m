@@ -72,6 +72,7 @@ for i = 1:size(algs,2)
     plot(vmin, times(i,:), markers(i,:), 'MarkerSize', 7, 'LineWidth', 1, 'Color', colors(i,:));
 end
 legend(algs, 'Location', 'northeast','FontSize', fs);
+legend boxoff
 xlabel('Min. Velocity (units)','FontSize', fs);
 ylabel('Time (ms)','FontSize', fs);
 set(gca,'FontSize', fs);

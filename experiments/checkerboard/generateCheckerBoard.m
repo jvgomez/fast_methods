@@ -11,8 +11,8 @@ cells = 4e6;
 mkdir('maps');
 side = round(cells^(1/nd));
 side10 = round(side/10);
-% for vmin = 0:10:100 % For each velocity ranges
-for vmin = 100
+for vmin = 0:10:100 % For each velocity ranges
+% for vmin = 100
     if nd == 2
         cells = side*side;
         map = ones(side, side);
