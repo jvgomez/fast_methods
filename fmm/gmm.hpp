@@ -38,6 +38,13 @@ template < class grid_t > class GMM : public EikonalSolver <grid_t> {
 
         virtual ~GMM() { clear(); }
 
+        void setup
+        () {
+            EikonalSolver<grid_t>::setup();
+            if (deltau_ < 0)
+                deltau_ = grid_->getLeafSize()/(grid_->getMaxSpeed()*sqrt(grid_t::getNDims()));
+            }
+
         /** \brief Actual method that implements GMM. */
         virtual void computeInternal
         () {
