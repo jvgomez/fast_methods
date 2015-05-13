@@ -109,9 +109,9 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FMM : public
             }
 
             // Main loop.
+            unsigned int idxMin = 0;
             while (!stopWavePropagation && !narrow_band_.empty()) {
-                //std::cout << "iterating" << "  " << narrow_band_.size() << '\n';
-                unsigned int idxMin = narrow_band_.popMinIdx();
+                idxMin = narrow_band_.popMinIdx();
                 n_neighs = grid_->getNeighbors(idxMin, neighbors_);
                 grid_->getCell(idxMin).setState(FMState::FROZEN);
                 for (unsigned int s = 0; s < n_neighs; ++s) {
@@ -129,7 +129,7 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FMM : public
 
                         // Updating narrow band if necessary.
                         if (grid_->getCell(j).getState() == FMState::NARROW) {
-                            if (new_arrival_time < grid_->getCell(j).getArrivalTime()) {
+                            if (utils::isTimeBetterThan(new_arrival_time, grid_->getCell(j).getArrivalTime())) {
                                 grid_->getCell(j).setArrivalTime(new_arrival_time);
                                 narrow_band_.increase( &(grid_->getCell(j)) );
                             }

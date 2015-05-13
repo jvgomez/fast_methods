@@ -23,6 +23,7 @@
 #include "../../thirdparty/untidy_queue.hpp"
 #include "fmcell.h"
 
+/// \todo save buckets here as a hash table instead of saving them in FMCell.
 template<class cell_t = FMCell> class FMUntidyQueue {
 
     public:
@@ -37,8 +38,7 @@ template<class cell_t = FMCell> class FMUntidyQueue {
         /** \brief Pushes a new element into the heap. */
         void push
         (cell_t * c) {
-            unsigned int i = queue_->push(c, c->getArrivalTime());
-            c->setBucket(i);
+            c->setBucket( queue_->push(c, c->getArrivalTime()) );
         }
 
         /** \brief Returns current size of the heap. */
@@ -51,17 +51,19 @@ template<class cell_t = FMCell> class FMUntidyQueue {
              Also updates the bucket of the cell. */
         void increase
         (cell_t * c) {
-            unsigned int i = queue_->increase_priority(c, c->getBucket(), c->getArrivalTime());
-            c->setBucket(i);
+            c->setBucket( queue_->increase_priority(c, c->getBucket(), c->getArrivalTime()) );
         }
 
-        /** \brief Pops index of the element with lowest value and removes it from the heap. */
-        unsigned int popMinIdx
+        /** \brief Returns index of the element with \e lowest value (to be popped next). */
+        unsigned int topIdx
         (){
-            const cell_t * c = queue_->top();
+            return queue_->top()->getIndex();
+        }
+
+        /** \brief Removes the top value of the heap. */
+        void pop
+        () {
             queue_->pop();
-            int index_pop = c->getIndex();
-            return index_pop;
         }
 
         /** \brief Deallocates heap memory. */

@@ -35,6 +35,7 @@
 
 #include "../console/console.h"
 
+/// \todo Init and goal points are not checked to be in the map.
 template <class grid_t>
 class Solver {
 

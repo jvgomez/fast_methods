@@ -130,11 +130,13 @@ Although there are a lot of folders, they are quite simple. It is organized this
 ## KNOWN ISSUES
 
 - Gradient Descent for FM2* could fail if very narrow passages are in the way of the path.
+- It seems that UFMM can fail in maps with random (or similar) velocity changes.
 
 ## TODO
 
 At the top of each file there are specific TODO comments. Here are some others:
 
+- Improve untidy queue implementation with hash maps (specially remove element in increase_priority()).
 - Upload as a unique biicode block.
 - printRunInfo implementation missing for most of the solvers.
 - Unify GridWriter and GridPlotter functions parameter order: (grid, name)

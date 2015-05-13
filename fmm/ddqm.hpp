@@ -46,8 +46,7 @@ template < class grid_t > class DDQM : public EikonalSolver<grid_t> {
         virtual void setEnvironment
         (grid_t * g) {
             EikonalSolver<grid_t>::setEnvironment(g);
-            double avgSpeed = 1.0/(grid_->getAvgSpeed()*grid_->getLeafSize());
-            thStep_ = 1.5 / avgSpeed;
+            thStep_  = 1.5 *grid_->getLeafSize() / grid_->getAvgSpeed();
             threshold_ = thStep_;
         }
 

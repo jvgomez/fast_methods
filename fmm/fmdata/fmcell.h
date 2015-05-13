@@ -38,7 +38,7 @@ class FMCell : public Cell{
 
     public:
         /** \brief Default constructor which performs and implicit Fast Marching-like initialization of the grid. */
-        FMCell() : Cell(std::numeric_limits<double>::infinity(), 1), state_(FMState::OPEN), hValue_(0) {}
+        FMCell() : Cell(std::numeric_limits<double>::infinity(), 1), state_(FMState::OPEN), bucket_(0), hValue_(0) {}
 
         virtual ~FMCell() {}
 
@@ -59,7 +59,7 @@ class FMCell : public Cell{
         virtual inline double getTotalValue() const               {return value_ + hValue_;}
         virtual inline double getVelocity() const                 {return occupancy_;}
         virtual inline FMState getState() const                   {return state_;}
-        virtual inline bool getBucket() const                     {return bucket_;}
+        virtual inline int getBucket() const                      {return bucket_;}
 
     protected:
         /** \brief State of the cell. */

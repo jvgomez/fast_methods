@@ -96,23 +96,28 @@ class MapLoader {
                 std::getline(file, val);
 
                 double leafsize;
-                unsigned int width, height;
                 size_t ndims_aux;
 
                 file >> leafsize;
                 file >> ndims_aux;
-                file >> width;
-                file >> height;
 
-                std::array<unsigned int, ndims> dimsize = {width, height};
+                if (ndims_aux != ndims) {
+                    console::error("Number of dimensions specified does not match the loaded grid.");
+                    exit(1);
+                }
+
+                std::array<unsigned int, ndims> dimsize;
+                for (unsigned int &i : dimsize) {
+                    file >> i;
+                }
+
                 grid.resize(dimsize);
                 grid.setLeafSize(leafsize);
 
-                for (unsigned int i = 0; i < width*height; ++i)
+                double occupancy;
+                for (unsigned int i = 0; i < grid.size(); ++i)
                 {
-                    bool occupancy;
                     file >> occupancy;
-
                     grid[i].setOccupancy(occupancy);
 
                     if (grid[i].isOccupied())

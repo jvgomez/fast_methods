@@ -76,14 +76,13 @@ namespace levelset {
                 delete[] m_tab;
         }
 
-
         // Access/Modif the queue
         template <class Element>
                 bool PriorityQueue<Element>::empty() const
         {
                 return (m_nb_elem == 0);
         }
-                
+
         template <class Element>
                 int PriorityQueue<Element>::push(const Element &e, double t)
         {
@@ -109,8 +108,8 @@ namespace levelset {
 
                         // compute the true indice in the regular array.
                         if (i >= 0){
-                                i = (i >= m_size)? m_size-1 : i;
-                                i = (i + m_i0) % m_size;
+                                i = (i >= m_size)? m_size-1 : i; // Index smaller than m_size
+                                i = (i + m_i0) % m_size; // Applying circular logic.
                         }
                         else{
                                 // if t < m_t0, compute new values for m_i0, m_t0, and verify that the end of the circular array is empty of at least |i| bucket.
@@ -133,8 +132,7 @@ namespace levelset {
                                 i = m_i0;
                         }
                 }
-
-                m_nb_elem++;
+                ++m_nb_elem;
                 m_tab[i].push_front(e);
 
                 return i;
@@ -150,10 +148,8 @@ namespace levelset {
                         m_i0 = (m_i0 + 1) % m_size;
                         m_t0 += m_delta;
                 }
-
-                m_nb_elem--;
+                --m_nb_elem;
                 m_tab[m_i0].pop_back();
-
         }
 
         template <class Element>
@@ -168,6 +164,7 @@ namespace levelset {
                 return m_tab[m_i0].back();
         }
 
+        /// \todo Improve this implementation using hash maps. It calls remove which is O(n).
         template <class Element>
                 int PriorityQueue<Element>::increase_priority(const Element& e, int bucket, double t_new)
         {
@@ -208,8 +205,10 @@ namespace levelset {
                         i = m_i0;
                 }
 
-                m_tab[bucket].remove(e);
-                m_tab[i].push_front(e);
+                if (i != bucket) { // Self-made optimization. Do nothing if the bucket is the same.
+                    m_tab[bucket].remove(e);
+                    m_tab[i].push_front(e);
+                }
 
                 return i;
         }
@@ -221,7 +220,7 @@ namespace levelset {
                 m_t0      = 0;
                 m_i0      = 0;
                 for (unsigned int i=0 ; i<m_size ; i++)
-                        m_tab[i].clear();
+                    m_tab[i].clear();
         }
 
         template <class Element>

@@ -30,6 +30,7 @@ void FMCell::setDefault
 () {
     Cell::setDefault();
     value_ = std::numeric_limits<double>::infinity();
+    bucket_ = 0;
     hValue_ = 0;
     state_ = FMState::OPEN;
 }
