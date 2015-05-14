@@ -44,10 +44,10 @@ template < class grid_t > class GMM : public EikonalSolver <grid_t> {
             EikonalSolver<grid_t>::setup();
             if (deltau_ < 0)
                 // Original paper dt:
-                //deltau_ = grid_->getLeafSize()/(grid_->getMaxSpeed()*sqrt(grid_t::getNDims()));
+                deltau_ = grid_->getLeafSize()/(grid_->getMaxSpeed()*sqrt(grid_t::getNDims()));
 
                 // FIM paper dt:
-                deltau_ = 1/grid_->getMaxSpeed();
+                //deltau_ = 1/grid_->getMaxSpeed();
             }
 
         /** \brief Actual method that implements GMM. */
