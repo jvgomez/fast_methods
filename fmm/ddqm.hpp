@@ -132,7 +132,7 @@ template < class grid_t > class DDQM : public EikonalSolver<grid_t> {
         void increaseThreshold
         (std::array<size_t, 2> & counts) {
             double minPercent = 0.65;
-            double maxPercent = 0.7;
+            double maxPercent = 0.75;
             double currentPercent;
             if (counts[1] != 0)
                 currentPercent = counts[0]/double(counts[1]);

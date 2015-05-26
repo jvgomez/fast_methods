@@ -1,8 +1,8 @@
 %% Dummy script to generate the barriers maps used in the benchmarking.
 
 % Number of dimensions
-nd = 2;
-% nd = 3;
+% nd = 2;
+nd = 3;
 
 % Number of barriers
 nbar = 9;
@@ -83,9 +83,10 @@ elseif nd == 3
         if i >= 9
             map(0.1*size:end, :, 170:180) = 0;
         end
-    end
+        
+        saveGridToFile(map, ['maps/3dbarriers_' num2str(i) '.grid']);
 
-    saveGridToFile(map, ['maps/3dbarriers_' num2str(i) '.grid']);
+    end
 end
 
 %% Additional map plotting code.

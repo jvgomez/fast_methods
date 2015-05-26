@@ -1,15 +1,15 @@
 %% This script assumes that fast/marching scripts folder is included in Matlab's
 %  path.
 clear all;
-close all;
+%close all;
 
 % This file assumes that all the experiments in path_to_benchmarks logged 
 % the same algorithms in the same order.
 
 %% Set the number of dimensions to analyze.
-nd = 2;
+% nd = 2;
 % nd = 3;
-% nd = 4;
+nd = 4;
 
 fs = 16;
 

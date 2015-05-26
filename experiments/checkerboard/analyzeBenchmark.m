@@ -80,8 +80,25 @@ set(gca,'FontSize', fs);
 box on;
 saveas(gcf, [num2str(nd) 'checkerboard.pdf'],'pdf');
 
-%% Analyzing errors for FMM, FIM and UFMM
-% Assumes this ordering: 0001 FMM, 0002 FIM, 0003 UFMM
+%% Proportional plotting, with respect to FMM
+ratios = bsxfun(@rdivide, times, times(1,:));
+figure;
+hold on;
+for i = 1:size(algs,2)
+    plot(vmin, ratios(i,:), markers(i,:), 'MarkerSize', 7, 'LineWidth', 1, 'Color', colors(i,:));
+end
+xlabel('# Cells', 'FontSize', fs);
+ylabel('Ratio Time/FMM Time', 'FontSize', fs);
+box on;
+set(gca,'FontSize', fs);
+
+saveas(gcf, [num2str(nd) 'checkerboard_ratio.pdf'],'pdf');
+
+% %% Analyzing errors for FMM, FIM and UFMM
+% % Assumes this ordering: 0001 FMM, 0002 FIM, 0003 UFMM
+% algs = 1;
+% % algs = 2; % If FIM analysis is also desired 
+% 
 % files_err = [];
 % dirs_err = [];
 % elements_err = dir(path_to_errors);
@@ -93,19 +110,20 @@ saveas(gcf, [num2str(nd) 'checkerboard.pdf'],'pdf');
 %     end
 % end
 % 
-% L1 = zeros(2,size(dirs_err,1));
-% Linf = zeros(2,size(dirs_err,1));
+% L1 = zeros(algs,size(dirs_err,1));
+% Linf = zeros(algs,size(dirs_err,1));
 % 
 % for i = 1:size(dirs_err,1)
 %     % Load grids
 %     grids_path = strcat(path_to_errors, dirs_err(i).name, '/');
 %     fmm_grid = parseGrid(strcat(grids_path, 'FMM.grid'));
-%     fim_grid = parseGrid(strcat(grids_path, 'FIM.grid'));
 %     ufmm_grid = parseGrid(strcat(grids_path, 'UFMM.grid'));
+% %     fim_grid = parseGrid(strcat(grids_path, 'FIM.grid')); % Uncomment if
+% %     FIM analysis is dsired.
 %     
 %     % Compute errors
-%     fim_err = fim_grid.cells - fmm_grid.cells;
 %     ufmm_err = ufmm_grid.cells - fmm_grid.cells;
+% %     fim_err = fim_grid.cells - fmm_grid.cells;
 %     
 %     % L1 norm is done with the integral (actually the mean of L1), see 
 %     % Lp spaces for more info: http://en.wikipedia.org/wiki/Lp_space#Lp_spaces
@@ -115,30 +133,36 @@ saveas(gcf, [num2str(nd) 'checkerboard.pdf'],'pdf');
 %     % cells in that dimension.
 %     domX = 1;
 %     numX = size(fmm_grid.cells,1);
-%     L1(1,i) = norm(fim_err(:), 1) * domX^nd  / (numX^nd); % Assuming cubic grid.
-%     L1(2,i) = norm(ufmm_err(:), 1) * domX^nd  / (numX^nd);
+%     L1(1,i) = norm(ufmm_err(:), 1) * domX^nd  / (numX^nd);
+% %     L1(2,i) = norm(fim_err(:), 1) * domX^nd  / (numX^nd); % Assuming cubic grid.
 %     
-%     Linf(1,i) = norm(fim_err(:), Inf);
-%     Linf(2,i) = norm(ufmm_err(:), Inf);
+%     Linf(1,i) = norm(ufmm_err(:), Inf);
+% %     Linf(2,i) = norm(fim_err(:), Inf);
 % end
 % 
+% %% Manual restructuration of the vectors
+% %% NEEDS TO BE CHANGED IF THE EXPERIMENTS ARE CHANGED!
+% L1 =[L1(:,1:2), L1(:,4:end), L1(:,3)];
+% Linf =[Linf(:,1:2), Linf(:,4:end), Linf(:,3)];
+% 
 % %% Plotting
-% markers_err = [markers(5,:); markers(6,:)]; % Positions of FIM and UFMM.
-% colors_err = [colors(5,:); colors(6,:)];
+% markers_err = [markers(6,:); markers(5,:)]; % Positions of FIM and UFMM.
+% colors_err = [colors(6,:); colors(5,:)];
 % 
 % figure;
 % hold on;
-% for i = 1:2
+% for i = 1:algs
 %     plot(vmin, L1(i,:), markers_err(i,:), 'MarkerSize', 7, 'LineWidth', 1, 'Color', colors_err(i,:));
-% end
-% for i = 1:2
 %     plot(vmin, Linf(i,:), ['-',markers_err(i,:)], 'MarkerSize', 7, 'LineWidth', 1, 'Color', colors_err(i,:));
 % end
-% algs_err = cell(1,4);
-% algs_err{1} = 'FIM L_1';
-% algs_err{2} = 'UFMM L_1';
-% algs_err{3} = 'FIM L_\infty';
-% algs_err{4} = 'UFMM L_\infty';
+% 
+% algs_err = cell(1,2*algs);
+% 
+% algs_err{1} = 'UFMM L_1';
+% algs_err{2} = 'UFMM L_\infty';
+% %algs_err{3} = 'FIM L_1';
+% %algs_err{4} = 'FIM L_\infty';
+% 
 % h = legend(algs_err, 'Location', 'northeast');
 % xlabel('Min. Velocity');
 % ylabel('Norm (s)');
