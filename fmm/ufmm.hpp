@@ -7,8 +7,11 @@
     The grid is assumed to be squared, that is Delta(x) = Delta(y) = leafsize_
 
     @par External documentation:
-        L. Yatziv, A.Bartesaghi and G. Sapiro, O(n) implementation of the fast marching algorithm, Journal of Computational Physics 
+        L. Yatziv, A.Bartesaghi and G. Sapiro, O(n) implementation of the fast marching algorithm, Journal of Computational Physics. 212(2): 393-399. 2006.
         <a href="http://www.sciencedirect.com/science/article/pii/S0021999105003736">[PDF]</a>
+         
+        C. Rasch, T. Satzger, Remarks on the O(N) implementation of the Fast Marching Method. 2007.
+        <a href="http://arxiv.org/abs/cs/0703082">[PDF]</a>
     
     Copyright (C) 2014 Javier V. Gomez
     www.javiervgomez.com

@@ -8,7 +8,7 @@
 
     @par External documentation:
         S. Bak, J. McLaughlin, D. Renzi, Some Improvements for the Fast Sweeping Method,
-        SIAM J. Sci. Comput., 32(5), 2853–2874.
+        SIAM J. Sci. Comput., 32(5), 2853–2874. 2010.
         <a href="http://epubs.siam.org/doi/abs/10.1137/090749645">[More Info]</a>
 
     NOTE: The sweeping directions are inverted with respect to the paper to make implementation easier. And sweeping
