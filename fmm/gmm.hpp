@@ -7,7 +7,7 @@
     The grid is assumed to be squared, that is Delta(x) = Delta(y) = leafsize_
 
     @par External documentation:
-        S. Kim, An O(N) Level Set Method for Eikonal Equations, SIAM J. Sci. Comput., 22(6), 2178–2193.
+        S. Kim, An O(N) Level Set Method for Eikonal Equations, SIAM J. Sci. Comput., 22(6), 2178–2193. 2006.
         <a href="http://epubs.siam.org/doi/abs/10.1137/S1064827500367130">[PDF]</a>
 
     Copyright (C) 2014 Javier V. Gomez

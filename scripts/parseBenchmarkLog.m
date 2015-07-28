@@ -2,7 +2,11 @@ function bm = parseBenchmarkLog (path_to_file)
     %% Opening file.
     txt = fileread(path_to_file);
     txt = regexprep(fileread(path_to_file), '\s+', '\t'); % Spaces (if any) to tabs.
+<<<<<<< HEAD
     txt = regexp(txt, '[\t\n ]', 'split');
+=======
+    txt = regexp(txt, '[\t\n]', 'split');
+>>>>>>> master
 
     %% Parsing header.
     bm.name = txt{1};

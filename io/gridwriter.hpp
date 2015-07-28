@@ -1,4 +1,4 @@
-/*! \class GridWritter
+/*! \class GridWriter
     \brief Auxiliar class which helps to save nDGridMaps into text files.
 
     Additional Matlab scripts are provided to parse these grids.

@@ -76,6 +76,13 @@ class MapLoader {
 
             Should be used only in 2D grids.
 
+            leafsize_\n                          (float)
+            ndims\n                              (size_t)
+            dimsize_[0]\n                        (int)
+            dimsize_[1]\n                        (int)
+            x1\ty1\tz1\tv1...\n                  (double)
+            x2\ty2\tz2\tv2...\n                  (double)
+
             The Y dimension flipping is because nDGridMap works in X-Y coordinates, not in image indices as CImg.
 
             IMPORTANT NOTE: no type-checkings are done. T type has to be Cell or any class with bool setOccupancy() method.

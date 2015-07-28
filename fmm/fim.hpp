@@ -7,7 +7,7 @@
     The grid is assumed to be squared, that is Delta(x) = Delta(y) = leafsize_
 
     @par External documentation:
-        W. Jeong and R. Whitaker, A Fast Iterative Method for Eiknal Equations, SIAM J. Sci. Comput., 30(5), 2512–2534.
+        W. Jeong and R. Whitaker, A Fast Iterative Method for Eiknal Equations, SIAM J. Sci. Comput., 30(5), 2512–2534. 2008.
         <a href="http://epubs.siam.org/doi/abs/10.1137/060670298">[PDF]</a>
 
     Copyright (C) 2014 Javier V. Gomez
