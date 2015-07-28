@@ -16,6 +16,9 @@
 #include "../io/gridplotter.hpp"
 #include "../io/gridwriter.hpp"
 
+#include "../io/gridpoints.hpp"
+
+
 using namespace std;
 using namespace std::chrono;
 
@@ -35,18 +38,22 @@ int main(int argc, const char ** argv)
     typedef nDGridMap<FMCell, ndims2> FMGrid2D;
     typedef typename std::vector< std::array<double, ndims2> > Path2D; // A bit of short-hand.
 
-    // Loading grid.
+    console::info("Creating grid from image and testing Fast Marching Method..");
     FMGrid2D grid_fm2;
+    MapLoader::loadMapFromImg(filename.c_str(), grid_fm2);
+
+    std::array<unsigned int, ndims2> coords_init, coords_goal;
+    GridPoints::selectMapPoints(grid_fm2, coords_init, coords_goal);
 
     // Solvers declaration.
     std::vector<Solver<FMGrid2D>*> solvers;
     solvers.push_back(new FM2<FMGrid2D>("FM2_Dary"));
-    solvers.push_back(new FM2<FMGrid2D, FMFibHeap<FMCell> >("FM2_Fib"));
+    //solvers.push_back(new FM2<FMGrid2D, FMFibHeap<FMCell> >("FM2_Fib"));
     solvers.push_back(new FM2<FMGrid2D, FMPriorityQueue<FMCell> >("FM2_SFMM"));
     solvers.push_back(new FM2Star<FMGrid2D>("FM2*_Dary_Dist", DISTANCE));
     solvers.push_back(new FM2Star<FMGrid2D>("FM2*_Dary_Time"));
-    solvers.push_back(new FM2Star<FMGrid2D, FMFibHeap<FMCell> >("FM2*_Fib_Time"));
-    solvers.push_back(new FM2Star<FMGrid2D, FMFibHeap<FMCell> >("FM2*_Fib_Dist", DISTANCE));
+    //solvers.push_back(new FM2Star<FMGrid2D, FMFibHeap<FMCell> >("FM2*_Fib_Time"));
+    //solvers.push_back(new FM2Star<FMGrid2D, FMFibHeap<FMCell> >("FM2*_Fib_Dist", DISTANCE));
     solvers.push_back(new FM2Star<FMGrid2D, FMPriorityQueue<FMCell> >("FM2*_SFMM_Time"));
     solvers.push_back(new FM2Star<FMGrid2D, FMPriorityQueue<FMCell> >("FM2*_SFMM_Dist", DISTANCE));
 
@@ -58,14 +65,15 @@ int main(int argc, const char ** argv)
             //exit(1);
         MapLoader::loadMapFromImg(filename.c_str(), grid_fm2); // Loading from image.
         s->setEnvironment(&grid_fm2);
-        s->setInitialAndGoalPoints({30, 20}, {375, 280}); // Init and goal points directly set.
+        s->setInitialAndGoalPoints(coords_init, coords_goal); // Init and goal points directly set.
         s->compute();
         cout << "\tElapsed "<< s->getName() <<" time: " << s->getTime() << " ms" << '\n';
 
         Path2D path;
         vector<double> path_vels;
         s->as<FM2<FMGrid2D>>()->computePath(&path, &path_vels);
-        GridPlotter::plotArrivalTimesPath(grid_fm2, path);
+        GridPlotter::plotArrivalTimesPath(grid_fm2, path, s->getName());
+        GridPlotter::plotOccupancyMap(grid_fm2);
     }
 
     // Preventing memory leaks.

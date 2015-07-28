@@ -87,6 +87,8 @@ class GridPlotter {
             cimg_forXY(img,x,y) { img(x,y) = grid[img.width()*(img.height()-y-1)+x].getOccupancy()*255; }
             name += " Occupancy Map";
             img.display(name.c_str(), false);
+            img.save("vels.png");
+
         }
 
        /** \brief Plots the values map of a given grid. It is based on the
@@ -220,8 +222,9 @@ class GridPlotter {
               img(static_cast<unsigned int>(path[i][0]), (img.height()-static_cast<unsigned int>(path[i][1])-1)) = 255;
 
           img.map( CImg<double>::jet_LUT256() );
-          name += " Values and Path";
+          //name += " Values and Path";
           img.display(name.c_str(), false);
+          img.save((name + std::string(".png")).c_str());
       }
 
       /** \brief Plots the FMState of a cell.
