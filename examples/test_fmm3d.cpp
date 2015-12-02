@@ -17,12 +17,12 @@ int main(int argc, char **argv)
 {
     // A bit of shorthand.
     typedef nDGridMap<FMCell, 3> FMGrid3D;
-    typedef array<unsigned int, 3> Coord2D;
+    typedef array<unsigned int, 3> Coord3D;
 
     // Grid, start and goal definition.
     FMGrid3D grid_fmm;
     MapLoader::loadMapFromText(argv[1], grid_fmm);
-    Coord2D init_point = {5, 5, 5};
+    Coord3D init_point = {5, 5, 5};
 
     // Solvers declaration.
     std::vector<Solver<FMGrid3D>*> solvers;
