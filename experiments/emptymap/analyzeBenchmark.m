@@ -8,8 +8,8 @@ clear all;
 
 %% Set the number of dimensions to analyze.
 % nd = 2;
-% nd = 3;
-nd = 4;
+nd = 3;
+% nd = 4;
 
 fs = 16;
 

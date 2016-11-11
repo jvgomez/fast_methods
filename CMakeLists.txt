@@ -26,10 +26,6 @@ include_directories (${FMM_SOURCE_DIR}/gradientdescent)
 # Third party internal includes
 include_directories (${FMM_SOURCE_DIR}/thirdparty) 
 
-
-# External dependencies
-include_directories (~/boost_1_55_0)
-
 add_executable (fmm main.cpp
                     console/console.cpp
                     ndgridmap/cell.cpp

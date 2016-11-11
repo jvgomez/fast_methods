@@ -4,11 +4,13 @@ $ ../../../scripts/run_benchmarks.bash .
 
 So that the results folder is stored in the corresponding problem directory.
 
-CFG and map files to run the benchmarking script. Separated by problems and number of dimensions. For problems with variable velocity aditional _error CFG are included, which run only 1 time those algorithms which can have errors in the output.
+CFG and map files to run the benchmarking script. Separated by problems and number of dimensions. For problems with variable velocity aditional _error CFG are included, which run only 1 time those algorithms which can have errors in the output. Note that for barriers, checkerboard and random you have to create the map beforehand (there are scripts in the corresponding folders).
 
 Each problem has its own benchmarking analisys Matlab script, and some of the scripts to create the maps to be used in the benchmarks.
 
 IMPORTANT: The CFG files and folder structure are highly coupled with the scripts. Take a moment to study them or create your own scripts and folder structure.
+
+Do not forget to add the scripts folder to your Matlab/Octave path!
 
 NOTE: In random folder, everything is called as in checkerboard folder. So that I do not have to repeat all the CFG and scripts. I know this is lazy, but I saved time :)
 

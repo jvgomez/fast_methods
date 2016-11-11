@@ -1,14 +1,5 @@
 N-Dimensional Fast Marching Method V1.0
 
-[Biicode](https://www.biicode.com/) blocks status:
-
-[![Build Status](https://webapi.biicode.com/v1/badges/jvgomez/jvgomez/console/master)](https://www.biicode.com/jvgomez/console)
-[![Build Status](https://webapi.biicode.com/v1/badges/jvgomez/jvgomez/ndgridmap/master)](https://www.biicode.com/jvgomez/ndgridmap)
-[![Build Status](https://webapi.biicode.com/v1/badges/jvgomez/jvgomez/fmm/master)](https://www.biicode.com/jvgomez/fmm)
-[![Build Status](https://webapi.biicode.com/v1/badges/endher/endher/fm2/master)](https://www.biicode.com/endher/fm2)
-[![Build Status](https://webapi.biicode.com/v1/badges/jvgomez/jvgomez/fmexamples/master)](https://www.biicode.com/jvgomez/fmexamples)
-[![Build Status](https://webapi.biicode.com/v1/badges/jvgomez/jvgomez/fm2examples/master)](https://www.biicode.com/jvgomez/fm2examples)
-
 **Authors:**
  - Javier V. Gomez javvgomez _at_ gmail.com www.javiervgomez.com
  - Jose Pardeiro jose.pardeiro _at_ gmail.com
@@ -41,19 +32,6 @@ N-Dimensional Fast Marching Method V1.0
 
 ROS nodes using this code (tested in the TurtleBot) are provided in a separate repo:
 https://github.com/jpardeiro/fastmarching_node
-
-**BIICODE**
-A version of this code is available at the [biicode](https://www.biicode.com) C/C++ dependency manager. Concretely
-the corresponding blocks are:
-
-https://www.biicode.com/jvgomez
-jvgomez/console
-jvgomez/ndgridmap
-jvgomez/fmm
-jvgomez/fm2examples
-
-https://www.biicode.com/endher
-endher/fm2
 
 ## DISCLAIMER and IMPORTANT NOTES
 
@@ -98,6 +76,8 @@ When using Ubuntu, you should install Boost libraries (tested with 1.55+):
 
     sudo apt-get install libboost-all-dev
 
+It is assumed that it is installed in the default directory.
+
 ## Building the code
 To build the code:
 
@@ -139,7 +119,7 @@ At the top of each file there are specific TODO comments. Here are some others:
 - Mix SFMM and UFMM (researchy TODO).
 - MapLoader, GridWriter... get a naming convention. MapReader or GridSaver for instance.
 - Improve untidy queue implementation with hash maps (specially remove element in increase_priority()).
-- Upload as a unique biicode block.
+- Improve CMake structure (now is very ad-hoc and actually wrong).
 - printRunInfo implementation missing for most of the solvers.
 - Unify GridWriter and GridPlotter functions parameter order: (grid, name)
 - Review and update nDGridMap.pdf
