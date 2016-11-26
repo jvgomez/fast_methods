@@ -1,4 +1,4 @@
-/* Runs different versions of FM2 and FM2* over grid map generated from a text file. */
+/* Runs different versions of FM2 and FM2* over grid map generated from an image. */
 
 #include <iostream>
 #include <array>
@@ -29,7 +29,7 @@ int main(int argc, const char ** argv)
     if (argc > 2)
         console::parseArguments(argc, argv, "-map", filename);
     else {
-        console::info("No enough arguments given. Use as ./test_fm2 -map path_to_file.txt");
+        console::info("No enough arguments given. Use as ./test_fm2 -map path_to_image.png");
         exit(1);
     }
 

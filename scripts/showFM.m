@@ -1,6 +1,6 @@
 % clear all; close all;
 
-grid = parsegrid('../build/grid.txt');
+grid = parseGrid('../experiments/intel/results/intel_map_200/FMM.grid');
     imagesc(grid.cells);
     hold on;
 % path = parsepath('../build/test_path.txt');
