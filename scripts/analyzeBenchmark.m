@@ -36,5 +36,5 @@ end
 
 %% Plotting
 figure;
-plot(ncells, times, '-x', 'LineWidth', 2);
+plot(ncells, times', '-x', 'LineWidth', 2);
 legend(algs, 'Location', 'northwest');
