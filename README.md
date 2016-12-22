@@ -16,44 +16,31 @@ N-Dimensional Fast Marching Method V1.0
 
 ## ALGORITHMS
 **Fast Marching Methods:**
-- [FMM](http://javiervgomez.com/fastmarching/classFMM.html): Fast Marching Method with Binary Queue and Fibonacci Queue (binary by default).
-- [FMM*](http://javiervgomez.com/fastmarching/classFMMStar.html): FMM with CostToGo heuristics.
-- [SFMM](http://javiervgomez.com/fastmarching/classSFMM.html): Simplified Fast Marhching Method.
-- [SFMM*](http://javiervgomez.com/fastmarching/classSFMMStar.html): SFMM with CostToGo heuristics..
+- [FMM](http://jvgomez.github.io/fastmarching/classFMM.html): Fast Marching Method with Binary Queue and Fibonacci Queue (binary by default).
+- [FMM*](http://jvgomez.github.io/fastmarching/classFMMStar.html): FMM with CostToGo heuristics.
+- [SFMM](http://jvgomez.github.io/fastmarching/classSFMM.html): Simplified Fast Marhching Method.
+- [SFMM*](http://jvgomez.github.io/fastmarching/classSFMMStar.html): SFMM with CostToGo heuristics..
 
 **O(n) Fast Marching Methods:**
-- [GMM](http://javiervgomez.com/fastmarching/classGMM.html): Group Marching Method.
-- [UFMM](http://javiervgomez.com/fastmarching/classUFMM.html): Untidy Fast Marching Method.
-- [FIM](http://javiervgomez.com/fastmarching/classFIM.html): Fast Iterative Method.
+- [GMM](http://jvgomez.github.io/fastmarching/classGMM.html): Group Marching Method.
+- [UFMM](http://jvgomez.github.io/fastmarching/classUFMM.html): Untidy Fast Marching Method.
+- [FIM](http://jvgomez.github.io/fastmarching/classFIM.html): Fast Iterative Method.
 
 **Fast Sweeping Methods:**
-- [FSM](http://javiervgomez.com/fastmarching/classFSM.html): Fast Sweeping Method.
-- [LSM](http://javiervgomez.com/fastmarching/classLSM.html): Lock Sweeping Method.
+- [FSM](http://jvgomez.github.io/fastmarching/classFSM.html): Fast Sweeping Method.
+- [LSM](http://jvgomez.github.io/fastmarching/classLSM.html): Lock Sweeping Method.
 
 **Other methods:**
-- [DDQM](http://javiervgomez.com/fastmarching/classDDQM.html): Dynamic Double Queue Method.
+- [DDQM](http://jvgomez.github.io/fastmarching/classDDQM.html): Dynamic Double Queue Method.
 
 **Fast Marching Square motion planning algorithms:**
-- [FM2](http://javiervgomez.com/fastmarching/classFM2.html): Fast Marching Square Method.
-- [FM2*](http://javiervgomez.com/fastmarching/classFM2Star.html): Fast Marching Square Star FM2 with CostToGo heuristics.
+- [FM2](http://jvgomez.github.io/fastmarching/classFM2.html): Fast Marching Square Method.
+- [FM2*](http://jvgomez.github.io/fastmarching/classFM2Star.html): Fast Marching Square Star FM2 with CostToGo heuristics.
 
 **ROS**
 
 ROS nodes using this code (tested in the TurtleBot) are provided in a separate repo:
 https://github.com/jpardeiro/fastmarching_node
-
-**BIICODE**
-A version of this code is available at the [biicode](https://www.biicode.com) C/C++ dependency manager. Concretely
-the corresponding blocks are:
-
-https://www.biicode.com/jvgomez
-jvgomez/console
-jvgomez/ndgridmap
-jvgomez/fmm
-jvgomez/fm2examples
-
-https://www.biicode.com/endher
-endher/fm2
 
 ## DISCLAIMER and IMPORTANT NOTES
 
@@ -68,7 +55,7 @@ endher/fm2
 
 ## Documentation
 
-- [API Reference](http://javiervgomez.com/fastmarching/)
+- [API Reference](jvgomez.github.io/fastmarching/)
 - This README is important as well.
 
 
