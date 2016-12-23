@@ -1,7 +1,7 @@
 N-Dimensional Fast Marching Method V1.0
 
 **Authors:**
- - [Javier V. Gomez](http://jvgomez.github.io) javvgomez _at_ gmail.com 
+ - [Javier V. Gomez](http://jvgomez.github.io) javvgomez _at_ gmail.com
  - Jose Pardeiro jose.pardeiro _at_ gmail.com
  - Pablo Gely
 
@@ -62,29 +62,25 @@ Go into the HTML folder and open index.html
 
 This code uses C\++11 so a compiler g++ 4.8 or equivalent is required. With GCC 4.7 some runtime problems can occur.
 
-### Linking CImg dependencies.
-If you want to compile code that uses the CImg library, you will need to add the following line to the CMakeLists.txt
+Additional dependencies: Boost, imagemafick and CImg.
 
-    target_link_libraries (fmm X11 pthread)
-
-The code provides a copy of the CImg library. This will take care of loading and savig images. Depending on the extension used, you will need to install another libraries as said in the main page of CImg: http://cimg.sourceforge.net/
-
-The example code uses png, therefore examples of libraries to be installed are libpng, Magick++, ImageMagick, etc.
-
-### Boost dependencies
-When using Ubuntu, you should install Boost libraries (tested with 1.55+):
-
-    sudo apt-get install libboost-all-dev
+    $ sudo apt-get install imagemagick libboost-all-dev cimg-dev
 
 ## Building the code
 To build the code:
 
     $ cd build
     $ cmake .. -DCMAKE_BUILD_TYPE=Release (Release, RelWithDebInf or Debug, Release by default)
-    $ make
+    $ make -j8 (or the number of cores you want to use during compilation)
+    $ sudo make install (only if you want to install the library)
     $ ./fmm -map1 ../data/testimg.png -map2 ../data/map.png -vel ../data/velocities.png
 
 This main shows most of the utilities implemented so far.
+
+To uninstall:
+
+    $ sudo make uninstall
+
 
 ## Folder structure
 
@@ -105,6 +101,17 @@ Although there are a lot of folders, they are quite simple. It is organized this
 + scripts: matlab scripts to parse outputs and automatic benchmarking bash script.
 + thirdparty: others' software included.
 
+### Installation
+Default installation folder is` /usr/local` for Linux distributions (or equivalent on other OS). Libraries are installed in subfolder `lib`, together with CMake modules. All the includes are installed under `include` subfolder. Additionally, in the `share` subfolder the helper scripts and some samples of benchmark configurations files are installed. Finally, the benchmark binary is installed in `bin`.
+
+In order to change the default installation folder you can do:
+
+	$ cmake ../.. -DCMAKE_INSTALL_PREFIX=<your folder>
+
+
+In this case, you will have to adapt your environment variables so that the libraries and CMake modules are found.
+
+
 ## KNOWN ISSUES
 
 - Gradient Descent for FM2* could fail if very narrow passages are in the way of the path.
@@ -112,27 +119,32 @@ Although there are a lot of folders, they are quite simple. It is organized this
 
 ## TODO
 
-At the top of each file there are specific TODO comments. Here are some others:
+At the top of each file there are specific TODO comments. Here are some others.
 
-- Mix SFMM and UFMM (researchy TODO).
+### Code TODOs
+- Remove relative file dependencies (#include "../../fmm", filename = "../../data", CMakeLists.txt deps, etc).
 - MapLoader, GridWriter... get a naming convention. MapReader or GridSaver for instance.
-- Improve untidy queue implementation with hash maps (specially remove element in increase_priority()).
-- Upload as a unique biicode block.
 - printRunInfo implementation missing for most of the solvers.
 - Unify GridWriter and GridPlotter functions parameter order: (grid, name)
-- Review and update nDGridMap.pdf
 - Fix Doxygen warnings.
 - Convert all scripts to python (or similar) so that they keep completely open source.
-- Improve the way FM2 and its versions deal with the grid when running multiple times on the same grid. Concretely, avoid recomputation of velocities map.
 - Reimplement FM2Dir from scratch. Currently in data/alpha folder.
-- Restructure the folder and the CMake files in order to properly have examples and that stuff.
 - Substitute arg parsing with boost_options.
-- Remove relative file dependencies (#include "../../fmm", filename = "../../data", CMakeLists.txt deps, etc).
 - Implement a grid copy constructor and assignment operator, etc.
 - Most of the unsigned int should be replaced by size_t to be type-correct.
 - Use smart pointers (specially for grid).
 - Create a testing framework.
 - BenchmarkCFG::configure, parse ctorParams_ with a variadic templated function, something like:` parseParams<int, bool>(param1, param2)`, `parseParams<string,double,bool>(p1,p2,p3)`.
-- For most methods, neighbors for same cell are computed many times. Store them like FMT to save some computation time.
 - GridPlotter code can be refactorized so that the same code is not repeated many times.
 - Review template template parameters, perhaps it can be simplified (specially for benchmark): `template <grid_t>` to `template <nDGridMap <cell_t, ndims>>` so we can use cell_t without doing `template <grid_t, cell_t>` (redundant).
+- Unify names: one thing is Fast Methods, other Fast Marching, etc.
+
+### Algorithmic TODOs
+- Improve untidy queue implementation with hash maps (specially remove element in increase_priority()).
+- Mix SFMM and UFMM (researchy TODO).
+- Improve the way FM2 and its versions deal with the grid when running multiple times on the same grid. Concretely, avoid recomputation of velocities map.
+- For most methods, neighbors for same cell are computed many times. Store them like FMT to save some computation time.
+
+### Documentation TODOs
+- Review and update nDGridMap.pdf
+- Link thesis and papers.
