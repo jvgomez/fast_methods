@@ -32,13 +32,13 @@ DOXYFILE_ENCODING      = UTF-8
 # title of most generated pages and in a few other places.
 # The default value is: My Project.
 
-PROJECT_NAME           = "n-Dimensional Fast Marching"
+PROJECT_NAME           = "n-Dimensional Fast Methods"
 
 # The PROJECT_NUMBER tag can be used to enter a project or revision number. This
 # could be handy for archiving the generated documentation or if some version
 # control system is used.
 
-PROJECT_NUMBER         = 0.6
+PROJECT_NUMBER         = 0.7
 
 # Using the PROJECT_BRIEF tag one can provide an optional one line description
 # for a project that appears at the top of each page and should give viewer a
@@ -753,17 +753,19 @@ WARN_LOGFILE           =
 # spaces.
 # Note: If this tag is empty the current directory is searched.
 
-INPUT                  = ../benchmark/ \
-                         ../console/ \
+INPUT                  = ../include/fast_methods/benchmark/ \
+                         ../include/fast_methods/console/ \
                          ../examples/ \
-                         ../fm2/ \
-                         ../fmm/ \
-                         ../gradientdescent/ \
-                         ../io/ \
-                         ../ndgridmap/ \
+                         ../include/fast_methods/fm2/ \
+                         ../include/fast_methods/fm/ \
+                         ../include/fast_methods/gradientdescent/ \
+                         ../include/fast_methods/io/ \
+                         ../include/fast_methods/ndgridmap/ \
+                         ../include/fast_methods/datastructures/ \
+                         ../include/fast_methods/utils/ \
                          ./markdown/ \
                          ./files/ \
-                         ../main.cpp
+                         ../examples/full_example.cpp
 
 # This tag can be used to specify the character encoding of the source files
 # that doxygen parses. Internally doxygen uses the UTF-8 encoding. Doxygen uses

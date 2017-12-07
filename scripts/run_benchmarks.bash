@@ -12,7 +12,6 @@ SCRDIR=$(dirname $0)
 
 bold=`tput bold`
 normal=`tput sgr0`
-FILESDIR=($PWD/$1)
 
 shopt -s globstar
 files=("$1"/**/*.cfg)
@@ -24,6 +23,6 @@ do
     echo""
     echo "${bold}Processing file $n out of ${#files[@]}${normal}"
     echo $f
-    $SCRDIR/../benchmark/build/fmmbenchmark $f
+    $SCRDIR/../build/fm_benchmark $f
     echo ""
 done

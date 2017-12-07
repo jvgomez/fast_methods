@@ -1,5 +1,5 @@
 cmake_minimum_required (VERSION 2.6) 
-project (FMM) 
+project (fast_methods) 
 
 # set a default build type for single-configuration
 # CMake generators if no build type is set.
@@ -9,7 +9,7 @@ endif(NOT CMAKE_CONFIGURATION_TYPES AND NOT CMAKE_BUILD_TYPE)
 
 set(BUILD_EXAMPLES true CACHE STRING "True (default) to build examples")
 if(BUILD_EXAMPLES)
-    message(STATUS "Examples are being built (NOT installed).")
+    message(STATUS "Examples are being built and installed.")
 endif(BUILD_EXAMPLES)
 
 # Select flags.
@@ -39,38 +39,29 @@ endif()
 include_directories (
     ${Boost_INCLUDE_DIRS}
     ${CImg_INCLUDE_DIRS}
-    console
-    ndgridmap
-    fmm
-    fmm/fmdata
-    fm2
-    io
-    gradientdescent
-    thirdparty
+    include
 )
 
 # Create main library
-add_library(fastmarching SHARED
-    console/console.cpp
-    ndgridmap/cell.cpp
-    fmm/fmdata/fmcell.cpp
+add_library(fast_methods SHARED
+    src/console/console.cpp
+    src/ndgridmap/cell.cpp
+    src/ndgridmap/fmcell.cpp
 )
 
 # Linking 
-target_link_libraries(fastmarching
+target_link_libraries(fast_methods
     ${Boost_LIBRARIES}
     ${CImg_SYSTEM_LIBS}
 )
 
 # Add benchmarking capabilities
-add_executable (fmmbenchmark benchmark/fmm_benchmark.cpp)  
+add_executable(fm_benchmark src/benchmark/fm_benchmark.cpp)  
 
-target_link_libraries (fmmbenchmark fastmarching)
+target_link_libraries(fm_benchmark fast_methods)
 
 # Create main example
 if(BUILD_EXAMPLES)
-    add_executable(fmm main.cpp)
-    target_link_libraries(fmm fastmarching)
     add_subdirectory(examples)
 endif(BUILD_EXAMPLES)
 
@@ -78,44 +69,30 @@ endif(BUILD_EXAMPLES)
 # We are not using CMakePackageConfigHelpers because CIMG variables are lists
 # and those functions do not manage them properly.
 configure_file(
-    cmake/FMConfig.cmake.in
-    ${CMAKE_BINARY_DIR}/FMConfig.cmake
+    cmake/fast_methods-config.cmake.in
+    ${CMAKE_BINARY_DIR}/fast_methods-config.cmake
 )
 
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/FMConfig.cmake
-    DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/cmake/FM
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/fast_methods-config.cmake
+    DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/cmake/fast_methods
 )
 
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/FMConfig.cmake
-    DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/cmake/FM
-)
-
-install(TARGETS fastmarching
+install(TARGETS fast_methods
     DESTINATION ${CMAKE_INSTALL_PREFIX}/lib
 )
 
-install(TARGETS fmmbenchmark
+install(TARGETS fm_benchmark
     DESTINATION ${CMAKE_INSTALL_PREFIX}/bin
 )
 
-install(DIRECTORY scripts DESTINATION ${CMAKE_INSTALL_PREFIX}/share/FM)
+install(DIRECTORY scripts
+    DESTINATION ${CMAKE_INSTALL_PREFIX}/share/fast_methods)
 
-install(DIRECTORY benchmark/cfg DESTINATION ${CMAKE_INSTALL_PREFIX}/share/FM)
-
-install(DIRECTORY ${CMAKE_SOURCE_DIR} DESTINATION ${CMAKE_INSTALL_PREFIX}/include
+install(DIRECTORY include/ DESTINATION ${CMAKE_INSTALL_PREFIX}/include
     FILES_MATCHING
         PATTERN "*.hpp"
         PATTERN "*.h"
-    REGEX "/build$" EXCLUDE
-    REGEX ".git$" EXCLUDE
-    REGEX "/examples$" EXCLUDE
-    REGEX "/doc$" EXCLUDE
-    REGEX "/data$" EXCLUDE
-    REGEX "/cfg$" EXCLUDE
-    REGEX "/cmake$" EXCLUDE
-    REGEX "/scripts$" EXCLUDE
 )
-
 
 # Uninstall target
 configure_file(

@@ -1,0 +1,13 @@
+set(fast_methods_FOUND 1)
+
+set(fast_methods_INCLUDE_DIRS
+    @Boost_INCLUDE_DIRS@
+    @CImg_INCLUDE_DIRS@
+    @CMAKE_INSTALL_PREFIX@/include
+)
+
+set(fast_methods_LIBRARIES
+    @CMAKE_INSTALL_PREFIX@/lib/${CMAKE_SHARED_LIBRARY_PREFIX}fast_methods${CMAKE_SHARED_LIBRARY_SUFFIX}
+    @CImg_SYSTEM_LIBS@
+    @Boost_LIBRARIES@
+)

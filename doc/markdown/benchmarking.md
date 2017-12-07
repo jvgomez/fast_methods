@@ -4,31 +4,31 @@ We provide two different ways to perform benchmarks: coding or using configurati
 \note We acknowledge that it is a bit tedious how we work with the folders. However, we decided with relative paths so that the user has total freedom to set the files as he/she wants.
 
 ## Coding
-Check test_fmm_benchmark.cpp and [building](@ref building_bmtest) to find more information about how to use the Benchmark class.
+Check the  `test_fm_benchmark.cpp` example.
 
-\note The benchmark application is currently limited to 3D and to work with FMCell-based nDGridMap. However, it is really easy to modify that. Check fmm_benchmark.cpp and follow the comments within the code for more instructions.
+\note The benchmark application is currently limited to 2D/3D and to work with FMCell-based nDGridMap. However, it is really easy to modify that. Check `fm_benchmark.cpp` and follow the comments within the code for more instructions.
 
 ## Benchmarking application
-This application allows to configure and run benchmarks very easily. It is implemented in fmm_benchmark.cpp and uses BenchmarkCFG to parse the CFG files and configure a Benchmark class.
+This application allows to configure and run benchmarks very easily. It is implemented in `fm_benchmark.cpp` and uses the `BenchmarkCFG` class to parse the CFG files and configure a Benchmark class.
 
-- [Read this to build the application](@ref building_bmapp)
+- [Read this to build the application](markdown/building.md)
 
-\note This benchmark application has been tested with FMM-based solvers. FM2-based solvers were not tested.
+\note This benchmark application has been tested with Fast Methods. FM2-based solvers were not tested.
 
 To run a benchmark once compiled:
 
-    $ ./fmm_benchmark ../benchmark.cfg
+    $ ./fm_benchmark ../data/benchmark.cfg
 
 It will parse `benchmark.cfg` and run all the solvers in the environment set with the specified configurations. It will generate a folder called `results` storing a log and grids (if set to do so). This folder will be generated from the current terminal working directory.
 
 ### CFG file
-`test.cfg` provides an example of most of the capabilites implemented:
+`benchmark_from_grid.cfg` provides an example of most of the capabilites implemented:
 
     # Example configuration file
     [grid]
     # File: route to image from the current terminal working dir, NOT from this file folder.
-    file=../../data/img.png
-    #text=../../data/map.grid
+    file=../data/img.png
+    #text=../data/map.grid
     #ndims=2
     #cell=FMCell
     #dimsize=300,300
@@ -43,7 +43,7 @@ Under grid label, we configure the enviroment. If a file is provided (in occupan
 
 Start and goal coordinates. Note the format: `s_x, s_y, s_z, ...` and `g_x, g_y, g_z, ...`. If the goal is omitted, the solvers will be rund through all the possible space.
 
-\note Configuring benchmarks with CFG files allows a unique start and unique goal. If you require multiple starts, you must code the benchmark as done in test_fmm_benchmark.cpp
+\note Configuring benchmarks with CFG files allows a unique start and unique goal. If you require multiple starts, you must code the benchmark as done in test_fm_benchmark.cpp
 
 
     [benchmark]
@@ -52,7 +52,7 @@ Start and goal coordinates. Note the format: `s_x, s_y, s_z, ...` and `g_x, g_y,
     #savegrid=1
     #savegrid=2
 
-Set the name of the benchmark and the number of runs for each solver. If `savegrid == 1` a `.grid` file will be saved for the last run of each solver, identified with solver given name (i.e. `FMM.grid`. If `savegrid == 2` a `.grid` file is saved for every run identified as `<runID>.grid`. In both cases, grid files will be stored in a folder `results/<benchmark_name>`. By default only the log will be saved.
+Set the name of the benchmark and the number of runs for each solver. If `savegrid == 1` a `.grid` file will be saved for the last run of each solver, identified with solver given name, i.e. `FMM.grid`. If `savegrid == 2` a `.grid` file is saved for every run identified as `<runID>.grid`. In both cases, grid files will be stored in a folder `results/<benchmark_name>`. By default only the log will be saved.
 
     [solvers]
     fmm=
@@ -149,16 +149,16 @@ Then, you can easily visualize:
 ![Example](gridplot.png)
 
 #### Run many experiments
-Every CFG file can run several solvers, with several configurations, several times. However, it only allows to run on one enviroment. To easily solve this, we provide a bash script which executes the benchmark for all the cfg files in a folder.
+Every CFG file can run several solvers, with several configurations, several times. However, it only allows to run on one enviroment. To easily solve this, we provide a bash script which executes the benchmark for all the cfg files in a folder (although it could be improved as it assumes the location of the benchmark tool relatively to the terminal working dir).
 
-- Place .cfg files in the folder: `fastmarching/benchmark/cfg/`
-- Place the terminal in folder: `fastmarching/benchmark/
+- Place .cfg files in the folder: `fast_methods/data/test_cfg/`
+- Place the terminal in folder: `fast_methods/data/
 - Execute run_benchmarks.bash`:
 
 
-    $ bash ../scripts/run_benchmarks.bash
+    $ bash ../scripts/run_benchmarks.bash test_cfg
 
-This will generate the folder `fastmarching/benchmark/results` with the logs of all the benchmarks. In our case, we executed the following CFG files, modifying only the grid size and start point:
+This will generate the folder `fast_methods/data/results` with the logs of all the benchmarks. In our case, we executed the following CFG files, modifying only the grid size and start point:
 
     [grid]
     ndims=2
@@ -181,7 +181,7 @@ This will generate the folder `fastmarching/benchmark/results` with the logs of 
 
 - We provide a Matlab script to process the logs of this kind, so that it is easy to compare solvers with varying enviroment conditions. Execute the Matlab script `analyzeBenchmark.m` from the `benchmark` folder. Otherwise, you might need to change the `path_to_benchmarks` variable in the script. The output could be something like:
 
-![Example](fmmcomp.png)
+![Example](fmcomp.png)
 
 \note This script is under constant development and you may need some modifications depending on your purpose.
 
