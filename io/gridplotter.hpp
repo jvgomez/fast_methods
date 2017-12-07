@@ -23,10 +23,11 @@
 #include <string>
 #include <array>
 
+#include <CImg.h>
+
 #include "../fmm/fmdata/fmcell.h"
 #include "../ndgridmap/ndgridmap.hpp"
 
-#include "../thirdparty/CImg.h"
 
 using namespace cimg_library;
 

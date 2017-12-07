@@ -20,9 +20,10 @@
 #ifndef MAPLOADER_H_
 #define MAPLOADER_H_
 
+#include <CImg.h>
+
 #include "../ndgridmap/ndgridmap.hpp"
 
-#include "../thirdparty/CImg.h"
 
 using namespace cimg_library;
 

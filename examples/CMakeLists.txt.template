@@ -1,0 +1,19 @@
+# Use this file as a reference if you want to use in your program the Fast
+# Methods library already installed in your computer
+
+cmake_minimum_required (VERSION 2.6) 
+project(test)
+
+set(CMAKE_CXX_FLAGS "-std=c++11")
+
+find_package(FM)
+
+# Not necessary if installed in default locations.
+include_directories(${FM_INCLUDE_DIRS})
+
+add_executable(fmm test_fmm.cpp)
+
+target_link_libraries(fmm
+    ${FM_LIBRARIES}
+)
+
