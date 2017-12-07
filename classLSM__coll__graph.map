@@ -1,5 +1,5 @@
 <map id="LSM&lt; grid_t &gt;" name="LSM&lt; grid_t &gt;">
-<area shape="rect" id="node2" href="$classFSM.html" title="Implements Fast Sweeping Method. " alt="" coords="31,155,138,181"/>
-<area shape="rect" id="node3" href="$classEikonalSolver.html" title="Abstract class that serves as interface for the actual EikonalSolvers implemented. It requires (at least) the computeInternal method to be implemented,. " alt="" coords="5,80,164,107"/>
-<area shape="rect" id="node4" href="$classSolver.html" title="Abstract class that serves as interface for the actual solvers implemented. It requires (at least) th..." alt="" coords="27,5,142,32"/>
+<area shape="rect" id="node2" href="$classFSM.html" title="Implements Fast Sweeping Method. " alt="" coords="31,155,137,181"/>
+<area shape="rect" id="node3" href="$classEikonalSolver.html" title="Abstract class that serves as interface for the actual EikonalSolvers implemented. It requires (at least) the computeInternal method to be implemented,. " alt="" coords="5,80,163,107"/>
+<area shape="rect" id="node4" href="$classSolver.html" title="Abstract class that serves as interface for the actual solvers implemented. It requires (at least) th..." alt="" coords="27,5,141,32"/>
 </map>

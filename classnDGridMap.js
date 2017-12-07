@@ -10,6 +10,7 @@ var classnDGridMap =
     [ "getDimSizes", "classnDGridMap.html#ab91a3cca2228d10f41b2e5378aceb74b", null ],
     [ "getDimSizesStr", "classnDGridMap.html#addfe0ab654c22fd3f5eb560c5b0d1cb8", null ],
     [ "getLeafSize", "classnDGridMap.html#a10b54c3a5183e1ab605d35d6be4f8893", null ],
+    [ "getMaxSpeed", "classnDGridMap.html#afbfc9369a6ff93f3fcbd91bef17ae433", null ],
     [ "getMaxValue", "classnDGridMap.html#a57c893d0176c269e3f05d9df89880e52", null ],
     [ "getMinValueInDim", "classnDGridMap.html#a933f96e30ef87474a083797b5bca705b", null ],
     [ "getNDims", "classnDGridMap.html#a23f1525ce06d42873f1359d1c10d74e4", null ],

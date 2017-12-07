@@ -1,5 +1,6 @@
 var searchData=
 [
+  ['absui',['absUI',['../classutils.html#a7214edc8e80851727ad050d773342209',1,'utils']]],
   ['active_5flist_5f',['active_list_',['../classFIM.html#a02e7c08a484b1a1c900a432e82239f76',1,'FIM']]],
   ['addsolver',['addSolver',['../classBenchmark.html#a89d766e24f43666e24dc68fd691a32e3',1,'Benchmark']]],
   ['apply',['apply',['../classGradientDescent.html#a6793623864f5e1ee3aec8510cfcd68d8',1,'GradientDescent']]],

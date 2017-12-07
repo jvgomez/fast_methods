@@ -8,6 +8,7 @@ var searchData=
   ['getgrid',['getGrid',['../classSolver.html#ae9a8112571d970d975c896e7367d5f83',1,'Solver']]],
   ['getheuristics',['getHeuristics',['../classFMM.html#a0c3efa3fdc01275f0a329b2e32c5ee5a',1,'FMM']]],
   ['getleafsize',['getLeafSize',['../classnDGridMap.html#a10b54c3a5183e1ab605d35d6be4f8893',1,'nDGridMap']]],
+  ['getmaxspeed',['getMaxSpeed',['../classnDGridMap.html#afbfc9369a6ff93f3fcbd91bef17ae433',1,'nDGridMap']]],
   ['getmaxvalue',['getMaxValue',['../classnDGridMap.html#a57c893d0176c269e3f05d9df89880e52',1,'nDGridMap']]],
   ['getminvalueindim',['getMinValueInDim',['../classnDGridMap.html#a933f96e30ef87474a083797b5bca705b',1,'nDGridMap']]],
   ['getname',['getName',['../classSolver.html#a720c179ac61c335739de5ceeab06864e',1,'Solver']]],
@@ -25,6 +26,5 @@ var searchData=
   ['grid_5f',['grid_',['../classBenchmark.html#a8cc602530ede4f39a13d8dff307123a1',1,'Benchmark::grid_()'],['../classSolver.html#a2189075afbd369b6047e5f5e9c5e5066',1,'Solver::grid_()']]],
   ['gridplotter',['GridPlotter',['../classGridPlotter.html',1,'']]],
   ['gridpoints',['GridPoints',['../classGridPoints.html',1,'']]],
-  ['gridwriter',['GridWriter',['../classGridWriter.html',1,'']]],
-  ['gridwritter',['GridWritter',['../classGridWritter.html',1,'']]]
+  ['gridwriter',['GridWriter',['../classGridWriter.html',1,'']]]
 ];

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['update',['update',['../classFMDaryHeap.html#a1220207e747bebc9abcee2829aba7af7',1,'FMDaryHeap::update()'],['../classFMFibHeap.html#abc967b3c5791c592da578e606b970ef4',1,'FMFibHeap::update()']]]
+  ['topidx',['topIdx',['../classFMUntidyQueue.html#a2cc52b868b0b16eb353c77ad3736ae27',1,'FMUntidyQueue']]]
 ];

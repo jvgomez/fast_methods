@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['warning',['warning',['../classconsole.html#a9487534da9fdd5a0734f4217f82951da',1,'console']]]
+  ['update',['update',['../classFMDaryHeap.html#a1220207e747bebc9abcee2829aba7af7',1,'FMDaryHeap::update()'],['../classFMFibHeap.html#abc967b3c5791c592da578e606b970ef4',1,'FMFibHeap::update()']]]
 ];

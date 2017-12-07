@@ -6,7 +6,7 @@ var classCell =
     [ "getOccupancy", "classCell.html#ad88d888c2640ac9b37bcc26377c613af", null ],
     [ "getValue", "classCell.html#ae8a0017003fbb261fee02c711c0effaa", null ],
     [ "isOccupied", "classCell.html#a47ecebc61863ebbbdebef5ee4259814c", null ],
-    [ "setDefault", "classCell.html#ab73042acdac5f53e28753f8518d97999", null ],
+    [ "setDefault", "classCell.html#a6b1aca0662eee53c1e4bd0f7d4b7d556", null ],
     [ "setIndex", "classCell.html#a2cab3fe68020e8e50f43dd64baaf3286", null ],
     [ "setOccupancy", "classCell.html#ae6e08c14566f228793e0a402d283e63d", null ],
     [ "setValue", "classCell.html#a7c70755796d755623f1df6afac671800", null ],

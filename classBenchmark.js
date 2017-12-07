@@ -1,6 +1,6 @@
 var classBenchmark =
 [
-    [ "Benchmark", "classBenchmark.html#a9424f75cade26fbf2664f811770c9b48", null ],
+    [ "Benchmark", "classBenchmark.html#a1386d0bbf37cf039eac9b2d840de6940", null ],
     [ "~Benchmark", "classBenchmark.html#a21f6a33f37e4a0c539712b2455165155", null ],
     [ "addSolver", "classBenchmark.html#a89d766e24f43666e24dc68fd691a32e3", null ],
     [ "clear", "classBenchmark.html#a1e3415434c820dee4fde0b0fee1b7ec3", null ],
@@ -18,7 +18,7 @@ var classBenchmark =
     [ "setName", "classBenchmark.html#a102650550987c23aed530a1134f66bd1", null ],
     [ "setNRuns", "classBenchmark.html#a9f28f46148d04526f8890c1e09fa3d81", null ],
     [ "setPath", "classBenchmark.html#a2926d367a34f58e34b75c0344a0f4aee", null ],
-    [ "setSaveGrid", "classBenchmark.html#a4a05935558cef6965d1a6e806623e6cf", null ],
+    [ "setSaveGrid", "classBenchmark.html#a9f1fba3c435eaafe2a85f71e14819c4b", null ],
     [ "setSaveLog", "classBenchmark.html#a7458d937b2aef80af1a191ca40252b4a", null ],
     [ "end_", "classBenchmark.html#aab9a168177263a615d325f5d07561de3", null ],
     [ "fmtID_", "classBenchmark.html#a17d1625d3ab46fc1813d643634927417", null ],
@@ -31,7 +31,7 @@ var classBenchmark =
     [ "nruns_", "classBenchmark.html#a3c1e9fce757032a3d9447d26548a5e64", null ],
     [ "path_", "classBenchmark.html#a059a82a3a32a3d71ac88bc7652f98675", null ],
     [ "runID_", "classBenchmark.html#ab1bd24b875944be6239482093f72e57e", null ],
-    [ "saveGrid_", "classBenchmark.html#a77a8a07fffb16b78f1e65e3967ce765e", null ],
+    [ "saveGrid_", "classBenchmark.html#a4422043c8708bf0b1f64bbd16f8c573f", null ],
     [ "saveLog_", "classBenchmark.html#a6cf2de133683c9d1dc066071c112770e", null ],
     [ "solvers_", "classBenchmark.html#a5f28000d7d9e8fc852c0187a93fbaa67", null ],
     [ "start_", "classBenchmark.html#acf601768f3886ef4152c7b498c99a61a", null ]

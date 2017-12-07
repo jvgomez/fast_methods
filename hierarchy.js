@@ -6,8 +6,8 @@ var hierarchy =
       [ "FMCell", "classFMCell.html", null ]
     ] ],
     [ "Class", "classClass.html", null ],
-    [ "console", "classconsole.html", null ],
     [ "Console", "classConsole.html", null ],
+    [ "console", "classconsole.html", null ],
     [ "FMCompare< cell_t >", "structFMCompare.html", null ],
     [ "FMDaryHeap< cell_t >", "classFMDaryHeap.html", null ],
     [ "FMFibHeap< cell_t >", "classFMFibHeap.html", null ],
@@ -17,13 +17,11 @@ var hierarchy =
     [ "GridPlotter", "classGridPlotter.html", null ],
     [ "GridPoints", "classGridPoints.html", null ],
     [ "GridWriter", "classGridWriter.html", null ],
-    [ "GridWritter", "classGridWritter.html", null ],
     [ "MapLoader", "classMapLoader.html", null ],
     [ "nDGridMap< T, ndims >", "classnDGridMap.html", null ],
     [ "SFMMStarStar", "classSFMMStarStar.html", null ],
     [ "Solver< grid_t >", "classSolver.html", [
       [ "EikonalSolver< grid_t >", "classEikonalSolver.html", [
-        [ "test_fmm_benchmark.cpp", "md_markdown_building.html#building_bmtest", null ],
         [ "DDQM< grid_t >", "classDDQM.html", null ],
         [ "FIM< grid_t >", "classFIM.html", null ],
         [ "FMM< grid_t, heap_t >", "classFMM.html", [
@@ -43,5 +41,6 @@ var hierarchy =
       [ "FM2< grid_t, heap_t >", "classFM2.html", [
         [ "FM2Star< grid_t, heap_t >", "classFM2Star.html", null ]
       ] ]
-    ] ]
+    ] ],
+    [ "utils", "classutils.html", null ]
 ];

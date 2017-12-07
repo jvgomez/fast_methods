@@ -1,12 +1,11 @@
 var annotated =
 [
-    [ "Benchmarking application", "md_markdown_building.html#building_bmapp", null ],
     [ "Benchmark", "classBenchmark.html", "classBenchmark" ],
     [ "BenchmarkCFG", "classBenchmarkCFG.html", "classBenchmarkCFG" ],
     [ "Cell", "classCell.html", "classCell" ],
     [ "Class", "classClass.html", null ],
-    [ "console", "classconsole.html", "classconsole" ],
     [ "Console", "classConsole.html", null ],
+    [ "console", "classconsole.html", "classconsole" ],
     [ "DDQM", "classDDQM.html", "classDDQM" ],
     [ "EikonalSolver", "classEikonalSolver.html", "classEikonalSolver" ],
     [ "FIM", "classFIM.html", "classFIM" ],
@@ -26,7 +25,6 @@ var annotated =
     [ "GridPlotter", "classGridPlotter.html", "classGridPlotter" ],
     [ "GridPoints", "classGridPoints.html", "classGridPoints" ],
     [ "GridWriter", "classGridWriter.html", "classGridWriter" ],
-    [ "GridWritter", "classGridWritter.html", null ],
     [ "LSM", "classLSM.html", "classLSM" ],
     [ "MapLoader", "classMapLoader.html", "classMapLoader" ],
     [ "nDGridMap", "classnDGridMap.html", "classnDGridMap" ],
@@ -34,5 +32,6 @@ var annotated =
     [ "SFMMStar", "classSFMMStar.html", "classSFMMStar" ],
     [ "SFMMStarStar", "classSFMMStarStar.html", null ],
     [ "Solver", "classSolver.html", "classSolver" ],
-    [ "UFMM", "classUFMM.html", "classUFMM" ]
+    [ "UFMM", "classUFMM.html", "classUFMM" ],
+    [ "utils", "classutils.html", "classutils" ]
 ];
