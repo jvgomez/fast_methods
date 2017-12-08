@@ -28,6 +28,4 @@ At the top of each file there are specific TODO comments. (List [here](http://jv
 
 ## Documentation TODOs
 - Review and update nDGridMap.pdf
-- Link thesis and papers.
-- Review and update: naming, folder structure, build instructions.
 - Add a make doc target.
