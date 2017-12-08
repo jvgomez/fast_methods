@@ -47,7 +47,7 @@ ROS nodes using this code (tested in the TurtleBot) are provided in a [separate 
 
 ## Documentation
 
-- [API Reference](jvgomez.github.io/fast_methods/)
+- [API Reference](http://jvgomez.github.io/fast_methods/)
 
 
 ## Building the code
