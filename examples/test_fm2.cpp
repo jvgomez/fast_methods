@@ -3,18 +3,18 @@
 #include <iostream>
 #include <array>
 
-#include "../fmm/fmdata/fmcell.h"
-#include "../ndgridmap/ndgridmap.hpp"
-#include "../console/console.h"
+#include <fast_methods/ndgridmap/fmcell.h>
+#include <fast_methods/ndgridmap/ndgridmap.hpp>
+#include <fast_methods/console/console.h>
 
-#include "../fm2/fm2.hpp"
-#include "../fm2/fm2star.hpp"
-#include "../fmm/fmdata/fmfibheap.hpp"
-#include "../fmm/fmdata/fmpriorityqueue.hpp"
+#include <fast_methods/fm2/fm2.hpp>
+#include <fast_methods/fm2/fm2star.hpp>
+#include <fast_methods/datastructures/fmfibheap.hpp>
+#include <fast_methods/datastructures/fmpriorityqueue.hpp>
 
-#include "../io/maploader.hpp"
-#include "../io/gridplotter.hpp"
-#include "../io/gridwriter.hpp"
+#include <fast_methods/io/maploader.hpp>
+#include <fast_methods/io/gridplotter.hpp>
+#include <fast_methods/io/gridwriter.hpp>
 
 using namespace std;
 using namespace std::chrono;

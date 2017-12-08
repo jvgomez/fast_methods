@@ -6,14 +6,14 @@ project(test)
 
 set(CMAKE_CXX_FLAGS "-std=c++11")
 
-find_package(FM)
+find_package(fast_methods)
 
 # Not necessary if installed in default locations.
-include_directories(${FM_INCLUDE_DIRS})
+include_directories(${fast_methods_INCLUDE_DIRS})
 
-add_executable(fmm test_fmm.cpp)
+add_executable(fm test_fm.cpp)
 
-target_link_libraries(fmm
-    ${FM_LIBRARIES}
+target_link_libraries(fm
+    ${fast_methods_LIBRARIES}
 )
 
