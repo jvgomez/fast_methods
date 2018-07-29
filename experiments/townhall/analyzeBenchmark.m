@@ -56,7 +56,9 @@ hold on;
 for i = 1:size(algs,2)
     plot(ncells, times(i,:), markers(i,:), 'MarkerSize', 7, 'LineWidth', 1, 'Color', colors(i,:));
 end
-lgnd = legend(algs, 'Location', 'northwest', 'FontSize', fs);
+%lgnd = legend(algs, 'Location', 'northwest', 'FontSize', fs);
+legend(algs, 'Location', 'northwest');
+
 legend boxoff;
 xlabel('# Cells', 'FontSize', fs);
 ylabel('Time (ms)', 'FontSize', fs);

@@ -11,8 +11,8 @@ close all;
 
 %% Set the number of dimensions to analyze.
 nd = 2;
-nd = 3;
-nd = 4;
+%nd = 3;
+%nd = 4;
 
 fs = 16;
 
@@ -71,7 +71,8 @@ hold on;
 for i = 1:size(algs,2)
     plot(vmin, times(i,:), markers(i,:), 'MarkerSize', 7, 'LineWidth', 1, 'Color', colors(i,:));
 end
-legend(algs, 'Location', 'northeastoutside','FontSize', fs);
+%legend(algs, 'Location', 'northeastoutside','FontSize', fs);
+legend(algs, 'Location', 'northeastoutside');
 legend boxoff
 xlabel('Min. Velocity (units)','FontSize', fs);
 ylabel('Time (ms)','FontSize', fs);
