@@ -11,7 +11,7 @@ close all;
 % the same algorithms in the same order.
 
 %% Set the number of dimensions to analyze.
-% nd = 2;
+%nd = 2;
 % nd = 3;
 nd = 4;
 

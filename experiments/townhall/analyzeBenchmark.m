@@ -12,7 +12,7 @@ nd = 3;
 fs = 16;
 
 %% Folders containing the results
-path_to_benchmarks = ['results/'];
+path_to_benchmarks = ['times/results/'];
 
 %% Opening benchmark file.
 files = [];

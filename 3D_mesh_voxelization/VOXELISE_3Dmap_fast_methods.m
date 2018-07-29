@@ -70,8 +70,8 @@ for i=1:1:size(tresD,2)
 %         figure(3+i)
 %         plot_map3d(OUTPUTgrid, 0.2, 3+i, view_ori);   
 %     end
-plot_map3d(OUTPUTgrid, 0.2, 1, view_ori);   
-pause
-clf(1)
+%plot_map3d(OUTPUTgrid, 0.2, 1, view_ori);   
+%pause
+%clf(1)
 end
 

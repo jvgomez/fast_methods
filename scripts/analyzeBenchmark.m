@@ -6,7 +6,7 @@ close all;
 
 %% Opening file.
 %path_to_benchmarks = '../benchmark/build/results/';
-path_to_benchmarks = 'results/';
+path_to_benchmarks = '../scripts/results/2D_empty/';
 
 files = dir(path_to_benchmarks);
 files = files(3:end); 

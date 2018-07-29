@@ -6,15 +6,10 @@ clear all;
 % This file assumes that all the experiments in path_to_benchmarks logged 
 % the same algorithms in the same order.
 
-%% Set the number of dimensions to analyze.
-% nd = 2;
-% nd = 3;
-nd = 4;
-
 fs = 16;
 
 %% Folders containing the results
-path_to_benchmarks = [num2str(nd) 'd/results/'];
+path_to_benchmarks = 'results/';
 
 %% Opening benchmark file.
 files = [];
@@ -64,7 +59,7 @@ ylabel('Time (ms)', 'FontSize', fs);
 box on;
 set(gca,'FontSize', fs);
 
-saveas(gcf, [num2str(nd) 'emptymap.pdf'],'pdf');
+saveas(gcf, 'intel.pdf','pdf');
 
 %% Proportional plotting, with respect to FMM
 ratios = bsxfun(@rdivide, times, times(1,:));
@@ -78,5 +73,5 @@ ylabel('Ratio Time/FMM Time', 'FontSize', fs);
 box on;
 set(gca,'FontSize', fs);
 
-saveas(gcf, [num2str(nd) 'emptymap_ratio.pdf'],'pdf');
+saveas(gcf, 'intel_ratio.pdf','pdf');
 

@@ -1,7 +1,7 @@
 %% Dummy script to generate the barriers maps used in the benchmarking.
 
 % Number of dimensions
-% nd = 2;
+%nd = 2;
 nd = 3;
 
 % Number of barriers

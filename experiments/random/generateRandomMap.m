@@ -2,8 +2,8 @@
 
 %% NOTE: files called checker for simplicity!!
 % Number of dimensions.
-% nd = 2;
-% nd = 3;
+%nd = 2;
+%nd = 3;
 nd = 4;
 
 % Number of total cells.
