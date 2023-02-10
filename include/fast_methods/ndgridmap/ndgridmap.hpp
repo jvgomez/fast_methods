@@ -258,7 +258,7 @@ template <class T, size_t ndims> class nDGridMap {
         () const {
             double max = 0;
             for (const T & c:cells_) {
-                if (!isinf(c.getValue()) && c.getValue() > max)
+                if (!std::isinf(c.getValue()) && c.getValue() > max)
                     max = c.getValue();
             }
             return max;

@@ -138,7 +138,7 @@ template < class grid_t > class FSM : public EikonalSolver<grid_t> {
                 keepSweeping_ = true;
             }
             // EXPERIMENTAL - Value not updated, it has converged
-            else if(!isnan(newTime) && !isinf(newTime) && (idx == goal_idx_))
+            else if(!isnan(newTime) && !std::isinf(newTime) && (idx == goal_idx_))
                 stopPropagation_ = true;
         }
 
