@@ -7,7 +7,8 @@ RUN apt-get install nano cmake git doxygen cmake-curses-gui wget -y
 ARG DEBIAN_FRONTEND=noninteractive #should be change
 RUN apt-get install imagemagick libboost-all-dev cimg-dev -y
 
-RUN git clone https://github.com/ferxxp/fast_methods_2023.git /fast_methods/
+RUN git clone https://github.com/jvgomez/fast_methods.git /fast_methods/
+
 
 RUN mkdir /fast_methods/build
 RUN cmake -S /fast_methods/ -B /fast_methods/build/
