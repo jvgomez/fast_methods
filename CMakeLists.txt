@@ -19,7 +19,7 @@ set(CMAKE_CXX_FLAGS_RELEASE "-Ofast -fno-finite-math-only")
 set(CMAKE_CXX_FLAGS_DEBUG  "-Wall -Wno-unused-local-typedefs -g")
 
 #Flag to avoid error in compilation
-add_compile_options(-fpermissive)
+#add_compile_options(-fpermissive)
 
 # Finding Boost
 find_package(Boost REQUIRED COMPONENTS system filesystem program_options)

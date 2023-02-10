@@ -52,7 +52,7 @@ class EikonalSolver : public Solver<grid_t>{
 
             for (unsigned int dim = 0; dim < grid_t::getNDims(); ++dim) {
                 double minTInDim = grid_->getMinValueInDim(idx, dim);
-                if (!isinf(minTInDim) && minTInDim < grid_->getCell(idx).getArrivalTime())
+                if (!std::ininf(minTInDim) && minTInDim < grid_->getCell(idx).getArrivalTime())
                     Tvalues_.push_back(minTInDim);
                 else
                     a -=1;
