@@ -35,6 +35,7 @@
 #include <cstddef>
 #include <array>
 #include <sstream>
+#include <cmath>
 
 #include <utility>
 
