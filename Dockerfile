@@ -1,18 +1,17 @@
-FROM ubuntu:latest
-#ubuntu:roller
+FROM ubuntu:22.10
 
-RUN apt update -y; exit 0
-RUN apt-get install build-essential -y
-RUN apt-get install nano cmake git doxygen cmake-curses-gui wget -y
-ARG DEBIAN_FRONTEND=noninteractive #should be change
-RUN apt-get install imagemagick libboost-all-dev cimg-dev -y
+RUN apt update -y && DEBIAN_FRONTEND=noninteractive apt-get install -y \
+        build-essential\
+        cmake\
+        git\
+        imagemagick\
+        libboost-all-dev\
+        cimg-dev
 
-RUN git clone https://github.com/jvgomez/fast_methods.git /fast_methods/
+COPY . /fast_methods
 
-
-RUN mkdir /fast_methods/build
-RUN cmake -S /fast_methods/ -B /fast_methods/build/
-RUN make -C /fast_methods/build/
-RUN cd /fast_methods/build
+RUN mkdir /fast_methods/build &&\
+    cmake -S /fast_methods/ -B /fast_methods/build/  &&\
+    make -C /fast_methods/build/
 
 CMD /fast_methods/build/fm_benchmark /fast_methods/data/benchmark.cfg

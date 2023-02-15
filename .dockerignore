@@ -1,0 +1,10 @@
+build/
+*.*~
+examples/build/
+doc/html/
+.vscode
+
+#QtCreator temps
+.idea
+*.*user
+build*/
