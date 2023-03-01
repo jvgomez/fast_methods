@@ -214,7 +214,7 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FM2Dir : pub
             if (idx_source == -1) {
                 for (int dim = 0; dim < grid_t::getNDims(); ++dim) {
                     minTInDim = grid_->getMinValueInDim(idx, dim);
-                    if (!isinf(minTInDim)) {
+                    if (!std::isinf(minTInDim)) {
                         Tvalues[dim] = minTInDim;
                         sumT +=  Tvalues[dim];
                         TTvalues[dim] = Tvalues[dim]*Tvalues[dim];
@@ -233,7 +233,7 @@ template < class grid_t, class heap_t = FMDaryHeap<FMCell> >  class FM2Dir : pub
 
                 for (int dim = 0; dim < grid_t::getNDims(); ++dim) {
                     minTInDim = getMinValueInDimDirectional(idx, dim);
-                    if (!isinf(minTInDim)) {
+                    if (!std::isinf(minTInDim)) {
                         Tvalues[dim] = minTInDim;
                         sumT +=  Tvalues[dim];
                         TTvalues[dim] = Tvalues[dim]*Tvalues[dim];

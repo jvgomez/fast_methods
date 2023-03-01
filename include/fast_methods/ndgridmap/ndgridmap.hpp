@@ -2,7 +2,7 @@
     \brief Templated class which represents a n-dimensional grid map. Its cells
     are assumed to be cubic, that is, the size (leaf size) of each cell is the
     same in every dimension.
-    
+
     Based on a flat array in which the generalized indexing operations are efficiently
     implemented, according to this document [nDGridMaps](http://javiervgomez.com/pages/n-dimensional-gridmaps-formulation-and-implementation.html)
     It is important to read this document in order to understand the class.
@@ -35,6 +35,7 @@
 #include <cstddef>
 #include <array>
 #include <sstream>
+#include <cmath>
 
 #include <utility>
 
@@ -258,7 +259,7 @@ template <class T, size_t ndims> class nDGridMap {
         () const {
             double max = 0;
             for (const T & c:cells_) {
-                if (!isinf(c.getValue()) && c.getValue() > max)
+                if (!(std::isinf(c.getValue())) && c.getValue() > max)
                     max = c.getValue();
             }
             return max;

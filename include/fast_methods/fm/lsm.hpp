@@ -111,7 +111,7 @@ template < class grid_t > class LSM : public FSM<grid_t> {
                             grid_->getCell(neighbors_[i]).setState(FMState::OPEN);
                 }
                 // EXPERIMENTAL - Value not updated, it has converged
-                else if(!isnan(newTime) && !isinf(newTime) && (idx == goal_idx_))
+                else if(!std::isnan(newTime) && !std::isinf(newTime) && (idx == goal_idx_))
                     stopPropagation_ = true;
 
                 grid_->getCell(idx).setState(FMState::FROZEN);

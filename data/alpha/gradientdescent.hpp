@@ -82,13 +82,13 @@ template <class grid_t> class GradientDescent {
 
               // First dimension done apart.
               grads[0] = - grid[idx-1].getDirectionalTime()/2 + grid[idx+1].getDirectionalTime()/2;
-              if (isinf(grads[0]))
+              if (std::isinf(grads[0]))
                   grads[0] = sgn<double>(grads[0]);
               double max_grad = std::abs(grads[0]);
 
               for (size_t i = 1; i < ndims_; ++i) {
                   grads[i] = - grid[idx-d_[i-1]].getDirectionalTime()/2 + grid[idx+d_[i-1]].getDirectionalTime()/2;
-                  if (isinf(grads[i]))
+                  if (std::isinf(grads[i]))
                       grads[i] = sgn<double>(grads[i]);
                   if (std::abs(max_grad) < std::abs(grads[i]))
                       max_grad = grads[i];
